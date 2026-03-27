@@ -1,0 +1,136 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Overview/Design Tokens" />
+
+# Design Tokens
+
+Design tokens are the foundational values that define the visual language of the Cyberdyne Design System. They ensure consistency across all components and products.
+
+## Architecture
+
+We use a **3-layer token architecture**:
+
+```
+Layer 1: Primitives    →  Raw values (colors, sizes)
+Layer 2: Semantic       →  Named by purpose (backgrounds, text, borders)
+Layer 3: Component      →  Scoped to components (button bg, input border)
+```
+
+### Why 3 layers?
+
+- **Primitives** are stable — they rarely change
+- **Semantic** tokens map intent — swap a theme by remapping these
+- **Component** tokens enable surgical overrides without side effects
+
+## Colors
+
+### Primitive Palette
+
+| Token | Hex | Purpose |
+|-------|-----|---------|
+| `--primitive-green-10` | `#00ff41` | Brand primary, crypto/blockchain |
+| `--primitive-cyan-10` | `#00d4ff` | Secondary, ML/data |
+| `--primitive-violet-10` | `#a855f7` | Tertiary, research |
+| `--primitive-red-10` | `#ff4444` | Error/danger |
+| `--primitive-amber-10` | `#ffb800` | Warning |
+| `--primitive-grey-5` | `#0a0a0f` | Deepest background |
+| `--primitive-grey-110` | `#f0f0ff` | Lightest foreground |
+
+### Semantic Tokens
+
+```css
+/* Backgrounds */
+--color-bg-primary      /* Main app background */
+--color-bg-secondary    /* Cards, panels */
+--color-bg-tertiary     /* Nested surfaces */
+--color-bg-elevated     /* Elevated elements */
+
+/* Text */
+--color-text-primary    /* Main text */
+--color-text-secondary  /* Supporting text */
+--color-text-code       /* Code/terminal text (green) */
+--color-text-link       /* Links (cyan) */
+
+/* State */
+--color-state-success   /* Green */
+--color-state-warning   /* Amber */
+--color-state-error     /* Red */
+--color-state-info      /* Cyan */
+```
+
+## Typography
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--font-display` | Space Grotesk | Headings, hero text |
+| `--font-body` | Inter | Body copy, form inputs |
+| `--font-mono` | JetBrains Mono | Code, labels, data |
+
+### Type Scale
+
+| Class | Size | Weight | Use |
+|-------|------|--------|-----|
+| `.cy-type-display-1` | 3.5rem | 700 | Hero headings |
+| `.cy-type-display-2` | 2.5rem | 700 | Section headers |
+| `.cy-type-h1` | 2rem | 600 | Page titles |
+| `.cy-type-h2` | 1.5rem | 600 | Section titles |
+| `.cy-type-h3` | 1.25rem | 600 | Subsections |
+| `.cy-type-body-lg` | 1.125rem | 400 | Lead text |
+| `.cy-type-body-md` | 1rem | 400 | Default body |
+| `.cy-type-body-sm` | 0.875rem | 400 | Small text |
+| `.cy-type-label` | 0.875rem | 500 | Form labels (uppercase) |
+| `.cy-type-caption` | 0.75rem | 400 | Metadata |
+| `.cy-type-code` | 0.875rem | 400 | Code blocks |
+
+## Spacing
+
+Based on a 4px grid:
+
+| Token | Value | Pixels |
+|-------|-------|--------|
+| `--space-1` | 0.25rem | 4px |
+| `--space-2` | 0.5rem | 8px |
+| `--space-3` | 0.75rem | 12px |
+| `--space-4` | 1rem | 16px |
+| `--space-6` | 1.5rem | 24px |
+| `--space-8` | 2rem | 32px |
+| `--space-12` | 3rem | 48px |
+| `--space-16` | 4rem | 64px |
+
+## Border Radius
+
+| Token | Value |
+|-------|-------|
+| `--radius-xs` | 0.25rem |
+| `--radius-sm` | 0.375rem |
+| `--radius-md` | 0.5rem |
+| `--radius-lg` | 0.75rem |
+| `--radius-xl` | 1rem |
+| `--radius-pill` | 999px |
+
+## Shadows & Glows
+
+| Token | Effect |
+|-------|--------|
+| `--shadow-sm` | Subtle elevation |
+| `--shadow-md` | Card elevation |
+| `--shadow-lg` | Modal elevation |
+| `--shadow-glow-green` | Brand glow effect |
+| `--shadow-glow-cyan` | Focus/data glow |
+| `--shadow-glow-violet` | Research accent glow |
+
+## Animations
+
+| Token | Duration | Easing |
+|-------|----------|--------|
+| `--transition-fast` | 100ms | ease |
+| `--transition-default` | 200ms | ease |
+| `--transition-slow` | 300ms | ease |
+| `--transition-spring` | 300ms | cubic-bezier spring |
+
+Available keyframe animations:
+- `cy-fade-in` — Simple opacity fade
+- `cy-slide-up` / `cy-slide-down` — Directional reveals
+- `cy-scale-in` — Modal/dialog entrance
+- `cy-glow-pulse` — Pulsing green glow (status indicators)
+- `cy-spinner` — Loading rotation

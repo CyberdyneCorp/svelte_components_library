@@ -1,0 +1,129 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Overview/Getting Started" />
+
+# Getting Started
+
+## Installation
+
+The Cyberdyne component library is distributed as private packages via GitHub Packages.
+
+### 1. Configure npm registry
+
+Create or update your `.npmrc`:
+
+```
+@cyberdyne:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_GITHUB_PAT
+```
+
+### 2. Install packages
+
+```bash
+pnpm add @cyberdyne/svelte-ui-foundation @cyberdyne/svelte-ui-core
+```
+
+### 3. Import foundation styles
+
+In your root layout or app entry point:
+
+```svelte
+<!-- +layout.svelte -->
+<script>
+  import "@cyberdyne/svelte-ui-foundation/styles";
+</script>
+
+{@render children()}
+```
+
+### 4. Use components
+
+```svelte
+<script>
+  import { Button, Card, TextInput, Badge } from "@cyberdyne/svelte-ui-core";
+
+  let query = $state("");
+</script>
+
+<Card variant="elevated">
+  <TextInput
+    bind:value={query}
+    label="Search"
+    placeholder="Search transactions..."
+  />
+  <Button variant="brand" onclick={() => search(query)}>
+    Execute Query
+  </Button>
+  <Badge variant="success">Online</Badge>
+</Card>
+```
+
+## Theming
+
+All components use CSS custom properties. Override any token in your app:
+
+```css
+:root {
+  /* Change the brand green to a different hue */
+  --color-action-brand-default: #00e5ff;
+
+  /* Adjust the background */
+  --color-bg-primary: #050510;
+}
+```
+
+## Typography
+
+The design system uses three font families:
+
+- **Space Grotesk** — Display headings and titles
+- **Inter** — Body text and form inputs
+- **JetBrains Mono** — Code, labels, data values
+
+Fonts are loaded via Google Fonts in the foundation CSS. For self-hosting, override the `--font-display`, `--font-body`, and `--font-mono` variables.
+
+## Component Categories
+
+| Category | Components | Purpose |
+|----------|-----------|---------|
+| **Primitives** | Button, Badge, Icon, IconButton, Avatar, Tooltip, ChipButton | Basic building blocks |
+| **Forms** | TextInput, PasswordInput, Select, Checkbox, Switch, Textarea, FileDropzone | Data input |
+| **Feedback** | Alert, Dialog, Notification | User communication |
+| **Navigation** | Tabs, Breadcrumb, Sidebar | App structure |
+| **Data Display** | Table, Pagination, ProgressBar, StatusBadge, EmptyState | Data presentation |
+| **Layout** | Card, AppLayout, PageHeader | Page structure |
+| **Overlay** | Modal, ContextMenu | Layered interfaces |
+
+## Accessibility
+
+All components include:
+- Semantic HTML elements
+- ARIA attributes where needed
+- Keyboard navigation support
+- Focus-visible indicators (cyan glow ring)
+- `prefers-reduced-motion` support
+- Color contrast ratios meeting WCAG 2.1 AA
+
+## Contributing
+
+```bash
+# Clone the repo
+git clone git@github.com:CyberdyneCorp/svelte-components-library.git
+
+# Install dependencies
+pnpm install
+
+# Start Storybook dev server
+pnpm dev
+
+# Run checks
+pnpm check
+```
+
+Use [changesets](https://github.com/changesets/changesets) for versioning:
+
+```bash
+pnpm changeset     # Create a changeset
+pnpm version-packages  # Apply versions
+pnpm release       # Build and publish
+```

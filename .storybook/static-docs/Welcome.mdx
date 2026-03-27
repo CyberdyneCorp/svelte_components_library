@@ -1,0 +1,71 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Overview/Welcome" />
+
+# Cyberdyne Design System
+
+Welcome to the **Cyberdyne Component Library** — the unified design system powering Cyberdyne's ecosystem of products across **Crypto**, **Machine Learning**, and **Research**.
+
+## Vision
+
+Cyberdyne builds at the intersection of blockchain infrastructure, AI/ML pipelines, and cutting-edge research platforms. This component library ensures a cohesive, dark-themed, cyberpunk-inspired UI across all products:
+
+- **CyberdyneDAO** — Web3 terminal platform with NFT-gated access
+- **YieldPath** — AI-powered DeFi life planner
+- **Vision Factory** — Computer vision ML pipeline
+- **Terraform Game** — Blockchain RTS strategy game
+- **Research Tools** — Internal ML & data exploration interfaces
+
+## Design Principles
+
+### 1. Dark-First
+Every component is designed for dark environments. We use deep blacks and dark greys as our canvas, with vibrant neon accents that reference the cyberpunk aesthetic.
+
+### 2. Signal over Noise
+In crypto and ML interfaces, data density is high. Our components prioritize clarity: monospace fonts for data, generous spacing, and clear visual hierarchy.
+
+### 3. Accessible by Default
+All components meet WCAG 2.1 AA standards. Focus indicators use our signature cyan glow. Motion respects `prefers-reduced-motion`.
+
+### 4. Composable
+Components are built with Svelte 5 runes and snippets. They compose naturally and expose CSS custom properties for deep customization.
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Svelte 5 (runes mode) |
+| Styling | CSS Custom Properties |
+| Types | TypeScript (strict) |
+| Documentation | Storybook 8 |
+| Fonts | Space Grotesk, Inter, JetBrains Mono |
+| Build | Vite + svelte-package |
+| Monorepo | pnpm workspaces |
+
+## Packages
+
+| Package | Description |
+|---------|------------|
+| `@cyberdyne/svelte-ui-foundation` | Design tokens, colors, typography, spacing |
+| `@cyberdyne/svelte-ui-core` | 30+ UI components across 7 categories |
+
+## Quick Start
+
+```bash
+# Install the packages
+pnpm add @cyberdyne/svelte-ui-foundation @cyberdyne/svelte-ui-core
+
+# Import the foundation styles in your app entry point
+import "@cyberdyne/svelte-ui-foundation/styles";
+
+# Use components
+import { Button, Card, TextInput } from "@cyberdyne/svelte-ui-core";
+```
+
+## Color Palette
+
+Our three signature colors map to Cyberdyne's domains:
+
+- **Neon Green `#00ff41`** — Crypto / Blockchain (Matrix-inspired)
+- **Electric Cyan `#00d4ff`** — Machine Learning / Data
+- **Violet `#a855f7`** — Research / Innovation
