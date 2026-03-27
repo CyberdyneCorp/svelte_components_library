@@ -9,13 +9,9 @@
   });
 </script>
 
-<Story name="Default">
-  <Switch label="Enable dark mode" />
-</Story>
+<Story name="Default" args={{ label: "Enable dark mode" }} />
 
-<Story name="On">
-  <Switch label="Real-time sync" checked={true} />
-</Story>
+<Story name="On" args={{ label: "Real-time sync", checked: true }} />
 
 <Story name="Disabled">
   <div style="display: flex; flex-direction: column; gap: 0.75rem;">

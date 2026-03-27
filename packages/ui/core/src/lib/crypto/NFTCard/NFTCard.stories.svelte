@@ -9,30 +9,22 @@
   });
 </script>
 
-<Story name="Default">
-  <div style="max-width: 280px;">
-    <NFTCard
-      name="CyberPunk #1337"
-      collection="CyberdyneDAO"
-      tokenId="1337"
-      price="0.85"
-      currency="ETH"
-    />
-  </div>
-</Story>
+<Story name="Default" args={{
+  name: "CyberPunk #1337",
+  collection: "CyberdyneDAO",
+  tokenId: "1337",
+  price: "0.85",
+  currency: "ETH",
+}} />
 
-<Story name="WithImage">
-  <div style="max-width: 280px;">
-    <NFTCard
-      name="Neural Interface v2"
-      image="https://picsum.photos/seed/nft1/400/400"
-      collection="CyberdyneDAO"
-      tokenId="42"
-      price="2.5"
-      currency="ETH"
-    />
-  </div>
-</Story>
+<Story name="WithImage" args={{
+  name: "Neural Interface v2",
+  image: "https://picsum.photos/seed/nft1/400/400",
+  collection: "CyberdyneDAO",
+  tokenId: "42",
+  price: "2.5",
+  currency: "ETH",
+}} />
 
 <Story name="WithRarity">
   <div style="display: flex; gap: 1rem; flex-wrap: wrap;">

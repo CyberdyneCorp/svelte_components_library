@@ -9,13 +9,9 @@
   });
 </script>
 
-<Story name="Default">
-  <Checkbox label="Accept terms and conditions" />
-</Story>
+<Story name="Default" args={{ label: "Accept terms and conditions" }} />
 
-<Story name="Checked">
-  <Checkbox label="Enable notifications" checked={true} />
-</Story>
+<Story name="Checked" args={{ label: "Enable notifications", checked: true }} />
 
 <Story name="Disabled">
   <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -24,6 +20,4 @@
   </div>
 </Story>
 
-<Story name="WithError">
-  <Checkbox label="I agree to the terms" error="You must accept the terms to continue" />
-</Story>
+<Story name="WithError" args={{ label: "I agree to the terms", error: "You must accept the terms to continue" }} />

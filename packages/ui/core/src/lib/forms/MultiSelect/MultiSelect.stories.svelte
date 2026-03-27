@@ -29,18 +29,10 @@
   ];
 </script>
 
-<Story name="Default">
-  <MultiSelect label="Select Networks" options={defaultOptions} />
-</Story>
+<Story name="Default" args={{ label: "Select Networks", options: defaultOptions }} />
 
-<Story name="WithGroups">
-  <MultiSelect label="Select Assets" options={groupedOptions} />
-</Story>
+<Story name="WithGroups" args={{ label: "Select Assets", options: groupedOptions }} />
 
-<Story name="MaxItems">
-  <MultiSelect label="Select Networks (max 3)" options={defaultOptions} maxItems={3} />
-</Story>
+<Story name="MaxItems" args={{ label: "Select Networks (max 3)", options: defaultOptions, maxItems: 3 }} />
 
-<Story name="Searchable">
-  <MultiSelect label="Search & Select" options={groupedOptions} searchable={true} placeholder="Type to search..." />
-</Story>
+<Story name="Searchable" args={{ label: "Search & Select", options: groupedOptions, searchable: true, placeholder: "Type to search..." }} />

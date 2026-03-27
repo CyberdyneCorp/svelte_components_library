@@ -9,14 +9,8 @@
   });
 </script>
 
-<Story name="Default">
-  <FileDropzone accept=".csv,.json" maxSize={10} onfiles={(files) => console.log("Files:", files)} />
-</Story>
+<Story name="Default" args={{ accept: ".csv,.json", maxSize: 10, onfiles: (files) => console.log("Files:", files) }} />
 
-<Story name="MultipleFiles">
-  <FileDropzone multiple accept="image/*" maxSize={5} onfiles={(files) => console.log("Files:", files)} />
-</Story>
+<Story name="MultipleFiles" args={{ multiple: true, accept: "image/*", maxSize: 5, onfiles: (files) => console.log("Files:", files) }} />
 
-<Story name="Disabled">
-  <FileDropzone disabled />
-</Story>
+<Story name="Disabled" args={{ disabled: true }} />

@@ -9,11 +9,7 @@
   });
 </script>
 
-<Story name="Default">
-  <div style="width: 400px; display: flex; flex-direction: column; gap: 1rem;">
-    <ProgressBar value={65} />
-  </div>
-</Story>
+<Story name="Default" args={{ value: 65 }} />
 
 <Story name="Variants">
   <div style="width: 400px; display: flex; flex-direction: column; gap: 1.5rem;">

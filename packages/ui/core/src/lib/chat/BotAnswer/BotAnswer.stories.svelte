@@ -9,18 +9,10 @@
   });
 </script>
 
-<Story name="Default">
-  <BotAnswer content="The current gas price on Ethereum mainnet is approximately 25 gwei." />
-</Story>
+<Story name="Default" args={{ content: "The current gas price on Ethereum mainnet is approximately 25 gwei." }} />
 
-<Story name="WithCode">
-  <BotAnswer content="You can use `eth_getBalance` to check your wallet balance. Try calling `web3.eth.getBalance(address)` in your console." />
-</Story>
+<Story name="WithCode" args={{ content: "You can use `eth_getBalance` to check your wallet balance. Try calling `web3.eth.getBalance(address)` in your console." }} />
 
-<Story name="Typing">
-  <BotAnswer typing />
-</Story>
+<Story name="Typing" args={{ typing: true }} />
 
-<Story name="SurfaceVariant">
-  <BotAnswer variant="surface" content="This response uses the surface variant styling." />
-</Story>
+<Story name="SurfaceVariant" args={{ variant: "surface", content: "This response uses the surface variant styling." }} />

@@ -9,13 +9,11 @@
   });
 </script>
 
-<Story name="Default">
-  <EmptyState
-    title="No models found"
-    description="You haven't trained any models yet. Start by uploading a dataset."
-    icon="terminal"
-  />
-</Story>
+<Story name="Default" args={{
+  title: "No models found",
+  description: "You haven't trained any models yet. Start by uploading a dataset.",
+  icon: "terminal",
+}} />
 
 <Story name="WithAction">
   <EmptyState

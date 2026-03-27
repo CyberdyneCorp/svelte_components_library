@@ -9,13 +9,11 @@
   });
 </script>
 
-<Story name="Default">
-  <PromptExample
-    title="Check wallet balance"
-    description="View your current token balances across chains"
-    onclick={() => console.log("clicked")}
-  />
-</Story>
+<Story name="Default" args={{
+  title: "Check wallet balance",
+  description: "View your current token balances across chains",
+  onclick: () => console.log("clicked"),
+}} />
 
 <Story name="Grid">
   <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; max-width: 500px;">

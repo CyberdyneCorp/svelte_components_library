@@ -9,21 +9,13 @@
   });
 </script>
 
-<Story name="New">
-  <Flag variant="new" />
-</Story>
+<Story name="New" args={{ variant: "new" }} />
 
-<Story name="Beta">
-  <Flag variant="beta" />
-</Story>
+<Story name="Beta" args={{ variant: "beta" }} />
 
-<Story name="Deprecated">
-  <Flag variant="deprecated" />
-</Story>
+<Story name="Deprecated" args={{ variant: "deprecated" }} />
 
-<Story name="Experimental">
-  <Flag variant="experimental" />
-</Story>
+<Story name="Experimental" args={{ variant: "experimental" }} />
 
 <Story name="AllVariants">
   <div style="display: flex; gap: 0.75rem; align-items: center;">

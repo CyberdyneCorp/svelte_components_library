@@ -9,31 +9,19 @@
   });
 </script>
 
-<script>
-  let activeDefault = $state("overview");
-  let activeThree = $state("models");
-</script>
+<Story name="Default" args={{
+  items: [
+    { id: "overview", label: "Overview" },
+    { id: "transactions", label: "Transactions" },
+  ],
+  activeId: "overview",
+}} />
 
-<Story name="Default">
-  <Tabs
-    items={[
-      { id: "overview", label: "Overview" },
-      { id: "transactions", label: "Transactions" },
-    ]}
-    bind:activeId={activeDefault}
-  />
-  <p style="color: var(--color-text-secondary); margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem;">
-    Active: {activeDefault}
-  </p>
-</Story>
-
-<Story name="ThreeTabs">
-  <Tabs
-    items={[
-      { id: "models", label: "Models" },
-      { id: "datasets", label: "Datasets" },
-      { id: "experiments", label: "Experiments" },
-    ]}
-    bind:activeId={activeThree}
-  />
-</Story>
+<Story name="ThreeTabs" args={{
+  items: [
+    { id: "models", label: "Models" },
+    { id: "datasets", label: "Datasets" },
+    { id: "experiments", label: "Experiments" },
+  ],
+  activeId: "models",
+}} />

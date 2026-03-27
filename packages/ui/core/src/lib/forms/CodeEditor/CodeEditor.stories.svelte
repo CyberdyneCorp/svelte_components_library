@@ -65,18 +65,10 @@ contract Vault {
 }`;
 </script>
 
-<Story name="TypeScript">
-  <CodeEditor label="TypeScript" language="typescript" value={tsCode} />
-</Story>
+<Story name="TypeScript" args={{ label: "TypeScript", language: "typescript", value: tsCode }} />
 
-<Story name="Solidity">
-  <CodeEditor label="Smart Contract" language="solidity" value={solidityCode} />
-</Story>
+<Story name="Solidity" args={{ label: "Smart Contract", language: "solidity", value: solidityCode }} />
 
-<Story name="JSON">
-  <CodeEditor label="Configuration" language="json" value={jsonCode} />
-</Story>
+<Story name="JSON" args={{ label: "Configuration", language: "json", value: jsonCode }} />
 
-<Story name="Readonly">
-  <CodeEditor label="Deployed Contract" language="solidity" value={solidityCode} readonly={true} />
-</Story>
+<Story name="Readonly" args={{ label: "Deployed Contract", language: "solidity", value: solidityCode, readonly: true }} />

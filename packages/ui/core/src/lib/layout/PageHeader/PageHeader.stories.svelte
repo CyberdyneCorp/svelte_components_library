@@ -9,12 +9,10 @@
   });
 </script>
 
-<Story name="Default">
-  <PageHeader
-    title="ML Models"
-    description="Manage your trained models and deployments."
-  />
-</Story>
+<Story name="Default" args={{
+  title: "ML Models",
+  description: "Manage your trained models and deployments.",
+}} />
 
 <Story name="WithActions">
   <PageHeader

@@ -9,13 +9,9 @@
   });
 </script>
 
-<Story name="Default">
-  <WelcomeText subtitle="Ask me anything about Web3, DeFi, or blockchain technology." />
-</Story>
+<Story name="Default" args={{ subtitle: "Ask me anything about Web3, DeFi, or blockchain technology." }} />
 
-<Story name="CustomTitle">
-  <WelcomeText title="Welcome to Cyberdyne" subtitle="Your AI assistant for decentralized operations." />
-</Story>
+<Story name="CustomTitle" args={{ title: "Welcome to Cyberdyne", subtitle: "Your AI assistant for decentralized operations." }} />
 
 <Story name="WithPrompts">
   <WelcomeText subtitle="Try one of these suggestions to get started.">

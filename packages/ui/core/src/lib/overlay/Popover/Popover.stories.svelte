@@ -9,15 +9,9 @@
   });
 </script>
 
-<script>
-  let openBottom = $state(false);
-  let openTop = $state(false);
-  let openRich = $state(false);
-</script>
-
 <Story name="Bottom">
   <div style="padding: 4rem 1rem;">
-    <Popover bind:open={openBottom} position="bottom">
+    <Popover position="bottom">
       {#snippet trigger()}
         <button class="trigger-btn">Show Info</button>
       {/snippet}
@@ -32,7 +26,7 @@
 
 <Story name="Top">
   <div style="padding: 8rem 1rem 1rem;">
-    <Popover bind:open={openTop} position="top">
+    <Popover position="top">
       {#snippet trigger()}
         <button class="trigger-btn">Status</button>
       {/snippet}
@@ -48,7 +42,7 @@
 
 <Story name="RichContent">
   <div style="padding: 4rem 1rem;">
-    <Popover bind:open={openRich} position="bottom">
+    <Popover position="bottom">
       {#snippet trigger()}
         <button class="trigger-btn">GPU Stats</button>
       {/snippet}

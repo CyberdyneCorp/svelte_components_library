@@ -8,9 +8,7 @@
     component: GraphViewer,
     tags: ["autodocs"],
   });
-</script>
 
-<script>
   // Knowledge Graph data
   const knowledgeNodes = [
     { id: "ml", label: "Machine Learning", group: "ML Fundamentals", metadata: { field: "AI", since: "1959" } },
@@ -151,46 +149,36 @@
   const largeGraph = generateLargeGraph(100);
 </script>
 
-<Story name="KnowledgeGraph">
-  <GraphViewer
-    nodes={knowledgeNodes}
-    edges={knowledgeEdges}
-    height="650px"
-    config={{ linkDistance: 120, chargeStrength: -400 }}
-  />
-</Story>
+<Story name="KnowledgeGraph" args={{
+  nodes: knowledgeNodes,
+  edges: knowledgeEdges,
+  height: "650px",
+  config: { linkDistance: 120, chargeStrength: -400 },
+}} />
 
-<Story name="BlockchainNetwork">
-  <GraphViewer
-    nodes={blockchainNodes}
-    edges={blockchainEdges}
-    height="650px"
-    config={{ showEdgeLabels: true, linkDistance: 140, chargeStrength: -500 }}
-  />
-</Story>
+<Story name="BlockchainNetwork" args={{
+  nodes: blockchainNodes,
+  edges: blockchainEdges,
+  height: "650px",
+  config: { showEdgeLabels: true, linkDistance: 140, chargeStrength: -500 },
+}} />
 
-<Story name="SmallGraph">
-  <GraphViewer
-    nodes={smallNodes}
-    edges={smallEdges}
-    height="400px"
-  />
-</Story>
+<Story name="SmallGraph" args={{
+  nodes: smallNodes,
+  edges: smallEdges,
+  height: "400px",
+}} />
 
-<Story name="LargeGraph">
-  <GraphViewer
-    nodes={largeGraph.nodes}
-    edges={largeGraph.edges}
-    height="700px"
-    config={{ nodeRadius: 5, linkDistance: 60, chargeStrength: -150, showLabels: false }}
-  />
-</Story>
+<Story name="LargeGraph" args={{
+  nodes: largeGraph.nodes,
+  edges: largeGraph.edges,
+  height: "700px",
+  config: { nodeRadius: 5, linkDistance: 60, chargeStrength: -150, showLabels: false },
+}} />
 
-<Story name="Cyberdyne Ecosystem">
-  <GraphViewer
-    nodes={cyberdyneKnowledgeGraph.nodes}
-    edges={cyberdyneKnowledgeGraph.edges}
-    height="750px"
-    config={{ linkDistance: 130, chargeStrength: -450, showEdgeLabels: false }}
-  />
-</Story>
+<Story name="Cyberdyne Ecosystem" args={{
+  nodes: cyberdyneKnowledgeGraph.nodes,
+  edges: cyberdyneKnowledgeGraph.edges,
+  height: "750px",
+  config: { linkDistance: 130, chargeStrength: -450, showEdgeLabels: false },
+}} />

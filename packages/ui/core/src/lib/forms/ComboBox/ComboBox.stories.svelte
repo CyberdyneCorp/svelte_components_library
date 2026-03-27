@@ -26,18 +26,10 @@
   ];
 </script>
 
-<Story name="Default">
-  <ComboBox label="Select Token" options={tokenOptions} placeholder="Search tokens..." />
-</Story>
+<Story name="Default" args={{ label: "Select Token", options: tokenOptions, placeholder: "Search tokens..." }} />
 
-<Story name="WithDescriptions">
-  <ComboBox label="Token" options={tokenOptions} placeholder="Search..." />
-</Story>
+<Story name="WithDescriptions" args={{ label: "Token", options: tokenOptions, placeholder: "Search..." }} />
 
-<Story name="Loading">
-  <ComboBox label="Network" options={[]} placeholder="Fetching networks..." loading={true} />
-</Story>
+<Story name="Loading" args={{ label: "Network", options: [], placeholder: "Fetching networks...", loading: true }} />
 
-<Story name="NoCustom">
-  <ComboBox label="Network" options={simpleOptions} placeholder="Choose a network..." allowCustom={false} />
-</Story>
+<Story name="NoCustom" args={{ label: "Network", options: simpleOptions, placeholder: "Choose a network...", allowCustom: false }} />

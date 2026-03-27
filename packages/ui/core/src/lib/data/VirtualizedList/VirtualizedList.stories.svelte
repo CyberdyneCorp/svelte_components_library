@@ -2,6 +2,16 @@
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import VirtualizedList from "./VirtualizedList.svelte";
 
+  const defaultItems = Array.from({ length: 1000 }, (_, i) => `Item ${i + 1} — Row entry`);
+
+  const customItems = Array.from({ length: 1000 }, (_, i) => ({
+    id: `TX-${String(i).padStart(6, '0')}`,
+    amount: (Math.random() * 10).toFixed(4),
+    status: ['confirmed', 'pending', 'failed'][i % 3],
+  }));
+
+  const largeItems = Array.from({ length: 10000 }, (_, i) => `Record ${i + 1} — Large dataset entry`);
+
   const { Story } = defineMeta({
     title: "Data/VirtualizedList",
     component: VirtualizedList,
@@ -9,9 +19,8 @@
   });
 </script>
 
-<Story name="Default" let:args>
-  {@const items = Array.from({ length: 1000 }, (_, i) => `Item ${i + 1} — Row entry`)}
-  <VirtualizedList {items} itemHeight={48} height="400px">
+<Story name="Default">
+  <VirtualizedList items={defaultItems} itemHeight={48} height="400px">
     {#snippet renderItem({ item, index })}
       <span style="color: var(--color-text-secondary, #888);">#{index}</span>
       <span style="margin-left: 12px;">{item}</span>
@@ -19,13 +28,8 @@
   </VirtualizedList>
 </Story>
 
-<Story name="WithCustomRender" let:args>
-  {@const items = Array.from({ length: 1000 }, (_, i) => ({
-    id: `TX-${String(i).padStart(6, '0')}`,
-    amount: (Math.random() * 10).toFixed(4),
-    status: ['confirmed', 'pending', 'failed'][i % 3],
-  }))}
-  <VirtualizedList {items} itemHeight={56} height="400px">
+<Story name="WithCustomRender">
+  <VirtualizedList items={customItems} itemHeight={56} height="400px">
     {#snippet renderItem({ item, index })}
       <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
         <span style="color: #00d4ff; font-family: monospace;">{item.id}</span>
@@ -42,9 +46,8 @@
   </VirtualizedList>
 </Story>
 
-<Story name="LargeDataset" let:args>
-  {@const items = Array.from({ length: 10000 }, (_, i) => `Record ${i + 1} — Large dataset entry`)}
-  <VirtualizedList {items} itemHeight={40} height="500px" overscan={10}>
+<Story name="LargeDataset">
+  <VirtualizedList items={largeItems} itemHeight={40} height="500px" overscan={10}>
     {#snippet renderItem({ item, index })}
       <span style="color: rgba(0, 212, 255, 0.6);">[{String(index).padStart(5, '0')}]</span>
       <span style="margin-left: 12px;">{item}</span>

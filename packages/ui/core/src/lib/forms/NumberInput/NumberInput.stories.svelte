@@ -9,18 +9,10 @@
   });
 </script>
 
-<Story name="Default">
-  <NumberInput label="Quantity" value={1} />
-</Story>
+<Story name="Default" args={{ label: "Quantity", value: 1 }} />
 
-<Story name="WithUnit">
-  <NumberInput label="Amount" value={0.5} step={0.1} precision={2} unit="ETH" />
-</Story>
+<Story name="WithUnit" args={{ label: "Amount", value: 0.5, step: 0.1, precision: 2, unit: "ETH" }} />
 
-<Story name="WithRange">
-  <NumberInput label="Gas Limit" value={21000} min={21000} max={1000000} step={1000} unit="gas" />
-</Story>
+<Story name="WithRange" args={{ label: "Gas Limit", value: 21000, min: 21000, max: 1000000, step: 1000, unit: "gas" }} />
 
-<Story name="SmallSize">
-  <NumberInput label="Confirmations" value={12} min={1} max={100} size="sm" />
-</Story>
+<Story name="SmallSize" args={{ label: "Confirmations", value: 12, min: 1, max: 100, size: "sm" }} />

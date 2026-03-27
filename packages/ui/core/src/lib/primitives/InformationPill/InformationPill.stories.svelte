@@ -9,17 +9,11 @@
   });
 </script>
 
-<Story name="Default">
-  <InformationPill label="Gas:" value="25 gwei" />
-</Story>
+<Story name="Default" args={{ label: "Gas:", value: "25 gwei" }} />
 
-<Story name="Brand">
-  <InformationPill label="Balance:" value="1.45 ETH" variant="brand" />
-</Story>
+<Story name="Brand" args={{ label: "Balance:", value: "1.45 ETH", variant: "brand" }} />
 
-<Story name="Info">
-  <InformationPill label="Network:" value="Ethereum" variant="info" />
-</Story>
+<Story name="Info" args={{ label: "Network:", value: "Ethereum", variant: "info" }} />
 
 <Story name="AllVariants">
   <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">

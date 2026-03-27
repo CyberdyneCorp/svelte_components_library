@@ -9,17 +9,11 @@
   });
 </script>
 
-<Story name="Default">
-  <ProgressRing value={25} />
-</Story>
+<Story name="Default" args={{ value: 25 }} />
 
-<Story name="HalfProgress">
-  <ProgressRing value={50} size={100} strokeWidth={8} />
-</Story>
+<Story name="HalfProgress" args={{ value: 50, size: 100, strokeWidth: 8 }} />
 
-<Story name="Complete">
-  <ProgressRing value={100} />
-</Story>
+<Story name="Complete" args={{ value: 100 }} />
 
 <Story name="AllVariants">
   <div style="display: flex; gap: 24px; align-items: flex-start;">

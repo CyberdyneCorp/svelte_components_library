@@ -9,18 +9,10 @@
   });
 </script>
 
-<Story name="Default">
-  <Chatbox onsend={(msg) => console.log("Send:", msg)} onattach={() => console.log("Attach")} />
-</Story>
+<Story name="Default" args={{ onsend: (msg) => console.log("Send:", msg), onattach: () => console.log("Attach") }} />
 
-<Story name="WithPlaceholder">
-  <Chatbox placeholder="Ask me anything..." onsend={(msg) => console.log(msg)} />
-</Story>
+<Story name="WithPlaceholder" args={{ placeholder: "Ask me anything...", onsend: (msg) => console.log(msg) }} />
 
-<Story name="Disabled">
-  <Chatbox disabled value="Cannot type here" />
-</Story>
+<Story name="Disabled" args={{ disabled: true, value: "Cannot type here" }} />
 
-<Story name="Loading">
-  <Chatbox loading value="Sending message..." />
-</Story>
+<Story name="Loading" args={{ loading: true, value: "Sending message..." }} />

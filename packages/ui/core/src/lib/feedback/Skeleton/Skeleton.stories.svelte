@@ -9,11 +9,7 @@
   });
 </script>
 
-<Story name="Text">
-  <div style="max-width: 400px; padding: 1rem;">
-    <Skeleton variant="text" />
-  </div>
-</Story>
+<Story name="Text" args={{ variant: "text" }} />
 
 <Story name="Circle">
   <div style="padding: 1rem; display: flex; gap: 1rem; align-items: center;">
@@ -23,14 +19,6 @@
   </div>
 </Story>
 
-<Story name="Card">
-  <div style="padding: 1rem; max-width: 320px;">
-    <Skeleton variant="card" />
-  </div>
-</Story>
+<Story name="Card" args={{ variant: "card" }} />
 
-<Story name="MultipleLines">
-  <div style="max-width: 400px; padding: 1rem;">
-    <Skeleton variant="text" lines={5} />
-  </div>
-</Story>
+<Story name="MultipleLines" args={{ variant: "text", lines: 5 }} />

@@ -9,20 +9,14 @@
   });
 </script>
 
-<Story name="Default">
-  <DataChart title="Model Accuracy" description="Accuracy over training epochs">
-    <div style="display: flex; align-items: flex-end; gap: 8px; height: 100%; width: 100%; padding: 0 16px;">
-      {#each [35, 52, 68, 74, 81, 87, 91, 94, 96, 97] as val}
-        <div style="flex: 1; height: {val}%; background: linear-gradient(180deg, #00ff41 0%, rgba(0,255,65,0.3) 100%); border-radius: 4px 4px 0 0; transition: height 300ms ease;"></div>
-      {/each}
-    </div>
-  </DataChart>
+<Story name="Default" args={{ title: "Model Accuracy", description: "Accuracy over training epochs" }}>
+  <div style="display: flex; align-items: flex-end; gap: 8px; height: 100%; width: 100%; padding: 0 16px;">
+    {#each [35, 52, 68, 74, 81, 87, 91, 94, 96, 97] as val}
+      <div style="flex: 1; height: {val}%; background: linear-gradient(180deg, #00ff41 0%, rgba(0,255,65,0.3) 100%); border-radius: 4px 4px 0 0; transition: height 300ms ease;"></div>
+    {/each}
+  </div>
 </Story>
 
-<Story name="Loading">
-  <DataChart title="Training Metrics" description="Waiting for data..." loading={true} />
-</Story>
+<Story name="Loading" args={{ title: "Training Metrics", description: "Waiting for data...", loading: true }} />
 
-<Story name="Empty">
-  <DataChart title="Inference Logs" empty={true} emptyMessage="No inference data recorded yet" />
-</Story>
+<Story name="Empty" args={{ title: "Inference Logs", empty: true, emptyMessage: "No inference data recorded yet" }} />

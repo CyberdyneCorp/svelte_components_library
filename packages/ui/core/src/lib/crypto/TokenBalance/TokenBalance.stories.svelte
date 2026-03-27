@@ -9,9 +9,7 @@
   });
 </script>
 
-<Story name="Default">
-  <TokenBalance symbol="ETH" balance="1.2345" usdValue="$2,450.00" />
-</Story>
+<Story name="Default" args={{ symbol: "ETH", balance: "1.2345", usdValue: "$2,450.00" }} />
 
 <Story name="WithChange">
   <div style="display: flex; flex-direction: column; gap: 1rem;">

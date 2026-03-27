@@ -7,40 +7,27 @@
     component: Radio,
     tags: ["autodocs"],
   });
+
+  const networkOptions = [
+    { value: "eth", label: "Ethereum" },
+    { value: "polygon", label: "Polygon" },
+    { value: "arbitrum", label: "Arbitrum" },
+  ];
+
+  const simpleOptions = [
+    { value: "a", label: "Option A" },
+    { value: "b", label: "Option B" },
+  ];
+
+  const planOptions = [
+    { value: "free", label: "Free" },
+    { value: "pro", label: "Pro" },
+    { value: "enterprise", label: "Enterprise" },
+  ];
 </script>
 
-<Story name="Default">
-  <Radio
-    label="Select network"
-    options={[
-      { value: "eth", label: "Ethereum" },
-      { value: "polygon", label: "Polygon" },
-      { value: "arbitrum", label: "Arbitrum" },
-    ]}
-    value="eth"
-  />
-</Story>
+<Story name="Default" args={{ label: "Select network", options: networkOptions, value: "eth" }} />
 
-<Story name="Disabled">
-  <Radio
-    label="Disabled group"
-    disabled
-    options={[
-      { value: "a", label: "Option A" },
-      { value: "b", label: "Option B" },
-    ]}
-    value="a"
-  />
-</Story>
+<Story name="Disabled" args={{ label: "Disabled group", disabled: true, options: simpleOptions, value: "a" }} />
 
-<Story name="WithError">
-  <Radio
-    label="Choose a plan"
-    error="Please select a plan"
-    options={[
-      { value: "free", label: "Free" },
-      { value: "pro", label: "Pro" },
-      { value: "enterprise", label: "Enterprise" },
-    ]}
-  />
-</Story>
+<Story name="WithError" args={{ label: "Choose a plan", error: "Please select a plan", options: planOptions }} />

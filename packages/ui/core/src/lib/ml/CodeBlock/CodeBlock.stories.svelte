@@ -7,12 +7,8 @@
     component: CodeBlock,
     tags: ["autodocs"],
   });
-</script>
 
-<Story name="TypeScript">
-  <CodeBlock
-    language="typescript"
-    code={`interface Model {
+  const typescriptCode = `interface Model {
   name: string;
   accuracy: number;
   layers: number[];
@@ -23,14 +19,9 @@ const trainModel = async (config: Model): Promise<void> => {
   const pipeline = new Pipeline(config);
   await pipeline.fit(trainingData);
   console.log("Training complete");
-};`}
-  />
-</Story>
+};`;
 
-<Story name="Python">
-  <CodeBlock
-    language="python"
-    code={`import torch
+  const pythonCode = `import torch
 import torch.nn as nn
 
 class NeuralNet(nn.Module):
@@ -42,14 +33,9 @@ class NeuralNet(nn.Module):
         self.fc2 = nn.Linear(hidden_size, 1)
 
     def forward(self, x):
-        return self.fc2(self.relu(self.fc1(x)))`}
-  />
-</Story>
+        return self.fc2(self.relu(self.fc1(x)))`;
 
-<Story name="JSON">
-  <CodeBlock
-    language="json"
-    code={`{
+  const jsonCode = `{
   "model": "gpt-4",
   "temperature": 0.7,
   "max_tokens": 2048,
@@ -59,14 +45,13 @@ class NeuralNet(nn.Module):
     "learning_rate": 0.001
   },
   "active": true
-}`}
-  />
-</Story>
+}`;
+</script>
 
-<Story name="WithCopy">
-  <CodeBlock
-    language="typescript"
-    copyable={true}
-    code={`npm install @cyberdyne/ml-core`}
-  />
-</Story>
+<Story name="TypeScript" args={{ language: "typescript", code: typescriptCode }} />
+
+<Story name="Python" args={{ language: "python", code: pythonCode }} />
+
+<Story name="JSON" args={{ language: "json", code: jsonCode }} />
+
+<Story name="WithCopy" args={{ language: "typescript", copyable: true, code: "npm install @cyberdyne/ml-core" }} />

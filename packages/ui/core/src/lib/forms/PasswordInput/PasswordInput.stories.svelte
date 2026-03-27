@@ -9,10 +9,6 @@
   });
 </script>
 
-<Story name="Default">
-  <PasswordInput label="Password" placeholder="Enter password..." />
-</Story>
+<Story name="Default" args={{ label: "Password", placeholder: "Enter password..." }} />
 
-<Story name="WithError">
-  <PasswordInput label="Password" value="123" error="Password must be at least 8 characters" />
-</Story>
+<Story name="WithError" args={{ label: "Password", value: "123", error: "Password must be at least 8 characters" }} />

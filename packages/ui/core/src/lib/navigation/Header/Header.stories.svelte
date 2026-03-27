@@ -9,9 +9,7 @@
   });
 </script>
 
-<Story name="Default">
-  <Header title="Cyberdyne" />
-</Story>
+<Story name="Default" args={{ title: "Cyberdyne" }} />
 
 <Story name="WithActions">
   <Header title="Dashboard">

@@ -7,9 +7,7 @@
     component: Icon,
     tags: ["autodocs"],
   });
-</script>
 
-<script>
   const allIcons = [
     "check", "x", "chevron-down", "chevron-right", "chevron-left",
     "search", "alert-circle", "info", "settings", "menu",

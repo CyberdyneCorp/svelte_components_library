@@ -9,18 +9,10 @@
   });
 </script>
 
-<Story name="Success">
-  <Notification variant="success" message="Transaction confirmed successfully." duration={0} />
-</Story>
+<Story name="Success" args={{ variant: "success", message: "Transaction confirmed successfully.", duration: 0 }} />
 
-<Story name="Warning">
-  <Notification variant="warning" message="Network congestion detected. Delays expected." duration={0} />
-</Story>
+<Story name="Warning" args={{ variant: "warning", message: "Network congestion detected. Delays expected.", duration: 0 }} />
 
-<Story name="Error">
-  <Notification variant="error" message="Connection to node lost. Retrying..." duration={0} />
-</Story>
+<Story name="Error" args={{ variant: "error", message: "Connection to node lost. Retrying...", duration: 0 }} />
 
-<Story name="Info">
-  <Notification variant="info" message="New block mined: #14,203,892" duration={0} />
-</Story>
+<Story name="Info" args={{ variant: "info", message: "New block mined: #14,203,892", duration: 0 }} />

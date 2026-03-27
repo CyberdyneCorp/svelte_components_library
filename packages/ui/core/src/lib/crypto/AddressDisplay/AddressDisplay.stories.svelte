@@ -9,13 +9,9 @@
   });
 </script>
 
-<Story name="Default">
-  <AddressDisplay address="0x1234567890abcdef1234567890abcdef12345678" />
-</Story>
+<Story name="Default" args={{ address: "0x1234567890abcdef1234567890abcdef12345678" }} />
 
-<Story name="FullAddress">
-  <AddressDisplay address="0x1234567890abcdef1234567890abcdef12345678" truncate={false} />
-</Story>
+<Story name="FullAddress" args={{ address: "0x1234567890abcdef1234567890abcdef12345678", truncate: false }} />
 
 <Story name="WithLabel">
   <div style="display: flex; flex-direction: column; gap: 1rem;">

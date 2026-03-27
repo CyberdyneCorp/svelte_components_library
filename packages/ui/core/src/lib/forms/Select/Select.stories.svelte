@@ -16,18 +16,10 @@
   ];
 </script>
 
-<Story name="Default">
-  <Select options={networkOptions} placeholder="Choose network..." />
-</Story>
+<Story name="Default" args={{ options: networkOptions, placeholder: "Choose network..." }} />
 
-<Story name="WithLabel">
-  <Select label="Network" options={networkOptions} placeholder="Choose network..." />
-</Story>
+<Story name="WithLabel" args={{ label: "Network", options: networkOptions, placeholder: "Choose network..." }} />
 
-<Story name="WithError">
-  <Select label="Network" options={networkOptions} error="Network selection is required" />
-</Story>
+<Story name="WithError" args={{ label: "Network", options: networkOptions, error: "Network selection is required" }} />
 
-<Story name="Disabled">
-  <Select label="Network" options={networkOptions} value="ethereum" disabled />
-</Story>
+<Story name="Disabled" args={{ label: "Network", options: networkOptions, value: "ethereum", disabled: true }} />

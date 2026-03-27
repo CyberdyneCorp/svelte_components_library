@@ -9,23 +9,15 @@
   });
 </script>
 
-<Story name="Default">
-  <div style="max-width: 260px;">
-    <MetricCard label="Total Value Locked" value="$1.2M" />
-  </div>
-</Story>
+<Story name="Default" args={{ label: "Total Value Locked", value: "$1.2M" }} />
 
-<Story name="WithChange">
-  <div style="max-width: 260px;">
-    <MetricCard
-      label="Total Value Locked"
-      value="$1.2M"
-      change={12.5}
-      changeLabel="vs last week"
-      variant="brand"
-    />
-  </div>
-</Story>
+<Story name="WithChange" args={{
+  label: "Total Value Locked",
+  value: "$1.2M",
+  change: 12.5,
+  changeLabel: "vs last week",
+  variant: "brand",
+}} />
 
 <Story name="AllVariants">
   <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; max-width: 560px;">

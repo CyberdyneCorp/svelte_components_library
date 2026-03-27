@@ -9,13 +9,9 @@
   });
 </script>
 
-<Story name="Ethereum">
-  <NetworkBadge network="Ethereum" chainId={1} connected={true} />
-</Story>
+<Story name="Ethereum" args={{ network: "Ethereum", chainId: 1, connected: true }} />
 
-<Story name="Polygon">
-  <NetworkBadge network="Polygon" chainId={137} connected={true} />
-</Story>
+<Story name="Polygon" args={{ network: "Polygon", chainId: 137, connected: true }} />
 
 <Story name="Disconnected">
   <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start;">

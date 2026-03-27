@@ -9,23 +9,7 @@
   });
 </script>
 
-<script>
-  import { getContext } from "svelte";
-
-  let toastRefSuccess;
-  let toastRefWarning;
-  let toastRefError;
-  let toastRefAction;
-</script>
-
 <Story name="Success">
-  <Toast>
-    {#snippet children()}
-      <button class="trigger-btn" onclick={() => {
-        const ctx = toastRefSuccess;
-      }}>Note: Toasts use context. See provider pattern.</button>
-    {/snippet}
-  </Toast>
   <div style="padding: 1rem;">
     <p style="color: var(--color-text-secondary); font-family: var(--font-body); font-size: 0.875rem; margin-bottom: 1rem;">
       Toast component provides a context-based API. Wrap your app in {'<Toast>'} and use getContext("toast") to trigger notifications.
@@ -82,17 +66,6 @@
 </Story>
 
 <style>
-  .trigger-btn {
-    padding: 0.5rem 1rem;
-    background: var(--color-surface-raised);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    font-family: var(--font-body);
-    font-size: 0.875rem;
-  }
-
   .toast-preview {
     display: flex;
     align-items: center;

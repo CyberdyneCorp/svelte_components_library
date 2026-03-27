@@ -14,14 +14,8 @@
   ];
 </script>
 
-<Story name="Default">
-  <TagInput label="Tags" placeholder="Add a tag..." />
-</Story>
+<Story name="Default" args={{ label: "Tags", placeholder: "Add a tag..." }} />
 
-<Story name="WithSuggestions">
-  <TagInput label="Categories" placeholder="Type to see suggestions..." suggestions={blockchainSuggestions} />
-</Story>
+<Story name="WithSuggestions" args={{ label: "Categories", placeholder: "Type to see suggestions...", suggestions: blockchainSuggestions }} />
 
-<Story name="MaxTags">
-  <TagInput label="Keywords (max 5)" placeholder="Add keyword..." maxTags={5} suggestions={blockchainSuggestions} />
-</Story>
+<Story name="MaxTags" args={{ label: "Keywords (max 5)", placeholder: "Add keyword...", maxTags: 5, suggestions: blockchainSuggestions }} />

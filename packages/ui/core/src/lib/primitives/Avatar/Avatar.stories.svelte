@@ -9,13 +9,11 @@
   });
 </script>
 
-<Story name="WithImage">
-  <Avatar
-    src="https://i.pravatar.cc/128?img=3"
-    alt="User avatar"
-    size="lg"
-  />
-</Story>
+<Story name="WithImage" args={{
+  src: "https://i.pravatar.cc/128?img=3",
+  alt: "User avatar",
+  size: "lg",
+}} />
 
 <Story name="WithInitials">
   <div style="display: flex; align-items: center; gap: 0.75rem;">

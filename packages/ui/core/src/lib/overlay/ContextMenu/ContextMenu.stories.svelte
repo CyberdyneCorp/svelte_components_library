@@ -7,14 +7,29 @@
     component: ContextMenu,
     tags: ["autodocs"],
   });
-</script>
 
-<Story name="Default">
-  <ContextMenu items={[
+  const defaultItems = [
     { label: "Copy", onclick: () => console.log("copy") },
     { label: "Paste", onclick: () => console.log("paste") },
     { label: "Select All", onclick: () => console.log("select all") },
-  ]}>
+  ];
+
+  const iconItems = [
+    { label: "Copy", icon: "copy", onclick: () => console.log("copy") },
+    { label: "Edit", icon: "edit", onclick: () => console.log("edit") },
+    { label: "Download", icon: "download", onclick: () => console.log("download") },
+    { label: "Share", icon: "share", onclick: () => console.log("share") },
+  ];
+
+  const dangerItems = [
+    { label: "Edit", icon: "edit", onclick: () => console.log("edit") },
+    { label: "Download", icon: "download", onclick: () => console.log("download") },
+    { label: "Delete", icon: "delete", onclick: () => console.log("delete"), variant: "danger" },
+  ];
+</script>
+
+<Story name="Default">
+  <ContextMenu items={defaultItems}>
     <div style="
       padding: 2rem;
       border: 2px dashed var(--color-border-subtle);
@@ -30,12 +45,7 @@
 </Story>
 
 <Story name="WithIcons">
-  <ContextMenu items={[
-    { label: "Copy", icon: "copy", onclick: () => console.log("copy") },
-    { label: "Edit", icon: "edit", onclick: () => console.log("edit") },
-    { label: "Download", icon: "download", onclick: () => console.log("download") },
-    { label: "Share", icon: "share", onclick: () => console.log("share") },
-  ]}>
+  <ContextMenu items={iconItems}>
     <div style="
       padding: 2rem;
       border: 2px dashed var(--color-border-subtle);
@@ -51,11 +61,7 @@
 </Story>
 
 <Story name="WithDanger">
-  <ContextMenu items={[
-    { label: "Edit", icon: "edit", onclick: () => console.log("edit") },
-    { label: "Download", icon: "download", onclick: () => console.log("download") },
-    { label: "Delete", icon: "delete", onclick: () => console.log("delete"), variant: "danger" },
-  ]}>
+  <ContextMenu items={dangerItems}>
     <div style="
       padding: 2rem;
       border: 2px dashed var(--color-border-subtle);

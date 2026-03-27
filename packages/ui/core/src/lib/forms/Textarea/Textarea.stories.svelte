@@ -9,18 +9,10 @@
   });
 </script>
 
-<Story name="Default">
-  <Textarea placeholder="Enter your message..." />
-</Story>
+<Story name="Default" args={{ placeholder: "Enter your message..." }} />
 
-<Story name="WithLabel">
-  <Textarea label="Description" placeholder="Describe your model architecture..." rows={6} />
-</Story>
+<Story name="WithLabel" args={{ label: "Description", placeholder: "Describe your model architecture...", rows: 6 }} />
 
-<Story name="WithError">
-  <Textarea label="Notes" value="Too short" error="Description must be at least 50 characters" />
-</Story>
+<Story name="WithError" args={{ label: "Notes", value: "Too short", error: "Description must be at least 50 characters" }} />
 
-<Story name="WithMaxLength">
-  <Textarea label="Bio" placeholder="Write a short bio..." maxlength={280} hint="Keep it brief" />
-</Story>
+<Story name="WithMaxLength" args={{ label: "Bio", placeholder: "Write a short bio...", maxlength: 280, hint: "Keep it brief" }} />
