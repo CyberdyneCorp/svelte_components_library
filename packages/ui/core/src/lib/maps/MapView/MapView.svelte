@@ -44,6 +44,52 @@
   let map: any = null;
   let markerLayer: any = null;
   let leafletLoaded = $state(false);
+  let locating = $state(false);
+  let locationMarker: any = null;
+
+  function zoomIn() { map?.zoomIn(); }
+  function zoomOut() { map?.zoomOut(); }
+  function resetView() { map?.setView(center, zoom); }
+
+  function locateMe() {
+    if (!map || !navigator.geolocation) return;
+    locating = true;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const L = (window as any).L;
+        const latlng: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        map.flyTo(latlng, 14, { duration: 1.5 });
+
+        if (locationMarker) {
+          locationMarker.setLatLng(latlng);
+        } else {
+          const icon = L.divIcon({
+            className: "cy-map-marker",
+            html: `<div style="
+              width: 18px; height: 18px; border-radius: 50%;
+              background: #00d4ff;
+              box-shadow: 0 0 12px #00d4ff, 0 0 24px #00d4ff44;
+              border: 3px solid rgba(255,255,255,0.5);
+              animation: cy-map-pulse 1.5s ease-in-out infinite;
+            "></div>`,
+            iconSize: [18, 18],
+            iconAnchor: [9, 9],
+          });
+          locationMarker = L.marker(latlng, { icon }).addTo(map);
+          locationMarker.bindPopup(
+            `<div style="background:#12121a;color:#f0f0ff;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;border:1px solid #00d4ff44;">
+              <div style="color:#00d4ff;font-weight:600;">Your Location</div>
+              <div style="color:rgba(240,240,255,0.6);font-size:11px;margin-top:2px;">${latlng[0].toFixed(4)}, ${latlng[1].toFixed(4)}</div>
+            </div>`,
+            { className: "cy-map-popup", closeButton: false }
+          );
+        }
+        locating = false;
+      },
+      () => { locating = false; },
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+  }
 
   function loadLeafletCSS(): Promise<void> {
     return new Promise((resolve) => {
@@ -164,9 +210,7 @@
 
     L.tileLayer(tileUrl, { attribution }).addTo(map);
 
-    if (interactive) {
-      L.control.zoom({ position: "bottomright" }).addTo(map);
-    }
+    // Custom controls are rendered in Svelte template instead of Leaflet's
 
     addMarkers();
   }
@@ -193,6 +237,39 @@
 
 <div class="cy-map" style="--map-height: {height};">
   <div class="cy-map__container" bind:this={mapContainer}></div>
+
+  {#if leafletLoaded && interactive}
+    <div class="cy-map__controls">
+      <button class="cy-map__ctrl-btn" onclick={zoomIn} title="Zoom in" aria-label="Zoom in">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <button class="cy-map__ctrl-btn" onclick={zoomOut} title="Zoom out" aria-label="Zoom out">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="cy-map__ctrl-sep"></div>
+      <button class="cy-map__ctrl-btn" onclick={resetView} title="Reset view" aria-label="Reset view">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button
+        class="cy-map__ctrl-btn"
+        class:cy-map__ctrl-btn--active={locating}
+        onclick={locateMe}
+        title="My location"
+        aria-label="My location"
+        disabled={locating}
+      >
+        {#if locating}
+          <div class="cy-map__ctrl-spinner"></div>
+        {:else}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        {/if}
+      </button>
+    </div>
+  {/if}
+
   {#if !leafletLoaded}
     <div class="cy-map__loading">
       <span class="cy-map__loading-text">Initializing map...</span>
@@ -239,6 +316,73 @@
     50% { opacity: 1; }
   }
 
+  /* Custom controls */
+  .cy-map__controls {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: rgba(18, 18, 26, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 4px;
+    backdrop-filter: blur(8px);
+  }
+
+  .cy-map__ctrl-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.65);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .cy-map__ctrl-btn:hover {
+    background: rgba(0, 212, 255, 0.1);
+    color: #00d4ff;
+  }
+
+  .cy-map__ctrl-btn:active {
+    background: rgba(0, 212, 255, 0.18);
+  }
+
+  .cy-map__ctrl-btn--active {
+    color: #00d4ff;
+  }
+
+  .cy-map__ctrl-btn:disabled {
+    opacity: 0.4;
+    cursor: wait;
+  }
+
+  .cy-map__ctrl-sep {
+    height: 1px;
+    margin: 2px 4px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .cy-map__ctrl-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-top-color: #00d4ff;
+    border-radius: 50%;
+    animation: cy-map-spin 0.6s linear infinite;
+  }
+
+  @keyframes cy-map-spin {
+    to { transform: rotate(360deg); }
+  }
+
   /* Override Leaflet popup styles */
   .cy-map :global(.cy-map-popup .leaflet-popup-content-wrapper) {
     background: transparent;
@@ -258,25 +402,9 @@
     box-shadow: none;
   }
 
+  /* Hide default Leaflet zoom control */
   .cy-map :global(.leaflet-control-zoom) {
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 6px !important;
-    overflow: hidden;
-  }
-
-  .cy-map :global(.leaflet-control-zoom a) {
-    background: rgba(18, 18, 26, 0.9) !important;
-    color: rgba(255, 255, 255, 0.7) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
-    width: 32px !important;
-    height: 32px !important;
-    line-height: 32px !important;
-    font-size: 16px !important;
-  }
-
-  .cy-map :global(.leaflet-control-zoom a:hover) {
-    background: rgba(18, 18, 26, 1) !important;
-    color: #00d4ff !important;
+    display: none !important;
   }
 
   .cy-map :global(.leaflet-control-attribution) {
