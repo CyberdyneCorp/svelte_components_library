@@ -6,6 +6,8 @@ export { IconButton } from "./primitives/IconButton/index.js";
 export { Avatar } from "./primitives/Avatar/index.js";
 export { Tooltip } from "./primitives/Tooltip/index.js";
 export { ChipButton } from "./primitives/ChipButton/index.js";
+export { ToggleGroup } from "./primitives/ToggleGroup/index.js";
+export { AvatarGroup } from "./primitives/AvatarGroup/index.js";
 export { Flag } from "./primitives/Flag/index.js";
 export { InformationPill } from "./primitives/InformationPill/index.js";
 export { CopyButton } from "./primitives/CopyButton/index.js";
@@ -26,6 +28,8 @@ export { NumberInput } from "./forms/NumberInput/index.js";
 export { ComboBox } from "./forms/ComboBox/index.js";
 export { RangeSlider } from "./forms/RangeSlider/index.js";
 export { CodeEditor } from "./forms/CodeEditor/index.js";
+export { ColorPicker } from "./forms/ColorPicker/index.js";
+export { SearchInput } from "./forms/SearchInput/index.js";
 
 // Feedback
 export { Alert } from "./feedback/Alert/index.js";
@@ -55,6 +59,11 @@ export { EmptyState } from "./data/EmptyState/index.js";
 export { StickyNote } from "./data/StickyNote/index.js";
 export { VirtualizedList } from "./data/VirtualizedList/index.js";
 export { InfiniteScroll } from "./data/InfiniteScroll/index.js";
+export { FileTree } from "./data/FileTree/index.js";
+export { DiffViewer } from "./data/DiffViewer/index.js";
+export { Calendar } from "./data/Calendar/index.js";
+export { Kanban } from "./data/Kanban/index.js";
+export { DataTable } from "./data/DataTable/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
@@ -119,3 +128,6 @@ export { HeatmapChart } from "./charts/HeatmapChart/index.js";
 export { MarkdownEditor } from "./editor/MarkdownEditor/index.js";
 export { MarkdownPreview } from "./editor/MarkdownPreview/index.js";
 export { MarkdownToolbar } from "./editor/MarkdownToolbar/index.js";
+
+// Maps
+export { MapView } from "./maps/MapView/index.js";
