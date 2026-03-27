@@ -19,6 +19,13 @@ export { Switch } from "./forms/Switch/index.js";
 export { Textarea } from "./forms/Textarea/index.js";
 export { FileDropzone } from "./forms/FileDropzone/index.js";
 export { Radio } from "./forms/Radio/index.js";
+export { DateRangePicker } from "./forms/DateRangePicker/index.js";
+export { MultiSelect } from "./forms/MultiSelect/index.js";
+export { TagInput } from "./forms/TagInput/index.js";
+export { NumberInput } from "./forms/NumberInput/index.js";
+export { ComboBox } from "./forms/ComboBox/index.js";
+export { RangeSlider } from "./forms/RangeSlider/index.js";
+export { CodeEditor } from "./forms/CodeEditor/index.js";
 
 // Feedback
 export { Alert } from "./feedback/Alert/index.js";
@@ -28,6 +35,9 @@ export { Toast } from "./feedback/Toast/index.js";
 export { Skeleton } from "./feedback/Skeleton/index.js";
 export { Accordion } from "./feedback/Accordion/index.js";
 export { Dropdown } from "./feedback/Dropdown/index.js";
+export { ProgressRing } from "./feedback/ProgressRing/index.js";
+export { Stepper } from "./feedback/Stepper/index.js";
+export { ErrorBoundary } from "./feedback/ErrorBoundary/index.js";
 
 // Navigation
 export { Tabs } from "./navigation/Tabs/index.js";
@@ -43,6 +53,8 @@ export { ProgressBar } from "./data/ProgressBar/index.js";
 export { StatusBadge } from "./data/StatusBadge/index.js";
 export { EmptyState } from "./data/EmptyState/index.js";
 export { StickyNote } from "./data/StickyNote/index.js";
+export { VirtualizedList } from "./data/VirtualizedList/index.js";
+export { InfiniteScroll } from "./data/InfiniteScroll/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
@@ -50,6 +62,8 @@ export { AppLayout } from "./layout/AppLayout/index.js";
 export { PageHeader } from "./layout/PageHeader/index.js";
 export { ContentSlot } from "./layout/ContentSlot/index.js";
 export { Drawer } from "./layout/Drawer/index.js";
+export { SplitView } from "./layout/SplitView/index.js";
+export { GridLayout } from "./layout/GridLayout/index.js";
 
 // Overlay
 export { Modal } from "./overlay/Modal/index.js";
@@ -90,3 +104,13 @@ export { StepProgress } from "./ml/StepProgress/index.js";
 export { Timeline } from "./ml/Timeline/index.js";
 export { DataChart } from "./ml/DataChart/index.js";
 export { Kbd } from "./ml/Kbd/index.js";
+
+// Graph
+export { GraphViewer } from "./graph/GraphViewer/index.js";
+export { SemanticSearch } from "./graph/SemanticSearch/index.js";
+
+// Charts
+export { LineChart } from "./charts/LineChart/index.js";
+export { BarChart } from "./charts/BarChart/index.js";
+export { AreaChart } from "./charts/AreaChart/index.js";
+export { HeatmapChart } from "./charts/HeatmapChart/index.js";

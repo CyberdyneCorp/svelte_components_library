@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **71 components** across 12 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **93 components** across 15 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -34,7 +34,7 @@ The Storybook includes:
 | Package | Description |
 |---------|------------|
 | `@cyberdyne/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdyne/svelte-ui-core` | 71 UI components across 12 categories |
+| `@cyberdyne/svelte-ui-core` | 93 UI components across 15 categories |
 
 ## Installation
 
@@ -75,25 +75,25 @@ Use components:
 </Card>
 ```
 
-## Components (71)
+## Components (93)
 
 ### Primitives (10)
 `Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `Flag` · `InformationPill` · `CopyButton`
 
-### Forms (8)
-`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone`
+### Forms (15)
+`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `ComboBox` · `RangeSlider` · `CodeEditor`
 
-### Feedback (7)
-`Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown`
+### Feedback (10)
+`Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary`
 
 ### Navigation (5)
 `Tabs` · `Breadcrumb` · `Sidebar` · `Header` · `MenuItem`
 
-### Data Display (6)
-`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote`
+### Data Display (8)
+`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll`
 
-### Layout (5)
-`Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer`
+### Layout (7)
+`Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` · `SplitView` · `GridLayout`
 
 ### Overlay (5)
 `Modal` · `ModalBackdrop` · `ContextMenu` · `Popover` · `CommandPalette` (Cmd+K)
@@ -109,6 +109,12 @@ Use components:
 
 ### ML / Data Tools (8)
 `CodeBlock` (syntax highlighting) · `Terminal` · `LogViewer` (severity filtering) · `Slider` · `StepProgress` · `Timeline` · `DataChart` (chart wrapper) · `Kbd` (keyboard shortcuts)
+
+### Graph & Search (2)
+`GraphViewer` (force-directed network graph with community detection, zoom/pan, search) · `SemanticSearch` (vector search results with relevance scores)
+
+### Charts (4)
+`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart`
 
 ## Design System
 
@@ -205,19 +211,21 @@ pnpm release            # Build & publish
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
-│       └── core/            UI components (71 components)
+│       └── core/            UI components (93 components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, Flag, CopyButton, ...
-│               ├── forms/        TextInput, Select, Checkbox, Radio, ...
-│               ├── feedback/     Alert, Dialog, Toast, Skeleton, Accordion, ...
+│               ├── forms/        TextInput, Select, DateRangePicker, MultiSelect, CodeEditor, ...
+│               ├── feedback/     Alert, Toast, Skeleton, Stepper, ProgressRing, ErrorBoundary, ...
 │               ├── navigation/   Tabs, Breadcrumb, Sidebar, Header, MenuItem
-│               ├── data/         Table, Pagination, ProgressBar, StickyNote, ...
-│               ├── layout/       Card, AppLayout, PageHeader, Drawer, ContentSlot
+│               ├── data/         Table, Pagination, VirtualizedList, InfiniteScroll, ...
+│               ├── layout/       Card, AppLayout, Drawer, SplitView, GridLayout, ...
 │               ├── overlay/      Modal, ContextMenu, Popover, CommandPalette
 │               ├── auth/         LoginPage, WalletConnect
 │               ├── chat/         Chatbox, ChatPanel, ChatResponse, ...
 │               ├── crypto/       TokenBalance, NFTCard, GasEstimate, TierBadge, ...
-│               └── ml/           CodeBlock, Terminal, LogViewer, Timeline, ...
+│               ├── ml/           CodeBlock, Terminal, LogViewer, Timeline, ...
+│               ├── graph/        GraphViewer (force-directed), SemanticSearch
+│               └── charts/       LineChart, BarChart, AreaChart, HeatmapChart
 └── docs/                    Built Storybook output
 ```
 
