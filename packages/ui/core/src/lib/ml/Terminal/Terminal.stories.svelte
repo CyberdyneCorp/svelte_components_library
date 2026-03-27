@@ -1,6 +1,7 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import Terminal from "./Terminal.svelte";
+  import { deploymentTerminal } from "../../_testdata/index.js";
 
   const { Story } = defineMeta({
     title: "ML/Terminal",
@@ -49,5 +50,12 @@
       { text: "1234  train   387.2  82.4  python train.py", type: "stdout" },
       { text: "5678  root      2.1   0.3  nvidia-persistenced", type: "stdout" },
     ]}
+  />
+</Story>
+
+<Story name="Smart Contract Deployment">
+  <Terminal
+    title="Cyberdyne Deploy"
+    lines={deploymentTerminal}
   />
 </Story>

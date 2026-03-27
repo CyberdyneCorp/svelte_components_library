@@ -1,0 +1,81 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Overview/Showcase" />
+
+# Component Showcase
+
+This page demonstrates how Cyberdyne components compose together in real-world scenarios.
+
+Browse the individual component stories to see each one in isolation with full interactive controls.
+
+## Key Demos
+
+### Data-Heavy Components
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **Table** | `Data Display / Table / Crypto Market` | 12-row sortable crypto market table |
+| **Table** | `Data Display / Table / ML Model Comparison` | Model benchmarks with striped rows |
+| **Table** | `Data Display / Table / Validator Nodes` | Cyberdyne validator node monitoring |
+| **GraphViewer** | `Graph / GraphViewer / KnowledgeGraph` | 15-node ML knowledge graph with community detection |
+| **GraphViewer** | `Graph / GraphViewer / BlockchainNetwork` | DeFi protocol network with weighted edges |
+| **GraphViewer** | `Graph / GraphViewer / LargeGraph` | 100-node stress test |
+
+### Charts
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **LineChart** | `Charts / LineChart / MultiSeries` | GPT-4 vs Claude vs Gemini training loss |
+| **BarChart** | `Charts / BarChart / Default` | ML component importance scores |
+| **AreaChart** | `Charts / AreaChart / Stacked` | Multi-asset portfolio allocation |
+| **HeatmapChart** | `Charts / HeatmapChart / CorrelationMatrix` | Feature correlation with diverging colors |
+| **HeatmapChart** | `Charts / HeatmapChart / Attention` | Transformer attention weights |
+
+### Crypto / Web3
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **LoginPage** | `Auth / LoginPage / Both` | Full login with credential + wallet modes |
+| **TokenBalance** | `Auth / TokenBalance / WithChange` | ETH & BTC balances with price changes |
+| **TransactionList** | `Crypto / TransactionList / WithPending` | Mixed transaction statuses |
+| **GasEstimate** | `Crypto / GasEstimate / Default` | Gas fee selector (slow/standard/fast) |
+| **TierBadge** | `Crypto / TierBadge / AllTiers` | 6-tier NFT access system |
+
+### ML / Developer Tools
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **Terminal** | `ML / Terminal / CommandOutput` | nvidia-smi GPU monitoring |
+| **LogViewer** | `ML / LogViewer / Default` | Pipeline logs with severity filtering |
+| **CodeBlock** | `ML / CodeBlock / TypeScript` | Syntax-highlighted code |
+| **StepProgress** | `ML / StepProgress / Horizontal` | ML pipeline steps |
+
+### Advanced Interactions
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **CommandPalette** | `Overlay / CommandPalette / Default` | Cmd+K search overlay |
+| **SplitView** | `Layout / SplitView / Horizontal` | Resizable panels |
+| **DateRangePicker** | `Forms / DateRangePicker / WithPresets` | Calendar with preset ranges |
+| **MultiSelect** | `Forms / MultiSelect / WithGroups` | Grouped multi-select |
+| **CodeEditor** | `Forms / CodeEditor / Solidity` | Editable smart contract code |
+
+## Test Data
+
+The library ships with a shared test data module at `_testdata/index.ts` containing realistic Cyberdyne-themed data:
+
+- **Crypto market** — Top 10 tokens with prices, market caps, volumes, sparklines
+- **Transactions** — Send, receive, swap, approve with various statuses
+- **Training metrics** — Loss curves, accuracy, validation loss over 15 epochs
+- **Model benchmarks** — MMLU, HumanEval, GSM8K scores
+- **Confusion matrix** — 4-class blockchain transaction classification
+- **Portfolio timeline** — 12-month portfolio growth with asset allocation breakdown
+- **Validator nodes** — 6 Cyberdyne validators with uptime, rewards, status
+- **Knowledge graph** — 29 nodes across 5 groups (Infrastructure, Finance, AI/ML, Products, Science)
+- **System logs** — 12 entries from ml-service, chain-watcher, yieldpath, vision-factory
+- **Deployment terminal** — Full smart contract deployment output
+
+Import in your own stories:
+```ts
+import { cryptoMarket, trainingMetrics, systemLogs } from "../_testdata/index.js";
+```

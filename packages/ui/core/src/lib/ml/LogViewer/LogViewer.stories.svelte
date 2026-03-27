@@ -1,6 +1,7 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import LogViewer from "./LogViewer.svelte";
+  import { systemLogs } from "../../_testdata/index.js";
 
   const { Story } = defineMeta({
     title: "ML/LogViewer",
@@ -48,4 +49,8 @@
       { timestamp: "14:00:15", level: "error", message: "Timeout waiting for inference result", source: "ml-worker" },
     ]}
   />
+</Story>
+
+<Story name="Cyberdyne System Logs">
+  <LogViewer logs={systemLogs} maxHeight="500px" />
 </Story>

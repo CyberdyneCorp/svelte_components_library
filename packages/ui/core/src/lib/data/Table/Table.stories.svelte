@@ -9,37 +9,83 @@
   });
 </script>
 
-<script>
-  const sampleRows = [
-    { token: "ETH", price: "$3,245.12", change: "+2.4%", volume: "$18.2B" },
-    { token: "BTC", price: "$67,891.00", change: "-0.8%", volume: "$32.1B" },
-    { token: "SOL", price: "$142.50", change: "+5.1%", volume: "$4.8B" },
-    { token: "LINK", price: "$18.73", change: "+1.2%", volume: "$890M" },
+<script lang="ts">
+  const cryptoRows = [
+    { rank: 1, token: "BTC", name: "Bitcoin", price: "$67,891.00", marketCap: "$1.33T", change: "+1.8%", volume: "$32.1B" },
+    { rank: 2, token: "ETH", name: "Ethereum", price: "$3,245.12", marketCap: "$390.1B", change: "+2.4%", volume: "$18.2B" },
+    { rank: 3, token: "SOL", name: "Solana", price: "$142.50", marketCap: "$62.3B", change: "+5.1%", volume: "$4.8B" },
+    { rank: 4, token: "BNB", name: "BNB Chain", price: "$612.30", marketCap: "$91.2B", change: "-0.3%", volume: "$2.1B" },
+    { rank: 5, token: "XRP", name: "Ripple", price: "$0.5412", marketCap: "$29.6B", change: "+0.9%", volume: "$1.4B" },
+    { rank: 6, token: "ADA", name: "Cardano", price: "$0.4523", marketCap: "$16.0B", change: "-1.2%", volume: "$620M" },
+    { rank: 7, token: "AVAX", name: "Avalanche", price: "$35.67", marketCap: "$13.1B", change: "+3.7%", volume: "$890M" },
+    { rank: 8, token: "DOT", name: "Polkadot", price: "$7.12", marketCap: "$9.8B", change: "-0.5%", volume: "$410M" },
+    { rank: 9, token: "LINK", name: "Chainlink", price: "$18.73", marketCap: "$10.9B", change: "+1.2%", volume: "$890M" },
+    { rank: 10, token: "MATIC", name: "Polygon", price: "$0.7234", marketCap: "$6.7B", change: "+4.2%", volume: "$520M" },
+    { rank: 11, token: "UNI", name: "Uniswap", price: "$12.45", marketCap: "$7.4B", change: "-2.1%", volume: "$340M" },
+    { rank: 12, token: "ATOM", name: "Cosmos", price: "$9.87", marketCap: "$3.8B", change: "+0.6%", volume: "$210M" },
   ];
 
   const defaultCols = [
-    { key: "token", label: "Token" },
-    { key: "price", label: "Price" },
-    { key: "change", label: "24h Change" },
-    { key: "volume", label: "Volume" },
+    { key: "rank", label: "#", sortable: true },
+    { key: "token", label: "Token", sortable: true },
+    { key: "name", label: "Name" },
+    { key: "price", label: "Price", sortable: true },
+    { key: "marketCap", label: "Market Cap", sortable: true },
+    { key: "change", label: "24h", sortable: true },
+    { key: "volume", label: "Volume", sortable: true },
   ];
 
-  const sortableCols = [
-    { key: "token", label: "Token", sortable: true },
-    { key: "price", label: "Price", sortable: true },
-    { key: "change", label: "24h Change", sortable: true },
-    { key: "volume", label: "Volume" },
+  const modelRows = [
+    { model: "GPT-4o", params: "1.8T", accuracy: "94.2%", latency: "320ms", cost: "$0.005/1K", status: "Production" },
+    { model: "Claude Opus 4", params: "—", accuracy: "95.1%", latency: "280ms", cost: "$0.015/1K", status: "Production" },
+    { model: "Gemini 2.5", params: "1.5T", accuracy: "93.8%", latency: "350ms", cost: "$0.004/1K", status: "Production" },
+    { model: "Llama 4", params: "405B", accuracy: "91.5%", latency: "180ms", cost: "$0.001/1K", status: "Production" },
+    { model: "Mistral Large", params: "123B", accuracy: "90.2%", latency: "150ms", cost: "$0.002/1K", status: "Beta" },
+    { model: "CyberNet v3", params: "70B", accuracy: "89.7%", latency: "95ms", cost: "Self-hosted", status: "Internal" },
+    { model: "CyberNet v2", params: "13B", accuracy: "85.3%", latency: "45ms", cost: "Self-hosted", status: "Deprecated" },
+  ];
+
+  const modelCols = [
+    { key: "model", label: "Model", sortable: true },
+    { key: "params", label: "Parameters" },
+    { key: "accuracy", label: "Accuracy", sortable: true },
+    { key: "latency", label: "Latency", sortable: true },
+    { key: "cost", label: "Cost / 1K tokens" },
+    { key: "status", label: "Status" },
+  ];
+
+  const validatorRows = [
+    { node: "cy-node-01", region: "US-East", uptime: "99.99%", stake: "32.00 ETH", rewards: "1.245 ETH", blocks: "12,847", status: "Active" },
+    { node: "cy-node-02", region: "EU-West", uptime: "99.97%", stake: "32.00 ETH", rewards: "1.198 ETH", blocks: "12,341", status: "Active" },
+    { node: "cy-node-03", region: "AP-Tokyo", uptime: "99.95%", stake: "32.00 ETH", rewards: "1.156 ETH", blocks: "11,982", status: "Active" },
+    { node: "cy-node-04", region: "US-West", uptime: "99.91%", stake: "32.00 ETH", rewards: "1.102 ETH", blocks: "11,540", status: "Syncing" },
+    { node: "cy-node-05", region: "EU-Central", uptime: "98.45%", stake: "32.00 ETH", rewards: "0.987 ETH", blocks: "10,234", status: "Warning" },
+    { node: "cy-node-06", region: "SA-East", uptime: "—", stake: "32.00 ETH", rewards: "0.000 ETH", blocks: "0", status: "Offline" },
+  ];
+
+  const validatorCols = [
+    { key: "node", label: "Node", sortable: true },
+    { key: "region", label: "Region" },
+    { key: "uptime", label: "Uptime", sortable: true },
+    { key: "stake", label: "Stake" },
+    { key: "rewards", label: "Rewards", sortable: true },
+    { key: "blocks", label: "Blocks Proposed", sortable: true },
+    { key: "status", label: "Status" },
   ];
 </script>
 
-<Story name="Default">
-  <Table columns={defaultCols} rows={sampleRows} />
+<Story name="Crypto Market">
+  <Table columns={defaultCols} rows={cryptoRows} />
 </Story>
 
-<Story name="Striped">
-  <Table columns={defaultCols} rows={sampleRows} striped />
+<Story name="Crypto Market (Striped)">
+  <Table columns={defaultCols} rows={cryptoRows} striped />
 </Story>
 
-<Story name="Sortable">
-  <Table columns={sortableCols} rows={sampleRows} />
+<Story name="ML Model Comparison">
+  <Table columns={modelCols} rows={modelRows} striped />
+</Story>
+
+<Story name="Validator Nodes">
+  <Table columns={validatorCols} rows={validatorRows} />
 </Story>

@@ -1,6 +1,7 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import GraphViewer from "./GraphViewer.svelte";
+  import { cyberdyneKnowledgeGraph } from "../../_testdata/index.js";
 
   const { Story } = defineMeta({
     title: "Graph/GraphViewer",
@@ -182,5 +183,14 @@
     edges={largeGraph.edges}
     height="700px"
     config={{ nodeRadius: 5, linkDistance: 60, chargeStrength: -150, showLabels: false }}
+  />
+</Story>
+
+<Story name="Cyberdyne Ecosystem">
+  <GraphViewer
+    nodes={cyberdyneKnowledgeGraph.nodes}
+    edges={cyberdyneKnowledgeGraph.edges}
+    height="750px"
+    config={{ linkDistance: 130, chargeStrength: -450, showEdgeLabels: false }}
   />
 </Story>
