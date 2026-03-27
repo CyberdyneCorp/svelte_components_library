@@ -114,3 +114,8 @@ export { LineChart } from "./charts/LineChart/index.js";
 export { BarChart } from "./charts/BarChart/index.js";
 export { AreaChart } from "./charts/AreaChart/index.js";
 export { HeatmapChart } from "./charts/HeatmapChart/index.js";
+
+// Editor
+export { MarkdownEditor } from "./editor/MarkdownEditor/index.js";
+export { MarkdownPreview } from "./editor/MarkdownPreview/index.js";
+export { MarkdownToolbar } from "./editor/MarkdownToolbar/index.js";
