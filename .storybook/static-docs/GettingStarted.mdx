@@ -40,7 +40,7 @@ In your root layout or app entry point:
 
 ```svelte
 <script>
-  import { Button, Card, TextInput, Badge } from "@cyberdyne/svelte-ui-core";
+  import { Button, Card, TextInput, Badge, DataTable, MarkdownEditor, MapView } from "@cyberdyne/svelte-ui-core";
 
   let query = $state("");
 </script>
@@ -56,6 +56,15 @@ In your root layout or app entry point:
   </Button>
   <Badge variant="success">Online</Badge>
 </Card>
+
+<!-- Rich markdown editing -->
+<MarkdownEditor mode="split" enableMermaid />
+
+<!-- Interactive map -->
+<MapView markers={validatorNodes} />
+
+<!-- Sortable data table -->
+<DataTable rows={data} sortable paginated />
 ```
 
 ## Theming
@@ -84,15 +93,23 @@ Fonts are loaded via Google Fonts in the foundation CSS. For self-hosting, overr
 
 ## Component Categories
 
-| Category | Components | Purpose |
-|----------|-----------|---------|
-| **Primitives** | Button, Badge, Icon, IconButton, Avatar, Tooltip, ChipButton | Basic building blocks |
-| **Forms** | TextInput, PasswordInput, Select, Checkbox, Switch, Textarea, FileDropzone | Data input |
-| **Feedback** | Alert, Dialog, Notification | User communication |
-| **Navigation** | Tabs, Breadcrumb, Sidebar | App structure |
-| **Data Display** | Table, Pagination, ProgressBar, StatusBadge, EmptyState | Data presentation |
-| **Layout** | Card, AppLayout, PageHeader | Page structure |
-| **Overlay** | Modal, ContextMenu | Layered interfaces |
+| Category | Count | Purpose |
+|----------|-------|---------|
+| **Primitives** | 12 | Basic building blocks |
+| **Forms** | 17 | Data input and editing |
+| **Feedback** | 10 | User communication |
+| **Navigation** | 5 | App structure |
+| **Data Display** | 13 | Data presentation |
+| **Layout** | 7 | Page structure |
+| **Overlay** | 5 | Layered interfaces |
+| **Auth** | 2 | Authentication flows |
+| **Chat** | 6 | Messaging and conversation |
+| **Crypto/Web3** | 9 | Blockchain and DeFi |
+| **ML/Data Tools** | 8 | Machine learning and data exploration |
+| **Graph** | 2 | Network and graph visualization |
+| **Charts** | 4 | Data charting |
+| **Editor** | 3 | Rich text and code editing |
+| **Maps** | 1 | Geospatial visualization |
 
 ## Accessibility
 

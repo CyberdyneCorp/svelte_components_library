@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **93 components** across 15 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **104 components** across 15 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -29,12 +29,14 @@ The Storybook includes:
 - Design token reference (colors, typography, spacing)
 - Getting started guide and architecture overview
 
+All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visual regression testing is handled via Playwright.
+
 ## Packages
 
 | Package | Description |
 |---------|------------|
 | `@cyberdyne/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdyne/svelte-ui-core` | 93 UI components across 15 categories |
+| `@cyberdyne/svelte-ui-core` | 104 UI components across 15 categories |
 
 ## Installation
 
@@ -75,13 +77,13 @@ Use components:
 </Card>
 ```
 
-## Components (93)
+## Components (104)
 
-### Primitives (10)
-`Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `Flag` · `InformationPill` · `CopyButton`
+### Primitives (12)
+`Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton`
 
-### Forms (15)
-`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `ComboBox` · `RangeSlider` · `CodeEditor`
+### Forms (17)
+`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `ComboBox` · `RangeSlider` · `CodeEditor` · `ColorPicker` · `SearchInput`
 
 ### Feedback (10)
 `Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary`
@@ -89,8 +91,8 @@ Use components:
 ### Navigation (5)
 `Tabs` · `Breadcrumb` · `Sidebar` · `Header` · `MenuItem`
 
-### Data Display (8)
-`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll`
+### Data Display (13)
+`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable`
 
 ### Layout (7)
 `Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` · `SplitView` · `GridLayout`
@@ -115,6 +117,12 @@ Use components:
 
 ### Charts (4)
 `LineChart` · `BarChart` · `AreaChart` · `HeatmapChart`
+
+### Editor (3)
+`MarkdownEditor` (with Mermaid diagram support) · `MarkdownPreview` · `MarkdownToolbar`
+
+### Maps (1)
+`MapView` (Leaflet with dark tiles, custom controls, geolocation)
 
 ## Design System
 
@@ -160,6 +168,7 @@ All components use CSS custom properties. Override any token:
 | Styling | CSS Custom Properties |
 | Types | TypeScript (strict) |
 | Docs | Storybook 8 |
+| Testing | Playwright (visual regression) |
 | Build | Vite + svelte-package |
 | Monorepo | pnpm workspaces |
 | Versioning | Changesets |
@@ -211,13 +220,13 @@ pnpm release            # Build & publish
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
-│       └── core/            UI components (93 components)
+│       └── core/            UI components (104 components)
 │           └── src/lib/
-│               ├── primitives/   Button, Badge, Icon, Avatar, Flag, CopyButton, ...
-│               ├── forms/        TextInput, Select, DateRangePicker, MultiSelect, CodeEditor, ...
+│               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ...
+│               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, ...
 │               ├── feedback/     Alert, Toast, Skeleton, Stepper, ProgressRing, ErrorBoundary, ...
 │               ├── navigation/   Tabs, Breadcrumb, Sidebar, Header, MenuItem
-│               ├── data/         Table, Pagination, VirtualizedList, InfiniteScroll, ...
+│               ├── data/         Table, Pagination, VirtualizedList, FileTree, DiffViewer, Kanban, ...
 │               ├── layout/       Card, AppLayout, Drawer, SplitView, GridLayout, ...
 │               ├── overlay/      Modal, ContextMenu, Popover, CommandPalette
 │               ├── auth/         LoginPage, WalletConnect
@@ -225,7 +234,10 @@ pnpm release            # Build & publish
 │               ├── crypto/       TokenBalance, NFTCard, GasEstimate, TierBadge, ...
 │               ├── ml/           CodeBlock, Terminal, LogViewer, Timeline, ...
 │               ├── graph/        GraphViewer (force-directed), SemanticSearch
-│               └── charts/       LineChart, BarChart, AreaChart, HeatmapChart
+│               ├── charts/       LineChart, BarChart, AreaChart, HeatmapChart
+│               ├── editor/       MarkdownEditor, MarkdownPreview, MarkdownToolbar
+│               ├── maps/         MapView (Leaflet)
+│               └── _testdata/    Shared test data module for stories
 └── docs/                    Built Storybook output
 ```
 

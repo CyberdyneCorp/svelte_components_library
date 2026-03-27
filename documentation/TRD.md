@@ -44,7 +44,7 @@ The Cyberdyne Design System is a comprehensive, reusable Svelte 5 component libr
 
 The system encompasses:
 - **Design Tokens** — Colors, typography, spacing, radius, shadows, and animations defined as CSS custom properties
-- **71 UI Components** — Organized across 12 functional categories
+- **104 UI Components** — Organized across 15 functional categories
 - **Storybook Documentation** — Interactive component playground with auto-generated API docs
 - **CI/CD Pipeline** — Automated testing, versioning, and publishing workflows
 
@@ -125,19 +125,22 @@ svelte_components_library/
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS layers (colors, typography, spacing, ...)
-│       └── core/            UI components (71 components)
+│       └── core/            UI components (104 components)
 │           └── src/lib/
-│               ├── primitives/   10 components
-│               ├── forms/        8 components
+│               ├── primitives/   12 components
+│               ├── forms/        10 components
 │               ├── feedback/     7 components
 │               ├── navigation/   5 components
-│               ├── data/         6 components
+│               ├── data/         11 components
 │               ├── layout/       5 components
 │               ├── overlay/      5 components
 │               ├── auth/         2 components
 │               ├── chat/         6 components
 │               ├── crypto/       9 components
-│               └── ml/           8 components
+│               ├── ml/           8 components
+│               ├── editor/       3 components
+│               ├── maps/         1 component
+│               └── _testdata/    Shared test data module
 ├── package.json             Root workspace config
 ├── pnpm-workspace.yaml      Workspace package paths
 ├── svelte.config.js         Svelte compiler options
@@ -283,6 +286,7 @@ ComponentName/
 | prettier-plugin-svelte | ^3.3.3 | Svelte file formatting |
 | svelte-check | ^4.2.1 | Svelte type checking |
 | Vitest | ^3.1.4 | Unit testing framework |
+| @playwright/test | latest | End-to-end browser testing |
 
 ### 4.5 External Font Dependencies
 
@@ -326,7 +330,7 @@ export type BreakpointKey, SpacingKey, RadiusKey
 ### 5.2 @cyberdyne/svelte-ui-core
 
 **Version:** 0.1.0
-**Purpose:** 71 UI components
+**Purpose:** 104 UI components
 **Dependency:** `@cyberdyne/svelte-ui-foundation` (workspace:*)
 
 **Export Path:** `.` — All components from a single entry point
@@ -442,7 +446,7 @@ Based on a 4px base grid:
 
 ## 7. Component Inventory
 
-### 7.1 Primitives (10 components)
+### 7.1 Primitives (12 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -456,8 +460,10 @@ Based on a 4px base grid:
 | `Flag` | variant, size | Feature/status flag (new, beta, deprecated, experimental) |
 | `InformationPill` | label, value, variant | Key:value inline chip |
 | `CopyButton` | text, label, size, variant | Clipboard copy with feedback animation |
+| `ToggleGroup` | items, value (bindable), multiple, size, variant | Grouped toggle buttons for single/multi selection |
+| `AvatarGroup` | avatars, max, size, overlap | Stacked avatar display with overflow count |
 
-### 7.2 Forms (8 components)
+### 7.2 Forms (10 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -469,6 +475,8 @@ Based on a 4px base grid:
 | `Switch` | checked (bindable), label, disabled | Toggle switch with smooth animation |
 | `Textarea` | value (bindable), label, placeholder, hint, error, rows, maxlength | Multi-line input with character count |
 | `FileDropzone` | accept, multiple, disabled, maxSize, onfiles | Drag-and-drop file upload zone |
+| `ColorPicker` | value (bindable), label, presets, showInput, disabled | Color selection with preset swatches and hex input |
+| `SearchInput` | value (bindable), placeholder, debounce, results, grouped, onselect | Debounced search field with grouped result dropdown |
 
 ### 7.3 Feedback (7 components)
 
@@ -492,7 +500,7 @@ Based on a 4px base grid:
 | `Header` | title, children, logo | Top navigation bar |
 | `MenuItem` | label, icon, active, href, onclick, children | Reusable navigation menu item |
 
-### 7.5 Data Display (6 components)
+### 7.5 Data Display (11 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -502,6 +510,11 @@ Based on a 4px base grid:
 | `StatusBadge` | status, label | Status indicator with pulsing dot |
 | `EmptyState` | title, description, icon, children | Empty data placeholder |
 | `StickyNote` | variant, title, children | Callout/annotation card |
+| `FileTree` | items, expanded, onselect | Recursive file/folder tree with file-type coloring and expand/collapse |
+| `DiffViewer` | oldText, newText, mode, language, showLineNumbers | LCS-based text diff viewer with split and unified modes |
+| `Calendar` | date (bindable), events, onselect | Month grid calendar with event markers and date navigation |
+| `Kanban` | columns, ondrop, onmove | Drag-and-drop board with configurable columns and card management |
+| `DataTable` | columns, rows, selectable, expandable, resizable, pagination, pageSize | Enhanced data table with row selection, expandable rows, column resize, and pagination |
 
 ### 7.6 Layout (5 components)
 
@@ -567,6 +580,20 @@ Based on a 4px base grid:
 | `Timeline` | items | Vertical timeline with variant markers |
 | `DataChart` | title, description, height, children, loading, empty | Chart container wrapper with loading/empty states |
 | `Kbd` | keys, size, separator | Keyboard shortcut display |
+
+### 7.12 Editor (3 components)
+
+| Component | Props | Description |
+|-----------|-------|------------|
+| `MarkdownEditor` | value (bindable), mode, toolbar, placeholder | Markdown editor with edit, split, and preview modes; configurable toolbar; Mermaid diagram support via CDN |
+| `MarkdownPreview` | content, sanitize | Rendered markdown preview using built-in regex parser with dynamic Mermaid diagram rendering |
+| `MarkdownToolbar` | onapply | Formatting toolbar with 15 buttons (bold, italic, headings, lists, links, code, etc.) and keyboard shortcuts |
+
+### 7.13 Maps (1 component)
+
+| Component | Props | Description |
+|-----------|-------|------------|
+| `MapView` | center, zoom, markers, tileUrl, maxZoom | Interactive map powered by Leaflet with CartoDB dark tiles, custom zoom/reset/locate controls, colored markers, and geolocation support |
 
 ---
 
@@ -686,6 +713,7 @@ Merge to main → [release.yaml]          → [publish-storybook.yaml]
 | Level | Tool | Scope |
 |-------|------|-------|
 | Unit tests | Vitest ^3.1.4 | Component logic, derived values, utilities |
+| E2E tests | @playwright/test | Full browser testing for component interactions |
 | Story tests | Storybook interactions | Visual behavior, play functions |
 | Accessibility | @storybook/addon-a11y | WCAG compliance auditing |
 | Type safety | svelte-check + tsc | Compile-time type errors |
@@ -716,7 +744,16 @@ Merge to main → [release.yaml]          → [publish-storybook.yaml]
 - Rendered story variants
 - Source code view
 
-### 11.2 Project Documentation
+### 11.2 Storybook Conventions
+
+- Stories use the **args pattern** (not inline template props) for Storybook Svelte CSF compatibility
+- Each story exports an `args` object that maps to component props, enabling the Controls addon
+
+### 11.3 Shared Test Data
+
+A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provides reusable mock data (sample users, transactions, log entries, file trees, etc.) used across stories and tests to ensure consistency.
+
+### 11.4 Project Documentation
 
 | Document | Location | Purpose |
 |---------|----------|---------|
@@ -756,7 +793,7 @@ Merge to main → [release.yaml]          → [publish-storybook.yaml]
 | Package | Target (gzipped) | Notes |
 |---------|------------------|-------|
 | Foundation CSS | < 5KB | Tokens only, no components |
-| Core (full) | < 100KB | All 71 components |
+| Core (full) | < 100KB | All 104 components |
 | Core (tree-shaken) | < 15KB | Typical import of 5–10 components |
 
 ### 13.2 Runtime Performance
@@ -826,10 +863,10 @@ Merge to main → [release.yaml]          → [publish-storybook.yaml]
 | Priority | Item | Description |
 |----------|------|------------|
 | P1 | Dark/Light theme toggle | Semantic token remapping for light mode |
-| P1 | MarkdownEditor package | Milkdown-based rich text editor (from svelte-libs) |
+| ~~P1~~ | ~~MarkdownEditor package~~ | ~~Delivered in Editor category (regex-based parser, not Milkdown)~~ |
 | P1 | Chromatic integration | Visual regression testing |
 | P2 | Figma token sync | Automated design-to-code token pipeline |
-| P2 | Playwright E2E tests | Full browser testing suite |
+| ~~P2~~ | ~~Playwright E2E tests~~ | ~~Delivered — @playwright/test integrated~~ |
 | P2 | Tailwind CSS preset | `@cyberdyne/svelte-config-tailwind` for consumer apps |
 | P3 | Chart components | Built-in charting (beyond DataChart wrapper) |
 | P3 | i18n support | Internationalization for labels and content |
@@ -841,7 +878,7 @@ Merge to main → [release.yaml]          → [publish-storybook.yaml]
 |----------|-------------------|
 | Gaming | Minimap, ResourceBar, AbilityPanel, HealthBar, Leaderboard |
 | Data Viz | LineChart, BarChart, PieChart, Heatmap |
-| Advanced Forms | DatePicker, TimePicker, ColorPicker, TagInput, Autocomplete |
+| Advanced Forms | DatePicker, TimePicker, ~~ColorPicker~~, TagInput, Autocomplete |
 | Layout | Resizable panels, Masonry grid, Virtual list |
 
 ---
