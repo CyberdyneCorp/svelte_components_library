@@ -2,15 +2,25 @@ import type { Preview } from "@storybook/svelte";
 import "../packages/ui/foundation/src/lib/styles/index.css";
 
 const preview: Preview = {
-  parameters: {
-    backgrounds: {
-      default: "cyberdyne-dark",
-      values: [
-        { name: "cyberdyne-dark", value: "#0a0a0f" },
-        { name: "cyberdyne-surface", value: "#12121a" },
-        { name: "cyberdyne-elevated", value: "#22222e" },
-      ],
+  globalTypes: {
+    theme: {
+      description: "Light / Dark mode",
+      toolbar: {
+        title: "Theme",
+        icon: "mirror",
+        items: [
+          { value: "dark", title: "Dark", icon: "moon" },
+          { value: "light", title: "Light", icon: "sun" },
+        ],
+        dynamicTitle: true,
+      },
     },
+  },
+  initialGlobals: {
+    theme: "dark",
+  },
+  parameters: {
+    backgrounds: { disable: true },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -19,12 +29,28 @@ const preview: Preview = {
     },
     docs: {
       toc: true,
-      // Render docs story previews in iframes so they get the dark background
       story: { inline: false, height: "400px" },
     },
     a11y: {},
     layout: "padded",
   },
+  decorators: [
+    // Apply theme to the story container — do NOT wrap the Story component
+    (Story, context) => {
+      const theme = context.globals.theme || "dark";
+
+      if (typeof document !== "undefined") {
+        document.documentElement.setAttribute("data-theme", theme);
+        document.body.style.backgroundColor =
+          theme === "light" ? "#f8f8fc" : "#0a0a0f";
+        document.body.style.color =
+          theme === "light" ? "#12121a" : "#f0f0ff";
+      }
+
+      // Return Story directly without wrapping — preserves args
+      return Story(context.args);
+    },
+  ],
 };
 
 export default preview;

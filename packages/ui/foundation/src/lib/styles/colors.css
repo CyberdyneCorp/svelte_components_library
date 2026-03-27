@@ -175,3 +175,122 @@
   --nav-item-text: var(--color-text-secondary);
   --nav-item-text-active: var(--color-action-brand-default);
 }
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT MODE — Remap semantic + component tokens
+   Activate via: <html data-theme="light"> or any parent element
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] {
+  /* ── Layer 2: Semantic (light overrides) ── */
+
+  /* Backgrounds — inverted to light tones */
+  --color-bg-primary: #f8f8fc;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #f0f0f5;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(0, 0, 0, 0.4);
+
+  /* Surfaces */
+  --color-surface-default: #ffffff;
+  --color-surface-raised: #f5f5fa;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #ebebf0;
+  --color-surface-active: #e0e0e8;
+
+  /* Text — dark text on light background */
+  --color-text-primary: #12121a;
+  --color-text-secondary: #4a4a5c;
+  --color-text-tertiary: #6a6a7e;
+  --color-text-disabled: #aaaabe;
+  --color-text-inverse: #f0f0ff;
+  --color-text-link: var(--primitive-cyan-40);
+  --color-text-code: var(--primitive-green-50);
+
+  /* Borders */
+  --color-border-default: #d0d0da;
+  --color-border-subtle: #e0e0e8;
+  --color-border-strong: #aaaabe;
+  --color-border-focus: var(--primitive-cyan-30);
+  --color-border-brand: var(--primitive-green-40);
+
+  /* Actions — slightly darker greens for contrast on white */
+  --color-action-brand-default: var(--primitive-green-40);
+  --color-action-brand-hover: var(--primitive-green-50);
+  --color-action-brand-active: var(--primitive-green-60);
+  --color-action-brand-text: #ffffff;
+
+  --color-action-secondary-default: var(--primitive-cyan-40);
+  --color-action-secondary-hover: var(--primitive-cyan-50);
+  --color-action-secondary-active: var(--primitive-cyan-60);
+  --color-action-secondary-text: #ffffff;
+
+  --color-action-tertiary-default: var(--primitive-violet-20);
+  --color-action-tertiary-hover: var(--primitive-violet-30);
+  --color-action-tertiary-active: var(--primitive-violet-40);
+  --color-action-tertiary-text: #ffffff;
+
+  /* State — darker variants for light background */
+  --color-state-success: var(--primitive-green-50);
+  --color-state-success-bg: rgba(0, 153, 38, 0.08);
+  --color-state-warning: var(--primitive-amber-40);
+  --color-state-warning-bg: rgba(179, 130, 0, 0.08);
+  --color-state-error: var(--primitive-red-30);
+  --color-state-error-bg: rgba(204, 46, 46, 0.08);
+  --color-state-info: var(--primitive-cyan-40);
+  --color-state-info-bg: rgba(0, 149, 179, 0.08);
+
+  /* Shadows — standard box shadows instead of glows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-glow-green: 0 0 8px rgba(0, 179, 45, 0.2);
+  --shadow-glow-cyan: 0 0 8px rgba(0, 149, 179, 0.2);
+  --shadow-glow-violet: 0 0 8px rgba(126, 34, 206, 0.2);
+
+  /* ── Layer 3: Component Tokens (light overrides) ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: #ffffff;
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-bg-hover: #f0f0f5;
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-default);
+  --btn-danger-bg: var(--color-state-error);
+  --btn-danger-bg-hover: var(--primitive-red-40);
+  --btn-danger-text: #ffffff;
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-bg-hover: #f5f5fa;
+  --input-border: var(--color-border-default);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: #ffffff;
+  --card-border: var(--color-border-subtle);
+  --card-hover-border: var(--color-border-default);
+
+  /* Tables */
+  --table-header-bg: #f0f0f5;
+  --table-row-bg: #ffffff;
+  --table-row-hover: #f5f5fa;
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: #ffffff;
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-default);
+}

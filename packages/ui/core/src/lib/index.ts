@@ -8,6 +8,7 @@ export { Tooltip } from "./primitives/Tooltip/index.js";
 export { ChipButton } from "./primitives/ChipButton/index.js";
 export { ToggleGroup } from "./primitives/ToggleGroup/index.js";
 export { AvatarGroup } from "./primitives/AvatarGroup/index.js";
+export { ThemeToggle } from "./primitives/ThemeToggle/index.js";
 export { Flag } from "./primitives/Flag/index.js";
 export { InformationPill } from "./primitives/InformationPill/index.js";
 export { CopyButton } from "./primitives/CopyButton/index.js";
