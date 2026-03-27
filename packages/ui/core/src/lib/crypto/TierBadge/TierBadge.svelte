@@ -2,7 +2,7 @@
 
 <script lang="ts">
   let {
-    tier,
+    tier = 1,
     label = "",
     showLevel = true,
   }: {

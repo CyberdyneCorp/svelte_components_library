@@ -4,8 +4,8 @@
   import { type Snippet } from "svelte";
 
   let {
-    network,
-    chainId,
+    network = "",
+    chainId = 0,
     connected = true,
     icon,
   }: {

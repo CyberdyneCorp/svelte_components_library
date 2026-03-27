@@ -4,8 +4,8 @@
   import Icon from "../Icon/Icon.svelte";
 
   let {
-    icon,
-    label,
+    icon = "",
+    label = "",
     variant = "ghost",
     size = "md",
     disabled = false,

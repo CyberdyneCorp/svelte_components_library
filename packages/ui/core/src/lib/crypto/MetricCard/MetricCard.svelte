@@ -4,8 +4,8 @@
   import { type Snippet } from "svelte";
 
   let {
-    label,
-    value,
+    label = "",
+    value = "",
     change,
     changeLabel = "",
     icon,

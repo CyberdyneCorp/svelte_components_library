@@ -2,8 +2,8 @@
 
 <script lang="ts">
   let {
-    symbol,
-    price,
+    symbol = "",
+    price = "",
     change,
     period = "24h",
   }: {

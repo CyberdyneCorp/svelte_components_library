@@ -2,12 +2,12 @@
 
 <script lang="ts">
   let {
-    address,
+    address = "",
     truncate = true,
     label = "",
     size = "md",
   }: {
-    address: string;
+    address?: string;
     truncate?: boolean;
     label?: string;
     size?: "sm" | "md";
@@ -16,9 +16,9 @@
   let copied = $state(false);
 
   let displayAddress = $derived(
-    truncate && address.length > 12
+    truncate && address && address.length > 12
       ? `${address.slice(0, 6)}...${address.slice(-4)}`
-      : address
+      : address || ""
   );
 
   async function copyAddress() {

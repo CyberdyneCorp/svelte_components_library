@@ -2,7 +2,7 @@
 
 <script lang="ts">
   let {
-    name,
+    name = "",
     image = "",
     collection = "",
     tokenId = "",

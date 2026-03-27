@@ -7,22 +7,24 @@
     usd: string;
   };
 
+  const defaultGas: GasOption = { gwei: "—", time: "—", usd: "—" };
+
   let {
-    slow,
-    standard,
-    fast,
+    slow = defaultGas,
+    standard = defaultGas,
+    fast = defaultGas,
     selected = $bindable("standard"),
   }: {
-    slow: GasOption;
-    standard: GasOption;
-    fast: GasOption;
+    slow?: GasOption;
+    standard?: GasOption;
+    fast?: GasOption;
     selected?: "slow" | "standard" | "fast";
   } = $props();
 
   const options = $derived([
-    { key: "slow" as const, label: "Slow", icon: "\uD83D\uDC22", data: slow },
-    { key: "standard" as const, label: "Standard", icon: "\u26A1", data: standard },
-    { key: "fast" as const, label: "Fast", icon: "\uD83D\uDE80", data: fast },
+    { key: "slow" as const, label: "Slow", icon: "🐢", data: slow },
+    { key: "standard" as const, label: "Standard", icon: "⚡", data: standard },
+    { key: "fast" as const, label: "Fast", icon: "🚀", data: fast },
   ]);
 </script>
 

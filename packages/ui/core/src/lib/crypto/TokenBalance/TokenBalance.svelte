@@ -4,8 +4,8 @@
   import { type Snippet } from "svelte";
 
   let {
-    symbol,
-    balance,
+    symbol = "",
+    balance = "",
     usdValue = "",
     icon,
     change,

@@ -4,7 +4,7 @@
   import { type Snippet } from "svelte";
 
   let {
-    text,
+    text = "",
     position = "top",
     children,
   }: {
