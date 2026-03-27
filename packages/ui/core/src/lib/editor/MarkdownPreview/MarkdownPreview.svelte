@@ -138,17 +138,21 @@
       html = html.replace(`\x00CODEBLOCK${idx}\x00`, block);
     });
 
-    // Restore mermaid blocks
+    // Restore mermaid blocks (use data-idx, raw text stored in mermaidBlocksRef)
     mermaidBlocks.forEach((block, idx) => {
       html = html.replace(
         `\x00MERMAIDBLOCK${idx}\x00`,
-        `<div class="cy-md-mermaid" data-mermaid="${escapeHtml(block)}"></div>`
+        `<div class="cy-md-mermaid" data-mermaid-idx="${idx}"></div>`
       );
     });
+
+    // Store mermaid source for the $effect to pick up
+    mermaidBlocksRef = mermaidBlocks;
 
     return html;
   }
 
+  let mermaidBlocksRef: string[] = [];
   let renderedHtml = $derived(parseMarkdown(content));
 
   // Mermaid rendering
@@ -157,10 +161,11 @@
 
   async function loadMermaid() {
     if (mermaidLoaded) return mermaidModule;
-    try {
-      const mod = await import("https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js");
-      const mermaid = mod.default || mod;
-      mermaid.initialize({
+
+    // Check if already loaded globally
+    if (typeof window !== "undefined" && (window as any).mermaid) {
+      const m = (window as any).mermaid;
+      m.initialize({
         startOnLoad: false,
         theme: "dark",
         themeVariables: {
@@ -172,12 +177,40 @@
           tertiaryColor: "#1a1a24",
         },
       });
-      mermaidModule = mermaid;
+      mermaidModule = m;
       mermaidLoaded = true;
-      return mermaid;
-    } catch {
-      return null;
+      return m;
     }
+
+    // Load via script tag (dynamic import doesn't work with CDN URLs in Vite)
+    return new Promise<any>((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+      script.onload = () => {
+        const m = (window as any).mermaid;
+        if (m) {
+          m.initialize({
+            startOnLoad: false,
+            theme: "dark",
+            themeVariables: {
+              primaryColor: "#00ff41",
+              primaryTextColor: "#f0f0ff",
+              primaryBorderColor: "#00ff41",
+              lineColor: "#00d4ff",
+              secondaryColor: "#12121a",
+              tertiaryColor: "#1a1a24",
+            },
+          });
+          mermaidModule = m;
+          mermaidLoaded = true;
+          resolve(m);
+        } else {
+          resolve(null);
+        }
+      };
+      script.onerror = () => resolve(null);
+      document.head.appendChild(script);
+    });
   }
 
   $effect(() => {
@@ -186,24 +219,30 @@
 
     if (!containerEl) return;
 
-    const mermaidEls = containerEl.querySelectorAll(".cy-md-mermaid");
+    const mermaidEls = containerEl.querySelectorAll<HTMLElement>(".cy-md-mermaid");
     if (mermaidEls.length === 0) return;
 
-    loadMermaid().then(async (mermaid) => {
-      if (!mermaid) return;
+    // Use a microtask to ensure DOM is updated with innerHTML first
+    queueMicrotask(() => {
+      loadMermaid().then(async (mermaid) => {
+        if (!mermaid) return;
 
-      for (const el of mermaidEls) {
-        const diagramDef = el.getAttribute("data-mermaid");
-        if (!diagramDef || el.querySelector("svg")) continue;
+        for (const el of mermaidEls) {
+          const idxStr = el.getAttribute("data-mermaid-idx");
+          if (idxStr === null) continue;
+          const idx = parseInt(idxStr, 10);
+          const diagramDef = mermaidBlocksRef[idx];
+          if (!diagramDef || el.querySelector("svg")) continue;
 
-        try {
-          const id = `mermaid-${Math.random().toString(36).slice(2, 10)}`;
-          const { svg } = await mermaid.render(id, diagramDef);
-          el.innerHTML = svg;
-        } catch (err: any) {
-          el.innerHTML = `<div class="cy-md-mermaid-error">Diagram error: ${escapeHtml(err?.message || "Invalid syntax")}</div>`;
+          try {
+            const id = `mermaid-${Math.random().toString(36).slice(2, 10)}`;
+            const { svg } = await mermaid.render(id, diagramDef);
+            el.innerHTML = svg;
+          } catch (err: any) {
+            el.innerHTML = `<div class="cy-md-mermaid-error">Diagram error: ${escapeHtml(err?.message || "Invalid syntax")}</div>`;
+          }
         }
-      }
+      });
     });
   });
 </script>
