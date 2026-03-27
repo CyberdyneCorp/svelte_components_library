@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with 32+ components, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **71 components** across 12 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -23,12 +23,18 @@ pnpm build-storybook
 # Output → docs/
 ```
 
+The Storybook includes:
+- Interactive component playground with controls
+- Auto-generated API documentation for every component
+- Design token reference (colors, typography, spacing)
+- Getting started guide and architecture overview
+
 ## Packages
 
 | Package | Description |
 |---------|------------|
 | `@cyberdyne/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdyne/svelte-ui-core` | 32+ UI components across 8 categories |
+| `@cyberdyne/svelte-ui-core` | 71 UI components across 12 categories |
 
 ## Installation
 
@@ -56,7 +62,10 @@ Use components:
 
 ```svelte
 <script>
-  import { Button, Card, TextInput, Badge, LoginPage } from "@cyberdyne/svelte-ui-core";
+  import {
+    Button, Card, TextInput, Badge,
+    TokenBalance, Terminal, CommandPalette
+  } from "@cyberdyne/svelte-ui-core";
 </script>
 
 <Card variant="elevated">
@@ -66,31 +75,40 @@ Use components:
 </Card>
 ```
 
-## Components
+## Components (71)
 
-### Primitives
-`Button` · `Badge` · `Icon` (20+ built-in icons) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton`
+### Primitives (10)
+`Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `Flag` · `InformationPill` · `CopyButton`
 
-### Forms
-`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Switch` · `Textarea` · `FileDropzone`
+### Forms (8)
+`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone`
 
-### Feedback
-`Alert` · `Dialog` · `Notification`
+### Feedback (7)
+`Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown`
 
-### Navigation
-`Tabs` · `Breadcrumb` · `Sidebar`
+### Navigation (5)
+`Tabs` · `Breadcrumb` · `Sidebar` · `Header` · `MenuItem`
 
-### Data Display
-`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState`
+### Data Display (6)
+`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote`
 
-### Layout
-`Card` · `AppLayout` · `PageHeader`
+### Layout (5)
+`Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer`
 
-### Overlay
-`Modal` · `ContextMenu`
+### Overlay (5)
+`Modal` · `ModalBackdrop` · `ContextMenu` · `Popover` · `CommandPalette` (Cmd+K)
 
-### Auth
+### Auth (2)
 `LoginPage` (credentials + wallet modes) · `WalletConnect` (MetaMask, WalletConnect, Coinbase, Phantom)
+
+### Chat (6)
+`Chatbox` · `ChatPanel` · `ChatResponse` · `PromptExample` · `WelcomeText` · `BotAnswer`
+
+### Crypto / Web3 (9)
+`TokenBalance` · `TransactionList` · `AddressDisplay` · `NetworkBadge` · `NFTCard` · `PriceDisplay` · `MetricCard` · `GasEstimate` · `TierBadge` (6-tier NFT access system)
+
+### ML / Data Tools (8)
+`CodeBlock` (syntax highlighting) · `Terminal` · `LogViewer` (severity filtering) · `Slider` · `StepProgress` · `Timeline` · `DataChart` (chart wrapper) · `Kbd` (keyboard shortcuts)
 
 ## Design System
 
@@ -187,18 +205,31 @@ pnpm release            # Build & publish
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
-│       └── core/            UI components
+│       └── core/            UI components (71 components)
 │           └── src/lib/
-│               ├── primitives/   Button, Badge, Icon, Avatar, ...
-│               ├── forms/        TextInput, Select, Checkbox, ...
-│               ├── feedback/     Alert, Dialog, Notification
-│               ├── navigation/   Tabs, Breadcrumb, Sidebar
-│               ├── data/         Table, Pagination, ProgressBar, ...
-│               ├── layout/       Card, AppLayout, PageHeader
-│               ├── overlay/      Modal, ContextMenu
-│               └── auth/         LoginPage, WalletConnect
+│               ├── primitives/   Button, Badge, Icon, Avatar, Flag, CopyButton, ...
+│               ├── forms/        TextInput, Select, Checkbox, Radio, ...
+│               ├── feedback/     Alert, Dialog, Toast, Skeleton, Accordion, ...
+│               ├── navigation/   Tabs, Breadcrumb, Sidebar, Header, MenuItem
+│               ├── data/         Table, Pagination, ProgressBar, StickyNote, ...
+│               ├── layout/       Card, AppLayout, PageHeader, Drawer, ContentSlot
+│               ├── overlay/      Modal, ContextMenu, Popover, CommandPalette
+│               ├── auth/         LoginPage, WalletConnect
+│               ├── chat/         Chatbox, ChatPanel, ChatResponse, ...
+│               ├── crypto/       TokenBalance, NFTCard, GasEstimate, TierBadge, ...
+│               └── ml/           CodeBlock, Terminal, LogViewer, Timeline, ...
 └── docs/                    Built Storybook output
 ```
+
+## Target Products
+
+This design system is built to support:
+
+- **CyberdyneDAO** — Web3 terminal platform with NFT-gated access
+- **YieldPath** — AI-powered DeFi life planner
+- **Vision Factory** — Computer vision ML pipeline
+- **Terraform Game** — Blockchain RTS strategy game
+- **Research Tools** — Internal ML & data exploration interfaces
 
 ## License
 
