@@ -347,9 +347,11 @@
     align-items: center;
     gap: 2px;
     padding: 6px 8px;
-    background: var(--color-bg-primary);
+    background: var(--color-surface-default);
     border-bottom: 1px solid var(--color-border-subtle);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    min-height: 44px;
   }
 
   .cy-md-toolbar--disabled {

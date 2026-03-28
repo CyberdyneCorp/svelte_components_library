@@ -171,10 +171,11 @@
   .cy-md-editor {
     display: flex;
     flex-direction: column;
-    background: var(--color-bg-primary);
+    background: var(--color-surface-default);
     border: 1px solid var(--color-border-subtle);
     border-radius: 8px;
     overflow: hidden;
+    min-width: 600px;
   }
 
   .cy-md-editor__header {

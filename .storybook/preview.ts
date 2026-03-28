@@ -29,13 +29,11 @@ const preview: Preview = {
     },
     docs: {
       toc: true,
-      story: { inline: false, height: "400px" },
     },
     a11y: {},
     layout: "padded",
   },
   decorators: [
-    // Apply theme to the story container — do NOT wrap the Story component
     (Story, context) => {
       const theme = context.globals.theme || "dark";
 
@@ -47,7 +45,6 @@ const preview: Preview = {
           theme === "light" ? "#12121a" : "#f0f0ff";
       }
 
-      // Return Story directly without wrapping — preserves args
       return Story(context.args);
     },
   ],

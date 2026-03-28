@@ -1,5 +1,5 @@
 <style>
-  /* Default dark background — overridden when data-theme="light" is set */
+  /* Default dark mode */
   html, body {
     background-color: #0a0a0f;
     color: #f0f0ff;
@@ -7,8 +7,31 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
+  /* Light mode override */
   html[data-theme="light"], html[data-theme="light"] body {
     background-color: #f8f8fc;
     color: #12121a;
+  }
+
+  /* Docs page: story preview containers need themed background */
+  .docs-story {
+    background-color: var(--color-bg-primary) !important;
+    padding: 1rem !important;
+    border-radius: 8px;
+  }
+
+  .sbdocs-preview {
+    background-color: var(--color-bg-secondary) !important;
+    border-color: var(--color-border-subtle) !important;
+  }
+
+  /* Docs page text should also be themed */
+  .sbdocs.sbdocs-content {
+    color: var(--color-text-primary);
+  }
+
+  /* Story root padding */
+  #storybook-root {
+    padding: 1rem;
   }
 </style>
