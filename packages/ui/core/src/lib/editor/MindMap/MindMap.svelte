@@ -557,16 +557,15 @@
         ctx.fill();
       }
 
-      // Note/link indicators — small icons below the node, clickable
+      // Note/link indicators — icons below the node, clickable
       const nodeData = findNode(root, node.id);
       if (nodeData && (nodeData.note || nodeData.link)) {
-        const badgeY = ny + node.height + 4;
-        let badgeX = node.x; // centered
+        const badgeY = ny + node.height + 6;
         const badges: Array<{ type: "note" | "link"; x: number }> = [];
 
         if (nodeData.note && nodeData.link) {
-          badges.push({ type: "note", x: node.x - 12 });
-          badges.push({ type: "link", x: node.x + 12 });
+          badges.push({ type: "note", x: node.x - 16 });
+          badges.push({ type: "link", x: node.x + 16 });
         } else if (nodeData.note) {
           badges.push({ type: "note", x: node.x });
         } else {
@@ -574,9 +573,8 @@
         }
 
         for (const badge of badges) {
-          // Small rounded pill
-          const bw = 20;
-          const bh = 16;
+          const bw = 26;
+          const bh = 18;
           ctx.fillStyle = badge.type === "note" ? cssCache.stateWarning : cssCache.actionSecondary;
           ctx.globalAlpha = 0.9;
           roundRect(ctx, badge.x - bw / 2, badgeY, bw, bh, 4);
@@ -693,14 +691,14 @@
       if (!nodeData || (!nodeData.note && !nodeData.link)) continue;
 
       const ny = node.y - node.height / 2;
-      const badgeY = ny + node.height + 4;
-      const bw = 20;
-      const bh = 16;
+      const badgeY = ny + node.height + 6;
+      const bw = 26;
+      const bh = 18;
 
       const badges: Array<{ type: "note" | "link"; x: number }> = [];
       if (nodeData.note && nodeData.link) {
-        badges.push({ type: "note", x: node.x - 12 });
-        badges.push({ type: "link", x: node.x + 12 });
+        badges.push({ type: "note", x: node.x - 16 });
+        badges.push({ type: "link", x: node.x + 16 });
       } else if (nodeData.note) {
         badges.push({ type: "note", x: node.x });
       } else {
@@ -708,8 +706,9 @@
       }
 
       for (const badge of badges) {
-        if (wx >= badge.x - bw / 2 - 4 && wx <= badge.x + bw / 2 + 4 &&
-            wy >= badgeY - 4 && wy <= badgeY + bh + 4) {
+        const hitPad = 8;
+        if (wx >= badge.x - bw / 2 - hitPad && wx <= badge.x + bw / 2 + hitPad &&
+            wy >= badgeY - hitPad && wy <= badgeY + bh + hitPad) {
           return { nodeId: node.id, type: badge.type };
         }
       }
@@ -734,8 +733,17 @@
 
     const { x, y } = getCanvasCoords(e);
     const world = screenToWorld(x, y);
-    const node = getNodeAt(world.x, world.y);
 
+    // Check badges first — don't start drag on badge clicks
+    const badge = getBadgeHit(world.x, world.y);
+    if (badge) {
+      // Will be handled in mouseup — just prevent drag/pan
+      dragState = { nodeId: badge.nodeId, startX: x, startY: y, dragging: false, worldX: world.x, worldY: world.y };
+      lastMouse = { x, y };
+      return;
+    }
+
+    const node = getNodeAt(world.x, world.y);
     if (node && !readonly) {
       dragState = { nodeId: node.id, startX: x, startY: y, dragging: false, worldX: world.x, worldY: world.y };
     } else {
