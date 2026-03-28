@@ -15,7 +15,7 @@
 
 <Story name="WithPrompts">
   <WelcomeText subtitle="Try one of these suggestions to get started.">
-    <button style="padding: 0.75rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; background: transparent; color: #fff; cursor: pointer; text-align: left;">Check gas prices</button>
-    <button style="padding: 0.75rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; background: transparent; color: #fff; cursor: pointer; text-align: left;">View portfolio</button>
+    <button style="padding: 0.75rem; border: 1px solid var(--color-border-subtle); border-radius: 8px; background: transparent; color: var(--color-text-primary); cursor: pointer; text-align: left;">Check gas prices</button>
+    <button style="padding: 0.75rem; border: 1px solid var(--color-border-subtle); border-radius: 8px; background: transparent; color: var(--color-text-primary); cursor: pointer; text-align: left;">View portfolio</button>
   </WelcomeText>
 </Story>

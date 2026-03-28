@@ -12,7 +12,7 @@
 <Story name="Default" args={{ title: "Model Accuracy", description: "Accuracy over training epochs" }}>
   <div style="display: flex; align-items: flex-end; gap: 8px; height: 100%; width: 100%; padding: 0 16px;">
     {#each [35, 52, 68, 74, 81, 87, 91, 94, 96, 97] as val}
-      <div style="flex: 1; height: {val}%; background: linear-gradient(180deg, #00ff41 0%, rgba(0,255,65,0.3) 100%); border-radius: 4px 4px 0 0; transition: height 300ms ease;"></div>
+      <div style="flex: 1; height: {val}%; background: linear-gradient(180deg, var(--color-action-brand-default) 0%, var(--color-border-subtle) 100%); border-radius: 4px 4px 0 0; transition: height 300ms ease;"></div>
     {/each}
   </div>
 </Story>

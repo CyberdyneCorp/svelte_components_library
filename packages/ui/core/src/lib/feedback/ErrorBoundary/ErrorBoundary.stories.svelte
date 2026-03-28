@@ -40,7 +40,7 @@
 <Story name="NoError">
   <ErrorBoundary error="">
     {#snippet children()}
-      <div style="padding: 24px; background: #0a0a0f; border: 1px solid rgba(0,255,65,0.15); border-radius: 8px; color: #e0e0e0; font-family: monospace;">
+      <div style="padding: 24px; background: var(--color-bg-primary); border: 1px solid var(--color-border-subtle); border-radius: 8px; color: var(--color-text-primary); font-family: monospace;">
         Application content renders normally when no error is present.
       </div>
     {/snippet}

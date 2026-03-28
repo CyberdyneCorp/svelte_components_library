@@ -14,7 +14,7 @@
 <Story name="Active" args={{ label: "Dashboard", icon: "terminal", active: true }} />
 
 <Story name="Navigation">
-  <div style="width: 240px; background: #0a0a0f; padding: 0.5rem 0;">
+  <div style="width: 240px; background: var(--color-bg-primary); padding: 0.5rem 0;">
     <MenuItem label="Dashboard" icon="terminal" active />
     <MenuItem label="Transactions" icon="activity" />
     <MenuItem label="Settings" icon="settings" />
@@ -23,7 +23,7 @@
 </Story>
 
 <Story name="WithSubItems">
-  <div style="width: 240px; background: #0a0a0f; padding: 0.5rem 0;">
+  <div style="width: 240px; background: var(--color-bg-primary); padding: 0.5rem 0;">
     <MenuItem label="Settings" icon="settings" active>
       <MenuItem label="Profile" />
       <MenuItem label="Security" />

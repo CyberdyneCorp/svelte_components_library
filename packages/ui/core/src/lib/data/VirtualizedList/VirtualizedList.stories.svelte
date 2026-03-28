@@ -22,8 +22,8 @@
 <Story name="Default">
   <VirtualizedList items={defaultItems} itemHeight={48} height="400px">
     {#snippet renderItem({ item, index })}
-      <span style="color: var(--color-text-secondary, #888);">#{index}</span>
-      <span style="margin-left: 12px;">{item}</span>
+      <span style="color: var(--color-text-tertiary);">#{index}</span>
+      <span style="margin-left: 12px; color: var(--color-text-primary);">{item}</span>
     {/snippet}
   </VirtualizedList>
 </Story>
@@ -32,14 +32,14 @@
   <VirtualizedList items={customItems} itemHeight={56} height="400px">
     {#snippet renderItem({ item, index })}
       <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-        <span style="color: #00d4ff; font-family: monospace;">{item.id}</span>
-        <span style="color: #e0e0e0;">{item.amount} ETH</span>
+        <span style="color: var(--color-action-secondary-default); font-family: monospace;">{item.id}</span>
+        <span style="color: var(--color-text-primary);">{item.amount} ETH</span>
         <span style="
           padding: 2px 8px;
           border-radius: 4px;
           font-size: 0.75rem;
-          background: {item.status === 'confirmed' ? 'rgba(0,255,65,0.15)' : item.status === 'pending' ? 'rgba(255,184,0,0.15)' : 'rgba(255,68,68,0.15)'};
-          color: {item.status === 'confirmed' ? '#00ff41' : item.status === 'pending' ? '#ffb800' : '#ff4444'};
+          background: {item.status === 'confirmed' ? 'var(--color-state-success-bg)' : item.status === 'pending' ? 'var(--color-state-warning-bg)' : 'var(--color-state-error-bg)'};
+          color: {item.status === 'confirmed' ? 'var(--color-state-success)' : item.status === 'pending' ? 'var(--color-state-warning)' : 'var(--color-state-error)'};
         ">{item.status}</span>
       </div>
     {/snippet}
@@ -49,8 +49,8 @@
 <Story name="LargeDataset">
   <VirtualizedList items={largeItems} itemHeight={40} height="500px" overscan={10}>
     {#snippet renderItem({ item, index })}
-      <span style="color: rgba(0, 212, 255, 0.6);">[{String(index).padStart(5, '0')}]</span>
-      <span style="margin-left: 12px;">{item}</span>
+      <span style="color: var(--color-text-tertiary);">[{String(index).padStart(5, '0')}]</span>
+      <span style="margin-left: 12px; color: var(--color-text-primary);">{item}</span>
     {/snippet}
   </VirtualizedList>
 </Story>

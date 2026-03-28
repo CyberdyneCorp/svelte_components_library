@@ -121,19 +121,19 @@ Check out [the docs](https://example.com).
 </script>
 
 <Story name="BasicMarkdown" args={{ content: basicContent }}>
-  <div style="padding: 2rem; background: #0a0a0f; border-radius: 8px;">
+  <div style="padding: 2rem; background: var(--color-bg-primary); border-radius: 8px;">
     <MarkdownPreview content={basicContent} />
   </div>
 </Story>
 
 <Story name="WithMermaid" args={{ content: mermaidContent }}>
-  <div style="padding: 2rem; background: #0a0a0f; border-radius: 8px;">
+  <div style="padding: 2rem; background: var(--color-bg-primary); border-radius: 8px;">
     <MarkdownPreview content={mermaidContent} />
   </div>
 </Story>
 
 <Story name="FullDocument" args={{ content: fullContent }}>
-  <div style="padding: 2rem; background: #0a0a0f; border-radius: 8px;">
+  <div style="padding: 2rem; background: var(--color-bg-primary); border-radius: 8px;">
     <MarkdownPreview content={fullContent} />
   </div>
 </Story>

@@ -11,18 +11,18 @@
 
 <Story name="Default">
   <ContentSlot name="main">
-    <p style="color: rgba(255,255,255,0.7); margin: 0;">Content inside a medium-padded slot.</p>
+    <p style="color: var(--color-text-secondary); margin: 0;">Content inside a medium-padded slot.</p>
   </ContentSlot>
 </Story>
 
 <Story name="NoPadding">
   <ContentSlot name="hero" padding="none">
-    <div style="background: rgba(0,255,65,0.05); padding: 2rem; color: rgba(255,255,255,0.7);">Full-width content with no slot padding.</div>
+    <div style="background: var(--color-state-success-bg); padding: 2rem; color: var(--color-text-secondary);">Full-width content with no slot padding.</div>
   </ContentSlot>
 </Story>
 
 <Story name="LargePadding">
   <ContentSlot name="section" padding="lg">
-    <p style="color: rgba(255,255,255,0.7); margin: 0;">Content with large padding.</p>
+    <p style="color: var(--color-text-secondary); margin: 0;">Content with large padding.</p>
   </ContentSlot>
 </Story>

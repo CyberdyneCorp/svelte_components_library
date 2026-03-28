@@ -17,7 +17,7 @@
       {/snippet}
       {#snippet content()}
         <p style="margin: 0; color: var(--color-text-secondary); line-height: 1.5;">
-          Neural network inference latency: <strong style="color: #00ff41;">12ms</strong>
+          Neural network inference latency: <strong style="color: var(--color-action-brand-default);">12ms</strong>
         </p>
       {/snippet}
     </Popover>
@@ -32,7 +32,7 @@
       {/snippet}
       {#snippet content()}
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <span style="width: 8px; height: 8px; border-radius: 50%; background: #00ff41; display: inline-block;"></span>
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--color-action-brand-default); display: inline-block;"></span>
           <span style="color: var(--color-text-secondary);">All systems operational</span>
         </div>
       {/snippet}
@@ -52,15 +52,15 @@
           <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.8125rem;">
             <div style="display: flex; justify-content: space-between;">
               <span style="color: var(--color-text-tertiary);">Utilization</span>
-              <span style="color: #00ff41; font-family: var(--font-mono);">97.2%</span>
+              <span style="color: var(--color-action-brand-default); font-family: var(--font-mono);">97.2%</span>
             </div>
             <div style="display: flex; justify-content: space-between;">
               <span style="color: var(--color-text-tertiary);">Temperature</span>
-              <span style="color: #ffaa00; font-family: var(--font-mono);">78°C</span>
+              <span style="color: var(--color-state-warning); font-family: var(--font-mono);">78°C</span>
             </div>
             <div style="display: flex; justify-content: space-between;">
               <span style="color: var(--color-text-tertiary);">Memory</span>
-              <span style="color: #00d4ff; font-family: var(--font-mono);">22.4 / 24 GB</span>
+              <span style="color: var(--color-action-secondary-default); font-family: var(--font-mono);">22.4 / 24 GB</span>
             </div>
             <div style="display: flex; justify-content: space-between;">
               <span style="color: var(--color-text-tertiary);">Power Draw</span>

@@ -18,7 +18,7 @@
       border-radius: var(--radius-md);
       font-family: var(--font-mono);
       font-size: 0.8125rem;
-      color: #00ff41;
+      color: var(--color-action-brand-default);
     ">npm install @cyberdyne/core</code>
     <CopyButton text="npm install @cyberdyne/core" />
   </div>

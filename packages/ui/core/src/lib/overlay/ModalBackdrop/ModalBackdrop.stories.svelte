@@ -11,14 +11,14 @@
 
 <Story name="Open">
   <div style="position: relative; height: 200px; overflow: hidden;">
-    <p style="color: rgba(255,255,255,0.7);">Content behind the backdrop</p>
+    <p style="color: var(--color-text-secondary);">Content behind the backdrop</p>
     <ModalBackdrop open onclick={() => console.log("backdrop clicked")} />
   </div>
 </Story>
 
 <Story name="NoBlur">
   <div style="position: relative; height: 200px; overflow: hidden;">
-    <p style="color: rgba(255,255,255,0.7);">Content behind the backdrop (no blur)</p>
+    <p style="color: var(--color-text-secondary);">Content behind the backdrop (no blur)</p>
     <ModalBackdrop open blur={false} onclick={() => console.log("clicked")} />
   </div>
 </Story>
