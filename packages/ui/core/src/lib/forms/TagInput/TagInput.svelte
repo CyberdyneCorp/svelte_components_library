@@ -209,9 +209,9 @@
     gap: 4px;
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    color: var(--color-accent-green, #00ff41);
-    background: rgba(0, 255, 65, 0.08);
-    border: 1px solid rgba(0, 255, 65, 0.3);
+    color: var(--color-action-brand-default);
+    background: var(--color-state-success-bg);
+    border: 1px solid var(--color-action-brand-border);
     border-radius: var(--radius-sm);
     padding: 2px 6px;
     line-height: 1.5;
@@ -220,7 +220,7 @@
   .cy-ti__tag-remove {
     background: transparent;
     border: none;
-    color: var(--color-accent-green, #00ff41);
+    color: var(--color-action-brand-default);
     cursor: pointer;
     font-size: 0.875rem;
     line-height: 1;
@@ -262,12 +262,12 @@
     right: 0;
     z-index: 50;
     margin-top: var(--space-1);
-    background: var(--color-bg-elevated, #12121a);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--input-border);
     border-radius: var(--radius-md);
     max-height: 180px;
     overflow-y: auto;
-    box-shadow: var(--shadow-lg, 0 8px 32px rgba(0, 0, 0, 0.5));
+    box-shadow: var(--shadow-lg);
   }
 
   .cy-ti__suggestion {
@@ -276,7 +276,7 @@
     text-align: left;
     font-family: var(--font-body);
     font-size: 0.875rem;
-    color: var(--color-text-secondary, #a0a0a0);
+    color: var(--color-text-secondary);
     background: transparent;
     border: none;
     padding: var(--space-2) var(--space-3);
@@ -286,8 +286,8 @@
 
   .cy-ti__suggestion:hover,
   .cy-ti__suggestion--highlighted {
-    background: rgba(0, 212, 255, 0.08);
-    color: var(--color-text-primary, #e0e0e0);
+    background: var(--color-action-secondary-bg);
+    color: var(--color-text-primary);
   }
 
   .cy-ti__error {

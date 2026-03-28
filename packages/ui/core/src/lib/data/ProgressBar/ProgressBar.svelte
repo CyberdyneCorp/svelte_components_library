@@ -64,22 +64,22 @@
 
   .cy-progress__fill--brand {
     background: var(--color-action-brand-default);
-    box-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+    box-shadow: 0 0 8px var(--color-state-success-bg);
   }
 
   .cy-progress__fill--info {
     background: var(--color-state-info);
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 8px var(--color-state-info-bg);
   }
 
   .cy-progress__fill--warning {
     background: var(--color-state-warning);
-    box-shadow: 0 0 8px rgba(255, 184, 0, 0.3);
+    box-shadow: 0 0 8px var(--color-state-warning-bg);
   }
 
   .cy-progress__fill--error {
     background: var(--color-state-error);
-    box-shadow: 0 0 8px rgba(255, 68, 68, 0.3);
+    box-shadow: 0 0 8px var(--color-state-error-bg);
   }
 
   .cy-progress__label {

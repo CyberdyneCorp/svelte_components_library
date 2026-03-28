@@ -75,7 +75,7 @@
 
 <style>
   .cy-skeleton {
-    background: var(--color-surface-raised, #1a1a2e);
+    background: var(--color-surface-raised);
     border-radius: var(--radius-sm);
     position: relative;
     overflow: hidden;
@@ -88,8 +88,8 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(0, 255, 65, 0.04) 40%,
-      rgba(0, 212, 255, 0.06) 60%,
+      var(--color-state-success-bg) 40%,
+      var(--color-state-info-bg) 60%,
       transparent 100%
     );
     animation: cy-shimmer 1.8s ease-in-out infinite;
@@ -116,9 +116,9 @@
 
   .cy-skeleton-card {
     border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--color-border-subtle);
     overflow: hidden;
-    background: var(--color-surface-default, #12121a);
+    background: var(--color-surface-default);
   }
 
   .cy-skeleton-card__body {

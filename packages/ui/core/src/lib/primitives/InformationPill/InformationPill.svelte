@@ -27,23 +27,23 @@
     font-family: var(--font-mono, monospace);
     font-size: 0.75rem;
     line-height: 1;
-    background: var(--color-surface-2, #12121a);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-subtle);
   }
 
   .cy-info-pill__label {
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.3));
+    color: var(--color-text-tertiary);
   }
 
   .cy-info-pill--default .cy-info-pill__value {
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
   }
 
   .cy-info-pill--brand .cy-info-pill__value {
-    color: var(--color-action-brand-default, #00ff41);
+    color: var(--color-action-brand-default);
   }
 
   .cy-info-pill--info .cy-info-pill__value {
-    color: var(--color-info, #00d4ff);
+    color: var(--color-action-secondary-default);
   }
 </style>

@@ -78,7 +78,7 @@
   .cy-drawer-overlay {
     position: fixed;
     inset: 0;
-    background: var(--color-bg-overlay, rgba(0, 0, 0, 0.6));
+    background: var(--color-bg-overlay);
     backdrop-filter: blur(4px);
     z-index: 1000;
     animation: cy-overlay-fade-in 150ms ease;
@@ -90,7 +90,7 @@
     bottom: 0;
     display: flex;
     flex-direction: column;
-    background: var(--color-surface-default, #12121a);
+    background: var(--color-surface-default);
     border: 1px solid var(--color-border-default);
     box-shadow: var(--shadow-lg);
     max-width: 100vw;
@@ -113,7 +113,7 @@
     align-items: center;
     justify-content: space-between;
     padding: var(--space-4) var(--space-5);
-    border-bottom: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06));
+    border-bottom: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
   }
 
@@ -159,7 +159,7 @@
     justify-content: flex-end;
     gap: var(--space-3);
     padding: var(--space-3) var(--space-5);
-    border-top: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06));
+    border-top: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
   }
 

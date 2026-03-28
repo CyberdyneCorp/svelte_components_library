@@ -257,7 +257,7 @@
 <style>
   .cy-md-preview {
     font-family: var(--font-body, "Inter", sans-serif);
-    color: var(--color-text-primary, #f0f0ff);
+    color: var(--color-text-primary);
     line-height: 1.7;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -270,7 +270,7 @@
   .cy-md-preview :global(h5),
   .cy-md-preview :global(h6) {
     font-family: var(--font-display, "Orbitron", sans-serif);
-    color: var(--color-text-primary, #f0f0ff);
+    color: var(--color-text-primary);
     margin: 1.5em 0 0.5em;
     line-height: 1.3;
   }
@@ -278,13 +278,13 @@
   .cy-md-preview :global(h1) {
     font-size: 2rem;
     padding-bottom: 0.3em;
-    border-bottom: 2px solid #00ff41;
+    border-bottom: 2px solid var(--color-action-brand-default);
   }
 
   .cy-md-preview :global(h2) {
     font-size: 1.5rem;
     padding-bottom: 0.25em;
-    border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+    border-bottom: 1px solid var(--color-border-subtle);
   }
 
   .cy-md-preview :global(h3) {
@@ -301,7 +301,7 @@
 
   .cy-md-preview :global(h6) {
     font-size: 0.875rem;
-    color: var(--color-text-secondary, #a0a0b0);
+    color: var(--color-text-secondary);
   }
 
   .cy-md-preview :global(p) {
@@ -309,7 +309,7 @@
   }
 
   .cy-md-preview :global(strong) {
-    color: #f0f0ff;
+    color: var(--color-text-primary);
     font-weight: 700;
   }
 
@@ -323,19 +323,19 @@
   }
 
   .cy-md-preview :global(a) {
-    color: #00d4ff;
+    color: var(--color-action-secondary-default);
     text-decoration: none;
-    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    border-bottom: 1px solid var(--color-border-subtle);
     transition: border-color 150ms ease;
   }
 
   .cy-md-preview :global(a:hover) {
-    border-bottom-color: #00d4ff;
+    border-bottom-color: var(--color-action-secondary-default);
   }
 
   .cy-md-preview :global(.cy-md-inline-code) {
-    background: #1a1a24;
-    color: #00ff41;
+    background: var(--color-surface-raised);
+    color: var(--color-action-brand-default);
     padding: 0.15em 0.4em;
     border-radius: 4px;
     font-family: var(--font-mono, "JetBrains Mono", monospace);
@@ -343,8 +343,8 @@
   }
 
   .cy-md-preview :global(.cy-md-pre) {
-    background: #1a1a24;
-    border: 1px solid rgba(0, 255, 65, 0.15);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 8px;
     padding: 1em;
     overflow-x: auto;
@@ -354,18 +354,18 @@
   .cy-md-preview :global(.cy-md-pre code) {
     font-family: var(--font-mono, "JetBrains Mono", monospace);
     font-size: 0.875rem;
-    color: #e0e0f0;
+    color: var(--color-text-primary);
     background: none;
     padding: 0;
     line-height: 1.6;
   }
 
   .cy-md-preview :global(blockquote) {
-    border-left: 3px solid #00ff41;
+    border-left: 3px solid var(--color-action-brand-default);
     margin: 1em 0;
     padding: 0.5em 1em;
-    background: rgba(0, 255, 65, 0.04);
-    color: var(--color-text-secondary, #c0c0d0);
+    background: var(--color-state-success-bg);
+    color: var(--color-text-secondary);
   }
 
   .cy-md-preview :global(ul),
@@ -385,7 +385,7 @@
 
   .cy-md-preview :global(ul > li::before) {
     content: "\25B8";
-    color: #00ff41;
+    color: var(--color-action-brand-default);
     position: absolute;
     left: -1em;
     font-size: 0.8em;
@@ -409,7 +409,7 @@
     -webkit-appearance: none;
     width: 16px;
     height: 16px;
-    border: 2px solid #00ff41;
+    border: 2px solid var(--color-action-brand-default);
     border-radius: 3px;
     background: transparent;
     vertical-align: middle;
@@ -419,12 +419,12 @@
   }
 
   .cy-md-preview :global(.cy-md-task input[type="checkbox"]:checked) {
-    background: rgba(0, 255, 65, 0.2);
+    background: var(--color-state-success-bg);
   }
 
   .cy-md-preview :global(.cy-md-task input[type="checkbox"]:checked::after) {
     content: "\2713";
-    color: #00ff41;
+    color: var(--color-action-brand-default);
     font-size: 12px;
     position: absolute;
     top: -1px;
@@ -442,7 +442,7 @@
   .cy-md-preview :global(hr) {
     border: none;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #00ff41, #00d4ff, #00ff41, transparent);
+    background: linear-gradient(90deg, transparent, var(--color-action-brand-default), var(--color-action-secondary-default), var(--color-action-brand-default), transparent);
     margin: 2em 0;
   }
 
@@ -454,38 +454,38 @@
   }
 
   .cy-md-preview :global(.cy-md-table th) {
-    background: #1a1a24;
+    background: var(--color-surface-raised);
     padding: 0.6em 1em;
     text-align: left;
     font-family: var(--font-display, "Orbitron", sans-serif);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #00ff41;
-    border-bottom: 2px solid rgba(0, 255, 65, 0.3);
+    color: var(--color-action-brand-default);
+    border-bottom: 2px solid var(--color-border-subtle);
   }
 
   .cy-md-preview :global(.cy-md-table td) {
     padding: 0.5em 1em;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--color-border-subtle);
   }
 
   .cy-md-preview :global(.cy-md-table tr:hover td) {
-    background: rgba(0, 255, 65, 0.04);
+    background: var(--color-state-success-bg);
   }
 
   .cy-md-preview :global(.cy-md-img) {
     max-width: 100%;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border-default);
     margin: 1em 0;
   }
 
   .cy-md-preview :global(.cy-md-mermaid) {
     margin: 1.5em 0;
     padding: 1em;
-    background: #12121a;
-    border: 1px solid rgba(0, 255, 65, 0.15);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 8px;
     display: flex;
     justify-content: center;
@@ -497,7 +497,7 @@
   }
 
   .cy-md-preview :global(.cy-md-mermaid-error) {
-    color: #ff4444;
+    color: var(--color-state-error);
     font-family: var(--font-mono, "JetBrains Mono", monospace);
     font-size: 0.875rem;
     padding: 0.5em;

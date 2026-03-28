@@ -60,8 +60,8 @@
   .cy-nft-card {
     display: flex;
     flex-direction: column;
-    background: var(--color-surface-base, #12121a);
-    border: 1px solid var(--color-border-default, rgba(0, 255, 65, 0.1));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg, 12px);
     overflow: hidden;
     transition: all var(--transition-default, 0.2s ease);
@@ -79,8 +79,8 @@
 
   .cy-nft-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(0, 255, 65, 0.3);
-    box-shadow: var(--shadow-glow-md, 0 0 20px rgba(0, 255, 65, 0.1), 0 8px 24px rgba(0, 0, 0, 0.3));
+    border-color: var(--color-border-default);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-nft-card__image {
@@ -120,8 +120,8 @@
     padding: 0.125rem var(--space-2, 0.5rem);
     border-radius: var(--radius-pill, 999px);
     background: rgba(0, 0, 0, 0.7);
-    color: var(--color-secondary, #00d4ff);
-    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: var(--color-action-secondary-default);
+    border: 1px solid var(--color-border-default);
     backdrop-filter: blur(4px);
   }
 
@@ -134,7 +134,7 @@
 
   .cy-nft-card__collection {
     font-size: 0.6875rem;
-    color: var(--color-primary, #00ff41);
+    color: var(--color-action-brand-default);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     font-weight: var(--font-weight-medium, 500);
@@ -149,7 +149,7 @@
   .cy-nft-card__name {
     font-size: 0.9375rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -158,7 +158,7 @@
   .cy-nft-card__token-id {
     font-family: var(--font-mono, monospace);
     font-size: 0.6875rem;
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
     flex-shrink: 0;
   }
 
@@ -167,13 +167,13 @@
     align-items: center;
     margin-top: var(--space-2, 0.5rem);
     padding-top: var(--space-2, 0.5rem);
-    border-top: 1px solid var(--color-border-default, rgba(0, 255, 65, 0.06));
+    border-top: 1px solid var(--color-border-subtle);
   }
 
   .cy-nft-card__price {
     font-family: var(--font-mono, monospace);
     font-size: 0.8125rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
   }
 </style>

@@ -37,26 +37,26 @@
   }
 
   .cy-flag--new {
-    background: rgba(0, 255, 65, 0.12);
-    color: #00ff41;
-    border: 1px solid rgba(0, 255, 65, 0.2);
+    background: var(--color-surface-hover);
+    color: var(--color-action-brand-default);
+    border: 1px solid var(--color-action-brand-default);
   }
 
   .cy-flag--beta {
-    background: rgba(0, 212, 255, 0.12);
-    color: #00d4ff;
-    border: 1px solid rgba(0, 212, 255, 0.2);
+    background: var(--color-surface-hover);
+    color: var(--color-action-secondary-default);
+    border: 1px solid var(--color-action-secondary-default);
   }
 
   .cy-flag--deprecated {
-    background: rgba(245, 158, 11, 0.12);
-    color: #f59e0b;
-    border: 1px solid rgba(245, 158, 11, 0.2);
+    background: var(--color-surface-hover);
+    color: var(--color-state-warning);
+    border: 1px solid var(--color-state-warning);
   }
 
   .cy-flag--experimental {
-    background: rgba(168, 85, 247, 0.12);
-    color: #a855f7;
-    border: 1px solid rgba(168, 85, 247, 0.2);
+    background: var(--color-surface-hover);
+    color: var(--color-action-tertiary-default);
+    border: 1px solid var(--color-action-tertiary-default);
   }
 </style>

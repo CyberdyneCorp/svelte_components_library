@@ -150,7 +150,7 @@
   .cy-sidebar__link--active {
     color: var(--nav-item-text-active);
     border-left-color: var(--nav-item-text-active);
-    background: rgba(0, 255, 65, 0.05);
+    background: var(--color-surface-hover);
   }
 
   .cy-sidebar__icon {

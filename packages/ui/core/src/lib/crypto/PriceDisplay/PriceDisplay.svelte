@@ -46,16 +46,16 @@
 
 <style>
   .cy-price {
-    background: var(--color-surface-base, #12121a);
-    border: 1px solid var(--color-border-default, rgba(0, 255, 65, 0.1));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg, 12px);
     padding: var(--space-4, 1rem) var(--space-5, 1.25rem);
     transition: all var(--transition-default, 0.2s ease);
   }
 
   .cy-price:hover {
-    border-color: rgba(0, 255, 65, 0.2);
-    box-shadow: var(--shadow-glow-sm, 0 0 12px rgba(0, 255, 65, 0.06));
+    border-color: var(--color-border-default);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-price__header {
@@ -69,7 +69,7 @@
     font-family: var(--font-mono, monospace);
     font-size: 0.8125rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
@@ -77,8 +77,8 @@
   .cy-price__period {
     font-family: var(--font-mono, monospace);
     font-size: 0.625rem;
-    color: var(--color-text-tertiary, #666);
-    background: var(--color-surface-raised, #1a1a2e);
+    color: var(--color-text-tertiary);
+    background: var(--color-surface-raised);
     padding: 0.0625rem var(--space-2, 0.5rem);
     border-radius: var(--radius-pill, 999px);
   }
@@ -87,7 +87,7 @@
     font-family: var(--font-mono, monospace);
     font-size: 1.75rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
     letter-spacing: -0.02em;
     line-height: 1.2;
   }
@@ -105,18 +105,18 @@
   }
 
   .cy-price__change--positive {
-    color: var(--color-state-success, #00ff41);
-    background: rgba(0, 255, 65, 0.1);
+    color: var(--color-state-success);
+    background: var(--color-state-success-bg);
   }
 
   .cy-price__change--negative {
-    color: var(--color-state-error, #ff4444);
-    background: rgba(255, 68, 68, 0.1);
+    color: var(--color-state-error);
+    background: var(--color-state-error-bg);
   }
 
   .cy-price__change--neutral {
-    color: var(--color-text-secondary, #8a8a8a);
-    background: var(--color-surface-raised, rgba(255, 255, 255, 0.04));
+    color: var(--color-text-secondary);
+    background: var(--color-surface-raised);
   }
 
   .cy-price__arrow {

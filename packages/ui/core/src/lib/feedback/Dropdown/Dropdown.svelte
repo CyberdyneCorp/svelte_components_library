@@ -136,7 +136,7 @@
     position: absolute;
     top: calc(100% + 4px);
     min-width: 180px;
-    background: var(--color-surface-raised, #1a1a2e);
+    background: var(--color-surface-raised);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
@@ -172,16 +172,16 @@
 
   .cy-dropdown__item--focused,
   .cy-dropdown__item:hover {
-    background: var(--color-surface-hover, rgba(255, 255, 255, 0.06));
+    background: var(--color-surface-hover);
   }
 
   .cy-dropdown__item--danger {
-    color: #ff4444;
+    color: var(--color-state-error);
   }
 
   .cy-dropdown__item--danger.cy-dropdown__item--focused,
   .cy-dropdown__item--danger:hover {
-    background: rgba(255, 68, 68, 0.1);
+    background: var(--color-state-error-bg);
   }
 
   .cy-dropdown__icon {

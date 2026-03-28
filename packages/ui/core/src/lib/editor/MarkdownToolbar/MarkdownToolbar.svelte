@@ -347,8 +347,8 @@
     align-items: center;
     gap: 2px;
     padding: 6px 8px;
-    background: #0a0a0f;
-    border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border-subtle);
     flex-wrap: wrap;
   }
 
@@ -367,26 +367,26 @@
     background: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
-    color: var(--color-text-secondary, #a0a0b0);
+    color: var(--color-text-secondary);
     cursor: pointer;
     transition: all 150ms ease;
   }
 
   .cy-md-toolbar__btn:hover {
-    color: #00ff41;
-    background: rgba(0, 255, 65, 0.08);
-    border-color: rgba(0, 255, 65, 0.2);
+    color: var(--color-action-brand-default);
+    background: var(--color-state-success-bg);
+    border-color: var(--color-border-subtle);
   }
 
   .cy-md-toolbar__btn:active {
-    color: #00ff41;
-    background: rgba(0, 255, 65, 0.15);
+    color: var(--color-action-brand-default);
+    background: var(--color-state-success-bg);
   }
 
   .cy-md-toolbar__sep {
     width: 1px;
     height: 20px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-border-subtle);
     margin: 0 4px;
   }
 
@@ -399,8 +399,8 @@
     top: 100%;
     left: 0;
     margin-top: 4px;
-    background: #12121a;
-    border: 1px solid rgba(0, 255, 65, 0.2);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 6px;
     padding: 4px;
     z-index: 10;
@@ -417,7 +417,7 @@
     background: transparent;
     border: none;
     border-radius: 4px;
-    color: var(--color-text-secondary, #a0a0b0);
+    color: var(--color-text-secondary);
     font-family: var(--font-display, "Orbitron", sans-serif);
     font-size: 0.75rem;
     cursor: pointer;
@@ -426,7 +426,7 @@
   }
 
   .cy-md-toolbar__dropdown button:hover {
-    color: #00ff41;
-    background: rgba(0, 255, 65, 0.08);
+    color: var(--color-action-brand-default);
+    background: var(--color-state-success-bg);
   }
 </style>

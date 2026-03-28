@@ -145,7 +145,7 @@
     justify-content: center;
     background: transparent;
     border: none;
-    color: var(--color-text-secondary, #a0a0a0);
+    color: var(--color-text-secondary);
     cursor: pointer;
     transition: all var(--transition-default);
     flex-shrink: 0;
@@ -162,12 +162,12 @@
   }
 
   .cy-ni__btn:hover:not(:disabled) {
-    background: rgba(0, 212, 255, 0.1);
-    color: var(--color-accent-cyan, #00d4ff);
+    background: var(--color-action-secondary-bg);
+    color: var(--color-action-secondary-default);
   }
 
   .cy-ni__btn:active:not(:disabled) {
-    background: rgba(0, 212, 255, 0.2);
+    background: var(--color-action-secondary-active);
   }
 
   .cy-ni__btn:disabled {

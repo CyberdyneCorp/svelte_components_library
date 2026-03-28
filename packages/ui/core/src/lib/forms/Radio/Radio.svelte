@@ -66,7 +66,7 @@
     font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
     margin-bottom: var(--space-2);
   }
 
@@ -102,9 +102,9 @@
     justify-content: center;
     width: 20px;
     height: 20px;
-    border: 1px solid var(--input-border, rgba(255, 255, 255, 0.12));
+    border: 1px solid var(--input-border);
     border-radius: 50%;
-    background: var(--input-bg, transparent);
+    background: var(--input-bg);
     transition: all var(--transition-default);
     flex-shrink: 0;
   }
@@ -113,13 +113,13 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: var(--color-action-brand-default, #00ff41);
+    background: var(--color-action-brand-default);
     transform: scale(0);
     transition: transform var(--transition-default);
   }
 
   .cy-radio__input:checked + .cy-radio__circle {
-    border-color: var(--color-action-brand-default, #00ff41);
+    border-color: var(--color-action-brand-default);
   }
 
   .cy-radio__input:checked + .cy-radio__circle .cy-radio__dot {
@@ -132,23 +132,23 @@
   }
 
   .cy-radio__item:hover .cy-radio__circle {
-    border-color: var(--color-border-strong, rgba(255, 255, 255, 0.2));
+    border-color: var(--color-border-strong);
   }
 
   .cy-radio--error .cy-radio__circle {
-    border-color: var(--input-border-error, #ef4444);
+    border-color: var(--input-border-error);
   }
 
   .cy-radio__label {
     font-family: var(--font-body);
     font-size: 0.875rem;
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
   }
 
   .cy-radio__error {
     font-family: var(--font-body);
     font-size: 0.75rem;
-    color: var(--color-state-error, #ef4444);
+    color: var(--color-state-error);
     margin: 0;
   }
 </style>

@@ -209,9 +209,9 @@
             <td class="cy-datatable__empty" colspan={totalCols}>
               <div class="cy-datatable__empty-content">
                 <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                  <rect x="4" y="8" width="32" height="24" rx="2" stroke="#555570" stroke-width="2"/>
-                  <line x1="4" y1="16" x2="36" y2="16" stroke="#555570" stroke-width="2"/>
-                  <line x1="16" y1="16" x2="16" y2="32" stroke="#555570" stroke-width="1.5"/>
+                  <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <line x1="4" y1="16" x2="36" y2="16" stroke="currentColor" stroke-width="2"/>
+                  <line x1="16" y1="16" x2="16" y2="32" stroke="currentColor" stroke-width="1.5"/>
                 </svg>
                 <span>No data available</span>
               </div>
@@ -301,17 +301,8 @@
 
 <style>
   .cy-datatable {
-    --cy-bg: var(--datatable-bg, #12121a);
-    --cy-bg-deep: var(--datatable-bg-deep, #0a0a0f);
-    --cy-neon-green: var(--datatable-accent, #00ff41);
-    --cy-cyan: var(--datatable-cyan, #00d4ff);
-    --cy-border: var(--datatable-border, #1e1e2e);
-    --cy-text: var(--datatable-text, #e0e0e0);
-    --cy-text-dim: var(--datatable-text-dim, #8888a0);
-    --cy-text-secondary: var(--datatable-text-secondary, #555570);
-
-    background: var(--cy-bg);
-    border: 1px solid var(--cy-border);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: 12px;
     overflow: hidden;
     font-family: var(--font-body, "Inter", system-ui, sans-serif);
@@ -320,11 +311,11 @@
 
   .cy-datatable__selection-bar {
     padding: 8px 16px;
-    background: rgba(0, 255, 65, 0.08);
-    color: var(--cy-neon-green);
+    background: var(--color-state-success-bg);
+    color: var(--color-action-brand-default);
     font-size: 0.8rem;
     font-weight: 600;
-    border-bottom: 1px solid var(--cy-border);
+    border-bottom: 1px solid var(--color-border-default);
   }
 
   .cy-datatable__wrapper {
@@ -350,13 +341,13 @@
   .cy-datatable__th {
     text-align: left;
     padding: 12px 16px;
-    background: var(--cy-bg-deep);
-    color: var(--cy-text-dim);
+    background: var(--color-bg-primary);
+    color: var(--color-text-secondary);
     font-weight: 600;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--cy-border);
+    border-bottom: 1px solid var(--color-border-default);
     white-space: nowrap;
     position: relative;
   }
@@ -393,42 +384,42 @@
   }
 
   .cy-datatable__resize-handle:hover {
-    background: var(--cy-cyan);
+    background: var(--color-action-secondary-default);
   }
 
   .cy-datatable__td {
     padding: 10px 16px;
-    color: var(--cy-text);
-    border-bottom: 1px solid var(--cy-border);
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border-default);
   }
 
   .cy-datatable__row {
-    background: var(--cy-bg);
+    background: var(--color-surface-default);
     transition: background 0.12s ease;
     cursor: default;
   }
 
   .cy-datatable__row:hover {
-    background: rgba(0, 212, 255, 0.04);
+    background: var(--color-surface-hover);
   }
 
   .cy-datatable__row--selected {
-    background: rgba(0, 255, 65, 0.06) !important;
+    background: var(--color-state-success-bg) !important;
   }
 
   .cy-datatable__table--striped .cy-datatable__row:nth-child(even) {
-    background: rgba(255, 255, 255, 0.015);
+    background: var(--color-surface-raised);
   }
 
   .cy-datatable__table--striped .cy-datatable__row:nth-child(even):hover {
-    background: rgba(0, 212, 255, 0.04);
+    background: var(--color-surface-hover);
   }
 
   .cy-datatable__checkbox {
     appearance: none;
     width: 16px;
     height: 16px;
-    border: 2px solid var(--cy-border);
+    border: 2px solid var(--color-border-default);
     border-radius: 4px;
     background: transparent;
     cursor: pointer;
@@ -437,8 +428,8 @@
   }
 
   .cy-datatable__checkbox:checked {
-    background: var(--cy-neon-green);
-    border-color: var(--cy-neon-green);
+    background: var(--color-action-brand-default);
+    border-color: var(--color-action-brand-default);
   }
 
   .cy-datatable__checkbox:checked::after {
@@ -448,7 +439,7 @@
     top: 1px;
     width: 4px;
     height: 8px;
-    border: solid #0a0a0f;
+    border: solid var(--color-bg-primary);
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
@@ -459,7 +450,7 @@
     justify-content: center;
     background: none;
     border: none;
-    color: var(--cy-text-dim);
+    color: var(--color-text-secondary);
     cursor: pointer;
     padding: 4px;
     border-radius: 4px;
@@ -467,24 +458,24 @@
   }
 
   .cy-datatable__expand-btn:hover {
-    color: var(--cy-cyan);
-    background: rgba(0, 212, 255, 0.1);
+    color: var(--color-action-secondary-default);
+    background: var(--color-state-info-bg);
   }
 
   .cy-datatable__expand-btn--open {
     transform: rotate(90deg);
-    color: var(--cy-neon-green);
+    color: var(--color-action-brand-default);
   }
 
   .cy-datatable__expanded-row {
-    background: rgba(0, 255, 65, 0.03);
+    background: var(--color-state-success-bg);
   }
 
   .cy-datatable__expanded-cell {
     padding: 16px 16px 16px 60px;
-    color: var(--cy-text-dim);
+    color: var(--color-text-secondary);
     font-size: 0.8rem;
-    border-bottom: 1px solid var(--cy-border);
+    border-bottom: 1px solid var(--color-border-default);
     line-height: 1.5;
   }
 
@@ -505,16 +496,16 @@
   }
 
   .cy-datatable__sort-btn:hover {
-    color: var(--cy-text);
+    color: var(--color-text-primary);
   }
 
   .cy-datatable__sort-icon {
     display: flex;
-    color: var(--cy-text-secondary);
+    color: var(--color-text-disabled);
   }
 
   .cy-datatable__sort-icon--active {
-    color: var(--cy-neon-green);
+    color: var(--color-action-brand-default);
   }
 
   .cy-datatable__empty {
@@ -527,7 +518,7 @@
     align-items: center;
     gap: 12px;
     padding: 48px 16px;
-    color: var(--cy-text-secondary);
+    color: var(--color-text-disabled);
     font-size: 0.85rem;
   }
 
@@ -536,13 +527,13 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    border-top: 1px solid var(--cy-border);
-    background: var(--cy-bg-deep);
+    border-top: 1px solid var(--color-border-default);
+    background: var(--color-bg-primary);
   }
 
   .cy-datatable__info {
     font-size: 0.8rem;
-    color: var(--cy-text-dim);
+    color: var(--color-text-secondary);
   }
 
   .cy-datatable__pagination {
@@ -559,9 +550,9 @@
     height: 32px;
     padding: 0 8px;
     background: transparent;
-    border: 1px solid var(--cy-border);
+    border: 1px solid var(--color-border-default);
     border-radius: 6px;
-    color: var(--cy-text-dim);
+    color: var(--color-text-secondary);
     font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
@@ -569,14 +560,14 @@
   }
 
   .cy-datatable__page-btn:hover:not(:disabled) {
-    border-color: var(--cy-cyan);
-    color: var(--cy-cyan);
+    border-color: var(--color-action-secondary-default);
+    color: var(--color-action-secondary-default);
   }
 
   .cy-datatable__page-btn--active {
-    background: var(--cy-neon-green) !important;
-    border-color: var(--cy-neon-green) !important;
-    color: #0a0a0f !important;
+    background: var(--color-action-brand-default) !important;
+    border-color: var(--color-action-brand-default) !important;
+    color: var(--color-bg-primary) !important;
     font-weight: 700;
   }
 

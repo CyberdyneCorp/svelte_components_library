@@ -274,7 +274,7 @@
     width: 16px;
     height: 16px;
     border: 2px solid var(--input-border);
-    border-top-color: var(--color-accent-cyan, #00d4ff);
+    border-top-color: var(--color-action-secondary-default);
     border-radius: 50%;
     animation: cy-cb-spin 0.6s linear infinite;
   }
@@ -290,12 +290,12 @@
     right: 0;
     z-index: 50;
     margin-top: var(--space-1);
-    background: var(--color-bg-elevated, #12121a);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--input-border);
     border-radius: var(--radius-md);
     max-height: 240px;
     overflow-y: auto;
-    box-shadow: var(--shadow-lg, 0 8px 32px rgba(0, 0, 0, 0.5));
+    box-shadow: var(--shadow-lg);
   }
 
   .cy-cb__option {
@@ -306,7 +306,7 @@
     text-align: left;
     font-family: var(--font-body);
     font-size: 0.875rem;
-    color: var(--color-text-secondary, #a0a0a0);
+    color: var(--color-text-secondary);
     background: transparent;
     border: none;
     padding: var(--space-2) var(--space-3);
@@ -316,12 +316,12 @@
 
   .cy-cb__option:hover,
   .cy-cb__option--highlighted {
-    background: rgba(0, 212, 255, 0.08);
-    color: var(--color-text-primary, #e0e0e0);
+    background: var(--color-state-info-bg);
+    color: var(--color-text-primary);
   }
 
   .cy-cb__option--selected {
-    color: var(--color-accent-green, #00ff41);
+    color: var(--color-action-brand-default);
   }
 
   .cy-cb__option-label {
@@ -335,8 +335,8 @@
   }
 
   :global(.cy-cb__match) {
-    background: rgba(0, 212, 255, 0.2);
-    color: var(--color-accent-cyan, #00d4ff);
+    background: var(--color-state-info-bg);
+    color: var(--color-action-secondary-default);
     border-radius: 1px;
     padding: 0;
   }

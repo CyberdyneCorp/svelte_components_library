@@ -54,7 +54,7 @@
     font-family: var(--font-heading, var(--font-body));
     font-size: 1.75rem;
     font-weight: 600;
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
     letter-spacing: -0.02em;
   }
 
@@ -62,7 +62,7 @@
     margin: 0;
     font-family: var(--font-body);
     font-size: 1rem;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.3));
+    color: var(--color-text-tertiary);
     max-width: 40ch;
     line-height: 1.5;
   }

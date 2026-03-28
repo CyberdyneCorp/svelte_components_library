@@ -222,7 +222,7 @@
   }
 
   .cy-line-chart__grid {
-    stroke: rgba(255, 255, 255, 0.06);
+    stroke: var(--color-border-subtle);
     stroke-width: 1;
   }
 
@@ -259,7 +259,7 @@
   }
 
   .cy-line-chart__crosshair {
-    stroke: rgba(255, 255, 255, 0.2);
+    stroke: var(--color-text-tertiary);
     stroke-width: 1;
     stroke-dasharray: 4 2;
   }

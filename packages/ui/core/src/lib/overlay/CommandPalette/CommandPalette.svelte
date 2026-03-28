@@ -183,7 +183,7 @@
     align-items: flex-start;
     justify-content: center;
     padding-top: 20vh;
-    background: var(--color-bg-overlay, rgba(0, 0, 0, 0.7));
+    background: var(--color-bg-overlay);
     backdrop-filter: blur(8px);
     z-index: 9999;
     animation: cy-cmd-overlay-in 100ms ease;
@@ -192,10 +192,10 @@
   .cy-cmd {
     width: 100%;
     max-width: 560px;
-    background: var(--color-surface-default, #0a0a0f);
+    background: var(--color-surface-default);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg), 0 0 40px rgba(0, 255, 65, 0.05);
+    box-shadow: var(--shadow-lg), var(--shadow-glow-green);
     overflow: hidden;
     animation: cy-cmd-in 150ms ease;
   }
@@ -205,7 +205,7 @@
     align-items: center;
     gap: var(--space-3);
     padding: var(--space-3) var(--space-4);
-    border-bottom: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06));
+    border-bottom: 1px solid var(--color-border-subtle);
   }
 
   .cy-cmd__search-icon {
@@ -221,7 +221,7 @@
     font-family: var(--font-mono);
     font-size: 0.9375rem;
     color: var(--color-text-primary);
-    caret-color: #00ff41;
+    caret-color: var(--color-action-brand-default);
   }
 
   .cy-cmd__input::placeholder {
@@ -230,8 +230,8 @@
 
   .cy-cmd__kbd {
     padding: 0.125rem 0.375rem;
-    background: var(--color-surface-raised, #1a1a2e);
-    border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06));
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-sm);
     font-family: var(--font-mono);
     font-size: 0.6875rem;
@@ -280,8 +280,8 @@
   }
 
   .cy-cmd__item--focused {
-    background: rgba(0, 255, 65, 0.08);
-    color: #00ff41;
+    background: var(--color-surface-hover);
+    color: var(--color-action-brand-default);
   }
 
   .cy-cmd__item-icon {
@@ -297,8 +297,8 @@
 
   .cy-cmd__item-shortcut {
     padding: 0.125rem 0.375rem;
-    background: var(--color-surface-raised, #1a1a2e);
-    border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06));
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-sm);
     font-family: var(--font-mono);
     font-size: 0.6875rem;
@@ -307,7 +307,7 @@
 
   .cy-cmd__footer {
     padding: var(--space-2) var(--space-4);
-    border-top: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06));
+    border-top: 1px solid var(--color-border-subtle);
   }
 
   .cy-cmd__hint {
@@ -320,8 +320,8 @@
 
   .cy-cmd__hint kbd {
     padding: 0 0.25rem;
-    background: var(--color-surface-raised, #1a1a2e);
-    border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06));
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 2px;
     font-family: var(--font-mono);
     font-size: 0.625rem;

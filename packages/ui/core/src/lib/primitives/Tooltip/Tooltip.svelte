@@ -59,7 +59,7 @@
     line-height: 1.4;
     border-radius: var(--radius-sm);
     border: 1px solid var(--color-border-default);
-    box-shadow: var(--shadow-md), 0 0 8px rgba(0, 212, 255, 0.1);
+    box-shadow: var(--shadow-md), var(--shadow-glow-cyan);
     white-space: nowrap;
     pointer-events: none;
     animation: tooltip-fade-in 150ms ease;

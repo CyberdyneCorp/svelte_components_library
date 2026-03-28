@@ -75,25 +75,25 @@
 
   .cy-notification--success {
     background: var(--color-surface-default);
-    border-color: rgba(0, 255, 65, 0.2);
+    border-color: var(--color-border-subtle);
     color: var(--color-state-success);
   }
 
   .cy-notification--warning {
     background: var(--color-surface-default);
-    border-color: rgba(255, 184, 0, 0.2);
+    border-color: var(--color-border-subtle);
     color: var(--color-state-warning);
   }
 
   .cy-notification--error {
     background: var(--color-surface-default);
-    border-color: rgba(255, 68, 68, 0.2);
+    border-color: var(--color-border-subtle);
     color: var(--color-state-error);
   }
 
   .cy-notification--info {
     background: var(--color-surface-default);
-    border-color: rgba(0, 212, 255, 0.2);
+    border-color: var(--color-border-subtle);
     color: var(--color-state-info);
   }
 

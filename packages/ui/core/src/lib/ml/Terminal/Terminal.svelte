@@ -42,8 +42,8 @@
 
 <style>
   .cy-term {
-    background: var(--color-bg-primary, #0a0a0f);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-lg, 12px);
     overflow: hidden;
     font-family: var(--font-mono, "JetBrains Mono", monospace);
@@ -54,8 +54,8 @@
     display: flex;
     align-items: center;
     padding: var(--space-2, 8px) var(--space-4, 16px);
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-surface-hover);
+    border-bottom: 1px solid var(--color-border-subtle);
   }
 
   .cy-term__dots {
@@ -84,7 +84,7 @@
   .cy-term__title {
     flex: 1;
     text-align: center;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
+    color: var(--color-text-tertiary);
     font-size: 0.75rem;
   }
 
@@ -104,23 +104,23 @@
   }
 
   .cy-term__line--stdout {
-    color: var(--color-text-default, rgba(255, 255, 255, 0.87));
+    color: var(--color-text-primary);
   }
 
   .cy-term__line--stderr {
-    color: #ff4444;
+    color: var(--color-state-error);
   }
 
   .cy-term__line--info {
-    color: var(--color-secondary, #00d4ff);
+    color: var(--color-action-secondary-default);
   }
 
   .cy-term__line--command {
-    color: var(--color-brand, #00ff41);
+    color: var(--color-action-brand-default);
   }
 
   .cy-term__prompt {
-    color: var(--color-brand, #00ff41);
+    color: var(--color-action-brand-default);
     user-select: none;
   }
 </style>

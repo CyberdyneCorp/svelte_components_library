@@ -49,10 +49,10 @@
     {:else if empty}
       <div class="cy-chart__empty">
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-          <rect x="4" y="32" width="8" height="12" rx="2" fill="rgba(255,255,255,0.08)" />
-          <rect x="16" y="24" width="8" height="20" rx="2" fill="rgba(255,255,255,0.06)" />
-          <rect x="28" y="28" width="8" height="16" rx="2" fill="rgba(255,255,255,0.08)" />
-          <rect x="40" y="20" width="4" height="24" rx="2" fill="rgba(255,255,255,0.06)" />
+          <rect x="4" y="32" width="8" height="12" rx="2" fill="currentColor" opacity="0.08" />
+          <rect x="16" y="24" width="8" height="20" rx="2" fill="currentColor" opacity="0.06" />
+          <rect x="28" y="28" width="8" height="16" rx="2" fill="currentColor" opacity="0.08" />
+          <rect x="40" y="20" width="4" height="24" rx="2" fill="currentColor" opacity="0.06" />
         </svg>
         <span class="cy-chart__empty-text">{emptyMessage}</span>
       </div>
@@ -64,32 +64,32 @@
 
 <style>
   .cy-chart {
-    background: var(--color-surface-elevated, #12121a);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
-    border-radius: var(--radius-lg, 12px);
+    background: var(--color-surface-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
     overflow: hidden;
   }
 
   .cy-chart__header {
-    padding: var(--space-4, 16px) var(--space-5, 20px) 0;
+    padding: var(--space-4) var(--space-5) 0;
   }
 
   .cy-chart__title {
     margin: 0;
-    font-family: var(--font-body, inherit);
+    font-family: var(--font-body);
     font-size: 1rem;
-    font-weight: var(--font-weight-semibold, 600);
-    color: var(--color-text-default, rgba(255, 255, 255, 0.87));
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
   }
 
   .cy-chart__desc {
-    margin: var(--space-1, 4px) 0 0;
+    margin: var(--space-1) 0 0;
     font-size: 0.8125rem;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
+    color: var(--color-text-tertiary);
   }
 
   .cy-chart__body {
-    padding: var(--space-4, 16px);
+    padding: var(--space-4);
     position: relative;
     display: flex;
     align-items: center;
@@ -101,7 +101,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-3, 12px);
+    gap: var(--space-3);
     width: 100%;
     height: 100%;
   }
@@ -116,11 +116,11 @@
 
   .cy-chart__skeleton-bar {
     flex: 1;
-    border-radius: var(--radius-sm, 6px) var(--radius-sm, 6px) 0 0;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.06) 0%,
-      rgba(255, 255, 255, 0.02) 100%
+      var(--color-border-subtle) 0%,
+      transparent 100%
     );
     animation: cy-chart-pulse 1.5s ease-in-out infinite;
   }
@@ -135,8 +135,8 @@
 
   .cy-chart__loading-text {
     font-size: 0.75rem;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.4));
-    font-family: var(--font-mono, "JetBrains Mono", monospace);
+    color: var(--color-text-tertiary);
+    font-family: var(--font-mono);
   }
 
   .cy-chart__empty {
@@ -144,13 +144,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-3, 12px);
+    gap: var(--space-3);
     height: 100%;
   }
 
   .cy-chart__empty-text {
     font-size: 0.875rem;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.4));
+    color: var(--color-text-tertiary);
   }
 
   @keyframes cy-chart-pulse {

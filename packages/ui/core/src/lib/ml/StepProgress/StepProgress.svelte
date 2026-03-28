@@ -113,23 +113,23 @@
   }
 
   .cy-steps__item--completed .cy-steps__circle {
-    background: var(--color-brand, #00ff41);
-    color: #0a0a0f;
-    border: 2px solid var(--color-brand, #00ff41);
+    background: var(--color-action-brand-default);
+    color: var(--color-bg-primary);
+    border: 2px solid var(--color-action-brand-default);
   }
 
   .cy-steps__item--current .cy-steps__circle {
     background: transparent;
-    color: var(--color-brand, #00ff41);
-    border: 2px solid var(--color-brand, #00ff41);
-    box-shadow: 0 0 12px rgba(0, 255, 65, 0.4);
+    color: var(--color-action-brand-default);
+    border: 2px solid var(--color-action-brand-default);
+    box-shadow: var(--shadow-glow-green);
     animation: cy-pulse 2s ease-in-out infinite;
   }
 
   .cy-steps__item--future .cy-steps__circle {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.35);
-    border: 2px solid rgba(255, 255, 255, 0.12);
+    background: var(--color-surface-hover);
+    color: var(--color-text-tertiary);
+    border: 2px solid var(--color-border-default);
   }
 
   .cy-steps__num {
@@ -146,23 +146,23 @@
     left: calc(50% + 20px);
     right: calc(-50% + 20px);
     height: 2px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-border-subtle);
     transform: translateY(-50%);
   }
 
   .cy-steps--horizontal .cy-steps__line--filled {
-    background: var(--color-brand, #00ff41);
+    background: var(--color-action-brand-default);
   }
 
   .cy-steps--vertical .cy-steps__line {
     width: 2px;
     height: 40px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-border-subtle);
     margin: var(--space-1, 4px) 0;
   }
 
   .cy-steps--vertical .cy-steps__line--filled {
-    background: var(--color-brand, #00ff41);
+    background: var(--color-action-brand-default);
   }
 
   .cy-steps__content {
@@ -185,24 +185,24 @@
     font-family: var(--font-body, inherit);
     font-size: 0.8125rem;
     font-weight: var(--font-weight-medium, 500);
-    color: var(--color-text-default, rgba(255, 255, 255, 0.87));
+    color: var(--color-text-primary);
   }
 
   .cy-steps__item--future .cy-steps__label {
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.4));
+    color: var(--color-text-tertiary);
   }
 
   .cy-steps__desc {
     font-size: 0.75rem;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.4));
+    color: var(--color-text-tertiary);
   }
 
   @keyframes cy-pulse {
     0%, 100% {
-      box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+      box-shadow: var(--shadow-glow-green);
     }
     50% {
-      box-shadow: 0 0 18px rgba(0, 255, 65, 0.6);
+      box-shadow: var(--shadow-glow-green);
     }
   }
 </style>

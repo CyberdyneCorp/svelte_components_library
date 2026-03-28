@@ -23,10 +23,10 @@
   let dashOffset = $derived(circumference - (clampedValue / 100) * circumference);
 
   const variantColors: Record<string, string> = {
-    brand: "#00ff41",
-    info: "#00d4ff",
-    warning: "#ffb800",
-    error: "#ff4444",
+    brand: "var(--color-action-brand-default)",
+    info: "var(--color-action-secondary-default)",
+    warning: "var(--color-state-warning)",
+    error: "var(--color-state-error)",
   };
 
   let strokeColor = $derived(variantColors[variant] ?? variantColors.brand);
@@ -90,7 +90,7 @@
   }
 
   .cy-progress-ring__track {
-    stroke: var(--color-bg-tertiary, #1a1a2e);
+    stroke: var(--color-bg-tertiary);
   }
 
   .cy-progress-ring__arc {
@@ -98,7 +98,7 @@
   }
 
   .cy-progress-ring__arc--brand {
-    filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.5));
+    filter: drop-shadow(0 0 6px var(--color-state-success-bg));
   }
 
   .cy-progress-ring__value {
@@ -112,14 +112,14 @@
     justify-content: center;
     font-family: var(--font-mono, monospace);
     font-weight: 700;
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
     pointer-events: none;
   }
 
   .cy-progress-ring__label {
     font-family: var(--font-body, sans-serif);
     font-size: 0.75rem;
-    color: var(--color-text-secondary, #888);
+    color: var(--color-text-secondary);
     text-align: center;
   }
 </style>

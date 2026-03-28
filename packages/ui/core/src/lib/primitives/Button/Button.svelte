@@ -134,12 +134,12 @@
   }
 
   .cy-btn--outline:hover:not(:disabled) {
-    background: rgba(0, 255, 65, 0.1);
+    background: var(--color-surface-hover);
     box-shadow: var(--shadow-glow-green);
   }
 
   .cy-btn--outline:active:not(:disabled) {
-    background: rgba(0, 255, 65, 0.15);
+    background: var(--color-surface-active);
   }
 
   /* Ghost */
@@ -168,7 +168,7 @@
   .cy-btn--danger:hover:not(:disabled) {
     background: var(--btn-danger-bg-hover);
     border-color: var(--btn-danger-bg-hover);
-    box-shadow: 0 0 12px rgba(255, 68, 68, 0.3);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-btn--danger:active:not(:disabled) {

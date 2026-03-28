@@ -59,28 +59,28 @@
 
 <style>
   .cy-metric {
-    background: var(--color-surface-base, #12121a);
-    border: 1px solid var(--color-border-default, rgba(0, 255, 65, 0.1));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg, 12px);
     padding: var(--space-4, 1rem) var(--space-5, 1.25rem);
     transition: all var(--transition-default, 0.2s ease);
   }
 
   .cy-metric:hover {
-    border-color: rgba(0, 255, 65, 0.2);
-    box-shadow: var(--shadow-glow-sm, 0 0 12px rgba(0, 255, 65, 0.06));
+    border-color: var(--color-border-default);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-metric--brand {
-    border-left: 3px solid var(--color-primary, #00ff41);
+    border-left: 3px solid var(--color-action-brand-default);
   }
 
   .cy-metric--info {
-    border-left: 3px solid var(--color-secondary, #00d4ff);
+    border-left: 3px solid var(--color-action-secondary-default);
   }
 
   .cy-metric--warning {
-    border-left: 3px solid var(--color-state-warning, #ffb800);
+    border-left: 3px solid var(--color-state-warning);
   }
 
   .cy-metric__header {
@@ -93,7 +93,7 @@
   .cy-metric__label {
     font-size: 0.75rem;
     font-weight: var(--font-weight-medium, 500);
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
@@ -102,7 +102,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
     width: 20px;
     height: 20px;
   }
@@ -111,7 +111,7 @@
     font-family: var(--font-mono, monospace);
     font-size: 1.5rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
     letter-spacing: -0.02em;
     line-height: 1.2;
   }
@@ -133,11 +133,11 @@
   }
 
   .cy-metric__change--positive {
-    color: var(--color-state-success, #00ff41);
+    color: var(--color-state-success);
   }
 
   .cy-metric__change--negative {
-    color: var(--color-state-error, #ff4444);
+    color: var(--color-state-error);
   }
 
   .cy-metric__arrow {
@@ -146,6 +146,6 @@
 
   .cy-metric__change-label {
     font-size: 0.6875rem;
-    color: var(--color-text-tertiary, #666);
+    color: var(--color-text-tertiary);
   }
 </style>

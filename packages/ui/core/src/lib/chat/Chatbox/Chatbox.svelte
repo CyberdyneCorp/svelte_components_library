@@ -91,14 +91,14 @@
     align-items: flex-end;
     gap: var(--space-2);
     padding: var(--space-3);
-    background: var(--color-surface-2, #12121a);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
     transition: border-color var(--transition-default);
   }
 
   .cy-chatbox:focus-within {
-    border-color: var(--color-action-brand-default, #00ff41);
+    border-color: var(--color-action-brand-default);
   }
 
   .cy-chatbox--disabled {
@@ -115,15 +115,15 @@
     border: none;
     border-radius: var(--radius-md);
     background: transparent;
-    color: var(--color-text-secondary, rgba(255, 255, 255, 0.5));
+    color: var(--color-text-secondary);
     cursor: pointer;
     transition: color var(--transition-default), background var(--transition-default);
     flex-shrink: 0;
   }
 
   .cy-chatbox__attach:hover {
-    color: var(--color-text-primary, #fff);
-    background: var(--color-surface-3, rgba(255, 255, 255, 0.05));
+    color: var(--color-text-primary);
+    background: var(--color-surface-raised);
   }
 
   .cy-chatbox__input {
@@ -134,7 +134,7 @@
     background: transparent;
     border: none;
     outline: none;
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
     font-family: var(--font-body);
     font-size: 0.875rem;
     line-height: 1.5;
@@ -142,7 +142,7 @@
   }
 
   .cy-chatbox__input::placeholder {
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.3));
+    color: var(--color-text-tertiary);
   }
 
   .cy-chatbox__send {
@@ -153,8 +153,8 @@
     height: 36px;
     border: none;
     border-radius: var(--radius-md);
-    background: var(--color-action-brand-default, #00ff41);
-    color: var(--color-surface-1, #0a0a0f);
+    background: var(--color-action-brand-default);
+    color: var(--color-bg-primary);
     cursor: pointer;
     transition: opacity var(--transition-default), transform var(--transition-default);
     flex-shrink: 0;
@@ -174,7 +174,7 @@
     width: 18px;
     height: 18px;
     border: 2px solid transparent;
-    border-top-color: var(--color-surface-1, #0a0a0f);
+    border-top-color: var(--color-bg-primary);
     border-radius: 50%;
     animation: cy-spin 0.6s linear infinite;
   }

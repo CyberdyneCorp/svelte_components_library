@@ -28,9 +28,9 @@
   <div class="cy-error-boundary">
     <div class="cy-error-boundary__icon">
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M16 4L2 28h28L16 4z" stroke="#ff4444" stroke-width="2" fill="rgba(255,68,68,0.1)"/>
-        <path d="M16 13v7" stroke="#ff4444" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="16" cy="24" r="1.5" fill="#ff4444"/>
+        <path d="M16 4L2 28h28L16 4z" stroke="var(--color-state-error)" stroke-width="2" fill="var(--color-state-error-bg)"/>
+        <path d="M16 13v7" stroke="var(--color-state-error)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="16" cy="24" r="1.5" fill="var(--color-state-error)"/>
       </svg>
     </div>
 
@@ -77,8 +77,8 @@
 
 <style>
   .cy-error-boundary {
-    background: linear-gradient(135deg, rgba(255, 68, 68, 0.06), rgba(255, 68, 68, 0.02));
-    border: 1px solid rgba(255, 68, 68, 0.25);
+    background: linear-gradient(135deg, var(--color-state-error-bg), var(--color-state-error-bg));
+    border: 1px solid var(--color-state-error);
     border-radius: var(--radius-md, 8px);
     padding: var(--space-6, 24px);
     display: flex;
@@ -96,22 +96,22 @@
     font-family: var(--font-display, sans-serif);
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
     margin: 0;
   }
 
   .cy-error-boundary__description {
     font-family: var(--font-body, sans-serif);
     font-size: 0.875rem;
-    color: var(--color-text-secondary, #888);
+    color: var(--color-text-secondary);
     margin: 0;
     max-width: 480px;
     line-height: 1.5;
   }
 
   .cy-error-boundary__error-msg {
-    background: rgba(255, 68, 68, 0.08);
-    border: 1px solid rgba(255, 68, 68, 0.15);
+    background: var(--color-state-error-bg);
+    border: 1px solid var(--color-state-error-bg);
     border-radius: var(--radius-sm, 4px);
     padding: var(--space-2, 8px) var(--space-3, 12px);
     width: 100%;
@@ -121,7 +121,7 @@
   .cy-error-boundary__error-msg code {
     font-family: var(--font-mono, monospace);
     font-size: 0.8125rem;
-    color: #ff6b6b;
+    color: var(--color-state-error);
     word-break: break-all;
   }
 
@@ -136,7 +136,7 @@
     gap: var(--space-2, 8px);
     background: none;
     border: none;
-    color: var(--color-text-secondary, #888);
+    color: var(--color-text-secondary);
     font-family: var(--font-mono, monospace);
     font-size: 0.75rem;
     cursor: pointer;
@@ -145,12 +145,12 @@
   }
 
   .cy-error-boundary__stack-toggle:hover {
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
   }
 
   .cy-error-boundary__stack {
-    background: var(--color-bg-primary, #0a0a0f);
-    border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08));
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-sm, 4px);
     padding: var(--space-3, 12px);
     margin: var(--space-2, 8px) 0 0 0;
@@ -158,23 +158,23 @@
     max-height: 200px;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 68, 68, 0.3) transparent;
+    scrollbar-color: var(--color-state-error) transparent;
   }
 
   .cy-error-boundary__stack code {
     font-family: var(--font-mono, monospace);
     font-size: 0.6875rem;
-    color: var(--color-text-secondary, #888);
+    color: var(--color-text-secondary);
     white-space: pre;
     line-height: 1.6;
   }
 
   .cy-error-boundary__retry {
     margin-top: var(--space-2, 8px);
-    background: rgba(255, 68, 68, 0.12);
-    border: 1px solid rgba(255, 68, 68, 0.3);
+    background: var(--color-state-error-bg);
+    border: 1px solid var(--color-state-error);
     border-radius: var(--radius-sm, 4px);
-    color: #ff6b6b;
+    color: var(--color-state-error);
     font-family: var(--font-mono, monospace);
     font-size: 0.8125rem;
     font-weight: 600;
@@ -184,7 +184,7 @@
   }
 
   .cy-error-boundary__retry:hover {
-    background: rgba(255, 68, 68, 0.2);
-    box-shadow: 0 0 12px rgba(255, 68, 68, 0.2);
+    background: var(--color-state-error-bg);
+    box-shadow: 0 0 12px var(--color-state-error-bg);
   }
 </style>

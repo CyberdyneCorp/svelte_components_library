@@ -78,8 +78,8 @@
   .cy-avatar-group__item {
     position: relative;
     border-radius: 50%;
-    background: var(--color-surface-raised, #12121a);
-    border: 2px solid var(--color-surface-base, #0a0a0f);
+    background: var(--color-surface-raised);
+    border: 2px solid var(--color-bg-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -102,7 +102,7 @@
   }
 
   .cy-avatar-group__initials {
-    color: var(--color-text-primary, rgba(255, 255, 255, 0.85));
+    color: var(--color-text-primary);
     font-family: var(--font-body, system-ui, sans-serif);
     font-weight: var(--font-weight-medium, 500);
     line-height: 1;
@@ -110,11 +110,11 @@
   }
 
   .cy-avatar-group__overflow {
-    background: var(--color-surface-active, rgba(0, 255, 65, 0.1));
+    background: var(--color-surface-active);
   }
 
   .cy-avatar-group__overflow .cy-avatar-group__initials {
-    color: var(--color-action-brand-default, #00ff41);
+    color: var(--color-action-brand-default);
     font-size: 0.75em;
   }
 </style>

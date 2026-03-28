@@ -33,15 +33,15 @@
     align-items: center;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
-    background: var(--color-surface-base, #12121a);
-    border: 1px solid var(--color-border-default, rgba(0, 255, 65, 0.1));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-pill, 999px);
     font-family: var(--font-mono, monospace);
     transition: all var(--transition-default, 0.2s ease);
   }
 
   .cy-network-badge:hover {
-    border-color: rgba(0, 255, 65, 0.2);
+    border-color: var(--color-border-default);
   }
 
   .cy-network-badge--disconnected {
@@ -52,13 +52,13 @@
     width: 8px;
     height: 8px;
     border-radius: var(--radius-full, 50%);
-    background: var(--color-text-tertiary, #555);
+    background: var(--color-text-tertiary);
     flex-shrink: 0;
   }
 
   .cy-network-badge__dot--connected {
-    background: var(--color-state-success, #00ff41);
-    box-shadow: 0 0 6px rgba(0, 255, 65, 0.5);
+    background: var(--color-state-success);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-network-badge__icon {
@@ -72,11 +72,11 @@
   .cy-network-badge__name {
     font-size: 0.75rem;
     font-weight: var(--font-weight-medium, 500);
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
   }
 
   .cy-network-badge__chain-id {
     font-size: 0.625rem;
-    color: var(--color-text-tertiary, #666);
+    color: var(--color-text-tertiary);
   }
 </style>

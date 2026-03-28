@@ -25,24 +25,24 @@
   .cy-kbd {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1, 4px);
-    font-family: var(--font-mono, "JetBrains Mono", monospace);
+    gap: var(--space-1);
+    font-family: var(--font-mono);
   }
 
   .cy-kbd__key {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-surface-elevated, #12121a);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--color-surface-elevated);
+    border: 1px solid var(--color-border-default);
     border-bottom-width: 3px;
-    border-bottom-color: rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-sm, 6px);
-    color: var(--color-text-default, rgba(255, 255, 255, 0.87));
+    border-bottom-color: var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
     font-family: inherit;
-    font-weight: var(--font-weight-medium, 500);
+    font-weight: var(--font-weight-medium);
     white-space: nowrap;
-    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.3));
+    box-shadow: var(--shadow-sm);
     user-select: none;
   }
 
@@ -61,7 +61,7 @@
   }
 
   .cy-kbd__sep {
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.35));
+    color: var(--color-text-tertiary);
     font-size: 0.6875rem;
   }
 </style>

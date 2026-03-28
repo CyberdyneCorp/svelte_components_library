@@ -312,11 +312,11 @@
     left: 0;
     z-index: 50;
     margin-top: var(--space-1);
-    background: var(--color-bg-elevated, #12121a);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--input-border);
     border-radius: var(--radius-lg);
     padding: var(--space-3);
-    box-shadow: var(--shadow-lg, 0 8px 32px rgba(0, 0, 0, 0.5));
+    box-shadow: var(--shadow-lg);
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
@@ -333,9 +333,9 @@
   .cy-drp__preset-btn {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
-    color: var(--color-accent-cyan, #00d4ff);
+    color: var(--color-action-secondary-default);
     background: transparent;
-    border: 1px solid var(--color-accent-cyan, #00d4ff);
+    border: 1px solid var(--color-action-secondary-default);
     border-radius: var(--radius-sm);
     padding: 2px 8px;
     cursor: pointer;
@@ -344,7 +344,7 @@
   }
 
   .cy-drp__preset-btn:hover {
-    background: rgba(0, 212, 255, 0.1);
+    background: var(--color-state-info-bg);
   }
 
   .cy-drp__calendars {
@@ -369,7 +369,7 @@
   .cy-drp__cal-title {
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
     font-weight: var(--font-weight-medium);
   }
 
@@ -377,7 +377,7 @@
     background: transparent;
     border: 1px solid var(--input-border);
     border-radius: var(--radius-sm);
-    color: var(--color-text-secondary, #a0a0a0);
+    color: var(--color-text-secondary);
     width: 24px;
     height: 24px;
     display: flex;
@@ -389,8 +389,8 @@
   }
 
   .cy-drp__nav-btn:hover {
-    border-color: var(--color-accent-cyan, #00d4ff);
-    color: var(--color-accent-cyan, #00d4ff);
+    border-color: var(--color-action-secondary-default);
+    color: var(--color-action-secondary-default);
   }
 
   .cy-drp__weekdays {
@@ -418,7 +418,7 @@
   .cy-drp__day {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    color: var(--color-text-secondary, #a0a0a0);
+    color: var(--color-text-secondary);
     background: transparent;
     border: none;
     border-radius: var(--radius-sm);
@@ -436,24 +436,24 @@
   }
 
   .cy-drp__day:not(.cy-drp__day--empty):hover {
-    background: rgba(0, 255, 65, 0.1);
-    color: var(--color-accent-green, #00ff41);
+    background: var(--color-state-success-bg);
+    color: var(--color-action-brand-default);
   }
 
   .cy-drp__day--today {
-    border: 1px solid var(--color-accent-cyan, #00d4ff);
+    border: 1px solid var(--color-action-secondary-default);
   }
 
   .cy-drp__day--start,
   .cy-drp__day--end {
-    background: var(--color-accent-green, #00ff41) !important;
-    color: #0a0a0f !important;
+    background: var(--color-action-brand-default) !important;
+    color: var(--color-bg-primary) !important;
     font-weight: var(--font-weight-bold);
   }
 
   .cy-drp__day--in-range {
-    background: rgba(0, 255, 65, 0.15);
-    color: var(--color-accent-green, #00ff41);
+    background: var(--color-state-success-bg);
+    color: var(--color-action-brand-default);
   }
 
   .cy-drp__error {

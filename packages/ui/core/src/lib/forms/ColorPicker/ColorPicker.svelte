@@ -156,7 +156,7 @@
     font-family: var(--font-mono, "JetBrains Mono", monospace);
     font-size: 0.8125rem;
     font-weight: 500;
-    color: var(--input-label, rgba(240, 240, 255, 0.7));
+    color: var(--input-label);
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
@@ -171,8 +171,8 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    background: #12121a;
+    border: 2px solid var(--color-border-default);
+    background: var(--color-surface-default);
     cursor: pointer;
     padding: 3px;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -182,8 +182,8 @@
   }
 
   .cy-color-picker__swatch:hover {
-    border-color: rgba(0, 255, 65, 0.4);
-    box-shadow: 0 0 10px rgba(0, 255, 65, 0.15);
+    border-color: var(--color-action-brand-default);
+    box-shadow: 0 0 10px var(--color-state-success-bg);
   }
 
   .cy-color-picker__swatch-circle {
@@ -198,9 +198,9 @@
   .cy-color-picker__hex-display {
     font-family: "JetBrains Mono", "Fira Code", monospace;
     font-size: 0.875rem;
-    color: var(--input-text, rgba(240, 240, 255, 0.9));
-    background: var(--input-bg, rgba(255, 255, 255, 0.04));
-    border: 1px solid var(--input-border, rgba(255, 255, 255, 0.08));
+    color: var(--input-text);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
     border-radius: var(--radius-md, 6px);
     padding: 6px 10px;
     width: 100px;
@@ -210,8 +210,8 @@
   }
 
   .cy-color-picker__hex-display:focus {
-    border-color: var(--input-border-focus, rgba(0, 212, 255, 0.5));
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.15);
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 8px var(--color-state-info-bg);
   }
 
   .cy-color-picker__dropdown {
@@ -220,8 +220,8 @@
     left: 0;
     margin-top: 8px;
     z-index: 100;
-    background: #12121a;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: 8px;
     padding: 12px;
     min-width: 220px;
@@ -249,11 +249,11 @@
 
   .cy-color-picker__preset:hover {
     transform: scale(1.15);
-    border-color: rgba(255, 255, 255, 0.4);
+    border-color: var(--color-border-default);
   }
 
   .cy-color-picker__preset--active {
-    border-color: #ffffff;
+    border-color: var(--color-text-primary);
     box-shadow: 0 0 12px var(--preset-color);
   }
 
@@ -262,16 +262,16 @@
     gap: 8px;
     align-items: center;
     padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--color-border-subtle);
   }
 
   .cy-color-picker__hex-input {
     flex: 1;
     font-family: "JetBrains Mono", "Fira Code", monospace;
     font-size: 0.8125rem;
-    color: rgba(240, 240, 255, 0.9);
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-text-primary);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 6px;
     padding: 6px 8px;
     outline: none;
@@ -279,15 +279,15 @@
   }
 
   .cy-color-picker__hex-input:focus {
-    border-color: rgba(0, 212, 255, 0.5);
+    border-color: var(--color-action-secondary-default);
   }
 
   .cy-color-picker__custom-btn {
     font-family: "JetBrains Mono", "Fira Code", monospace;
     font-size: 0.75rem;
-    color: #00ff41;
-    background: rgba(0, 255, 65, 0.08);
-    border: 1px solid rgba(0, 255, 65, 0.2);
+    color: var(--color-action-brand-default);
+    background: var(--color-state-success-bg);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 6px;
     padding: 6px 12px;
     cursor: pointer;
@@ -298,8 +298,8 @@
   }
 
   .cy-color-picker__custom-btn:hover {
-    background: rgba(0, 255, 65, 0.15);
-    border-color: rgba(0, 255, 65, 0.4);
+    background: var(--color-state-success-bg);
+    border-color: var(--color-action-brand-default);
   }
 
   .cy-color-picker__native {

@@ -48,7 +48,7 @@
     font-family: var(--font-mono, monospace);
     font-size: 0.75rem;
     font-weight: var(--font-weight-bold, 700);
-    background: var(--color-surface-base, #12121a);
+    background: var(--color-surface-default);
     border: 1.5px solid transparent;
     position: relative;
     overflow: hidden;
@@ -90,7 +90,7 @@
     height: 20px;
     border-radius: var(--radius-full, 50%);
     background: var(--tier-gradient);
-    color: #0a0a0f;
+    color: var(--color-bg-primary);
     font-size: 0.5625rem;
     font-weight: var(--font-weight-bold, 700);
     letter-spacing: 0.02em;

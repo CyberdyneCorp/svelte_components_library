@@ -63,25 +63,25 @@
 
   .cy-alert--success {
     background: var(--color-state-success-bg);
-    border-color: rgba(0, 255, 65, 0.15);
+    border-color: var(--color-border-subtle);
     border-left-color: var(--color-state-success);
   }
 
   .cy-alert--warning {
     background: var(--color-state-warning-bg);
-    border-color: rgba(255, 184, 0, 0.15);
+    border-color: var(--color-border-subtle);
     border-left-color: var(--color-state-warning);
   }
 
   .cy-alert--error {
     background: var(--color-state-error-bg);
-    border-color: rgba(255, 68, 68, 0.15);
+    border-color: var(--color-border-subtle);
     border-left-color: var(--color-state-error);
   }
 
   .cy-alert--info {
     background: var(--color-state-info-bg);
-    border-color: rgba(0, 212, 255, 0.15);
+    border-color: var(--color-border-subtle);
     border-left-color: var(--color-state-info);
   }
 

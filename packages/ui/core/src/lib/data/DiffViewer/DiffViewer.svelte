@@ -209,10 +209,10 @@
     font-family: var(--font-mono, "JetBrains Mono", "Fira Code", monospace);
     font-size: 0.8125rem;
     line-height: 1.5;
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md, 8px);
     overflow: hidden;
-    background: var(--color-surface-base, #0a0a0f);
+    background: var(--color-bg-primary);
   }
 
   .cy-diff__split {
@@ -221,7 +221,7 @@
   }
 
   .cy-diff__split .cy-diff__column:first-child {
-    border-right: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    border-right: 1px solid var(--color-border-default);
   }
 
   .cy-diff__header {
@@ -229,19 +229,19 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 0.75rem;
-    background: var(--color-surface-raised, #12121a);
-    border-bottom: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-surface-default);
+    border-bottom: 1px solid var(--color-border-default);
   }
 
   .cy-diff__label {
-    color: var(--color-text-primary, rgba(255, 255, 255, 0.85));
+    color: var(--color-text-primary);
     font-weight: var(--font-weight-medium, 500);
     font-family: var(--font-body, system-ui, sans-serif);
     font-size: 0.75rem;
   }
 
   .cy-diff__lang {
-    color: var(--color-text-secondary, rgba(255, 255, 255, 0.4));
+    color: var(--color-text-secondary);
     font-size: 0.6875rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -260,13 +260,13 @@
   }
 
   .cy-diff__line--added {
-    background: rgba(0, 255, 65, 0.08);
-    border-left-color: #00ff41;
+    background: var(--color-state-success-bg);
+    border-left-color: var(--color-state-success);
   }
 
   .cy-diff__line--removed {
-    background: rgba(255, 68, 68, 0.08);
-    border-left-color: #ff4444;
+    background: var(--color-state-error-bg);
+    border-left-color: var(--color-state-error);
   }
 
   .cy-diff__line--unchanged {
@@ -279,7 +279,7 @@
     justify-content: flex-end;
     min-width: 3em;
     padding: 0 0.5rem;
-    color: var(--color-text-secondary, rgba(255, 255, 255, 0.25));
+    color: var(--color-text-disabled);
     user-select: none;
     flex-shrink: 0;
   }
@@ -295,16 +295,16 @@
     width: 1.5em;
     padding-left: 0.25rem;
     flex-shrink: 0;
-    color: var(--color-text-secondary, rgba(255, 255, 255, 0.4));
+    color: var(--color-text-secondary);
     user-select: none;
   }
 
   .cy-diff__line--added .cy-diff__prefix {
-    color: #00ff41;
+    color: var(--color-state-success);
   }
 
   .cy-diff__line--removed .cy-diff__prefix {
-    color: #ff4444;
+    color: var(--color-state-error);
   }
 
   .cy-diff__text {

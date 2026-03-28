@@ -117,7 +117,7 @@
 
   .cy-avatar__status--online {
     background: var(--color-state-success);
-    box-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-avatar__status--offline {
@@ -126,6 +126,6 @@
 
   .cy-avatar__status--busy {
     background: var(--color-state-error);
-    box-shadow: 0 0 6px rgba(255, 68, 68, 0.4);
+    box-shadow: var(--shadow-glow-green);
   }
 </style>

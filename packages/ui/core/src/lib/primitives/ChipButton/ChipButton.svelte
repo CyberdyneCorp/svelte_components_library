@@ -71,16 +71,16 @@
   }
 
   .cy-chip--selected {
-    background: rgba(0, 255, 65, 0.08);
+    background: var(--color-surface-hover);
     color: var(--color-action-brand-default);
     border-color: var(--color-action-brand-default);
-    box-shadow: 0 0 10px rgba(0, 255, 65, 0.15);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-chip--selected:hover:not(:disabled) {
-    background: rgba(0, 255, 65, 0.14);
+    background: var(--color-surface-active);
     border-color: var(--color-action-brand-hover);
     color: var(--color-action-brand-hover);
-    box-shadow: 0 0 14px rgba(0, 255, 65, 0.25);
+    box-shadow: var(--shadow-glow-green);
   }
 </style>

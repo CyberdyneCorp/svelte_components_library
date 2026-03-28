@@ -54,8 +54,8 @@
 
 <style>
   .cy-token-balance {
-    background: var(--color-surface-base, #12121a);
-    border: 1px solid var(--color-border-default, rgba(0, 255, 65, 0.1));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg, 12px);
     padding: var(--space-4, 1rem) var(--space-5, 1.25rem);
     font-family: var(--font-mono, monospace);
@@ -63,8 +63,8 @@
   }
 
   .cy-token-balance:hover {
-    border-color: rgba(0, 255, 65, 0.25);
-    box-shadow: var(--shadow-glow-sm, 0 0 12px rgba(0, 255, 65, 0.08));
+    border-color: var(--color-border-default);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-token-balance__header {
@@ -80,8 +80,8 @@
     width: 36px;
     height: 36px;
     border-radius: var(--radius-full, 50%);
-    background: var(--color-surface-raised, #1a1a2e);
-    color: var(--color-primary, #00ff41);
+    background: var(--color-surface-raised);
+    color: var(--color-action-brand-default);
     flex-shrink: 0;
   }
 
@@ -94,14 +94,14 @@
   .cy-token-balance__balance {
     font-size: 1.75rem;
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
     letter-spacing: -0.02em;
     line-height: 1.2;
   }
 
   .cy-token-balance__symbol {
     font-size: 0.875rem;
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
     font-weight: var(--font-weight-medium, 500);
     text-transform: uppercase;
   }
@@ -116,7 +116,7 @@
 
   .cy-token-balance__usd {
     font-size: 0.8125rem;
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
   }
 
   .cy-token-balance__change {
@@ -127,12 +127,12 @@
   }
 
   .cy-token-balance__change--positive {
-    color: var(--color-state-success, #00ff41);
-    background: var(--color-state-success-bg, rgba(0, 255, 65, 0.1));
+    color: var(--color-state-success);
+    background: var(--color-state-success-bg);
   }
 
   .cy-token-balance__change--negative {
-    color: var(--color-state-error, #ff4444);
-    background: var(--color-state-error-bg, rgba(255, 68, 68, 0.1));
+    color: var(--color-state-error);
+    background: var(--color-state-error-bg);
   }
 </style>

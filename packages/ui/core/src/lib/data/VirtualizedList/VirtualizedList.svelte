@@ -73,11 +73,11 @@
   .cy-virtualized-list {
     height: var(--list-height);
     overflow-y: auto;
-    background: var(--color-bg-primary, #0a0a0f);
-    border: 1px solid var(--color-border-subtle, rgba(0, 255, 65, 0.1));
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md, 8px);
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 255, 65, 0.3) transparent;
+    scrollbar-color: var(--color-action-brand-default) transparent;
   }
 
   .cy-virtualized-list::-webkit-scrollbar {
@@ -89,7 +89,7 @@
   }
 
   .cy-virtualized-list::-webkit-scrollbar-thumb {
-    background: rgba(0, 255, 65, 0.3);
+    background: var(--color-action-brand-default);
     border-radius: 3px;
   }
 
@@ -106,13 +106,13 @@
     display: flex;
     align-items: center;
     padding: 0 var(--space-3, 12px);
-    border-bottom: 1px solid var(--color-border-subtle, rgba(0, 255, 65, 0.06));
-    color: var(--color-text-primary, #e0e0e0);
+    border-bottom: 1px solid var(--color-border-subtle);
+    color: var(--color-text-primary);
     font-family: var(--font-mono, monospace);
     font-size: 0.875rem;
   }
 
   .cy-virtualized-list__item:hover {
-    background: rgba(0, 255, 65, 0.03);
+    background: var(--color-state-success-bg);
   }
 </style>

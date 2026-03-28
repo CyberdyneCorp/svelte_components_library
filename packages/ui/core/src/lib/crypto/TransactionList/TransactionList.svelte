@@ -76,8 +76,8 @@
 
 <style>
   .cy-tx-list {
-    background: var(--color-surface-base, #12121a);
-    border: 1px solid var(--color-border-default, rgba(0, 255, 65, 0.1));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg, 12px);
     overflow: hidden;
   }
@@ -88,7 +88,7 @@
     align-items: center;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-8, 2rem);
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
   }
 
   .cy-tx-list__empty-icon {
@@ -106,7 +106,7 @@
     align-items: flex-start;
     gap: var(--space-3, 0.75rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    border-bottom: 1px solid var(--color-border-default, rgba(0, 255, 65, 0.06));
+    border-bottom: 1px solid var(--color-border-subtle);
     transition: background var(--transition-default, 0.2s ease);
   }
 
@@ -115,7 +115,7 @@
   }
 
   .cy-tx-list__row:hover {
-    background: var(--color-surface-raised, rgba(255, 255, 255, 0.02));
+    background: var(--color-surface-raised);
   }
 
   .cy-tx-list__type {
@@ -131,23 +131,23 @@
   }
 
   .cy-tx-list__type--send {
-    background: rgba(255, 68, 68, 0.12);
-    color: var(--color-state-error, #ff4444);
+    background: var(--color-state-error-bg);
+    color: var(--color-state-error);
   }
 
   .cy-tx-list__type--receive {
-    background: rgba(0, 255, 65, 0.12);
-    color: var(--color-state-success, #00ff41);
+    background: var(--color-state-success-bg);
+    color: var(--color-state-success);
   }
 
   .cy-tx-list__type--swap {
-    background: rgba(0, 212, 255, 0.12);
-    color: var(--color-secondary, #00d4ff);
+    background: var(--color-state-info-bg);
+    color: var(--color-state-info);
   }
 
   .cy-tx-list__type--approve {
-    background: rgba(255, 184, 0, 0.12);
-    color: var(--color-state-warning, #ffb800);
+    background: var(--color-state-warning-bg);
+    color: var(--color-state-warning);
   }
 
   .cy-tx-list__details {
@@ -164,7 +164,7 @@
   .cy-tx-list__label {
     font-size: 0.8125rem;
     font-weight: var(--font-weight-medium, 500);
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
   }
 
   .cy-tx-list__amount {
@@ -174,19 +174,19 @@
   }
 
   .cy-tx-list__amount--send {
-    color: var(--color-state-error, #ff4444);
+    color: var(--color-state-error);
   }
 
   .cy-tx-list__amount--receive {
-    color: var(--color-state-success, #00ff41);
+    color: var(--color-state-success);
   }
 
   .cy-tx-list__amount--swap {
-    color: var(--color-secondary, #00d4ff);
+    color: var(--color-state-info);
   }
 
   .cy-tx-list__amount--approve {
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
   }
 
   .cy-tx-list__bottom-row {
@@ -199,7 +199,7 @@
   .cy-tx-list__hash {
     font-family: var(--font-mono, monospace);
     font-size: 0.6875rem;
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
   }
 
   .cy-tx-list__status {
@@ -212,23 +212,23 @@
   }
 
   .cy-tx-list__status--confirmed {
-    color: var(--color-state-success, #00ff41);
-    background: rgba(0, 255, 65, 0.1);
+    color: var(--color-state-success);
+    background: var(--color-state-success-bg);
   }
 
   .cy-tx-list__status--pending {
-    color: var(--color-state-warning, #ffb800);
-    background: rgba(255, 184, 0, 0.1);
+    color: var(--color-state-warning);
+    background: var(--color-state-warning-bg);
   }
 
   .cy-tx-list__status--failed {
-    color: var(--color-state-error, #ff4444);
-    background: rgba(255, 68, 68, 0.1);
+    color: var(--color-state-error);
+    background: var(--color-state-error-bg);
   }
 
   .cy-tx-list__timestamp {
     font-size: 0.6875rem;
-    color: var(--color-text-tertiary, #666);
+    color: var(--color-text-tertiary);
     margin-top: var(--space-1, 0.25rem);
   }
 </style>

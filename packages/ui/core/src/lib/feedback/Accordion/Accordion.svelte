@@ -76,7 +76,7 @@
   }
 
   .cy-accordion__item {
-    border-bottom: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06));
+    border-bottom: 1px solid var(--color-border-subtle);
   }
 
   .cy-accordion__item:last-child {
@@ -84,7 +84,7 @@
   }
 
   .cy-accordion__item--open {
-    border-left: 2px solid #00ff41;
+    border-left: 2px solid var(--color-action-brand-default);
   }
 
   .cy-accordion__trigger {
@@ -93,7 +93,7 @@
     justify-content: space-between;
     width: 100%;
     padding: var(--space-4) var(--space-5);
-    background: var(--color-surface-default, #12121a);
+    background: var(--color-surface-default);
     border: none;
     color: var(--color-text-primary);
     font-family: var(--font-body);
@@ -125,7 +125,7 @@
 
   .cy-accordion__chevron--open {
     transform: rotate(180deg);
-    color: #00ff41;
+    color: var(--color-action-brand-default);
   }
 
   .cy-accordion__panel {

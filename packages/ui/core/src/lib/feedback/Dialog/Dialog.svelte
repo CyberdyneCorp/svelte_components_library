@@ -188,7 +188,7 @@
 
   .cy-dialog__btn--confirm.cy-dialog__btn--danger:hover {
     background: var(--btn-danger-bg-hover);
-    box-shadow: 0 0 12px rgba(255, 68, 68, 0.3);
+    box-shadow: 0 0 12px var(--color-state-error-bg);
   }
 
   @keyframes cy-fade-in {

@@ -145,7 +145,7 @@
 
   .cy-semantic-search__item-btn:hover {
     border-color: var(--color-action-brand-default);
-    box-shadow: 0 0 12px rgba(0, 255, 65, 0.15);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-semantic-search__item-header {
@@ -183,7 +183,7 @@
     height: 100%;
     background: var(--color-action-brand-default);
     border-radius: var(--radius-pill);
-    box-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
+    box-shadow: var(--shadow-glow-green);
     transition: width 300ms ease;
   }
 

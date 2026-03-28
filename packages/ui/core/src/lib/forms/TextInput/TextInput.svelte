@@ -109,7 +109,7 @@
 
   .cy-text-input--error .cy-text-input__field:focus {
     border-color: var(--input-border-error);
-    box-shadow: 0 0 12px rgba(255, 68, 68, 0.3);
+    box-shadow: var(--shadow-glow-red);
   }
 
   .cy-text-input__field:disabled {

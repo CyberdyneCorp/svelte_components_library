@@ -68,10 +68,27 @@
     onsearch?: (query: string) => void;
   } = $props();
 
-  const COMMUNITY_COLORS = [
+  function getCSSVar(name: string): string {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  const COMMUNITY_COLORS_FALLBACK = [
     "#00ff41", "#00d4ff", "#a855f7", "#ff4444",
     "#ffb800", "#00cc99", "#ff6b9d", "#40e0d0",
   ];
+
+  function getCommunityColors(): string[] {
+    return [
+      getCSSVar('--color-action-brand-default') || COMMUNITY_COLORS_FALLBACK[0],
+      getCSSVar('--color-action-secondary-default') || COMMUNITY_COLORS_FALLBACK[1],
+      COMMUNITY_COLORS_FALLBACK[2],
+      getCSSVar('--color-state-error') || COMMUNITY_COLORS_FALLBACK[3],
+      getCSSVar('--color-state-warning') || COMMUNITY_COLORS_FALLBACK[4],
+      COMMUNITY_COLORS_FALLBACK[5],
+      COMMUNITY_COLORS_FALLBACK[6],
+      COMMUNITY_COLORS_FALLBACK[7],
+    ];
+  }
 
   let cfg = $derived({
     showLabels: config.showLabels ?? true,
@@ -155,9 +172,11 @@
   }
 
   function assignCommunityColors() {
+    const COMMUNITY_COLORS = getCommunityColors();
+    const brandDefault = getCSSVar('--color-action-brand-default') || "#00ff41";
     if (!cfg.enableCommunityDetection || !showCommunities) {
       for (const n of simNodes) {
-        n.communityColor = n.color || "#00ff41";
+        n.communityColor = n.color || brandDefault;
       }
       return;
     }
@@ -265,7 +284,7 @@
     const dpr = window.devicePixelRatio || 1;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    ctx.fillStyle = "#0a0a0f";
+    ctx.fillStyle = getCSSVar('--color-bg-primary') || "#0a0a0f";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
     ctx.save();
@@ -294,9 +313,11 @@
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.lineTo(b.x, b.y);
+      const edgeDimmed = getCSSVar('--color-surface-active') || "rgba(58, 58, 74, 0.15)";
+      const edgeDefault = getCSSVar('--color-border-default') || "rgba(58, 58, 74, 0.6)";
       ctx.strokeStyle = dimmed
-        ? "rgba(58, 58, 74, 0.15)"
-        : (e.color || "rgba(58, 58, 74, 0.6)");
+        ? edgeDimmed
+        : (e.color || edgeDefault);
       ctx.lineWidth = Math.min(weight * 1.5, 6);
       ctx.stroke();
 
@@ -304,7 +325,7 @@
         const mx = (a.x + b.x) / 2;
         const my = (a.y + b.y) / 2;
         ctx.font = "10px Inter, sans-serif";
-        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.fillStyle = getCSSVar('--color-text-tertiary') || "rgba(255,255,255,0.5)";
         ctx.textAlign = "center";
         ctx.fillText(e.label, mx, my - 4);
       }
@@ -316,15 +337,16 @@
       const isSelected = n.id === selectedNodeId;
       const isHovered = hoveredNode?.id === n.id;
       const radius = (n.size || cfg.nodeRadius) * (isHovered ? 1.3 : 1);
+      const brandColor = getCSSVar('--color-action-brand-default') || "#00ff41";
       const color = (showCommunities && cfg.enableCommunityDetection)
-        ? (n.communityColor || "#00ff41")
-        : (n.color || "#00ff41");
+        ? (n.communityColor || brandColor)
+        : (n.color || brandColor);
 
       ctx.beginPath();
       ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
 
       if (dimmed) {
-        ctx.fillStyle = "rgba(58, 58, 74, 0.3)";
+        ctx.fillStyle = getCSSVar('--color-surface-active') || "rgba(58, 58, 74, 0.3)";
         ctx.fill();
         continue;
       }
@@ -337,7 +359,7 @@
       ctx.shadowBlur = 0;
 
       // stroke
-      ctx.strokeStyle = isSelected ? "#ffffff" : "rgba(255,255,255,0.2)";
+      ctx.strokeStyle = isSelected ? (getCSSVar('--color-text-primary') || "#ffffff") : (getCSSVar('--color-border-default') || "rgba(255,255,255,0.2)");
       ctx.lineWidth = isSelected ? 2.5 : 1;
       ctx.stroke();
 
@@ -346,10 +368,10 @@
         const fontSize = Math.max(10, 12 / transform.scale);
         ctx.font = `${fontSize}px Inter, sans-serif`;
         ctx.textAlign = "center";
-        ctx.strokeStyle = "rgba(0,0,0,0.8)";
+        ctx.strokeStyle = getCSSVar('--color-bg-primary') || "rgba(0,0,0,0.8)";
         ctx.lineWidth = 3;
         ctx.strokeText(n.label, n.x, n.y + radius + fontSize + 2);
-        ctx.fillStyle = dimmed ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.9)";
+        ctx.fillStyle = dimmed ? (getCSSVar('--color-text-tertiary') || "rgba(255,255,255,0.2)") : (getCSSVar('--color-text-primary') || "rgba(255,255,255,0.9)");
         ctx.fillText(n.label, n.x, n.y + radius + fontSize + 2);
       }
     }
@@ -371,19 +393,19 @@
       if (ty + tooltipH > canvasHeight) ty = sy - tooltipH - 16;
       if (ty < 0) ty = 4;
 
-      ctx.fillStyle = "rgba(18, 18, 26, 0.95)";
-      ctx.strokeStyle = "rgba(0, 212, 255, 0.3)";
+      ctx.fillStyle = getCSSVar('--color-surface-default') || "rgba(18, 18, 26, 0.95)";
+      ctx.strokeStyle = getCSSVar('--color-action-secondary-border') || "rgba(0, 212, 255, 0.3)";
       ctx.lineWidth = 1;
       roundRect(ctx, tx, ty, tooltipW, tooltipH, 6);
       ctx.fill();
       ctx.stroke();
 
       ctx.font = "bold 12px Inter, sans-serif";
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = getCSSVar('--color-text-primary') || "#ffffff";
       ctx.textAlign = "left";
       ctx.fillText(hoveredNode.label, tx + 10, ty + 18);
       ctx.font = "11px Inter, sans-serif";
-      ctx.fillStyle = "rgba(255,255,255,0.6)";
+      ctx.fillStyle = getCSSVar('--color-text-secondary') || "rgba(255,255,255,0.6)";
       ctx.fillText(`${connections} connection${connections !== 1 ? "s" : ""} · ${hoveredNode.group || "ungrouped"}`, tx + 10, ty + 36);
       ctx.restore();
     }
@@ -703,7 +725,7 @@
       <div class="cy-graph__info-header">
         <span
           class="cy-graph__info-dot"
-          style="background: {selectedNode.communityColor || '#00ff41'};"
+          style="background: {selectedNode.communityColor || 'var(--color-action-brand-default)'};"
         ></span>
         <span class="cy-graph__info-label">{selectedNode.label}</span>
       </div>
@@ -744,10 +766,10 @@
 <style>
   .cy-graph {
     position: relative;
-    background: #0a0a0f;
+    background: var(--color-bg-primary);
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-border-subtle);
   }
 
   .cy-graph canvas {
@@ -773,24 +795,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(18, 18, 26, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 6px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-tertiary);
     cursor: pointer;
     transition: all 0.15s ease;
     padding: 0;
   }
 
   .cy-graph__toolbar-btn:hover {
-    background: rgba(18, 18, 26, 1);
-    color: #00d4ff;
-    border-color: rgba(0, 212, 255, 0.3);
+    background: var(--color-surface-raised);
+    color: var(--color-action-secondary-default);
+    border-color: var(--color-action-secondary-border);
   }
 
   .cy-graph__toolbar-btn--active {
-    color: #00ff41;
-    border-color: rgba(0, 255, 65, 0.3);
+    color: var(--color-action-brand-default);
+    border-color: var(--color-action-brand-border);
   }
 
   /* Search */
@@ -802,19 +824,19 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(18, 18, 26, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 6px;
     padding: 0 10px;
     transition: border-color 0.15s ease;
   }
 
   .cy-graph__search:focus-within {
-    border-color: rgba(0, 212, 255, 0.4);
+    border-color: var(--color-action-secondary-border);
   }
 
   .cy-graph__search-icon {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-tertiary);
     flex-shrink: 0;
   }
 
@@ -822,7 +844,7 @@
     background: transparent;
     border: none;
     outline: none;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-text-primary);
     font-family: Inter, system-ui, sans-serif;
     font-size: 13px;
     padding: 8px 0;
@@ -830,7 +852,7 @@
   }
 
   .cy-graph__search-input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-tertiary);
   }
 
   /* Info Panel */
@@ -839,13 +861,13 @@
     bottom: 12px;
     right: 12px;
     z-index: 10;
-    background: rgba(18, 18, 26, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 8px;
     padding: 14px;
     min-width: 220px;
     max-width: 280px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-lg);
     backdrop-filter: blur(12px);
   }
 
@@ -855,7 +877,7 @@
     gap: 8px;
     margin-bottom: 10px;
     padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--color-border-subtle);
   }
 
   .cy-graph__info-dot {
@@ -869,7 +891,7 @@
     font-family: Inter, system-ui, sans-serif;
     font-size: 14px;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--color-text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -891,7 +913,7 @@
   .cy-graph__info-key {
     font-family: Inter, system-ui, sans-serif;
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-tertiary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -899,7 +921,7 @@
   .cy-graph__info-value {
     font-family: Inter, system-ui, sans-serif;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-text-secondary);
   }
 
   .cy-graph__info-value--mono {
@@ -916,8 +938,8 @@
   .cy-graph__info-chip {
     font-family: Inter, system-ui, sans-serif;
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.7);
-    background: rgba(255, 255, 255, 0.06);
+    color: var(--color-text-secondary);
+    background: var(--color-surface-hover);
     padding: 2px 8px;
     border-radius: 4px;
   }
@@ -925,7 +947,7 @@
   .cy-graph__info-meta {
     margin-top: 8px;
     padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--color-border-subtle);
   }
 
   /* Zoom Indicator */
@@ -936,8 +958,8 @@
     z-index: 10;
     font-family: "JetBrains Mono", "Fira Code", monospace;
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.3);
-    background: rgba(18, 18, 26, 0.7);
+    color: var(--color-text-tertiary);
+    background: var(--color-surface-default);
     padding: 4px 8px;
     border-radius: 4px;
   }

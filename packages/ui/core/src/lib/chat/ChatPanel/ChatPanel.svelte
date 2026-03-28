@@ -43,8 +43,8 @@
     padding: var(--space-4);
     overflow-y: auto;
     flex: 1;
-    background: var(--color-surface-1, #0a0a0f);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
     scroll-behavior: smooth;
   }
@@ -58,11 +58,11 @@
   }
 
   .cy-chat-panel::-webkit-scrollbar-thumb {
-    background: var(--color-border-default, rgba(255, 255, 255, 0.1));
+    background: var(--color-border-default);
     border-radius: 3px;
   }
 
   .cy-chat-panel::-webkit-scrollbar-thumb:hover {
-    background: var(--color-border-strong, rgba(255, 255, 255, 0.2));
+    background: var(--color-border-strong);
   }
 </style>

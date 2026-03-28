@@ -101,7 +101,7 @@
   }
 
   .cy-copy--ghost:hover {
-    background: var(--color-surface-hover, rgba(255, 255, 255, 0.06));
+    background: var(--color-surface-hover);
     color: var(--color-text-primary);
   }
 
@@ -112,21 +112,21 @@
   }
 
   .cy-copy--outline:hover {
-    border-color: var(--color-border-strong, rgba(255, 255, 255, 0.15));
+    border-color: var(--color-border-default);
     color: var(--color-text-primary);
   }
 
   /* Copied state */
   .cy-copy--copied {
-    color: #00ff41;
+    color: var(--color-action-brand-default);
   }
 
   .cy-copy--copied.cy-copy--ghost:hover {
-    color: #00ff41;
+    color: var(--color-action-brand-default);
   }
 
   .cy-copy--copied.cy-copy--outline {
-    border-color: rgba(0, 255, 65, 0.3);
+    border-color: var(--color-action-brand-default);
   }
 
   .cy-copy__icon {

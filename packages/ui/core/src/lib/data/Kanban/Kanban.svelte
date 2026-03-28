@@ -32,10 +32,10 @@
   let dragOverColumn = $state<string | null>(null);
 
   const priorityColors: Record<string, string> = {
-    low: "#555570",
-    medium: "#00d4ff",
-    high: "#ffaa00",
-    critical: "#ff3355",
+    low: "var(--color-text-tertiary)",
+    medium: "var(--color-action-secondary-default)",
+    high: "var(--color-state-warning)",
+    critical: "var(--color-state-error)",
   };
 
   function handleDragStart(e: DragEvent, itemId: string, columnId: string) {
@@ -129,14 +129,14 @@
 
 <style>
   .cy-kanban {
-    --cy-bg: var(--kanban-bg, #0a0a0f);
-    --cy-bg-card: var(--kanban-card-bg, #12121a);
-    --cy-bg-column: var(--kanban-column-bg, #0e0e16);
-    --cy-neon-green: var(--kanban-accent, #00ff41);
-    --cy-cyan: var(--kanban-cyan, #00d4ff);
-    --cy-border: var(--kanban-border, #1e1e2e);
-    --cy-text: var(--kanban-text, #e0e0e0);
-    --cy-text-dim: var(--kanban-text-dim, #8888a0);
+    --cy-bg: var(--kanban-bg, var(--color-bg-primary));
+    --cy-bg-card: var(--kanban-card-bg, var(--color-surface-default));
+    --cy-bg-column: var(--kanban-column-bg, var(--color-bg-primary));
+    --cy-neon-green: var(--kanban-accent, var(--color-action-brand-default));
+    --cy-cyan: var(--kanban-cyan, var(--color-action-secondary-default));
+    --cy-border: var(--kanban-border, var(--color-border-subtle));
+    --cy-text: var(--kanban-text, var(--color-text-primary));
+    --cy-text-dim: var(--kanban-text-dim, var(--color-text-secondary));
 
     display: flex;
     gap: 16px;
@@ -161,7 +161,7 @@
 
   .cy-kanban__column--dragover {
     border-color: var(--cy-neon-green);
-    box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.05), 0 0 12px rgba(0, 255, 65, 0.1);
+    box-shadow: inset 0 0 20px var(--color-state-success-bg), 0 0 12px var(--color-state-success-bg);
   }
 
   .cy-kanban__column-header {
@@ -252,8 +252,8 @@
     font-size: 0.65rem;
     font-weight: 600;
     color: var(--cy-cyan);
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid rgba(0, 212, 255, 0.2);
+    background: var(--color-state-info-bg);
+    border: 1px solid var(--color-state-info-bg);
     border-radius: 4px;
     padding: 2px 6px;
     text-transform: uppercase;

@@ -93,8 +93,8 @@
   .cy-infinite-scroll__spinner {
     width: 20px;
     height: 20px;
-    border: 2px solid rgba(0, 255, 65, 0.2);
-    border-top-color: var(--color-action-brand-default, #00ff41);
+    border: 2px solid var(--color-state-success-bg);
+    border-top-color: var(--color-action-brand-default);
     border-radius: 50%;
     animation: cy-spin 0.8s linear infinite;
   }
@@ -106,7 +106,7 @@
   }
 
   .cy-infinite-scroll__loading-text {
-    color: var(--color-text-secondary, #888);
+    color: var(--color-text-secondary);
     font-family: var(--font-mono, monospace);
     font-size: 0.875rem;
   }
@@ -119,7 +119,7 @@
   }
 
   .cy-infinite-scroll__end-text {
-    color: var(--color-text-tertiary, #555);
+    color: var(--color-text-tertiary);
     font-family: var(--font-mono, monospace);
     font-size: 0.8125rem;
     opacity: 0.7;

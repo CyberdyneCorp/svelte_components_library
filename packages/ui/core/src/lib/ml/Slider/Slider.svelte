@@ -67,14 +67,14 @@
   }
 
   .cy-slider__label {
-    color: var(--color-text-default, rgba(255, 255, 255, 0.87));
+    color: var(--color-text-primary);
     font-family: var(--font-body, inherit);
     font-size: 0.875rem;
     font-weight: var(--font-weight-medium, 500);
   }
 
   .cy-slider__value {
-    color: var(--color-brand, #00ff41);
+    color: var(--color-action-brand-default);
     font-family: var(--font-mono, "JetBrains Mono", monospace);
     font-size: 0.875rem;
     font-weight: var(--font-weight-medium, 500);
@@ -95,10 +95,10 @@
     cursor: pointer;
     background: linear-gradient(
       to right,
-      var(--color-brand, #00ff41) 0%,
-      var(--color-brand, #00ff41) var(--fill-percent, 50%),
-      rgba(255, 255, 255, 0.1) var(--fill-percent, 50%),
-      rgba(255, 255, 255, 0.1) 100%
+      var(--color-action-brand-default) 0%,
+      var(--color-action-brand-default) var(--fill-percent, 50%),
+      var(--color-border-subtle) var(--fill-percent, 50%),
+      var(--color-border-subtle) 100%
     );
   }
 
@@ -108,32 +108,32 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: var(--color-bg-primary, #0a0a0f);
-    border: 2px solid var(--color-brand, #00ff41);
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-action-brand-default);
     cursor: pointer;
     transition: box-shadow var(--transition-default, 150ms ease);
   }
 
   .cy-slider__input::-webkit-slider-thumb:hover {
-    box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-slider__input::-moz-range-thumb {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: var(--color-bg-primary, #0a0a0f);
-    border: 2px solid var(--color-brand, #00ff41);
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-action-brand-default);
     cursor: pointer;
     transition: box-shadow var(--transition-default, 150ms ease);
   }
 
   .cy-slider__input::-moz-range-thumb:hover {
-    box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-slider__input:focus-visible {
-    outline: 2px solid var(--color-border-focus, #00ff41);
+    outline: 2px solid var(--color-action-brand-default);
     outline-offset: 4px;
     border-radius: 3px;
   }

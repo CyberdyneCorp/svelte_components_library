@@ -87,11 +87,11 @@
 
 <style>
   .cy-code {
-    background: var(--color-surface-elevated, #12121a);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
-    border-radius: var(--radius-lg, 12px);
+    background: var(--color-surface-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    font-family: var(--font-mono, "JetBrains Mono", monospace);
+    font-family: var(--font-mono);
     font-size: 0.875rem;
   }
 
@@ -99,39 +99,39 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-2, 8px) var(--space-4, 16px);
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-surface-hover);
+    border-bottom: 1px solid var(--color-border-default);
   }
 
   .cy-code__lang {
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
+    color: var(--color-text-tertiary);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
   .cy-code__copy {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
-    border-radius: var(--radius-sm, 6px);
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
-    font-family: var(--font-body, inherit);
+    background: var(--color-surface-hover);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-tertiary);
+    font-family: var(--font-body);
     font-size: 0.75rem;
-    padding: var(--space-1, 4px) var(--space-2, 8px);
+    padding: var(--space-1) var(--space-2);
     cursor: pointer;
-    transition: all var(--transition-default, 150ms ease);
+    transition: all var(--transition-default);
   }
 
   .cy-code__copy:hover {
-    color: var(--color-brand, #00ff41);
-    border-color: var(--color-brand, #00ff41);
-    background: rgba(0, 255, 65, 0.08);
+    color: var(--color-action-brand-default);
+    border-color: var(--color-action-brand-default);
+    background: var(--color-state-success-bg);
   }
 
   .cy-code__body {
     overflow: auto;
-    padding: var(--space-4, 16px);
+    padding: var(--space-4);
   }
 
   pre {
@@ -151,32 +151,32 @@
   .cy-code__gutter {
     display: inline-block;
     min-width: 3ch;
-    margin-right: var(--space-4, 16px);
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.25));
+    margin-right: var(--space-4);
+    color: var(--color-text-tertiary);
     text-align: right;
     user-select: none;
     flex-shrink: 0;
   }
 
   .cy-code__content {
-    color: var(--color-text-default, rgba(255, 255, 255, 0.87));
+    color: var(--color-text-primary);
     white-space: pre;
   }
 
   :global(.cy-code__keyword) {
-    color: var(--color-secondary, #00d4ff);
+    color: var(--color-action-secondary-default);
   }
 
   :global(.cy-code__string) {
-    color: var(--color-brand, #00ff41);
+    color: var(--color-action-brand-default);
   }
 
   :global(.cy-code__number) {
-    color: #bd93f9;
+    color: var(--color-syntax-number);
   }
 
   :global(.cy-code__comment) {
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--color-text-tertiary);
     font-style: italic;
   }
 </style>

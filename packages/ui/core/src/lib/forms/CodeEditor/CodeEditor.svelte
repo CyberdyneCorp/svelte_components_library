@@ -183,9 +183,9 @@
   .cy-ce__lang {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
-    color: var(--color-accent-cyan, #00d4ff);
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid rgba(0, 212, 255, 0.2);
+    color: var(--color-action-secondary-default);
+    background: var(--color-state-info-bg);
+    border: 1px solid var(--color-state-info-bg);
     border-radius: var(--radius-sm);
     padding: 1px 6px;
     text-transform: lowercase;
@@ -193,7 +193,7 @@
 
   .cy-ce__editor {
     display: flex;
-    background: var(--color-bg-surface, #0a0a0f);
+    background: var(--color-bg-primary);
     border: 1px solid var(--input-border);
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -221,7 +221,7 @@
     padding-right: var(--space-2);
     padding-left: var(--space-2);
     border-right: 1px solid var(--input-border);
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--color-surface-raised);
     user-select: none;
     flex-shrink: 0;
     overflow: hidden;
@@ -231,7 +231,7 @@
     font-family: var(--font-mono);
     font-size: 0.75rem;
     line-height: 1.5rem;
-    color: var(--color-text-tertiary, rgba(255, 255, 255, 0.25));
+    color: var(--color-text-tertiary);
     min-width: 2ch;
     text-align: right;
   }
@@ -251,7 +251,7 @@
     font-family: var(--font-mono);
     font-size: 0.8125rem;
     line-height: 1.5rem;
-    color: var(--color-text-secondary, #a0a0a0);
+    color: var(--color-text-secondary);
     white-space: pre;
     pointer-events: none;
     min-width: 100%;
@@ -268,7 +268,7 @@
     font-size: 0.8125rem;
     line-height: 1.5rem;
     color: transparent;
-    caret-color: var(--color-accent-green, #00ff41);
+    caret-color: var(--color-action-brand-default);
     background: transparent;
     border: none;
     outline: none;
@@ -283,19 +283,19 @@
   }
 
   :global(.cy-ce__hl-keyword) {
-    color: var(--color-accent-cyan, #00d4ff);
+    color: var(--color-action-secondary-default);
   }
 
   :global(.cy-ce__hl-string) {
-    color: var(--color-accent-green, #00ff41);
+    color: var(--color-action-brand-default);
   }
 
   :global(.cy-ce__hl-number) {
-    color: #c678dd;
+    color: var(--color-action-tertiary-default);
   }
 
   :global(.cy-ce__hl-comment) {
-    color: var(--color-text-tertiary, rgba(255, 255, 255, 0.35));
+    color: var(--color-text-tertiary);
     font-style: italic;
   }
 

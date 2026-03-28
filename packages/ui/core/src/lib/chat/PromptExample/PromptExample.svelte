@@ -26,7 +26,7 @@
     gap: var(--space-1);
     padding: var(--space-3) var(--space-4);
     background: transparent;
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
     cursor: pointer;
     text-align: left;
@@ -34,9 +34,9 @@
   }
 
   .cy-prompt-example:hover {
-    border-color: var(--color-action-brand-default, #00ff41);
-    box-shadow: 0 0 12px rgba(0, 255, 65, 0.1);
-    background: rgba(0, 255, 65, 0.03);
+    border-color: var(--color-action-brand-default);
+    box-shadow: var(--shadow-glow-green);
+    background: var(--color-state-success-bg);
   }
 
   .cy-prompt-example:focus-visible {
@@ -48,13 +48,13 @@
     font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
   }
 
   .cy-prompt-example__desc {
     font-family: var(--font-body);
     font-size: 0.8125rem;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.3));
+    color: var(--color-text-tertiary);
     line-height: 1.4;
   }
 </style>

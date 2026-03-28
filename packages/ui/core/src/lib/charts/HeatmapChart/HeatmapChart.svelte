@@ -236,7 +236,7 @@
 
   .cy-heatmap__cell--hovered {
     opacity: 0.8;
-    outline: 1px solid rgba(255, 255, 255, 0.5);
+    outline: 1px solid var(--color-text-tertiary);
     outline-offset: -1px;
     z-index: 1;
   }

@@ -73,7 +73,7 @@
 
   .cy-address__label {
     font-size: 0.6875rem;
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-weight: var(--font-weight-medium, 500);
@@ -83,8 +83,8 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-2, 0.5rem);
-    background: var(--color-surface-base, #12121a);
-    border: 1px solid var(--color-border-default, rgba(0, 255, 65, 0.1));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md, 8px);
     transition: all var(--transition-default, 0.2s ease);
   }
@@ -98,12 +98,12 @@
   }
 
   .cy-address__row:hover {
-    border-color: rgba(0, 255, 65, 0.25);
+    border-color: var(--color-border-default);
   }
 
   .cy-address__value {
     font-family: var(--font-mono, monospace);
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
     letter-spacing: 0.02em;
   }
 
@@ -121,7 +121,7 @@
     justify-content: center;
     background: none;
     border: none;
-    color: var(--color-text-secondary, #8a8a8a);
+    color: var(--color-text-secondary);
     cursor: pointer;
     padding: var(--space-1, 0.25rem);
     border-radius: var(--radius-sm, 4px);
@@ -129,7 +129,7 @@
   }
 
   .cy-address__copy:hover {
-    color: var(--color-primary, #00ff41);
-    background: rgba(0, 255, 65, 0.08);
+    color: var(--color-action-brand-default);
+    background: var(--color-state-success-bg);
   }
 </style>

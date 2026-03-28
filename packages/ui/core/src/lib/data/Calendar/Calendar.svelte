@@ -188,7 +188,7 @@
             {#each day.events.slice(0, 3) as evt}
               <span
                 class="cy-calendar__event-dot"
-                style:--dot-color={evt.color || "var(--cy-neon-green)"}
+                style:--dot-color={evt.color || "var(--color-action-brand-default)"}
                 title={evt.label}
               ></span>
             {/each}
@@ -201,17 +201,8 @@
 
 <style>
   .cy-calendar {
-    --cy-bg: var(--calendar-bg, #12121a);
-    --cy-bg-deep: var(--calendar-bg-deep, #0a0a0f);
-    --cy-neon-green: var(--calendar-accent, #00ff41);
-    --cy-cyan: var(--calendar-cyan, #00d4ff);
-    --cy-border: var(--calendar-border, #1e1e2e);
-    --cy-text: var(--calendar-text, #e0e0e0);
-    --cy-text-dim: var(--calendar-text-dim, #555570);
-    --cy-text-secondary: var(--calendar-text-secondary, #8888a0);
-
-    background: var(--cy-bg);
-    border: 1px solid var(--cy-border);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
     border-radius: 12px;
     padding: 20px;
     font-family: var(--font-body, "Inter", system-ui, sans-serif);
@@ -227,7 +218,7 @@
   }
 
   .cy-calendar__title {
-    color: var(--cy-text);
+    color: var(--color-text-primary);
     font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.02em;
@@ -240,17 +231,17 @@
     width: 32px;
     height: 32px;
     background: transparent;
-    border: 1px solid var(--cy-border);
+    border: 1px solid var(--color-border-default);
     border-radius: 8px;
-    color: var(--cy-text-secondary);
+    color: var(--color-text-secondary);
     cursor: pointer;
     transition: all 0.15s ease;
   }
 
   .cy-calendar__nav-btn:hover {
-    background: var(--cy-bg-deep);
-    color: var(--cy-neon-green);
-    border-color: var(--cy-neon-green);
+    background: var(--color-bg-primary);
+    color: var(--color-action-brand-default);
+    border-color: var(--color-action-brand-default);
   }
 
   .cy-calendar__grid {
@@ -265,7 +256,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--cy-text-dim);
+    color: var(--color-text-disabled);
     padding: 4px 0 8px;
   }
 
@@ -285,8 +276,8 @@
   }
 
   .cy-calendar__day:not(:disabled):hover {
-    background: rgba(0, 255, 65, 0.06);
-    border-color: rgba(0, 255, 65, 0.2);
+    background: var(--color-state-success-bg);
+    border-color: var(--color-border-default);
   }
 
   .cy-calendar__day--outside {
@@ -300,7 +291,7 @@
   }
 
   .cy-calendar__day--today .cy-calendar__day-number {
-    box-shadow: 0 0 0 2px var(--cy-neon-green);
+    box-shadow: 0 0 0 2px var(--color-action-brand-default);
     border-radius: 50%;
     width: 26px;
     height: 26px;
@@ -310,19 +301,19 @@
   }
 
   .cy-calendar__day--selected {
-    background: var(--cy-neon-green) !important;
-    border-color: var(--cy-neon-green) !important;
+    background: var(--color-action-brand-default) !important;
+    border-color: var(--color-action-brand-default) !important;
   }
 
   .cy-calendar__day--selected .cy-calendar__day-number {
-    color: #0a0a0f !important;
+    color: var(--color-bg-primary) !important;
     font-weight: 700;
     box-shadow: none;
   }
 
   .cy-calendar__day-number {
     font-size: 0.8rem;
-    color: var(--cy-text);
+    color: var(--color-text-primary);
     font-weight: 500;
     line-height: 1;
   }

@@ -38,23 +38,23 @@
   }
 
   .cy-sticky-note--info {
-    border-left-color: var(--color-info, #00d4ff);
-    background: rgba(0, 212, 255, 0.05);
+    border-left-color: var(--color-action-secondary-default);
+    background: var(--color-state-info-bg);
   }
 
   .cy-sticky-note--warning {
-    border-left-color: var(--color-warning, #f59e0b);
-    background: rgba(245, 158, 11, 0.05);
+    border-left-color: var(--color-state-warning);
+    background: var(--color-state-warning-bg);
   }
 
   .cy-sticky-note--tip {
-    border-left-color: var(--color-action-brand-default, #00ff41);
-    background: rgba(0, 255, 65, 0.05);
+    border-left-color: var(--color-action-brand-default);
+    background: var(--color-state-success-bg);
   }
 
   .cy-sticky-note--note {
-    border-left-color: var(--color-tertiary, #a855f7);
-    background: rgba(168, 85, 247, 0.05);
+    border-left-color: var(--color-action-tertiary-default);
+    background: var(--color-state-info-bg);
   }
 
   .cy-sticky-note__header {
@@ -72,13 +72,13 @@
     font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
   }
 
   .cy-sticky-note__content {
     font-family: var(--font-body);
     font-size: 0.8125rem;
-    color: var(--color-text-secondary, rgba(255, 255, 255, 0.6));
+    color: var(--color-text-secondary);
     line-height: 1.5;
   }
 </style>

@@ -53,7 +53,7 @@
     border: none;
     border-left: 2px solid transparent;
     border-radius: 0;
-    color: var(--color-text-secondary, rgba(255, 255, 255, 0.5));
+    color: var(--color-text-secondary);
     font-family: var(--font-body);
     font-size: 0.875rem;
     text-decoration: none;
@@ -63,14 +63,14 @@
   }
 
   .cy-menu-item:hover {
-    color: var(--color-text-primary, #fff);
-    background: var(--color-surface-3, rgba(255, 255, 255, 0.03));
+    color: var(--color-text-primary);
+    background: var(--color-surface-hover);
   }
 
   .cy-menu-item--active {
-    color: var(--color-action-brand-default, #00ff41);
-    border-left-color: var(--color-action-brand-default, #00ff41);
-    background: rgba(0, 255, 65, 0.05);
+    color: var(--color-action-brand-default);
+    border-left-color: var(--color-action-brand-default);
+    background: var(--color-surface-hover);
   }
 
   .cy-menu-item:focus-visible {

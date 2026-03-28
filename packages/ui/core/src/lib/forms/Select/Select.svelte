@@ -109,7 +109,7 @@
 
   .cy-select--error .cy-select__field:focus {
     border-color: var(--input-border-error);
-    box-shadow: 0 0 12px rgba(255, 68, 68, 0.3);
+    box-shadow: var(--shadow-glow-red);
   }
 
   .cy-select__field:disabled {

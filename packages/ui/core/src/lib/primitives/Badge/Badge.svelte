@@ -50,32 +50,32 @@
   .cy-badge--success {
     background: var(--color-state-success-bg);
     color: var(--color-state-success);
-    border-color: rgba(0, 255, 65, 0.2);
-    box-shadow: 0 0 8px rgba(0, 255, 65, 0.1);
+    border-color: var(--color-action-brand-default);
+    box-shadow: var(--shadow-glow-green);
   }
 
   /* Warning */
   .cy-badge--warning {
     background: var(--color-state-warning-bg);
     color: var(--color-state-warning);
-    border-color: rgba(255, 184, 0, 0.2);
-    box-shadow: 0 0 8px rgba(255, 184, 0, 0.1);
+    border-color: var(--color-state-warning);
+    box-shadow: var(--shadow-glow-green);
   }
 
   /* Error */
   .cy-badge--error {
     background: var(--color-state-error-bg);
     color: var(--color-state-error);
-    border-color: rgba(255, 68, 68, 0.2);
-    box-shadow: 0 0 8px rgba(255, 68, 68, 0.1);
+    border-color: var(--color-state-error);
+    box-shadow: var(--shadow-glow-green);
   }
 
   /* Info */
   .cy-badge--info {
     background: var(--color-state-info-bg);
     color: var(--color-state-info);
-    border-color: rgba(0, 212, 255, 0.2);
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.1);
+    border-color: var(--color-action-secondary-default);
+    box-shadow: var(--shadow-glow-cyan);
   }
 
   /* Neutral */

@@ -55,7 +55,7 @@
   }
 
   .cy-timeline__item--alt .cy-timeline__content {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--color-surface-default);
   }
 
   .cy-timeline__rail {
@@ -80,23 +80,23 @@
   }
 
   .cy-timeline__marker--default {
-    background: var(--color-secondary, #00d4ff);
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+    background: var(--color-action-secondary-default);
+    box-shadow: var(--shadow-glow-cyan);
   }
 
   .cy-timeline__marker--success {
-    background: var(--color-brand, #00ff41);
-    box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+    background: var(--color-action-brand-default);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-timeline__marker--warning {
-    background: #ffbd2e;
-    box-shadow: 0 0 8px rgba(255, 189, 46, 0.3);
+    background: var(--color-state-warning);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-timeline__marker--error {
-    background: #ff4444;
-    box-shadow: 0 0 8px rgba(255, 68, 68, 0.3);
+    background: var(--color-state-error);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-timeline__icon {
@@ -107,7 +107,7 @@
   .cy-timeline__line {
     width: 2px;
     flex: 1;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-border-subtle);
     min-height: 24px;
   }
 
@@ -127,12 +127,12 @@
   .cy-timeline__title {
     font-size: 0.875rem;
     font-weight: var(--font-weight-medium, 500);
-    color: var(--color-text-default, rgba(255, 255, 255, 0.87));
+    color: var(--color-text-primary);
   }
 
   .cy-timeline__ts {
     font-size: 0.75rem;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.4));
+    color: var(--color-text-tertiary);
     font-family: var(--font-mono, "JetBrains Mono", monospace);
     white-space: nowrap;
   }
@@ -140,7 +140,7 @@
   .cy-timeline__desc {
     margin: 0;
     font-size: 0.8125rem;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
+    color: var(--color-text-tertiary);
     line-height: 1.5;
   }
 </style>

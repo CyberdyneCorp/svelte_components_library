@@ -63,7 +63,7 @@
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
-    background: var(--color-surface-3, rgba(255, 255, 255, 0.05));
+    background: var(--color-surface-raised);
   }
 
   .cy-chat-response__avatar-img {
@@ -81,7 +81,7 @@
     font-family: var(--font-mono, monospace);
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--color-text-secondary, rgba(255, 255, 255, 0.5));
+    color: var(--color-text-secondary);
   }
 
   .cy-chat-response__bubble {
@@ -91,13 +91,13 @@
   }
 
   .cy-chat-response--user .cy-chat-response__bubble {
-    background: rgba(0, 255, 65, 0.1);
-    border: 1px solid rgba(0, 255, 65, 0.15);
+    background: var(--color-state-success-bg);
+    border: 1px solid var(--color-border-default);
   }
 
   .cy-chat-response--assistant .cy-chat-response__bubble {
-    background: var(--color-surface-2, #12121a);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
   }
 
   .cy-chat-response--system .cy-chat-response__bubble {
@@ -110,11 +110,11 @@
     margin: 0;
     font-family: var(--font-body);
     font-size: 0.875rem;
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
   }
 
   .cy-chat-response--system .cy-chat-response__content {
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.3));
+    color: var(--color-text-tertiary);
     font-size: 0.8125rem;
   }
 
@@ -123,7 +123,7 @@
     margin-top: var(--space-1);
     font-family: var(--font-mono, monospace);
     font-size: 0.6875rem;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.3));
+    color: var(--color-text-tertiary);
   }
 
   .cy-chat-response--user .cy-chat-response__time {

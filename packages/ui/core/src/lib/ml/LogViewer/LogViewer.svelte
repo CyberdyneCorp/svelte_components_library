@@ -84,51 +84,51 @@
 
 <style>
   .cy-log {
-    background: var(--color-surface-elevated, #12121a);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
-    border-radius: var(--radius-lg, 12px);
+    background: var(--color-surface-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    font-family: var(--font-mono, "JetBrains Mono", monospace);
+    font-family: var(--font-mono);
     font-size: 0.8125rem;
   }
 
   .cy-log__filters {
     display: flex;
-    gap: var(--space-1, 4px);
-    padding: var(--space-2, 8px) var(--space-4, 16px);
-    border-bottom: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
-    background: rgba(255, 255, 255, 0.02);
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-4);
+    border-bottom: 1px solid var(--color-border-default);
+    background: var(--color-surface-hover);
   }
 
   .cy-log__filter {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1, 4px);
-    padding: var(--space-1, 4px) var(--space-2, 8px);
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
     border: 1px solid transparent;
-    border-radius: var(--radius-sm, 6px);
+    border-radius: var(--radius-sm);
     background: transparent;
-    color: var(--color-text-muted, rgba(255, 255, 255, 0.5));
-    font-family: var(--font-body, inherit);
+    color: var(--color-text-tertiary);
+    font-family: var(--font-body);
     font-size: 0.75rem;
     cursor: pointer;
     text-transform: capitalize;
-    transition: all var(--transition-default, 150ms ease);
+    transition: all var(--transition-default);
   }
 
   .cy-log__filter:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--color-text-default, rgba(255, 255, 255, 0.87));
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
   }
 
   .cy-log__filter--active {
-    background: rgba(0, 255, 65, 0.1);
-    color: var(--color-brand, #00ff41);
-    border-color: rgba(0, 255, 65, 0.2);
+    background: var(--color-state-success-bg);
+    color: var(--color-action-brand-default);
+    border-color: var(--color-action-brand-border);
   }
 
   .cy-log__count {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-surface-hover);
     padding: 0 6px;
     border-radius: 9999px;
     font-size: 0.6875rem;
@@ -136,23 +136,23 @@
 
   .cy-log__body {
     overflow-y: auto;
-    padding: var(--space-2, 8px) 0;
+    padding: var(--space-2) 0;
   }
 
   .cy-log__line {
     display: flex;
     align-items: baseline;
-    gap: var(--space-2, 8px);
-    padding: var(--space-1, 4px) var(--space-4, 16px);
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-4);
     line-height: 1.6;
   }
 
   .cy-log__line:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--color-surface-default);
   }
 
   .cy-log__ts {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-tertiary);
     white-space: nowrap;
     flex-shrink: 0;
     font-size: 0.75rem;
@@ -161,7 +161,7 @@
   .cy-log__badge {
     display: inline-block;
     padding: 0 6px;
-    border-radius: var(--radius-sm, 6px);
+    border-radius: var(--radius-sm);
     font-size: 0.625rem;
     font-weight: 700;
     letter-spacing: 0.05em;
@@ -170,33 +170,33 @@
   }
 
   .cy-log__badge--debug {
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.5);
+    background: var(--color-surface-hover);
+    color: var(--color-text-tertiary);
   }
 
   .cy-log__badge--info {
-    background: rgba(0, 212, 255, 0.12);
-    color: #00d4ff;
+    background: var(--color-action-secondary-bg);
+    color: var(--color-action-secondary-default);
   }
 
   .cy-log__badge--warn {
-    background: rgba(255, 189, 46, 0.12);
-    color: #ffbd2e;
+    background: var(--color-state-warning-bg);
+    color: var(--color-state-warning);
   }
 
   .cy-log__badge--error {
-    background: rgba(255, 68, 68, 0.12);
-    color: #ff4444;
+    background: var(--color-state-error-bg);
+    color: var(--color-state-error);
   }
 
   .cy-log__msg {
-    color: var(--color-text-default, rgba(255, 255, 255, 0.87));
+    color: var(--color-text-primary);
     flex: 1;
     word-break: break-word;
   }
 
   .cy-log__src {
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--color-text-tertiary);
     font-size: 0.75rem;
     white-space: nowrap;
     flex-shrink: 0;

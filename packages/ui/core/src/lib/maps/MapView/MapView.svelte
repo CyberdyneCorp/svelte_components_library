@@ -284,9 +284,9 @@
     height: var(--map-height, 500px);
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid rgba(0, 255, 65, 0.15);
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.05), inset 0 0 20px rgba(0, 0, 0, 0.3);
-    background: #0a0a0f;
+    border: 1px solid var(--color-action-brand-border);
+    box-shadow: var(--shadow-glow-green);
+    background: var(--color-bg-primary);
   }
 
   .cy-map__container {
@@ -300,14 +300,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #0a0a0f;
+    background: var(--color-bg-primary);
     z-index: 1000;
   }
 
   .cy-map__loading-text {
-    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-family: var(--font-mono);
     font-size: 13px;
-    color: rgba(0, 255, 65, 0.6);
+    color: var(--color-action-brand-default);
     animation: cy-map-pulse 1.5s ease-in-out infinite;
   }
 
@@ -325,8 +325,8 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-    background: rgba(18, 18, 26, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 8px;
     padding: 4px;
     backdrop-filter: blur(8px);
@@ -341,22 +341,22 @@
     border: none;
     border-radius: 6px;
     background: transparent;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--color-text-secondary);
     cursor: pointer;
     transition: all 0.15s ease;
   }
 
   .cy-map__ctrl-btn:hover {
-    background: rgba(0, 212, 255, 0.1);
-    color: #00d4ff;
+    background: var(--color-action-secondary-bg);
+    color: var(--color-action-secondary-default);
   }
 
   .cy-map__ctrl-btn:active {
-    background: rgba(0, 212, 255, 0.18);
+    background: var(--color-action-secondary-active);
   }
 
   .cy-map__ctrl-btn--active {
-    color: #00d4ff;
+    color: var(--color-action-secondary-default);
   }
 
   .cy-map__ctrl-btn:disabled {
@@ -367,14 +367,14 @@
   .cy-map__ctrl-sep {
     height: 1px;
     margin: 2px 4px;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--color-border-subtle);
   }
 
   .cy-map__ctrl-spinner {
     width: 14px;
     height: 14px;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    border-top-color: #00d4ff;
+    border: 2px solid var(--color-border-default);
+    border-top-color: var(--color-action-secondary-default);
     border-radius: 50%;
     animation: cy-map-spin 0.6s linear infinite;
   }
@@ -397,8 +397,8 @@
   }
 
   .cy-map :global(.cy-map-popup .leaflet-popup-tip) {
-    background: #12121a;
-    border: 1px solid rgba(0, 255, 65, 0.15);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-action-brand-border);
     box-shadow: none;
   }
 
@@ -408,13 +408,13 @@
   }
 
   .cy-map :global(.leaflet-control-attribution) {
-    background: rgba(10, 10, 15, 0.8) !important;
-    color: rgba(255, 255, 255, 0.3) !important;
+    background: var(--color-bg-primary) !important;
+    color: var(--color-text-tertiary) !important;
     font-size: 10px !important;
   }
 
   .cy-map :global(.leaflet-control-attribution a) {
-    color: rgba(0, 212, 255, 0.5) !important;
+    color: var(--color-action-secondary-default) !important;
   }
 
   .cy-map :global(.cy-map-marker) {

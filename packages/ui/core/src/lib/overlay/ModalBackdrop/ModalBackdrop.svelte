@@ -30,7 +30,7 @@
     position: fixed;
     inset: 0;
     z-index: 40;
-    background: rgba(0, 0, 0, 0.6);
+    background: var(--color-bg-overlay);
   }
 
   .cy-modal-backdrop--blur {

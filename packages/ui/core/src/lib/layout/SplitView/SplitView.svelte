@@ -180,7 +180,7 @@
 
   .cy-split__divider:hover,
   .cy-split--dragging .cy-split__divider {
-    background: rgba(0, 255, 65, 0.15);
+    background: var(--color-state-success-bg);
     border-color: var(--color-action-brand-default);
   }
 

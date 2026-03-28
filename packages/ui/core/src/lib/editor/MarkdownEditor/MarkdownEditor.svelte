@@ -171,8 +171,8 @@
   .cy-md-editor {
     display: flex;
     flex-direction: column;
-    background: #0a0a0f;
-    border: 1px solid rgba(0, 255, 65, 0.15);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 8px;
     overflow: hidden;
   }
@@ -182,8 +182,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 8px 12px;
-    background: #0a0a0f;
-    border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border-subtle);
     min-height: 40px;
   }
 
@@ -192,17 +192,17 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #00ff41;
+    color: var(--color-action-brand-default);
   }
 
   .cy-md-editor__modes {
     display: flex;
     gap: 0;
     margin-left: auto;
-    background: #12121a;
+    background: var(--color-surface-default);
     border-radius: 6px;
     padding: 2px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-border-subtle);
   }
 
   .cy-md-editor__mode-btn {
@@ -210,7 +210,7 @@
     background: transparent;
     border: none;
     border-radius: 4px;
-    color: var(--color-text-secondary, #a0a0b0);
+    color: var(--color-text-secondary);
     font-family: var(--font-body, "Inter", sans-serif);
     font-size: 0.75rem;
     cursor: pointer;
@@ -218,12 +218,12 @@
   }
 
   .cy-md-editor__mode-btn:hover {
-    color: #f0f0ff;
+    color: var(--color-text-primary);
   }
 
   .cy-md-editor__mode-btn--active {
-    background: rgba(0, 255, 65, 0.15);
-    color: #00ff41;
+    background: var(--color-state-success-bg);
+    color: var(--color-action-brand-default);
   }
 
   .cy-md-editor__content {
@@ -251,8 +251,8 @@
   .cy-md-editor__textarea {
     flex: 1;
     width: 100%;
-    background: #12121a;
-    color: #f0f0ff;
+    background: var(--color-surface-default);
+    color: var(--color-text-primary);
     border: none;
     padding: 16px;
     font-family: var(--font-mono, "JetBrains Mono", monospace);
@@ -260,18 +260,18 @@
     line-height: 1.7;
     resize: none;
     outline: none;
-    caret-color: #00ff41;
+    caret-color: var(--color-action-brand-default);
     overflow-y: auto;
     tab-size: 2;
   }
 
   .cy-md-editor__textarea::placeholder {
-    color: rgba(160, 160, 176, 0.4);
+    color: var(--color-text-tertiary);
   }
 
   .cy-md-editor__divider {
     width: 1px;
-    background: rgba(0, 255, 65, 0.15);
+    background: var(--color-border-subtle);
     flex-shrink: 0;
   }
 
@@ -279,7 +279,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 16px;
-    background: #0a0a0f;
+    background: var(--color-bg-primary);
     min-width: 0;
   }
 

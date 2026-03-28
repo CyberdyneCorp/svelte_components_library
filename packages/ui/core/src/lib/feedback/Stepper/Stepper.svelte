@@ -123,24 +123,24 @@
   }
 
   .cy-stepper__circle--completed {
-    background: var(--color-action-brand-default, #00ff41);
-    border-color: var(--color-action-brand-default, #00ff41);
-    color: #0a0a0f;
-    box-shadow: 0 0 12px rgba(0, 255, 65, 0.3);
+    background: var(--color-action-brand-default);
+    border-color: var(--color-action-brand-default);
+    color: var(--color-bg-primary);
+    box-shadow: 0 0 12px var(--color-state-success-bg);
   }
 
   .cy-stepper__circle--current {
     background: transparent;
-    border-color: var(--color-action-brand-default, #00ff41);
-    color: var(--color-action-brand-default, #00ff41);
-    box-shadow: 0 0 12px rgba(0, 255, 65, 0.2);
+    border-color: var(--color-action-brand-default);
+    color: var(--color-action-brand-default);
+    box-shadow: 0 0 12px var(--color-state-success-bg);
     animation: cy-stepper-pulse 2s ease-in-out infinite;
   }
 
   .cy-stepper__circle--upcoming {
     background: transparent;
-    border-color: var(--color-border-subtle, rgba(255, 255, 255, 0.15));
-    color: var(--color-text-tertiary, #555);
+    border-color: var(--color-border-subtle);
+    color: var(--color-text-tertiary);
   }
 
   .cy-stepper__circle--clickable {
@@ -148,27 +148,27 @@
   }
 
   .cy-stepper__circle--clickable:hover {
-    box-shadow: 0 0 16px rgba(0, 255, 65, 0.4);
+    box-shadow: 0 0 16px var(--color-state-success-bg);
   }
 
   @keyframes cy-stepper-pulse {
-    0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 65, 0.2); }
-    50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.5); }
+    0%, 100% { box-shadow: 0 0 8px var(--color-state-success-bg); }
+    50% { box-shadow: 0 0 20px var(--color-state-success-bg); }
   }
 
   .cy-stepper__connector {
     flex: 1;
     min-width: 40px;
     min-height: 2px;
-    background: var(--color-border-subtle, rgba(255, 255, 255, 0.1));
+    background: var(--color-border-subtle);
     align-self: center;
     margin-top: 18px;
     transition: background 300ms ease;
   }
 
   .cy-stepper__connector--completed {
-    background: var(--color-action-brand-default, #00ff41);
-    box-shadow: 0 0 4px rgba(0, 255, 65, 0.3);
+    background: var(--color-action-brand-default);
+    box-shadow: 0 0 4px var(--color-state-success-bg);
   }
 
   .cy-stepper--vertical .cy-stepper__connector {
@@ -195,19 +195,19 @@
   .cy-stepper__title {
     font-family: var(--font-display, sans-serif);
     font-size: 0.8125rem;
-    color: var(--color-text-tertiary, #555);
+    color: var(--color-text-tertiary);
     transition: color 300ms ease;
     white-space: nowrap;
   }
 
   .cy-stepper__title--active {
-    color: var(--color-text-primary, #e0e0e0);
+    color: var(--color-text-primary);
   }
 
   .cy-stepper__description {
     font-family: var(--font-body, sans-serif);
     font-size: 0.6875rem;
-    color: var(--color-text-tertiary, #555);
+    color: var(--color-text-tertiary);
     max-width: 120px;
     text-align: center;
   }

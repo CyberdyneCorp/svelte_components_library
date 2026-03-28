@@ -55,9 +55,9 @@
 <style>
   .cy-toggle-group {
     display: inline-flex;
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.1));
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg, 9999px);
-    background: var(--color-surface-base, #0a0a0f);
+    background: var(--color-bg-primary);
     overflow: hidden;
   }
 
@@ -73,7 +73,7 @@
     gap: 0.375rem;
     border: none;
     background: transparent;
-    color: var(--color-text-secondary, rgba(255, 255, 255, 0.5));
+    color: var(--color-text-secondary);
     cursor: pointer;
     font-family: var(--font-body, system-ui, sans-serif);
     font-weight: var(--font-weight-medium, 500);
@@ -96,17 +96,17 @@
   }
 
   .cy-toggle-group__btn:not(:first-child) {
-    border-left: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    border-left: 1px solid var(--color-border-default);
   }
 
   .cy-toggle-group__btn:hover:not(:disabled):not(.cy-toggle-group__btn--active) {
-    color: var(--color-text-primary, rgba(255, 255, 255, 0.85));
-    background: rgba(255, 255, 255, 0.04);
+    color: var(--color-text-primary);
+    background: var(--color-surface-hover);
   }
 
   .cy-toggle-group__btn--active {
-    background: var(--color-action-brand-default, #00ff41);
-    color: #0a0a0f;
+    background: var(--color-action-brand-default);
+    color: var(--color-bg-primary);
     border-left-color: transparent !important;
   }
 
@@ -115,7 +115,7 @@
   }
 
   .cy-toggle-group__btn:focus-visible {
-    outline: 2px solid var(--color-border-focus, #00ff41);
+    outline: 2px solid var(--color-action-brand-default);
     outline-offset: -2px;
     z-index: 1;
   }

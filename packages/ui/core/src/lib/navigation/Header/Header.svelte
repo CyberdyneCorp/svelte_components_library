@@ -40,8 +40,8 @@
     justify-content: space-between;
     height: var(--nav-height, 56px);
     padding: 0 var(--space-4);
-    background: var(--color-surface-1, #0a0a0f);
-    border-bottom: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
   }
 
@@ -61,7 +61,7 @@
     font-family: var(--font-heading, var(--font-body));
     font-size: 1rem;
     font-weight: 600;
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
     letter-spacing: -0.01em;
   }
 

@@ -53,16 +53,16 @@
     switch (ext) {
       case "ts":
       case "js":
-        return "#00d4ff";
+        return "var(--color-action-secondary-default)";
       case "svelte":
         return "#ff6e40";
       case "css":
       case "scss":
-        return "#b48eff";
+        return "var(--color-action-tertiary-default)";
       case "md":
-        return "#00ff41";
+        return "var(--color-action-brand-default)";
       default:
-        return "rgba(255, 255, 255, 0.5)";
+        return "var(--color-text-tertiary)";
     }
   }
 </script>
@@ -122,8 +122,8 @@
   .cy-file-tree {
     font-family: var(--font-mono, "JetBrains Mono", "Fira Code", monospace);
     font-size: 0.8125rem;
-    background: var(--color-surface-base, #0a0a0f);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md, 8px);
     padding: 0.5rem 0;
     min-width: 240px;
@@ -147,7 +147,7 @@
     width: 100%;
     border: none;
     background: transparent;
-    color: var(--color-text-primary, rgba(255, 255, 255, 0.85));
+    color: var(--color-text-primary);
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     padding-right: 1rem;
@@ -160,19 +160,19 @@
   }
 
   .cy-file-tree__row:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--color-surface-hover);
   }
 
   .cy-file-tree__row--selected {
-    background: rgba(0, 255, 65, 0.08);
+    background: var(--color-state-success-bg);
   }
 
   .cy-file-tree__row--selected:hover {
-    background: rgba(0, 255, 65, 0.12);
+    background: var(--color-state-success-bg);
   }
 
   .cy-file-tree__row:focus-visible {
-    outline: 1px solid var(--color-border-focus, #00ff41);
+    outline: 1px solid var(--color-action-brand-default);
     outline-offset: -1px;
   }
 
@@ -181,7 +181,7 @@
     top: 0;
     bottom: 0;
     width: 1px;
-    background: var(--color-border-default, rgba(255, 255, 255, 0.06));
+    background: var(--color-border-subtle);
   }
 
   .cy-file-tree__chevron {
@@ -191,7 +191,7 @@
     width: 14px;
     height: 14px;
     font-size: 0.5rem;
-    color: var(--color-text-secondary, rgba(255, 255, 255, 0.4));
+    color: var(--color-text-secondary);
     transition: transform 0.15s ease;
     flex-shrink: 0;
   }

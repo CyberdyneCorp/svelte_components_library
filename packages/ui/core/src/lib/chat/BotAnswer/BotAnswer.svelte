@@ -38,19 +38,19 @@
   }
 
   .cy-bot-answer--default {
-    background: var(--color-surface-2, #12121a);
-    border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
   }
 
   .cy-bot-answer--surface {
-    background: var(--color-surface-3, rgba(255, 255, 255, 0.03));
+    background: var(--color-surface-raised);
     border: 1px solid transparent;
   }
 
   .cy-bot-answer__content {
     font-family: var(--font-body);
     font-size: 0.875rem;
-    color: var(--color-text-primary, #fff);
+    color: var(--color-text-primary);
     white-space: pre-wrap;
     word-break: break-word;
   }
@@ -58,8 +58,8 @@
   .cy-bot-answer__content :global(.cy-bot-answer__code) {
     font-family: var(--font-mono, monospace);
     font-size: 0.8125rem;
-    background: rgba(0, 255, 65, 0.08);
-    color: var(--color-action-brand-default, #00ff41);
+    background: var(--color-state-success-bg);
+    color: var(--color-action-brand-default);
     padding: 0.125em 0.375em;
     border-radius: var(--radius-xs);
   }
@@ -74,7 +74,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--color-text-muted, rgba(255, 255, 255, 0.3));
+    background: var(--color-text-tertiary);
     animation: cy-typing 1.4s infinite;
   }
 

@@ -109,10 +109,10 @@
   }
 
   .cy-popover__body {
-    background: var(--color-surface-raised, #1a1a2e);
+    background: var(--color-surface-raised);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 212, 255, 0.05);
+    box-shadow: var(--shadow-lg), var(--shadow-glow-cyan);
     padding: var(--space-4);
     min-width: 200px;
     font-family: var(--font-body);
@@ -124,7 +124,7 @@
     position: absolute;
     width: 10px;
     height: 10px;
-    background: var(--color-surface-raised, #1a1a2e);
+    background: var(--color-surface-raised);
     border: 1px solid var(--color-border-default);
     transform: rotate(45deg);
   }

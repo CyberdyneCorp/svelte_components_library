@@ -186,7 +186,7 @@
   .cy-rs__range-text {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    color: var(--color-accent-green, #00ff41);
+    color: var(--color-action-brand-default);
   }
 
   .cy-rs__track-container {
@@ -208,24 +208,24 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: var(--input-border, rgba(255, 255, 255, 0.1));
+    background: var(--input-border);
     border-radius: 2px;
   }
 
   .cy-rs__fill {
     position: absolute;
     height: 4px;
-    background: var(--color-accent-green, #00ff41);
+    background: var(--color-action-brand-default);
     border-radius: 2px;
-    box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-rs__thumb {
     position: absolute;
     width: 18px;
     height: 18px;
-    background: var(--color-bg-elevated, #12121a);
-    border: 2px solid var(--color-accent-green, #00ff41);
+    background: var(--color-bg-elevated);
+    border: 2px solid var(--color-action-brand-default);
     border-radius: 50%;
     transform: translateX(-50%);
     cursor: grab;
@@ -236,7 +236,7 @@
 
   .cy-rs__thumb:hover,
   .cy-rs__thumb:focus {
-    box-shadow: 0 0 12px rgba(0, 255, 65, 0.4);
+    box-shadow: var(--shadow-glow-green);
   }
 
   .cy-rs__thumb:active {
@@ -250,7 +250,7 @@
     transform: translateX(-50%);
     font-family: var(--font-mono);
     font-size: 0.625rem;
-    color: var(--color-accent-green, #00ff41);
+    color: var(--color-action-brand-default);
     white-space: nowrap;
     pointer-events: none;
   }

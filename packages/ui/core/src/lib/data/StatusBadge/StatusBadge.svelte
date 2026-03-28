@@ -34,7 +34,7 @@
 
   .cy-status-badge--active .cy-status-badge__dot {
     background: var(--color-state-success);
-    box-shadow: 0 0 6px rgba(0, 255, 65, 0.5);
+    box-shadow: 0 0 6px var(--color-state-success-bg);
     animation: cy-pulse 2s ease-in-out infinite;
   }
 
@@ -52,7 +52,7 @@
 
   .cy-status-badge--pending .cy-status-badge__dot {
     background: var(--color-state-warning);
-    box-shadow: 0 0 6px rgba(255, 184, 0, 0.4);
+    box-shadow: 0 0 6px var(--color-state-warning-bg);
   }
 
   .cy-status-badge--pending .cy-status-badge__label {
@@ -61,7 +61,7 @@
 
   .cy-status-badge--error .cy-status-badge__dot {
     background: var(--color-state-error);
-    box-shadow: 0 0 6px rgba(255, 68, 68, 0.4);
+    box-shadow: 0 0 6px var(--color-state-error-bg);
   }
 
   .cy-status-badge--error .cy-status-badge__label {
