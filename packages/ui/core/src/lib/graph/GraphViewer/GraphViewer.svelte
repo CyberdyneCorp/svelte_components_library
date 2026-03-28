@@ -224,6 +224,13 @@
     assignCommunityColors();
     buildEdgePairs();
     refreshCSSCache();
+
+    // Pre-settle: run 150 simulation ticks before first render
+    // so the graph appears already laid out (like bridge_system)
+    for (let i = 0; i < 150; i++) {
+      simulationTick();
+    }
+
     simulationRunning = true;
     cancelAnimationFrame(animFrame);
     runSimulation();
