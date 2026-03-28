@@ -471,6 +471,7 @@
     if (node) {
       draggingNode = node;
       node.pinned = true;
+      canvas.style.cursor = "grabbing";
     } else if (cfg.enablePan) {
       isPanning = true;
     }
@@ -481,26 +482,25 @@
     const { x, y } = getCanvasCoords(e);
 
     if (draggingNode) {
+      // Move the dragged node directly — just re-render, no physics
       const world = screenToWorld(x, y);
       draggingNode.x = world.x;
       draggingNode.y = world.y;
-      if (!simulationRunning) {
-        simulationRunning = true;
-        runSimulation();
-      }
+      render();
     } else if (isPanning) {
       const dx = x - lastMouse.x;
       const dy = y - lastMouse.y;
       transform = { ...transform, x: transform.x + dx, y: transform.y + dy };
-      if (!simulationRunning) render();
+      render();
     } else {
+      // Hover detection — just re-render to show tooltip, no simulation
       const world = screenToWorld(x, y);
       const node = getNodeAt(world.x, world.y);
       if (node !== hoveredNode) {
         hoveredNode = node;
         onnodehover?.(node);
-        canvas.style.cursor = node ? "pointer" : "default";
-        if (!simulationRunning) render();
+        canvas.style.cursor = node ? "grab" : "default";
+        render();
       }
     }
     lastMouse = { x, y };
@@ -509,9 +509,10 @@
   function handleMouseUp(e: MouseEvent) {
     if (draggingNode) {
       draggingNode.pinned = false;
+      // Gentle settle — very low alpha so neighbors adjust slightly
+      alpha = 0.05;
       draggingNode = null;
-      // Reheat slightly after drag so nodes settle
-      alpha = Math.max(alpha, 0.1);
+      canvas.style.cursor = "default";
       if (!simulationRunning) {
         simulationRunning = true;
         runSimulation();
@@ -741,7 +742,14 @@
     onmousedown={handleMouseDown}
     onmousemove={handleMouseMove}
     onmouseup={handleMouseUp}
-    onmouseleave={() => { isPanning = false; draggingNode = null; hoveredNode = null; }}
+    onmouseleave={() => {
+      if (draggingNode) { draggingNode.pinned = false; }
+      isPanning = false;
+      draggingNode = null;
+      hoveredNode = null;
+      canvas.style.cursor = "default";
+      render();
+    }}
     onwheel={handleWheel}
   ></canvas>
 
