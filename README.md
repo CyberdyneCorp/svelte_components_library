@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **104 components** across 15 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **121 components** across 15 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdyne/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdyne/svelte-ui-core` | 104 UI components across 15 categories |
+| `@cyberdyne/svelte-ui-core` | 121 UI components across 15 categories |
 
 ## Installation
 
@@ -77,16 +77,16 @@ Use components:
 </Card>
 ```
 
-## Components (104)
+## Components (121)
 
-### Primitives (12)
-`Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton`
+### Primitives (13)
+`Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle`
 
-### Forms (17)
-`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `ComboBox` · `RangeSlider` · `CodeEditor` · `ColorPicker` · `SearchInput`
+### Forms (19)
+`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `ComboBox` · `RangeSlider` · `CodeEditor` · `ColorPicker` · `SearchInput` · `DatePicker` · `TimePicker`
 
-### Feedback (10)
-`Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary`
+### Feedback (12)
+`Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary` · `Carousel`
 
 ### Navigation (5)
 `Tabs` · `Breadcrumb` · `Sidebar` · `Header` · `MenuItem`
@@ -94,8 +94,8 @@ Use components:
 ### Data Display (13)
 `Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable`
 
-### Layout (7)
-`Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` · `SplitView` · `GridLayout`
+### Layout (8)
+`Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` · `SplitView` · `GridLayout` · `PageShell`
 
 ### Overlay (5)
 `Modal` · `ModalBackdrop` · `ContextMenu` · `Popover` · `CommandPalette` (Cmd+K)
@@ -103,20 +103,20 @@ Use components:
 ### Auth (2)
 `LoginPage` (credentials + wallet modes) · `WalletConnect` (MetaMask, WalletConnect, Coinbase, Phantom)
 
-### Chat (6)
-`Chatbox` · `ChatPanel` · `ChatResponse` · `PromptExample` · `WelcomeText` · `BotAnswer`
+### Chat (8)
+`Chatbox` · `ChatPanel` · `ChatResponse` · `PromptExample` · `WelcomeText` · `BotAnswer` · `CommentThread`
 
-### Crypto / Web3 (9)
-`TokenBalance` · `TransactionList` · `AddressDisplay` · `NetworkBadge` · `NFTCard` · `PriceDisplay` · `MetricCard` · `GasEstimate` · `TierBadge` (6-tier NFT access system)
+### Crypto / Web3 (13)
+`TokenBalance` · `TransactionList` · `AddressDisplay` · `NetworkBadge` · `NFTCard` · `PriceDisplay` · `MetricCard` · `GasEstimate` · `TierBadge` (6-tier NFT access system) · `SwapInterface` · `TokenSelector` · `StakingCard` · `TransactionConfirm`
 
-### ML / Data Tools (8)
-`CodeBlock` (syntax highlighting) · `Terminal` · `LogViewer` (severity filtering) · `Slider` · `StepProgress` · `Timeline` · `DataChart` (chart wrapper) · `Kbd` (keyboard shortcuts)
+### ML / Data Tools (11)
+`CodeBlock` (syntax highlighting) · `Terminal` · `LogViewer` (severity filtering) · `Slider` · `StepProgress` · `Timeline` · `DataChart` (chart wrapper) · `Kbd` (keyboard shortcuts) · `NotebookCell` · `ModelCard` · `ConfusionMatrix`
 
 ### Graph & Search (2)
 `GraphViewer` (force-directed network graph with community detection, zoom/pan, search) · `SemanticSearch` (vector search results with relevance scores)
 
-### Charts (4)
-`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart`
+### Charts (8)
+`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart` · `PieChart` · `Sparkline` · `Gauge` · `TreeMap`
 
 ### Editor (3)
 `MarkdownEditor` (with Mermaid diagram support) · `MarkdownPreview` · `MarkdownToolbar`
@@ -220,21 +220,21 @@ pnpm release            # Build & publish
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
-│       └── core/            UI components (104 components)
+│       └── core/            UI components (121 components)
 │           └── src/lib/
-│               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ...
-│               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, ...
-│               ├── feedback/     Alert, Toast, Skeleton, Stepper, ProgressRing, ErrorBoundary, ...
+│               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, ...
+│               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ...
+│               ├── feedback/     Alert, Toast, Skeleton, Stepper, ProgressRing, ErrorBoundary, Carousel, ...
 │               ├── navigation/   Tabs, Breadcrumb, Sidebar, Header, MenuItem
-│               ├── data/         Table, Pagination, VirtualizedList, FileTree, DiffViewer, Kanban, ...
-│               ├── layout/       Card, AppLayout, Drawer, SplitView, GridLayout, ...
+│               ├── data/         Table, Pagination, VirtualizedList, FileTree, DiffViewer, Kanban, DataTable, ...
+│               ├── layout/       Card, AppLayout, Drawer, SplitView, GridLayout, PageShell, ...
 │               ├── overlay/      Modal, ContextMenu, Popover, CommandPalette
 │               ├── auth/         LoginPage, WalletConnect
-│               ├── chat/         Chatbox, ChatPanel, ChatResponse, ...
-│               ├── crypto/       TokenBalance, NFTCard, GasEstimate, TierBadge, ...
-│               ├── ml/           CodeBlock, Terminal, LogViewer, Timeline, ...
+│               ├── chat/         Chatbox, ChatPanel, ChatResponse, CommentThread, ...
+│               ├── crypto/       TokenBalance, NFTCard, GasEstimate, TierBadge, SwapInterface, StakingCard, ...
+│               ├── ml/           CodeBlock, Terminal, LogViewer, Timeline, NotebookCell, ModelCard, ConfusionMatrix, ...
 │               ├── graph/        GraphViewer (force-directed), SemanticSearch
-│               ├── charts/       LineChart, BarChart, AreaChart, HeatmapChart
+│               ├── charts/       LineChart, BarChart, AreaChart, HeatmapChart, PieChart, Sparkline, Gauge, TreeMap
 │               ├── editor/       MarkdownEditor, MarkdownPreview, MarkdownToolbar
 │               ├── maps/         MapView (Leaflet)
 │               └── _testdata/    Shared test data module for stories

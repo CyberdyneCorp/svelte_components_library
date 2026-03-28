@@ -44,7 +44,7 @@ The Cyberdyne Design System is a comprehensive, reusable Svelte 5 component libr
 
 The system encompasses:
 - **Design Tokens** — Colors, typography, spacing, radius, shadows, and animations defined as CSS custom properties
-- **104 UI Components** — Organized across 15 functional categories
+- **121 UI Components** — Organized across 15 functional categories
 - **Storybook Documentation** — Interactive component playground with auto-generated API docs
 - **CI/CD Pipeline** — Automated testing, versioning, and publishing workflows
 
@@ -125,19 +125,21 @@ svelte_components_library/
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS layers (colors, typography, spacing, ...)
-│       └── core/            UI components (104 components)
+│       └── core/            UI components (121 components)
 │           └── src/lib/
-│               ├── primitives/   12 components
-│               ├── forms/        10 components
-│               ├── feedback/     7 components
+│               ├── primitives/   13 components
+│               ├── forms/        19 components
+│               ├── feedback/     12 components
 │               ├── navigation/   5 components
-│               ├── data/         11 components
-│               ├── layout/       5 components
+│               ├── data/         13 components
+│               ├── layout/       8 components
 │               ├── overlay/      5 components
 │               ├── auth/         2 components
-│               ├── chat/         6 components
-│               ├── crypto/       9 components
-│               ├── ml/           8 components
+│               ├── chat/         8 components
+│               ├── crypto/       13 components
+│               ├── ml/           11 components
+│               ├── graph/        2 components
+│               ├── charts/       8 components
 │               ├── editor/       3 components
 │               ├── maps/         1 component
 │               └── _testdata/    Shared test data module
@@ -330,7 +332,7 @@ export type BreakpointKey, SpacingKey, RadiusKey
 ### 5.2 @cyberdyne/svelte-ui-core
 
 **Version:** 0.1.0
-**Purpose:** 104 UI components
+**Purpose:** 121 UI components
 **Dependency:** `@cyberdyne/svelte-ui-foundation` (workspace:*)
 
 **Export Path:** `.` — All components from a single entry point
@@ -446,7 +448,7 @@ Based on a 4px base grid:
 
 ## 7. Component Inventory
 
-### 7.1 Primitives (12 components)
+### 7.1 Primitives (13 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -462,8 +464,9 @@ Based on a 4px base grid:
 | `CopyButton` | text, label, size, variant | Clipboard copy with feedback animation |
 | `ToggleGroup` | items, value (bindable), multiple, size, variant | Grouped toggle buttons for single/multi selection |
 | `AvatarGroup` | avatars, max, size, overlap | Stacked avatar display with overflow count |
+| `ThemeToggle` | theme (bindable), size | Dark/light theme toggle switch |
 
-### 7.2 Forms (10 components)
+### 7.2 Forms (19 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -477,8 +480,17 @@ Based on a 4px base grid:
 | `FileDropzone` | accept, multiple, disabled, maxSize, onfiles | Drag-and-drop file upload zone |
 | `ColorPicker` | value (bindable), label, presets, showInput, disabled | Color selection with preset swatches and hex input |
 | `SearchInput` | value (bindable), placeholder, debounce, results, grouped, onselect | Debounced search field with grouped result dropdown |
+| `DateRangePicker` | startDate (bindable), endDate (bindable), presets, placeholder | Calendar-based date range picker with preset ranges |
+| `MultiSelect` | value (bindable), options, groups, placeholder, searchable | Multi-value selection with grouped options |
+| `TagInput` | tags (bindable), placeholder, maxTags, suggestions | Tag entry with autocomplete suggestions |
+| `NumberInput` | value (bindable), label, min, max, step, error, disabled | Numeric input with increment/decrement controls |
+| `ComboBox` | value (bindable), options, placeholder, searchable, creatable | Searchable select with optional value creation |
+| `RangeSlider` | min, max, start (bindable), end (bindable), step, label | Dual-handle range slider for value ranges |
+| `CodeEditor` | value (bindable), language, lineNumbers, readonly | Editable code input with syntax highlighting |
+| `DatePicker` | value (bindable), label, placeholder, min, max, disabled | Calendar-based single date selection |
+| `TimePicker` | value (bindable), label, format, step, disabled | Time selection with hour and minute controls |
 
-### 7.3 Feedback (7 components)
+### 7.3 Feedback (12 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -489,6 +501,10 @@ Based on a 4px base grid:
 | `Skeleton` | variant, width, height, lines, animated | Loading placeholder (text, circle, rect, card) |
 | `Accordion` | items, multiple, defaultOpen | Collapsible content sections |
 | `Dropdown` | items, trigger, onselect, align | Custom dropdown menu with keyboard navigation |
+| `ProgressRing` | value, size, strokeWidth, variant | Circular progress indicator with animated fill |
+| `Stepper` | steps, currentStep, orientation | Multi-step progress with labels and state tracking |
+| `ErrorBoundary` | fallback, onError | Graceful error catching with fallback UI |
+| `Carousel` | items, autoplay, interval, showDots, showArrows | Image/content carousel with navigation controls |
 
 ### 7.4 Navigation (5 components)
 
@@ -500,7 +516,7 @@ Based on a 4px base grid:
 | `Header` | title, children, logo | Top navigation bar |
 | `MenuItem` | label, icon, active, href, onclick, children | Reusable navigation menu item |
 
-### 7.5 Data Display (11 components)
+### 7.5 Data Display (13 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -515,8 +531,10 @@ Based on a 4px base grid:
 | `Calendar` | date (bindable), events, onselect | Month grid calendar with event markers and date navigation |
 | `Kanban` | columns, ondrop, onmove | Drag-and-drop board with configurable columns and card management |
 | `DataTable` | columns, rows, selectable, expandable, resizable, pagination, pageSize | Enhanced data table with row selection, expandable rows, column resize, and pagination |
+| `VirtualizedList` | items, itemHeight, overscan, containerHeight | Performant scrollable list with windowed rendering |
+| `InfiniteScroll` | onLoadMore, threshold, loading, hasMore, children | Infinite scroll container with loading trigger |
 
-### 7.6 Layout (5 components)
+### 7.6 Layout (8 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -525,6 +543,9 @@ Based on a 4px base grid:
 | `PageHeader` | title, description, children | Page title with action area |
 | `ContentSlot` | name, padding, children | Named content region wrapper |
 | `Drawer` | open (bindable), side, width, title, children, footer | Slide-in panel with backdrop |
+| `SplitView` | direction, sizes (bindable), minSize, maxSize | Resizable split panels (horizontal/vertical) |
+| `GridLayout` | columns, gap, responsive, children | Responsive CSS grid layout container |
+| `PageShell` | sidebar, header, footer, children | Full page shell combining header, sidebar, and content area |
 
 ### 7.7 Overlay (5 components)
 
@@ -543,7 +564,7 @@ Based on a 4px base grid:
 | `LoginPage` | mode, title, subtitle, email (bindable), password (bindable), error, loading, walletSection, onsubmit | Full login page (credentials + wallet + both modes) |
 | `WalletConnect` | wallets, connecting (bindable), disabled, onconnect | Wallet connection list (MetaMask, WalletConnect, Coinbase, Phantom) |
 
-### 7.9 Chat (6 components)
+### 7.9 Chat (8 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -553,8 +574,9 @@ Based on a 4px base grid:
 | `PromptExample` | title, description, onclick | Clickable example prompt card |
 | `WelcomeText` | title, subtitle, children | Empty chat welcome screen |
 | `BotAnswer` | content, typing, variant | Bot response with typing dots animation |
+| `CommentThread` | comments, onreply, onedit, ondelete | Threaded comment discussion with nested replies |
 
-### 7.10 Crypto / Web3 (9 components)
+### 7.10 Crypto / Web3 (13 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -567,8 +589,12 @@ Based on a 4px base grid:
 | `MetricCard` | label, value, change, changeLabel, icon, variant | KPI dashboard card |
 | `GasEstimate` | slow, standard, fast, selected (bindable) | Gas fee selector (slow/standard/fast) |
 | `TierBadge` | tier, label, showLevel | 6-level NFT access tier badge with gradient effects |
+| `SwapInterface` | fromToken (bindable), toToken (bindable), amount (bindable), slippage, onswap | Token swap interface with price estimation and slippage control |
+| `TokenSelector` | tokens, selected (bindable), searchable, onselect | Searchable token selection dropdown with balances |
+| `StakingCard` | token, staked, rewards, apy, lockPeriod, onstake, onunstake | Staking position display with rewards and APY |
+| `TransactionConfirm` | transaction, gas, open (bindable), onconfirm, oncancel | Transaction confirmation dialog with fee breakdown |
 
-### 7.11 ML / Data Tools (8 components)
+### 7.11 ML / Data Tools (11 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -580,8 +606,31 @@ Based on a 4px base grid:
 | `Timeline` | items | Vertical timeline with variant markers |
 | `DataChart` | title, description, height, children, loading, empty | Chart container wrapper with loading/empty states |
 | `Kbd` | keys, size, separator | Keyboard shortcut display |
+| `NotebookCell` | code, output, language, executionCount, status, onrun | Jupyter-style notebook cell with code input and output display |
+| `ModelCard` | name, description, metrics, tags, version, status | ML model summary card with key metrics and metadata |
+| `ConfusionMatrix` | matrix, labels, colorScale, showValues, normalized | Classification confusion matrix heatmap visualization |
 
-### 7.12 Editor (3 components)
+### 7.12 Graph (2 components)
+
+| Component | Props | Description |
+|-----------|-------|------------|
+| `GraphViewer` | nodes, edges, layout, zoomable, searchable | Force-directed network graph with community detection, zoom/pan, and search |
+| `SemanticSearch` | results, query, onselect | Vector search results display with relevance scores |
+
+### 7.13 Charts (8 components)
+
+| Component | Props | Description |
+|-----------|-------|------------|
+| `LineChart` | data, series, xAxis, yAxis, legend, tooltip | Multi-series line chart with axis configuration |
+| `BarChart` | data, series, xAxis, yAxis, horizontal, stacked | Vertical/horizontal bar chart with stacking |
+| `AreaChart` | data, series, xAxis, yAxis, stacked, gradient | Area chart with optional stacking and gradient fill |
+| `HeatmapChart` | data, xLabels, yLabels, colorScale, showValues | Heatmap grid with configurable color scales |
+| `PieChart` | data, donut, showLabels, showLegend | Pie/donut chart with labels and legend |
+| `Sparkline` | data, width, height, color, showDot | Inline mini chart for trend indicators |
+| `Gauge` | value, min, max, label, thresholds, size | Radial gauge for metric visualization |
+| `TreeMap` | data, colorScale, showLabels, padding | Hierarchical treemap for proportional data display |
+
+### 7.14 Editor (3 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -589,7 +638,7 @@ Based on a 4px base grid:
 | `MarkdownPreview` | content, sanitize | Rendered markdown preview using built-in regex parser with dynamic Mermaid diagram rendering |
 | `MarkdownToolbar` | onapply | Formatting toolbar with 15 buttons (bold, italic, headings, lists, links, code, etc.) and keyboard shortcuts |
 
-### 7.13 Maps (1 component)
+### 7.15 Maps (1 component)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -793,7 +842,7 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | Package | Target (gzipped) | Notes |
 |---------|------------------|-------|
 | Foundation CSS | < 5KB | Tokens only, no components |
-| Core (full) | < 100KB | All 104 components |
+| Core (full) | < 100KB | All 121 components |
 | Core (tree-shaken) | < 15KB | Typical import of 5–10 components |
 
 ### 13.2 Runtime Performance
@@ -868,7 +917,7 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | P2 | Figma token sync | Automated design-to-code token pipeline |
 | ~~P2~~ | ~~Playwright E2E tests~~ | ~~Delivered — @playwright/test integrated~~ |
 | P2 | Tailwind CSS preset | `@cyberdyne/svelte-config-tailwind` for consumer apps |
-| P3 | Chart components | Built-in charting (beyond DataChart wrapper) |
+| ~~P3~~ | ~~Chart components~~ | ~~Delivered — 8 chart components (LineChart, BarChart, AreaChart, HeatmapChart, PieChart, Sparkline, Gauge, TreeMap)~~ |
 | P3 | i18n support | Internationalization for labels and content |
 | P3 | RTL support | Right-to-left layout support |
 
@@ -877,8 +926,8 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | Category | Planned Components |
 |----------|-------------------|
 | Gaming | Minimap, ResourceBar, AbilityPanel, HealthBar, Leaderboard |
-| Data Viz | LineChart, BarChart, PieChart, Heatmap |
-| Advanced Forms | DatePicker, TimePicker, ~~ColorPicker~~, TagInput, Autocomplete |
+| ~~Data Viz~~ | ~~Delivered — LineChart, BarChart, PieChart, HeatmapChart, AreaChart, Sparkline, Gauge, TreeMap~~ |
+| ~~Advanced Forms~~ | ~~Delivered — DatePicker, TimePicker, ~~ColorPicker~~, TagInput, ComboBox~~ |
 | Layout | Resizable panels, Masonry grid, Virtual list |
 
 ---
