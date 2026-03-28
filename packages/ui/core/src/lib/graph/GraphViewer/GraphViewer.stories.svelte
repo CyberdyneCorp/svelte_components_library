@@ -153,14 +153,14 @@
   nodes: knowledgeNodes,
   edges: knowledgeEdges,
   height: "650px",
-  config: { linkDistance: 120, chargeStrength: -400 },
+  config: { linkDistance: 120 },
 }} />
 
 <Story name="BlockchainNetwork" args={{
   nodes: blockchainNodes,
   edges: blockchainEdges,
   height: "650px",
-  config: { showEdgeLabels: true, linkDistance: 140, chargeStrength: -500 },
+  config: { showEdgeLabels: true, linkDistance: 140 },
 }} />
 
 <Story name="SmallGraph" args={{
@@ -173,12 +173,12 @@
   nodes: largeGraph.nodes,
   edges: largeGraph.edges,
   height: "700px",
-  config: { nodeRadius: 5, linkDistance: 60, chargeStrength: -150, showLabels: false },
+  config: { nodeRadius: 5, linkDistance: 60, chargeStrength: -1500, showLabels: false },
 }} />
 
 <Story name="Cyberdyne Ecosystem" args={{
   nodes: cyberdyneKnowledgeGraph.nodes,
   edges: cyberdyneKnowledgeGraph.edges,
   height: "750px",
-  config: { linkDistance: 130, chargeStrength: -450, showEdgeLabels: false },
+  config: { linkDistance: 130 },
 }} />

@@ -100,8 +100,8 @@
     maxZoom: config.maxZoom ?? 5,
     nodeRadius: config.nodeRadius ?? 8,
     linkDistance: config.linkDistance ?? 100,
-    chargeStrength: config.chargeStrength ?? -300,
-    centerStrength: config.centerStrength ?? 0.1,
+    chargeStrength: config.chargeStrength ?? -3000,
+    centerStrength: config.centerStrength ?? 0.01,
   });
 
   let canvas: HTMLCanvasElement;
@@ -110,10 +110,11 @@
   let animFrame = 0;
   let simulationRunning = false;
   let alpha = 1.0; // cooling factor — decays each frame
-  const ALPHA_DECAY = 0.98;
-  const ALPHA_MIN = 0.001;
-  const VELOCITY_DAMPING = 0.82;
-  const MAX_VELOCITY = 15;
+  const ALPHA_DECAY = 0.985;
+  const ALPHA_MIN = 0.005;
+  const VELOCITY_DAMPING = 0.85;
+  const MAX_VELOCITY = 20;
+  const FIXED_ALPHA = 0.1; // bridge_system uses fixed 0.1 for velocity integration
 
   let transform = $state({ x: 0, y: 0, scale: 1 });
   let searchQuery = $state("");
@@ -201,20 +202,27 @@
 
   function initSimulation() {
     initCount++;
-    const myInit = initCount;
 
     buildAdjacency();
 
     const cx = canvasWidth / 2;
     const cy = canvasHeight / 2;
+    const count = nodes.length || 1;
 
-    simNodes = nodes.map((n, i) => ({
-      ...n,
-      x: n.x ?? cx + (Math.random() - 0.5) * canvasWidth * 0.5,
-      y: n.y ?? cy + (Math.random() - 0.5) * canvasHeight * 0.5,
-      vx: 0,
-      vy: 0,
-    }));
+    // Circular initial layout — nodes pre-positioned evenly around a circle
+    // This gives the simulation a huge head start (like bridge_system)
+    const radius = Math.min(canvasWidth, canvasHeight) * 0.35;
+
+    simNodes = nodes.map((n, i) => {
+      const angle = (2 * Math.PI * i) / count;
+      return {
+        ...n,
+        x: n.x ?? cx + Math.cos(angle) * radius,
+        y: n.y ?? cy + Math.sin(angle) * radius,
+        vx: 0,
+        vy: 0,
+      };
+    });
 
     assignCommunityColors();
     buildEdgePairs();
@@ -246,47 +254,49 @@
     const len = simNodes.length;
 
     alpha *= ALPHA_DECAY;
+    const repulsion = Math.abs(strength); // use positive magnitude
 
-    // Repulsion — O(n²) but with fast path (no sqrt until needed)
+    // Repulsion — Coulomb-like: force = repulsion / dist²
+    // Applied as unit vector (dx/dist, dy/dist) × force magnitude
     for (let i = 0; i < len; i++) {
       const a = simNodes[i];
-      for (let j = i + 1; j < len; j++) {
+      if (a.pinned) continue;
+      let fx = 0, fy = 0;
+      for (let j = 0; j < len; j++) {
+        if (i === j) continue;
         const b = simNodes[j];
-        const dx = b.x - a.x;
-        const dy = b.y - a.y;
-        const distSq = dx * dx + dy * dy || 1;
-        // force = strength / distSq, direction = dx/dist, dy/dist
-        // combined: fx = strength * dx / (distSq * dist) = strength * dx / (distSq^1.5)
-        // Approximate: use distSq directly (skip sqrt for speed)
-        const force = (strength * alpha) / distSq;
-        const fx = dx * force;
-        const fy = dy * force;
-        if (!a.pinned) { a.vx -= fx; a.vy -= fy; }
-        if (!b.pinned) { b.vx += fx; b.vy += fy; }
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        const force = repulsion / (dist * dist);
+        fx += (dx / dist) * force;
+        fy += (dy / dist) * force;
       }
+      a.vx += fx * FIXED_ALPHA;
+      a.vy += fy * FIXED_ALPHA;
     }
 
-    // Attraction along edges
+    // Attraction along edges — simple spring
     for (let i = 0; i < edgePairs.length; i++) {
-      const [a, b] = edgePairs[i];
+      const [a, b, w] = edgePairs[i];
       const dx = b.x - a.x;
       const dy = b.y - a.y;
-      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      const force = (dist - linkDist) * 0.1 * alpha;
-      const fx = (dx / dist) * force;
-      const fy = (dy / dist) * force;
-      if (!a.pinned) { a.vx += fx; a.vy += fy; }
-      if (!b.pinned) { b.vx -= fx; b.vy -= fy; }
+      const attraction = 0.005 * (w || 1);
+      if (!a.pinned) { a.vx += dx * attraction; a.vy += dy * attraction; }
+      if (!b.pinned) { b.vx -= dx * attraction; b.vy -= dy * attraction; }
     }
 
-    // Center gravity + velocity update
+    // Center gravity + velocity integration
     for (let i = 0; i < len; i++) {
       const n = simNodes[i];
       if (n.pinned) continue;
-      n.vx += (cx - n.x) * centerStr * alpha;
-      n.vy += (cy - n.y) * centerStr * alpha;
+      // Weak center pull
+      n.vx += (cx - n.x) * centerStr;
+      n.vy += (cy - n.y) * centerStr;
+      // Damping (friction)
       n.vx *= VELOCITY_DAMPING;
       n.vy *= VELOCITY_DAMPING;
+      // Cap velocity
       const speed = n.vx * n.vx + n.vy * n.vy;
       if (speed > MAX_VELOCITY * MAX_VELOCITY) {
         const s = Math.sqrt(speed);
@@ -302,8 +312,7 @@
     if (!simulationRunning) return;
 
     // Run multiple ticks per frame when alpha is high (early simulation)
-    // This makes the layout converge faster without waiting for rendering
-    const ticksPerFrame = alpha > 0.5 ? 8 : alpha > 0.1 ? 4 : 1;
+    const ticksPerFrame = alpha > 0.5 ? 4 : alpha > 0.1 ? 2 : 1;
     for (let t = 0; t < ticksPerFrame; t++) {
       simulationTick();
       if (alpha < ALPHA_MIN) break;
