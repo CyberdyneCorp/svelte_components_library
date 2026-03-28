@@ -61,7 +61,7 @@
     width: number;
   };
 
-  let dragState = $state<{ nodeId: string; startX: number; startY: number; dragging: boolean } | null>(null);
+  let dragState = $state<{ nodeId: string; startX: number; startY: number; dragging: boolean; worldX: number; worldY: number } | null>(null);
   let dropTargetId = $state<string | null>(null);
   let dropZone = $state<DropZone | null>(null);
   let isPanning = false;
@@ -398,6 +398,12 @@
       const ny = node.y - node.height / 2;
       const isSelected = node.id === selectedNodeId;
       const isDropTarget = node.id === dropTargetId;
+      const isBeingDragged = dragState?.dragging && dragState.nodeId === node.id;
+
+      // Dim the original node while it's being dragged
+      if (isBeingDragged) {
+        ctx.globalAlpha = 0.25;
+      }
 
       // Node background
       if (node.depth === 0) {
@@ -499,6 +505,53 @@
         ctx.closePath();
         ctx.fill();
       }
+
+      // Reset alpha after drawing a dragged node
+      if (isBeingDragged) {
+        ctx.globalAlpha = 1.0;
+      }
+    }
+
+    // --- Ghost node while dragging ---
+    if (dragState?.dragging) {
+      const dragNode = layoutNodes.find(n => n.id === dragState.nodeId);
+      if (dragNode) {
+        const gx = dragState.worldX;
+        const gy = dragState.worldY;
+        const gw = dragNode.width;
+        const gh = dragNode.height;
+
+        // Semi-transparent ghost
+        ctx.globalAlpha = 0.5;
+        ctx.fillStyle = cssCache.brandDefault;
+        roundRect(ctx, gx - gw / 2, gy - gh / 2, gw, gh, 8);
+        ctx.fill();
+
+        // Ghost label
+        ctx.globalAlpha = 0.7;
+        const fontSize = dragNode.depth === 0 ? 14 : dragNode.depth === 1 ? 13 : 12;
+        ctx.font = `${dragNode.depth === 0 ? "600" : "400"} ${fontSize}px Inter, system-ui, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = dragNode.depth === 0 ? cssCache.bgPrimary : cssCache.textPrimary;
+        const maxTextW = gw - 16;
+        const displayText = truncateText(ctx, dragNode.label, maxTextW);
+        ctx.fillText(displayText, gx, gy);
+
+        ctx.globalAlpha = 1.0;
+
+        // Dashed line from ghost to drop target
+        if (dropZone) {
+          ctx.strokeStyle = cssCache.stateSuccess;
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([6, 4]);
+          ctx.beginPath();
+          ctx.moveTo(gx, gy);
+          ctx.lineTo(dropZone.x, dropZone.y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
     }
 
     ctx.restore();
@@ -551,7 +604,7 @@
     const node = getNodeAt(world.x, world.y);
 
     if (node && !readonly) {
-      dragState = { nodeId: node.id, startX: x, startY: y, dragging: false };
+      dragState = { nodeId: node.id, startX: x, startY: y, dragging: false, worldX: world.x, worldY: world.y };
     } else {
       isPanning = true;
     }
@@ -569,6 +622,8 @@
       }
       if (dragState.dragging) {
         const world = screenToWorld(x, y);
+        dragState.worldX = world.x;
+        dragState.worldY = world.y;
         dropZone = getDropZone(world.x, world.y, dragState.nodeId);
         dropTargetId = dropZone?.targetId ?? null;
         canvas.style.cursor = "grabbing";
