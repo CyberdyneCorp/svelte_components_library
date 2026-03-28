@@ -31,6 +31,8 @@ export { RangeSlider } from "./forms/RangeSlider/index.js";
 export { CodeEditor } from "./forms/CodeEditor/index.js";
 export { ColorPicker } from "./forms/ColorPicker/index.js";
 export { SearchInput } from "./forms/SearchInput/index.js";
+export { DatePicker } from "./forms/DatePicker/index.js";
+export { TimePicker } from "./forms/TimePicker/index.js";
 
 // Feedback
 export { Alert } from "./feedback/Alert/index.js";
@@ -43,6 +45,7 @@ export { Dropdown } from "./feedback/Dropdown/index.js";
 export { ProgressRing } from "./feedback/ProgressRing/index.js";
 export { Stepper } from "./feedback/Stepper/index.js";
 export { ErrorBoundary } from "./feedback/ErrorBoundary/index.js";
+export { Carousel } from "./feedback/Carousel/index.js";
 
 // Navigation
 export { Tabs } from "./navigation/Tabs/index.js";
@@ -74,6 +77,7 @@ export { ContentSlot } from "./layout/ContentSlot/index.js";
 export { Drawer } from "./layout/Drawer/index.js";
 export { SplitView } from "./layout/SplitView/index.js";
 export { GridLayout } from "./layout/GridLayout/index.js";
+export { PageShell } from "./layout/PageShell/index.js";
 
 // Overlay
 export { Modal } from "./overlay/Modal/index.js";
@@ -93,6 +97,7 @@ export { ChatResponse } from "./chat/ChatResponse/index.js";
 export { PromptExample } from "./chat/PromptExample/index.js";
 export { WelcomeText } from "./chat/WelcomeText/index.js";
 export { BotAnswer } from "./chat/BotAnswer/index.js";
+export { CommentThread } from "./chat/CommentThread/index.js";
 
 // Crypto / Web3
 export { TokenBalance } from "./crypto/TokenBalance/index.js";
@@ -104,6 +109,10 @@ export { PriceDisplay } from "./crypto/PriceDisplay/index.js";
 export { MetricCard } from "./crypto/MetricCard/index.js";
 export { GasEstimate } from "./crypto/GasEstimate/index.js";
 export { TierBadge } from "./crypto/TierBadge/index.js";
+export { SwapInterface } from "./crypto/SwapInterface/index.js";
+export { TokenSelector } from "./crypto/TokenSelector/index.js";
+export { StakingCard } from "./crypto/StakingCard/index.js";
+export { TransactionConfirm } from "./crypto/TransactionConfirm/index.js";
 
 // ML / Data Tools
 export { CodeBlock } from "./ml/CodeBlock/index.js";
@@ -114,6 +123,9 @@ export { StepProgress } from "./ml/StepProgress/index.js";
 export { Timeline } from "./ml/Timeline/index.js";
 export { DataChart } from "./ml/DataChart/index.js";
 export { Kbd } from "./ml/Kbd/index.js";
+export { NotebookCell } from "./ml/NotebookCell/index.js";
+export { ModelCard } from "./ml/ModelCard/index.js";
+export { ConfusionMatrix } from "./ml/ConfusionMatrix/index.js";
 
 // Graph
 export { GraphViewer } from "./graph/GraphViewer/index.js";
@@ -124,6 +136,10 @@ export { LineChart } from "./charts/LineChart/index.js";
 export { BarChart } from "./charts/BarChart/index.js";
 export { AreaChart } from "./charts/AreaChart/index.js";
 export { HeatmapChart } from "./charts/HeatmapChart/index.js";
+export { PieChart } from "./charts/PieChart/index.js";
+export { Sparkline } from "./charts/Sparkline/index.js";
+export { Gauge } from "./charts/Gauge/index.js";
+export { TreeMap } from "./charts/TreeMap/index.js";
 
 // Editor
 export { MarkdownEditor } from "./editor/MarkdownEditor/index.js";
