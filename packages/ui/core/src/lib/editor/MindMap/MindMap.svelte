@@ -9,6 +9,8 @@
     children?: MindMapNode[];
     collapsed?: boolean;
     color?: string;
+    note?: string;
+    link?: string;
   };
 
   type LayoutNode = {
@@ -53,6 +55,8 @@
   let editValue = $state("");
   let editPos = $state({ x: 0, y: 0, w: 0, h: 0 });
   let contextMenu = $state<{ x: number; y: number; nodeId: string; showColorSub: boolean } | null>(null);
+  let noteEditor = $state<{ nodeId: string; x: number; y: number; value: string } | null>(null);
+  let linkEditor = $state<{ nodeId: string; x: number; y: number; value: string } | null>(null);
   type DropZone = {
     targetId: string;
     position: "before" | "after" | "child"; // insert before/after sibling, or as child
@@ -93,6 +97,7 @@
       secondaryBorder: s.getPropertyValue("--color-action-secondary-border").trim() || "#00a8cc",
       stateError: s.getPropertyValue("--color-state-error").trim() || "#ff4444",
       stateWarning: s.getPropertyValue("--color-state-warning").trim() || "#ffb800",
+      actionSecondary: s.getPropertyValue("--color-action-secondary-default").trim() || "#00d4ff",
       stateSuccess: s.getPropertyValue("--color-state-success").trim() || "#00cc99",
     };
   }
@@ -552,6 +557,26 @@
         ctx.fill();
       }
 
+      // Note/link indicators (small icons top-right of node)
+      const nodeData = findNode(root, node.id);
+      if (nodeData) {
+        let iconX = nx + node.width - 6;
+        const iconY = ny + 3;
+        if (nodeData.link) {
+          ctx.font = "10px sans-serif";
+          ctx.fillStyle = cssCache.actionSecondary;
+          ctx.textAlign = "right";
+          ctx.fillText("🔗", iconX, iconY + 10);
+          iconX -= 14;
+        }
+        if (nodeData.note) {
+          ctx.font = "10px sans-serif";
+          ctx.fillStyle = cssCache.stateWarning;
+          ctx.textAlign = "right";
+          ctx.fillText("📝", iconX, iconY + 10);
+        }
+      }
+
       // Reset alpha after drawing a dragged node
       if (isBeingDragged) {
         ctx.globalAlpha = 1.0;
@@ -974,6 +999,44 @@
     contextMenu = null;
   }
 
+  function openNoteEditor(nodeId: string) {
+    const node = findNode(root, nodeId);
+    if (!node || !contextMenu) return;
+    noteEditor = { nodeId, x: contextMenu.x, y: contextMenu.y, value: node.note || "" };
+    linkEditor = null;
+    contextMenu = null;
+  }
+
+  function saveNote() {
+    if (!noteEditor) return;
+    saveUndoSnapshot();
+    const node = findNode(root, noteEditor.nodeId);
+    if (node) {
+      node.note = noteEditor.value.trim() || undefined;
+      notifyChange();
+    }
+    noteEditor = null;
+  }
+
+  function openLinkEditor(nodeId: string) {
+    const node = findNode(root, nodeId);
+    if (!node || !contextMenu) return;
+    linkEditor = { nodeId, x: contextMenu.x, y: contextMenu.y, value: node.link || "" };
+    noteEditor = null;
+    contextMenu = null;
+  }
+
+  function saveLink() {
+    if (!linkEditor) return;
+    saveUndoSnapshot();
+    const node = findNode(root, linkEditor.nodeId);
+    if (node) {
+      node.link = linkEditor.value.trim() || undefined;
+      notifyChange();
+    }
+    linkEditor = null;
+  }
+
   // --- Markdown export ---
   export function getMarkdown(): string {
     return nodeToMarkdown(root, 0);
@@ -991,6 +1054,15 @@
     } else {
       const indent = "  ".repeat(depth - 3);
       lines.push(`${indent}- ${node.label}`);
+    }
+
+    if (node.link) {
+      const indent = depth >= 3 ? "  ".repeat(depth - 3) + "  " : "";
+      lines.push(`${indent}> Link: [${node.link}](${node.link})`);
+    }
+    if (node.note) {
+      const indent = depth >= 3 ? "  ".repeat(depth - 3) + "  " : "";
+      lines.push(`${indent}> ${node.note}`);
     }
 
     if (node.children && !node.collapsed) {
@@ -1284,6 +1356,13 @@
         {findNode(root, contextMenu.nodeId)?.collapsed ? "Expand" : "Collapse"}
       </button>
       <div class="cy-mindmap__context-sep"></div>
+      <button class="cy-mindmap__context-item" role="menuitem" onclick={() => openNoteEditor(contextMenu!.nodeId)}>
+        {findNode(root, contextMenu!.nodeId)?.note ? "Edit Note" : "Add Note"} &#128196;
+      </button>
+      <button class="cy-mindmap__context-item" role="menuitem" onclick={() => openLinkEditor(contextMenu!.nodeId)}>
+        {findNode(root, contextMenu!.nodeId)?.link ? "Edit Link" : "Add Link"} &#128279;
+      </button>
+      <div class="cy-mindmap__context-sep"></div>
       <button
         class="cy-mindmap__context-item"
         role="menuitem"
@@ -1303,6 +1382,56 @@
           {/each}
         </div>
       {/if}
+    </div>
+  {/if}
+  {#if noteEditor}
+    <div
+      class="cy-mindmap__popover"
+      style="left: {noteEditor.x}px; top: {noteEditor.y}px;"
+      onclick={(e) => e.stopPropagation()}
+      onkeydown={(e) => { if (e.key === "Escape") { noteEditor = null; } e.stopPropagation(); }}
+    >
+      <div class="cy-mindmap__popover-header">
+        <span>Note</span>
+        <button class="cy-mindmap__popover-close" onclick={() => { noteEditor = null; }}>&#x2715;</button>
+      </div>
+      <textarea
+        class="cy-mindmap__popover-textarea"
+        rows="4"
+        placeholder="Add a note..."
+        value={noteEditor.value}
+        oninput={(e) => { noteEditor = { ...noteEditor!, value: (e.target as HTMLTextAreaElement).value }; }}
+      ></textarea>
+      <div class="cy-mindmap__popover-actions">
+        <button class="cy-mindmap__popover-btn cy-mindmap__popover-btn--save" onclick={saveNote}>Save</button>
+        <button class="cy-mindmap__popover-btn" onclick={() => { noteEditor = null; }}>Cancel</button>
+      </div>
+    </div>
+  {/if}
+
+  {#if linkEditor}
+    <div
+      class="cy-mindmap__popover"
+      style="left: {linkEditor.x}px; top: {linkEditor.y}px;"
+      onclick={(e) => e.stopPropagation()}
+      onkeydown={(e) => { if (e.key === "Escape") { linkEditor = null; } e.stopPropagation(); }}
+    >
+      <div class="cy-mindmap__popover-header">
+        <span>Link</span>
+        <button class="cy-mindmap__popover-close" onclick={() => { linkEditor = null; }}>&#x2715;</button>
+      </div>
+      <input
+        class="cy-mindmap__popover-input"
+        type="url"
+        placeholder="https://..."
+        value={linkEditor.value}
+        oninput={(e) => { linkEditor = { ...linkEditor!, value: (e.target as HTMLInputElement).value }; }}
+        onkeydown={(e) => { if (e.key === "Enter") saveLink(); }}
+      />
+      <div class="cy-mindmap__popover-actions">
+        <button class="cy-mindmap__popover-btn cy-mindmap__popover-btn--save" onclick={saveLink}>Save</button>
+        <button class="cy-mindmap__popover-btn" onclick={() => { linkEditor = null; }}>Cancel</button>
+      </div>
     </div>
   {/if}
 </div>
@@ -1439,6 +1568,114 @@
     height: 1px;
     background: var(--color-border-subtle);
     margin: 4px 0;
+  }
+
+  .cy-mindmap__popover {
+    position: absolute;
+    z-index: 1002;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 260px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .cy-mindmap__popover-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .cy-mindmap__popover-close {
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 4px;
+    border-radius: 4px;
+  }
+
+  .cy-mindmap__popover-close:hover {
+    color: var(--color-text-primary);
+    background: var(--color-surface-hover);
+  }
+
+  .cy-mindmap__popover-textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    padding: 8px;
+    color: var(--input-text);
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    resize: vertical;
+    min-height: 60px;
+    outline: none;
+  }
+
+  .cy-mindmap__popover-textarea:focus {
+    border-color: var(--input-border-focus);
+    box-shadow: var(--shadow-glow-cyan);
+  }
+
+  .cy-mindmap__popover-input {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    padding: 8px;
+    color: var(--input-text);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    outline: none;
+  }
+
+  .cy-mindmap__popover-input:focus {
+    border-color: var(--input-border-focus);
+    box-shadow: var(--shadow-glow-cyan);
+  }
+
+  .cy-mindmap__popover-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+
+  .cy-mindmap__popover-btn {
+    padding: 4px 12px;
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .cy-mindmap__popover-btn:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+  }
+
+  .cy-mindmap__popover-btn--save {
+    background: var(--color-action-brand-default);
+    color: var(--color-action-brand-text);
+    border-color: var(--color-action-brand-default);
+  }
+
+  .cy-mindmap__popover-btn--save:hover {
+    background: var(--color-action-brand-hover);
   }
 
   .cy-mindmap__color-sub {
