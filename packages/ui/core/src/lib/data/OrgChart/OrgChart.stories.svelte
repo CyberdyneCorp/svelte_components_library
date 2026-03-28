@@ -7,18 +7,27 @@
     label: "Alex Morgan",
     title: "CEO",
     color: "var(--color-state-warning)",
+    department: "Executive",
+    email: "alex@cyberdyne.io",
+    description: "Founder and CEO of Cyberdyne Corp. Drives the vision for decentralized AI and blockchain infrastructure.",
     children: [
       {
         id: "vp-eng",
         label: "Jordan Kim",
         title: "VP Engineering",
         color: "var(--color-action-brand-default)",
+        department: "Engineering",
+        email: "jordan@cyberdyne.io",
+        description: "Leads all engineering efforts including backend, frontend, ML infrastructure, and blockchain integrations. Manages a team of 30+ engineers.",
+        links: [{ label: "GitHub", url: "https://github.com" }, { label: "LinkedIn", url: "https://linkedin.com" }],
         children: [
           {
             id: "dir-backend",
             label: "Sam Patel",
             title: "Dir Backend",
             color: "var(--color-action-secondary-default)",
+            department: "Backend Engineering",
+            description: "Oversees API development, database architecture, and ML service infrastructure.",
             children: [
               { id: "lead-api", label: "Taylor Wu", title: "Lead API" },
               { id: "lead-ml", label: "Casey Lin", title: "Lead ML" },

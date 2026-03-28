@@ -8,6 +8,10 @@
     avatar?: string;
     children?: OrgNode[];
     color?: string;
+    description?: string;
+    email?: string;
+    department?: string;
+    links?: Array<{ label: string; url: string }>;
   };
 
   let {
@@ -34,6 +38,16 @@
   const GAP_LEVEL = 100;
 
   let selectedId = $state<string | null>(null);
+  let detailNode = $state<OrgNode | null>(null);
+
+  function findNode(tree: OrgNode, id: string): OrgNode | null {
+    if (tree.id === id) return tree;
+    for (const child of tree.children || []) {
+      const found = findNode(child, id);
+      if (found) return found;
+    }
+    return null;
+  }
   let collapsedIds = $state<Set<string>>(new Set());
   let viewBox = $state({ x: 0, y: 0, w: 1000, h: 600 });
   let isPanning = $state(false);
@@ -249,8 +263,18 @@
   }
 
   function handleNodeClick(node: OrgNode) {
-    selectedId = node.id;
+    if (selectedId === node.id && detailNode) {
+      // Clicking same node again closes the panel
+      detailNode = null;
+    } else {
+      selectedId = node.id;
+      detailNode = node;
+    }
     onnodeclick?.(node);
+  }
+
+  function closeDetail() {
+    detailNode = null;
   }
 
   function hasChildren(node: OrgNode): boolean {
@@ -407,6 +431,59 @@
       </g>
     {/each}
   </svg>
+
+  {#if detailNode}
+    <div class="cy-org__detail" onclick={(e) => e.stopPropagation()}>
+      <div class="cy-org__detail-header">
+        <div class="cy-org__detail-avatar">
+          {detailNode.label.split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase()}
+        </div>
+        <div class="cy-org__detail-identity">
+          <div class="cy-org__detail-name">{detailNode.label}</div>
+          {#if detailNode.title}
+            <div class="cy-org__detail-title">{detailNode.title}</div>
+          {/if}
+        </div>
+        <button class="cy-org__detail-close" onclick={closeDetail}>&#x2715;</button>
+      </div>
+
+      {#if detailNode.department}
+        <div class="cy-org__detail-row">
+          <span class="cy-org__detail-label">Department</span>
+          <span class="cy-org__detail-value">{detailNode.department}</span>
+        </div>
+      {/if}
+
+      {#if detailNode.email}
+        <div class="cy-org__detail-row">
+          <span class="cy-org__detail-label">Email</span>
+          <a class="cy-org__detail-link" href="mailto:{detailNode.email}">{detailNode.email}</a>
+        </div>
+      {/if}
+
+      {#if detailNode.description}
+        <div class="cy-org__detail-desc">
+          {detailNode.description}
+        </div>
+      {/if}
+
+      {#if detailNode.links && detailNode.links.length > 0}
+        <div class="cy-org__detail-links">
+          <span class="cy-org__detail-label">Links</span>
+          {#each detailNode.links as link}
+            <a class="cy-org__detail-link" href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
+          {/each}
+        </div>
+      {/if}
+
+      {#if detailNode.children && detailNode.children.length > 0}
+        <div class="cy-org__detail-row">
+          <span class="cy-org__detail-label">Direct reports</span>
+          <span class="cy-org__detail-value">{detailNode.children.length}</span>
+        </div>
+      {/if}
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -501,5 +578,129 @@
   .cy-org__toggle-text {
     fill: var(--cy-text);
     font-family: var(--font-body, "Inter", system-ui, sans-serif);
+  }
+
+  /* Detail panel */
+  .cy-org__detail {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 280px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: var(--shadow-lg);
+    z-index: 10;
+    font-family: var(--font-body);
+    max-height: calc(100% - 24px);
+    overflow-y: auto;
+  }
+
+  .cy-org__detail-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .cy-org__detail-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-action-brand-default);
+    color: var(--color-action-brand-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  .cy-org__detail-identity {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cy-org__detail-name {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--color-text-primary);
+  }
+
+  .cy-org__detail-title {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-top: 2px;
+  }
+
+  .cy-org__detail-close {
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .cy-org__detail-close:hover {
+    color: var(--color-text-primary);
+    background: var(--color-surface-hover);
+  }
+
+  .cy-org__detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .cy-org__detail-label {
+    font-size: 0.6875rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-tertiary);
+  }
+
+  .cy-org__detail-value {
+    font-size: 0.8125rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-mono);
+  }
+
+  .cy-org__detail-desc {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 10px 0;
+    padding: 8px;
+    background: var(--color-surface-raised);
+    border-radius: 6px;
+    border-left: 3px solid var(--color-action-brand-default);
+  }
+
+  .cy-org__detail-links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 0;
+  }
+
+  .cy-org__detail-link {
+    font-size: 0.8125rem;
+    color: var(--color-action-secondary-default);
+    text-decoration: none;
+  }
+
+  .cy-org__detail-link:hover {
+    text-decoration: underline;
   }
 </style>
