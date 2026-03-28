@@ -47,6 +47,7 @@ export { ProgressRing } from "./feedback/ProgressRing/index.js";
 export { Stepper } from "./feedback/Stepper/index.js";
 export { ErrorBoundary } from "./feedback/ErrorBoundary/index.js";
 export { Carousel } from "./feedback/Carousel/index.js";
+export { VideoPlayer } from "./feedback/VideoPlayer/index.js";
 
 // Navigation
 export { Tabs } from "./navigation/Tabs/index.js";
@@ -54,6 +55,7 @@ export { Breadcrumb } from "./navigation/Breadcrumb/index.js";
 export { Sidebar } from "./navigation/Sidebar/index.js";
 export { Header } from "./navigation/Header/index.js";
 export { MenuItem } from "./navigation/MenuItem/index.js";
+export { BreadcrumbOverflow } from "./navigation/BreadcrumbOverflow/index.js";
 
 // Data Display
 export { Table } from "./data/Table/index.js";
@@ -71,6 +73,7 @@ export { Kanban } from "./data/Kanban/index.js";
 export { DataTable } from "./data/DataTable/index.js";
 export { FilterBar } from "./data/FilterBar/index.js";
 export { SortableList } from "./data/SortableList/index.js";
+export { OrgChart } from "./data/OrgChart/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
@@ -151,6 +154,7 @@ export { MarkdownEditor } from "./editor/MarkdownEditor/index.js";
 export { MarkdownPreview } from "./editor/MarkdownPreview/index.js";
 export { MarkdownToolbar } from "./editor/MarkdownToolbar/index.js";
 export { MindMap } from "./editor/MindMap/index.js";
+export { RichTextEditor } from "./editor/RichTextEditor/index.js";
 
 // Maps
 export { MapView } from "./maps/MapView/index.js";
