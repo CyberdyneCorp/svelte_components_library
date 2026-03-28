@@ -216,20 +216,21 @@
   }
 
   // --- Undo / Redo ---
-  let undoStack: string[] = [];
-  let redoStack: string[] = [];
+  let undoStack = $state<string[]>([]);
+  let redoStack = $state<string[]>([]);
   const MAX_UNDO = 50;
 
   function pushUndo() {
-    undoStack.push(JSON.stringify(root));
-    if (undoStack.length > MAX_UNDO) undoStack.shift();
-    redoStack = []; // clear redo on new change
+    undoStack = [...undoStack, JSON.stringify(root)].slice(-MAX_UNDO);
+    redoStack = [];
   }
 
   function undo() {
     if (undoStack.length === 0) return;
-    redoStack.push(JSON.stringify(root));
-    const prev = undoStack.pop()!;
+    const newUndo = [...undoStack];
+    const prev = newUndo.pop()!;
+    undoStack = newUndo;
+    redoStack = [...redoStack, JSON.stringify(root)];
     root = JSON.parse(prev);
     selectedNodeId = null;
     onchange?.(root);
@@ -239,8 +240,10 @@
 
   function redo() {
     if (redoStack.length === 0) return;
-    undoStack.push(JSON.stringify(root));
-    const next = redoStack.pop()!;
+    const newRedo = [...redoStack];
+    const next = newRedo.pop()!;
+    redoStack = newRedo;
+    undoStack = [...undoStack, JSON.stringify(root)];
     root = JSON.parse(next);
     selectedNodeId = null;
     onchange?.(root);
