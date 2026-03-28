@@ -62,6 +62,8 @@
   };
 
   let dragState = $state<{ nodeId: string; startX: number; startY: number; dragging: boolean; worldX: number; worldY: number } | null>(null);
+  let fadeGhost = $state<{ worldX: number; worldY: number; width: number; height: number; label: string; opacity: number } | null>(null);
+  let fadeAnimFrame = 0;
   let dropTargetId = $state<string | null>(null);
   let dropZone = $state<DropZone | null>(null);
   let isPanning = false;
@@ -554,6 +556,23 @@
       }
     }
 
+    // --- Fading ghost (dropped on empty space) ---
+    if (fadeGhost) {
+      ctx.globalAlpha = fadeGhost.opacity;
+      ctx.fillStyle = cssCache.brandDefault;
+      roundRect(ctx, fadeGhost.worldX - fadeGhost.width / 2, fadeGhost.worldY - fadeGhost.height / 2, fadeGhost.width, fadeGhost.height, 8);
+      ctx.fill();
+
+      const fontSize = 13;
+      ctx.font = `400 ${fontSize}px Inter, system-ui, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = cssCache.bgPrimary;
+      ctx.fillText(fadeGhost.label, fadeGhost.worldX, fadeGhost.worldY);
+
+      ctx.globalAlpha = 1.0;
+    }
+
     ctx.restore();
   }
 
@@ -647,6 +666,32 @@
     const world = screenToWorld(x, y);
 
     if (dragState && !readonly) {
+      if (dragState.dragging && !dropZone) {
+        // Dropped on empty space — fade out the ghost
+        const dragNode = layoutNodes.find(n => n.id === dragState.nodeId);
+        if (dragNode) {
+          fadeGhost = {
+            worldX: dragState.worldX,
+            worldY: dragState.worldY,
+            width: dragNode.width,
+            height: dragNode.height,
+            label: dragNode.label,
+            opacity: 0.5,
+          };
+          cancelAnimationFrame(fadeAnimFrame);
+          function animateFade() {
+            if (!fadeGhost || fadeGhost.opacity <= 0.02) {
+              fadeGhost = null;
+              render();
+              return;
+            }
+            fadeGhost.opacity *= 0.85;
+            render();
+            fadeAnimFrame = requestAnimationFrame(animateFade);
+          }
+          animateFade();
+        }
+      }
       if (dragState.dragging && dropZone) {
         // Reparent with position awareness
         const srcId = dragState.nodeId;
