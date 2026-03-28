@@ -9,6 +9,7 @@ export { ChipButton } from "./primitives/ChipButton/index.js";
 export { ToggleGroup } from "./primitives/ToggleGroup/index.js";
 export { AvatarGroup } from "./primitives/AvatarGroup/index.js";
 export { ThemeToggle } from "./primitives/ThemeToggle/index.js";
+export { StarRating } from "./primitives/StarRating/index.js";
 export { Flag } from "./primitives/Flag/index.js";
 export { InformationPill } from "./primitives/InformationPill/index.js";
 export { CopyButton } from "./primitives/CopyButton/index.js";
@@ -68,6 +69,8 @@ export { DiffViewer } from "./data/DiffViewer/index.js";
 export { Calendar } from "./data/Calendar/index.js";
 export { Kanban } from "./data/Kanban/index.js";
 export { DataTable } from "./data/DataTable/index.js";
+export { FilterBar } from "./data/FilterBar/index.js";
+export { SortableList } from "./data/SortableList/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
@@ -140,6 +143,8 @@ export { PieChart } from "./charts/PieChart/index.js";
 export { Sparkline } from "./charts/Sparkline/index.js";
 export { Gauge } from "./charts/Gauge/index.js";
 export { TreeMap } from "./charts/TreeMap/index.js";
+export { GanttChart } from "./charts/GanttChart/index.js";
+export { ActivityHeatmap } from "./charts/ActivityHeatmap/index.js";
 
 // Editor
 export { MarkdownEditor } from "./editor/MarkdownEditor/index.js";
