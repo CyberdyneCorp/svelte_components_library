@@ -1,7 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
+  import { onMount, onDestroy, untrack } from "svelte";
 
   type GraphNode = {
     id: string;
@@ -197,7 +197,12 @@
     }
   }
 
+  let initCount = 0;
+
   function initSimulation() {
+    initCount++;
+    const myInit = initCount;
+
     buildAdjacency();
 
     const cx = canvasWidth / 2;
@@ -215,7 +220,13 @@
     alpha = 1.0;
     simulationRunning = true;
     cancelAnimationFrame(animFrame);
-    runSimulation();
+
+    // Guard: if another initSimulation was called while we were setting up, abort
+    function guardedRun() {
+      if (myInit !== initCount) return; // superseded by newer init
+      runSimulation();
+    }
+    guardedRun();
   }
 
   function runSimulation() {
@@ -651,14 +662,22 @@
     mounted = false;
   });
 
-  // Init/re-init when data changes (also fires on mount)
+  // Init/re-init ONLY when nodes/edges data actually changes
+  let lastNodesRef: any = null;
+  let lastEdgesRef: any = null;
   $effect(() => {
-    // access reactive deps to track changes
-    const _n = nodes;
-    const _e = edges;
-    if (mounted && canvas && canvasWidth > 0) {
-      initSimulation();
-    }
+    // Read the reactive props to create dependency
+    const n = nodes;
+    const e = edges;
+    // Only re-init if the reference actually changed (new data passed in)
+    untrack(() => {
+      if (n === lastNodesRef && e === lastEdgesRef) return;
+      lastNodesRef = n;
+      lastEdgesRef = e;
+      if (mounted && canvas && canvasWidth > 0) {
+        initSimulation();
+      }
+    });
   });
 
   // sync selectedNode from external selectedNodeId changes
