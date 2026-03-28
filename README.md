@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **121 components** across 15 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **127 components** across 15 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdyne/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdyne/svelte-ui-core` | 121 UI components across 15 categories |
+| `@cyberdyne/svelte-ui-core` | 127 UI components across 15 categories |
 
 ## Installation
 
@@ -77,22 +77,22 @@ Use components:
 </Card>
 ```
 
-## Components (121)
+## Components (127)
 
-### Primitives (13)
-`Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle`
+### Primitives (14)
+`Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle` · `StarRating`
 
 ### Forms (19)
 `TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `ComboBox` · `RangeSlider` · `CodeEditor` · `ColorPicker` · `SearchInput` · `DatePicker` · `TimePicker`
 
-### Feedback (12)
+### Feedback (11)
 `Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary` · `Carousel`
 
 ### Navigation (5)
 `Tabs` · `Breadcrumb` · `Sidebar` · `Header` · `MenuItem`
 
-### Data Display (13)
-`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable`
+### Data Display (15)
+`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList`
 
 ### Layout (8)
 `Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` · `SplitView` · `GridLayout` · `PageShell`
@@ -103,7 +103,7 @@ Use components:
 ### Auth (2)
 `LoginPage` (credentials + wallet modes) · `WalletConnect` (MetaMask, WalletConnect, Coinbase, Phantom)
 
-### Chat (8)
+### Chat (7)
 `Chatbox` · `ChatPanel` · `ChatResponse` · `PromptExample` · `WelcomeText` · `BotAnswer` · `CommentThread`
 
 ### Crypto / Web3 (13)
@@ -115,11 +115,11 @@ Use components:
 ### Graph & Search (2)
 `GraphViewer` (force-directed network graph with community detection, zoom/pan, search) · `SemanticSearch` (vector search results with relevance scores)
 
-### Charts (8)
-`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart` · `PieChart` · `Sparkline` · `Gauge` · `TreeMap`
+### Charts (10)
+`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart` · `PieChart` · `Sparkline` · `Gauge` · `TreeMap` · `GanttChart` · `ActivityHeatmap`
 
-### Editor (3)
-`MarkdownEditor` (with Mermaid diagram support) · `MarkdownPreview` · `MarkdownToolbar`
+### Editor (4)
+`MarkdownEditor` (with Mermaid diagram support) · `MarkdownPreview` · `MarkdownToolbar` · `MindMap`
 
 ### Maps (1)
 `MapView` (Leaflet with dark tiles, custom controls, geolocation)
@@ -220,13 +220,13 @@ pnpm release            # Build & publish
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
-│       └── core/            UI components (121 components)
+│       └── core/            UI components (127 components)
 │           └── src/lib/
-│               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, ...
+│               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
 │               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ...
 │               ├── feedback/     Alert, Toast, Skeleton, Stepper, ProgressRing, ErrorBoundary, Carousel, ...
 │               ├── navigation/   Tabs, Breadcrumb, Sidebar, Header, MenuItem
-│               ├── data/         Table, Pagination, VirtualizedList, FileTree, DiffViewer, Kanban, DataTable, ...
+│               ├── data/         Table, Pagination, VirtualizedList, FileTree, DiffViewer, Kanban, DataTable, FilterBar, SortableList, ...
 │               ├── layout/       Card, AppLayout, Drawer, SplitView, GridLayout, PageShell, ...
 │               ├── overlay/      Modal, ContextMenu, Popover, CommandPalette
 │               ├── auth/         LoginPage, WalletConnect
@@ -234,8 +234,8 @@ pnpm release            # Build & publish
 │               ├── crypto/       TokenBalance, NFTCard, GasEstimate, TierBadge, SwapInterface, StakingCard, ...
 │               ├── ml/           CodeBlock, Terminal, LogViewer, Timeline, NotebookCell, ModelCard, ConfusionMatrix, ...
 │               ├── graph/        GraphViewer (force-directed), SemanticSearch
-│               ├── charts/       LineChart, BarChart, AreaChart, HeatmapChart, PieChart, Sparkline, Gauge, TreeMap
-│               ├── editor/       MarkdownEditor, MarkdownPreview, MarkdownToolbar
+│               ├── charts/       LineChart, BarChart, AreaChart, HeatmapChart, PieChart, Sparkline, Gauge, TreeMap, GanttChart, ActivityHeatmap
+│               ├── editor/       MarkdownEditor, MarkdownPreview, MarkdownToolbar, MindMap
 │               ├── maps/         MapView (Leaflet)
 │               └── _testdata/    Shared test data module for stories
 └── docs/                    Built Storybook output
