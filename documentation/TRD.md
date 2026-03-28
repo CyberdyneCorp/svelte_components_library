@@ -44,7 +44,7 @@ The Cyberdyne Design System is a comprehensive, reusable Svelte 5 component libr
 
 The system encompasses:
 - **Design Tokens** — Colors, typography, spacing, radius, shadows, and animations defined as CSS custom properties
-- **127 UI Components** — Organized across 15 functional categories
+- **131 UI Components** — Organized across 15 functional categories
 - **Storybook Documentation** — Interactive component playground with auto-generated API docs
 - **CI/CD Pipeline** — Automated testing, versioning, and publishing workflows
 
@@ -332,7 +332,7 @@ export type BreakpointKey, SpacingKey, RadiusKey
 ### 5.2 @cyberdyne/svelte-ui-core
 
 **Version:** 0.1.0
-**Purpose:** 127 UI components
+**Purpose:** 131 UI components
 **Dependency:** `@cyberdyne/svelte-ui-foundation` (workspace:*)
 
 **Export Path:** `.` — All components from a single entry point

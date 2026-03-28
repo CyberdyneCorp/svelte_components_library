@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdyne/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdyne/svelte-ui-core` | 127 UI components across 15 categories |
+| `@cyberdyne/svelte-ui-core` | 131 UI components across 15 categories |
 
 ## Installation
 
@@ -77,7 +77,7 @@ Use components:
 </Card>
 ```
 
-## Components (127)
+## Components (131)
 
 ### Primitives (14)
 `Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle` · `StarRating`
