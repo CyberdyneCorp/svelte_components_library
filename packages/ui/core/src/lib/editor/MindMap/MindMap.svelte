@@ -856,7 +856,14 @@
     const node = getNodeAt(world.x, world.y);
     if (node) {
       selectedNodeId = node.id;
-      contextMenu = { x: e.clientX, y: e.clientY, nodeId: node.id, showColorSub: false };
+      // Position relative to the MindMap container, not viewport
+      const containerRect = container.getBoundingClientRect();
+      contextMenu = {
+        x: e.clientX - containerRect.left,
+        y: e.clientY - containerRect.top,
+        nodeId: node.id,
+        showColorSub: false,
+      };
       render();
     }
   }
