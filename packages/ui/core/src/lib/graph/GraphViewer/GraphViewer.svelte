@@ -109,12 +109,9 @@
   let simNodes: SimNode[] = [];
   let animFrame = 0;
   let simulationRunning = false;
-  let alpha = 1.0; // cooling factor — decays each frame
-  const ALPHA_DECAY = 0.985;
-  const ALPHA_MIN = 0.005;
+  const ALPHA = 0.1; // fixed time step (matches bridge_system)
   const VELOCITY_DAMPING = 0.85;
   const MAX_VELOCITY = 20;
-  const FIXED_ALPHA = 0.1; // bridge_system uses fixed 0.1 for velocity integration
 
   let transform = $state({ x: 0, y: 0, scale: 1 });
   let searchQuery = $state("");
@@ -226,7 +223,7 @@
 
     assignCommunityColors();
     buildEdgePairs();
-    alpha = 1.0;
+    refreshCSSCache();
     simulationRunning = true;
     cancelAnimationFrame(animFrame);
     runSimulation();
@@ -253,11 +250,9 @@
     const centerStr = cfg.centerStrength;
     const len = simNodes.length;
 
-    alpha *= ALPHA_DECAY;
-    const repulsion = Math.abs(strength); // use positive magnitude
+    const repulsion = Math.abs(strength);
 
-    // Repulsion — Coulomb-like: force = repulsion / dist²
-    // Applied as unit vector (dx/dist, dy/dist) × force magnitude
+    // Repulsion from all other nodes (Coulomb: force = repulsion / dist²)
     for (let i = 0; i < len; i++) {
       const a = simNodes[i];
       if (a.pinned) continue;
@@ -272,58 +267,45 @@
         fx += (dx / dist) * force;
         fy += (dy / dist) * force;
       }
-      a.vx += fx * FIXED_ALPHA;
-      a.vy += fy * FIXED_ALPHA;
-    }
 
-    // Attraction along edges — simple spring
-    for (let i = 0; i < edgePairs.length; i++) {
-      const [a, b, w] = edgePairs[i];
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-      const attraction = 0.005 * (w || 1);
-      if (!a.pinned) { a.vx += dx * attraction; a.vy += dy * attraction; }
-      if (!b.pinned) { b.vx -= dx * attraction; b.vy -= dy * attraction; }
-    }
+      // Attraction along edges
+      for (let k = 0; k < edgePairs.length; k++) {
+        const [ea, eb, w] = edgePairs[k];
+        if (ea === a) {
+          fx += (eb.x - a.x) * 0.005 * (w || 1);
+          fy += (eb.y - a.y) * 0.005 * (w || 1);
+        } else if (eb === a) {
+          fx += (ea.x - a.x) * 0.005 * (w || 1);
+          fy += (ea.y - a.y) * 0.005 * (w || 1);
+        }
+      }
 
-    // Center gravity + velocity integration
-    for (let i = 0; i < len; i++) {
-      const n = simNodes[i];
-      if (n.pinned) continue;
-      // Weak center pull
-      n.vx += (cx - n.x) * centerStr;
-      n.vy += (cy - n.y) * centerStr;
-      // Damping (friction)
-      n.vx *= VELOCITY_DAMPING;
-      n.vy *= VELOCITY_DAMPING;
+      // Center gravity
+      fx += (cx - a.x) * centerStr;
+      fy += (cy - a.y) * centerStr;
+
+      // Velocity integration (matches bridge_system exactly)
+      a.vx = a.vx * VELOCITY_DAMPING + fx * ALPHA;
+      a.vy = a.vy * VELOCITY_DAMPING + fy * ALPHA;
+
       // Cap velocity
-      const speed = n.vx * n.vx + n.vy * n.vy;
+      const speed = a.vx * a.vx + a.vy * a.vy;
       if (speed > MAX_VELOCITY * MAX_VELOCITY) {
         const s = Math.sqrt(speed);
-        n.vx = (n.vx / s) * MAX_VELOCITY;
-        n.vy = (n.vy / s) * MAX_VELOCITY;
+        a.vx = (a.vx / s) * MAX_VELOCITY;
+        a.vy = (a.vy / s) * MAX_VELOCITY;
       }
-      n.x += n.vx;
-      n.y += n.vy;
+
+      a.x += a.vx;
+      a.y += a.vy;
     }
   }
 
   function runSimulation() {
     if (!simulationRunning) return;
 
-    // Run multiple ticks per frame when alpha is high (early simulation)
-    const ticksPerFrame = alpha > 0.5 ? 4 : alpha > 0.1 ? 2 : 1;
-    for (let t = 0; t < ticksPerFrame; t++) {
-      simulationTick();
-      if (alpha < ALPHA_MIN) break;
-    }
-
+    simulationTick();
     render();
-
-    if (alpha < ALPHA_MIN && !draggingNode) {
-      simulationRunning = false;
-      return;
-    }
 
     animFrame = requestAnimationFrame(runSimulation);
   }
@@ -350,8 +332,7 @@
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Cache CSS vars once per render call
-    refreshCSSCache();
+    // CSS vars cached in initSimulation — not refreshed per frame
 
     const dpr = window.devicePixelRatio || 1;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -566,14 +547,9 @@
   function handleMouseUp(e: MouseEvent) {
     if (draggingNode) {
       draggingNode.pinned = false;
-      // Gentle settle — very low alpha so neighbors adjust slightly
-      alpha = 0.05;
       draggingNode = null;
       canvas.style.cursor = "default";
-      if (!simulationRunning) {
-        simulationRunning = true;
-        runSimulation();
-      }
+      // Simulation already running continuously — damping handles settling
     }
     if (!isPanning) {
       const { x, y } = getCanvasCoords(e);
