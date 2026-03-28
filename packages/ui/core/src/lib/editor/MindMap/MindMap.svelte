@@ -215,7 +215,44 @@
     return "n" + Math.random().toString(36).slice(2, 9);
   }
 
+  // --- Undo / Redo ---
+  let undoStack: string[] = [];
+  let redoStack: string[] = [];
+  const MAX_UNDO = 50;
+
+  function pushUndo() {
+    undoStack.push(JSON.stringify(root));
+    if (undoStack.length > MAX_UNDO) undoStack.shift();
+    redoStack = []; // clear redo on new change
+  }
+
+  function undo() {
+    if (undoStack.length === 0) return;
+    redoStack.push(JSON.stringify(root));
+    const prev = undoStack.pop()!;
+    root = JSON.parse(prev);
+    selectedNodeId = null;
+    onchange?.(root);
+    recalcLayout();
+    render();
+  }
+
+  function redo() {
+    if (redoStack.length === 0) return;
+    undoStack.push(JSON.stringify(root));
+    const next = redoStack.pop()!;
+    root = JSON.parse(next);
+    selectedNodeId = null;
+    onchange?.(root);
+    recalcLayout();
+    render();
+  }
+
+  let canUndo = $derived(undoStack.length > 0);
+  let canRedo = $derived(redoStack.length > 0);
+
   function notifyChange() {
+    pushUndo();
     root = cloneTree(root);
     onchange?.(root);
     recalcLayout();
@@ -1048,6 +1085,22 @@
   });
 
   function handleContainerKeydown(e: KeyboardEvent) {
+    // Undo/Redo shortcuts work regardless of selection
+    if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
+      e.preventDefault();
+      undo();
+      return;
+    }
+    if ((e.ctrlKey || e.metaKey) && (e.key === "Z" || (e.key === "z" && e.shiftKey))) {
+      e.preventDefault();
+      redo();
+      return;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === "y") {
+      e.preventDefault();
+      redo();
+      return;
+    }
     handleKeydown(e);
   }
 
@@ -1086,6 +1139,21 @@
           <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
         <span>Delete</span>
+      </button>
+      <div class="cy-mindmap__toolbar-sep"></div>
+      <button class="cy-mindmap__toolbar-btn" onclick={undo} disabled={!canUndo} title="Undo (Ctrl+Z)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 7h7a3 3 0 0 1 0 6H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 4L3 7l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Undo</span>
+      </button>
+      <button class="cy-mindmap__toolbar-btn" onclick={redo} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M13 7H6a3 3 0 0 0 0 6h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Redo</span>
       </button>
       <div class="cy-mindmap__toolbar-sep"></div>
       <button class="cy-mindmap__toolbar-btn" onclick={collapseAll} title="Collapse All">
