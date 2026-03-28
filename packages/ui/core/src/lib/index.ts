@@ -150,6 +150,7 @@ export { ActivityHeatmap } from "./charts/ActivityHeatmap/index.js";
 export { MarkdownEditor } from "./editor/MarkdownEditor/index.js";
 export { MarkdownPreview } from "./editor/MarkdownPreview/index.js";
 export { MarkdownToolbar } from "./editor/MarkdownToolbar/index.js";
+export { MindMap } from "./editor/MindMap/index.js";
 
 // Maps
 export { MapView } from "./maps/MapView/index.js";
