@@ -134,15 +134,14 @@
     let best: DropZone | null = null;
     let bestDist = Infinity;
 
-    for (const [id, pos] of nodePositions) {
+    for (const layoutNode of layoutNodes) {
+      const id = layoutNode.id;
       if (id === dragNodeId) continue;
-      const node = findNode(root, id);
-      if (!node) continue;
 
-      const nx = pos.x;
-      const ny = pos.y;
-      const nw = pos.width;
-      const nh = pos.height;
+      const nx = layoutNode.x;
+      const ny = layoutNode.y;
+      const nw = layoutNode.width;
+      const nh = layoutNode.height;
 
       // Check if cursor is near this node
       const dx = worldX - nx;
@@ -519,11 +518,13 @@
   }
 
   function getNodeAt(wx: number, wy: number): LayoutNode | null {
+    // Add padding to make nodes easier to click (especially at low zoom)
+    const pad = 8;
     for (let i = layoutNodes.length - 1; i >= 0; i--) {
       const n = layoutNodes[i];
-      const nx = n.x - n.width / 2;
-      const ny = n.y - n.height / 2;
-      if (wx >= nx && wx <= nx + n.width && wy >= ny && wy <= ny + n.height) {
+      const nx = n.x - n.width / 2 - pad;
+      const ny = n.y - n.height / 2 - pad;
+      if (wx >= nx && wx <= nx + n.width + pad * 2 && wy >= ny && wy <= ny + n.height + pad * 2) {
         return n;
       }
     }
