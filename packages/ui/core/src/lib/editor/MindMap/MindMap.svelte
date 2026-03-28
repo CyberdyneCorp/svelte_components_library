@@ -254,8 +254,12 @@
   let canUndo = $derived(undoStack.length > 0);
   let canRedo = $derived(redoStack.length > 0);
 
-  function notifyChange() {
+  // Save current state BEFORE the mutation is applied
+  function saveUndoSnapshot() {
     pushUndo();
+  }
+
+  function notifyChange() {
     root = cloneTree(root);
     onchange?.(root);
     recalcLayout();
@@ -733,6 +737,8 @@
         }
       }
       if (dragState.dragging && dropZone) {
+        // Save state before reparenting
+        saveUndoSnapshot();
         // Reparent with position awareness
         const srcId = dragState.nodeId;
         const targetId = dropZone.targetId;
@@ -831,6 +837,7 @@
     if (!editingNodeId) return;
     const node = findNode(root, editingNodeId);
     if (node && editValue.trim()) {
+      saveUndoSnapshot();
       node.label = editValue.trim();
       notifyChange();
     }
@@ -890,6 +897,7 @@
 
   // --- Node operations ---
   function addChild(parentId: string) {
+    saveUndoSnapshot();
     const parent = findNode(root, parentId);
     if (!parent) return;
     if (!parent.children) parent.children = [];
@@ -901,6 +909,7 @@
   }
 
   function addSibling(nodeId: string) {
+    saveUndoSnapshot();
     if (nodeId === root.id) return;
     const parent = findParent(root, nodeId);
     if (!parent) return;
@@ -912,6 +921,7 @@
   }
 
   function deleteNode(nodeId: string) {
+    saveUndoSnapshot();
     if (nodeId === root.id) return;
     removeNode(root, nodeId);
     selectedNodeId = null;
@@ -919,6 +929,7 @@
   }
 
   function toggleCollapse(nodeId: string) {
+    saveUndoSnapshot();
     const node = findNode(root, nodeId);
     if (!node) return;
     node.collapsed = !node.collapsed;
@@ -926,6 +937,7 @@
   }
 
   function collapseAll() {
+    saveUndoSnapshot();
     function collapse(node: MindMapNode) {
       if (node.children && node.children.length > 0) {
         node.collapsed = true;
@@ -937,6 +949,7 @@
   }
 
   function expandAll() {
+    saveUndoSnapshot();
     function expand(node: MindMapNode) {
       node.collapsed = false;
       if (node.children) node.children.forEach(expand);
@@ -946,6 +959,7 @@
   }
 
   function setNodeColor(nodeId: string, color: string) {
+    saveUndoSnapshot();
     const node = findNode(root, nodeId);
     if (!node) return;
     node.color = color;
