@@ -178,7 +178,7 @@
 
   function assignCommunityColors() {
     const COMMUNITY_COLORS = getCommunityColors();
-    const brandDefault = getCSSVar('--color-action-brand-default') || "#00ff41";
+    const brandDefault = cssCache.brandDefault;
     if (!cfg.enableCommunityDetection || !showCommunities) {
       for (const n of simNodes) {
         n.communityColor = n.color || brandDefault;
@@ -217,89 +217,123 @@
     }));
 
     assignCommunityColors();
+    buildEdgePairs();
     alpha = 1.0;
     simulationRunning = true;
     cancelAnimationFrame(animFrame);
-
-    // Guard: if another initSimulation was called while we were setting up, abort
-    function guardedRun() {
-      if (myInit !== initCount) return; // superseded by newer init
-      runSimulation();
-    }
-    guardedRun();
+    runSimulation();
   }
 
-  function runSimulation() {
-    if (!simulationRunning) return;
+  // Pre-build edge lookup for simulation
+  let edgePairs: Array<[SimNode, SimNode, number]> = [];
 
+  function buildEdgePairs() {
     const nodeMap = new Map(simNodes.map((n) => [n.id, n]));
+    edgePairs = [];
+    for (const e of edges) {
+      const a = nodeMap.get(e.source);
+      const b = nodeMap.get(e.target);
+      if (a && b) edgePairs.push([a, b, e.weight ?? 1]);
+    }
+  }
+
+  function simulationTick() {
     const cx = canvasWidth / 2;
     const cy = canvasHeight / 2;
     const strength = cfg.chargeStrength;
     const linkDist = cfg.linkDistance;
     const centerStr = cfg.centerStrength;
+    const len = simNodes.length;
 
-    // Apply alpha cooling — all forces scaled by alpha
     alpha *= ALPHA_DECAY;
 
-    // repulsion between all node pairs (scaled by alpha)
-    for (let i = 0; i < simNodes.length; i++) {
-      for (let j = i + 1; j < simNodes.length; j++) {
-        const a = simNodes[i];
+    // Repulsion — O(n²) but with fast path (no sqrt until needed)
+    for (let i = 0; i < len; i++) {
+      const a = simNodes[i];
+      for (let j = i + 1; j < len; j++) {
         const b = simNodes[j];
-        let dx = b.x - a.x;
-        let dy = b.y - a.y;
-        let dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        let force = (strength / (dist * dist)) * alpha;
-        let fx = (dx / dist) * force;
-        let fy = (dy / dist) * force;
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const distSq = dx * dx + dy * dy || 1;
+        // force = strength / distSq, direction = dx/dist, dy/dist
+        // combined: fx = strength * dx / (distSq * dist) = strength * dx / (distSq^1.5)
+        // Approximate: use distSq directly (skip sqrt for speed)
+        const force = (strength * alpha) / distSq;
+        const fx = dx * force;
+        const fy = dy * force;
         if (!a.pinned) { a.vx -= fx; a.vy -= fy; }
         if (!b.pinned) { b.vx += fx; b.vy += fy; }
       }
     }
 
-    // attraction along edges (scaled by alpha)
-    for (const e of edges) {
-      const a = nodeMap.get(e.source);
-      const b = nodeMap.get(e.target);
-      if (!a || !b) continue;
-      let dx = b.x - a.x;
-      let dy = b.y - a.y;
-      let dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      let force = (dist - linkDist) * 0.1 * alpha;
-      let fx = (dx / dist) * force;
-      let fy = (dy / dist) * force;
+    // Attraction along edges
+    for (let i = 0; i < edgePairs.length; i++) {
+      const [a, b] = edgePairs[i];
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const force = (dist - linkDist) * 0.1 * alpha;
+      const fx = (dx / dist) * force;
+      const fy = (dy / dist) * force;
       if (!a.pinned) { a.vx += fx; a.vy += fy; }
       if (!b.pinned) { b.vx -= fx; b.vy -= fy; }
     }
 
-    // center gravity + velocity update with damping and capping
-    for (const n of simNodes) {
+    // Center gravity + velocity update
+    for (let i = 0; i < len; i++) {
+      const n = simNodes[i];
       if (n.pinned) continue;
       n.vx += (cx - n.x) * centerStr * alpha;
       n.vy += (cy - n.y) * centerStr * alpha;
       n.vx *= VELOCITY_DAMPING;
       n.vy *= VELOCITY_DAMPING;
-      // Cap velocity to prevent wild oscillations
-      const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
-      if (speed > MAX_VELOCITY) {
-        n.vx = (n.vx / speed) * MAX_VELOCITY;
-        n.vy = (n.vy / speed) * MAX_VELOCITY;
+      const speed = n.vx * n.vx + n.vy * n.vy;
+      if (speed > MAX_VELOCITY * MAX_VELOCITY) {
+        const s = Math.sqrt(speed);
+        n.vx = (n.vx / s) * MAX_VELOCITY;
+        n.vy = (n.vy / s) * MAX_VELOCITY;
       }
       n.x += n.vx;
       n.y += n.vy;
     }
+  }
+
+  function runSimulation() {
+    if (!simulationRunning) return;
+
+    // Run multiple ticks per frame when alpha is high (early simulation)
+    // This makes the layout converge faster without waiting for rendering
+    const ticksPerFrame = alpha > 0.5 ? 8 : alpha > 0.1 ? 4 : 1;
+    for (let t = 0; t < ticksPerFrame; t++) {
+      simulationTick();
+      if (alpha < ALPHA_MIN) break;
+    }
 
     render();
 
-    // Stop when alpha is exhausted (simulation has cooled)
     if (alpha < ALPHA_MIN && !draggingNode) {
       simulationRunning = false;
-      render(); // final render
       return;
     }
 
     animFrame = requestAnimationFrame(runSimulation);
+  }
+
+  // Cached CSS vars — refreshed once per render, not per element
+  let cssCache: Record<string, string> = {};
+  function refreshCSSCache() {
+    const s = getComputedStyle(document.documentElement);
+    cssCache = {
+      bgPrimary: s.getPropertyValue('--color-bg-primary').trim() || "#0a0a0f",
+      surfaceActive: s.getPropertyValue('--color-surface-active').trim() || "rgba(58,58,74,0.3)",
+      borderDefault: s.getPropertyValue('--color-border-default').trim() || "rgba(58,58,74,0.6)",
+      textTertiary: s.getPropertyValue('--color-text-tertiary').trim() || "rgba(255,255,255,0.5)",
+      textPrimary: s.getPropertyValue('--color-text-primary').trim() || "#f0f0ff",
+      textSecondary: s.getPropertyValue('--color-text-secondary').trim() || "#aaaabe",
+      brandDefault: s.getPropertyValue('--color-action-brand-default').trim() || "#00ff41",
+      bgElevated: s.getPropertyValue('--color-bg-elevated').trim() || "#22222e",
+      borderSubtle: s.getPropertyValue('--color-border-subtle').trim() || "#22222e",
+    };
   }
 
   function render() {
@@ -307,10 +341,13 @@
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Cache CSS vars once per render call
+    refreshCSSCache();
+
     const dpr = window.devicePixelRatio || 1;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    ctx.fillStyle = getCSSVar('--color-bg-primary') || "#0a0a0f";
+    ctx.fillStyle = cssCache.bgPrimary;
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
     ctx.save();
@@ -339,8 +376,8 @@
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.lineTo(b.x, b.y);
-      const edgeDimmed = getCSSVar('--color-surface-active') || "rgba(58, 58, 74, 0.15)";
-      const edgeDefault = getCSSVar('--color-border-default') || "rgba(58, 58, 74, 0.6)";
+      const edgeDimmed = cssCache.surfaceActive;
+      const edgeDefault = cssCache.borderDefault;
       ctx.strokeStyle = dimmed
         ? edgeDimmed
         : (e.color || edgeDefault);
@@ -351,7 +388,7 @@
         const mx = (a.x + b.x) / 2;
         const my = (a.y + b.y) / 2;
         ctx.font = "10px Inter, sans-serif";
-        ctx.fillStyle = getCSSVar('--color-text-tertiary') || "rgba(255,255,255,0.5)";
+        ctx.fillStyle = cssCache.textTertiary;
         ctx.textAlign = "center";
         ctx.fillText(e.label, mx, my - 4);
       }
@@ -363,7 +400,7 @@
       const isSelected = n.id === selectedNodeId;
       const isHovered = hoveredNode?.id === n.id;
       const radius = (n.size || cfg.nodeRadius) * (isHovered ? 1.3 : 1);
-      const brandColor = getCSSVar('--color-action-brand-default') || "#00ff41";
+      const brandColor = cssCache.brandDefault;
       const color = (showCommunities && cfg.enableCommunityDetection)
         ? (n.communityColor || brandColor)
         : (n.color || brandColor);
@@ -372,7 +409,7 @@
       ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
 
       if (dimmed) {
-        ctx.fillStyle = getCSSVar('--color-surface-active') || "rgba(58, 58, 74, 0.3)";
+        ctx.fillStyle = cssCache.surfaceActive;
         ctx.fill();
         continue;
       }
@@ -385,7 +422,7 @@
       ctx.shadowBlur = 0;
 
       // stroke
-      ctx.strokeStyle = isSelected ? (getCSSVar('--color-text-primary') || "#ffffff") : (getCSSVar('--color-border-default') || "rgba(255,255,255,0.2)");
+      ctx.strokeStyle = isSelected ? (cssCache.textPrimary) : (cssCache.borderDefault);
       ctx.lineWidth = isSelected ? 2.5 : 1;
       ctx.stroke();
 
@@ -394,10 +431,10 @@
         const fontSize = Math.max(10, 12 / transform.scale);
         ctx.font = `${fontSize}px Inter, sans-serif`;
         ctx.textAlign = "center";
-        ctx.strokeStyle = getCSSVar('--color-bg-primary') || "rgba(0,0,0,0.8)";
+        ctx.strokeStyle = cssCache.bgPrimary;
         ctx.lineWidth = 3;
         ctx.strokeText(n.label, n.x, n.y + radius + fontSize + 2);
-        ctx.fillStyle = dimmed ? (getCSSVar('--color-text-tertiary') || "rgba(255,255,255,0.2)") : (getCSSVar('--color-text-primary') || "rgba(255,255,255,0.9)");
+        ctx.fillStyle = dimmed ? (cssCache.textTertiary) : (cssCache.textPrimary);
         ctx.fillText(n.label, n.x, n.y + radius + fontSize + 2);
       }
     }
@@ -419,19 +456,19 @@
       if (ty + tooltipH > canvasHeight) ty = sy - tooltipH - 16;
       if (ty < 0) ty = 4;
 
-      ctx.fillStyle = getCSSVar('--color-surface-default') || "rgba(18, 18, 26, 0.95)";
-      ctx.strokeStyle = getCSSVar('--color-action-secondary-border') || "rgba(0, 212, 255, 0.3)";
+      ctx.fillStyle = cssCache.bgElevated;
+      ctx.strokeStyle = cssCache.borderSubtle;
       ctx.lineWidth = 1;
       roundRect(ctx, tx, ty, tooltipW, tooltipH, 6);
       ctx.fill();
       ctx.stroke();
 
       ctx.font = "bold 12px Inter, sans-serif";
-      ctx.fillStyle = getCSSVar('--color-text-primary') || "#ffffff";
+      ctx.fillStyle = cssCache.textPrimary;
       ctx.textAlign = "left";
       ctx.fillText(hoveredNode.label, tx + 10, ty + 18);
       ctx.font = "11px Inter, sans-serif";
-      ctx.fillStyle = getCSSVar('--color-text-secondary') || "rgba(255,255,255,0.6)";
+      ctx.fillStyle = cssCache.textSecondary;
       ctx.fillText(`${connections} connection${connections !== 1 ? "s" : ""} · ${hoveredNode.group || "ungrouped"}`, tx + 10, ty + 36);
       ctx.restore();
     }
