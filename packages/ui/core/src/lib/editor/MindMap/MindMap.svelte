@@ -53,8 +53,17 @@
   let editValue = $state("");
   let editPos = $state({ x: 0, y: 0, w: 0, h: 0 });
   let contextMenu = $state<{ x: number; y: number; nodeId: string; showColorSub: boolean } | null>(null);
+  type DropZone = {
+    targetId: string;
+    position: "before" | "after" | "child"; // insert before/after sibling, or as child
+    x: number; // for visual indicator
+    y: number;
+    width: number;
+  };
+
   let dragState = $state<{ nodeId: string; startX: number; startY: number; dragging: boolean } | null>(null);
   let dropTargetId = $state<string | null>(null);
+  let dropZone = $state<DropZone | null>(null);
   let isPanning = false;
   let lastMouse = { x: 0, y: 0 };
   let editInput = $state<HTMLInputElement | null>(null);
@@ -118,6 +127,65 @@
       if (found) return found;
     }
     return null;
+  }
+
+  function getDropZone(worldX: number, worldY: number, dragNodeId: string): DropZone | null {
+    // Find the closest node and determine if we're above, below, or on it
+    let best: DropZone | null = null;
+    let bestDist = Infinity;
+
+    for (const [id, pos] of nodePositions) {
+      if (id === dragNodeId) continue;
+      const node = findNode(root, id);
+      if (!node) continue;
+
+      const nx = pos.x;
+      const ny = pos.y;
+      const nw = pos.width;
+      const nh = pos.height;
+
+      // Check if cursor is near this node
+      const dx = worldX - nx;
+      const dy = worldY - ny;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist > 150) continue; // too far
+
+      // Determine zone: top third = before, bottom third = after, center = child
+      const relY = worldY - (ny - nh / 2);
+      const thirdH = nh / 3;
+
+      let position: "before" | "after" | "child";
+      let indicatorY: number;
+
+      if (relY < thirdH) {
+        position = "before";
+        indicatorY = ny - nh / 2 - 2;
+      } else if (relY > thirdH * 2) {
+        position = "after";
+        indicatorY = ny + nh / 2 + 2;
+      } else {
+        position = "child";
+        indicatorY = ny;
+      }
+
+      // Don't allow dropping as child of root from drag — use side detection instead
+      // Don't allow making a node its own ancestor
+      const srcNode = findNode(root, dragNodeId);
+      if (srcNode && isDescendant(srcNode, id)) continue;
+
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = { targetId: id, position, x: nx, y: indicatorY, width: nw };
+      }
+    }
+
+    // Special: if dragging near the root on the opposite side, allow side switch
+    if (best && best.targetId === root.id) {
+      best.position = "child"; // dropping on root always means add as child
+    }
+
+    return best;
   }
 
   function findParent(tree: MindMapNode, id: string): MindMapNode | null {
@@ -371,13 +439,32 @@
       }
 
       // Drop target indicator
-      if (isDropTarget) {
-        ctx.strokeStyle = cssCache.stateSuccess;
-        ctx.lineWidth = 2;
-        ctx.setLineDash([4, 4]);
-        roundRect(ctx, nx - 3, ny - 3, node.width + 6, node.height + 6, 10);
-        ctx.stroke();
-        ctx.setLineDash([]);
+      if (isDropTarget && dropZone) {
+        if (dropZone.position === "child") {
+          // Highlight the whole node (adding as child)
+          ctx.strokeStyle = cssCache.stateSuccess;
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4, 4]);
+          roundRect(ctx, nx - 3, ny - 3, node.width + 6, node.height + 6, 10);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else {
+          // Draw a horizontal insertion line (before or after)
+          const lineY = dropZone.position === "before"
+            ? ny - 2
+            : ny + node.height + 2;
+          ctx.strokeStyle = cssCache.stateSuccess;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(nx, lineY);
+          ctx.lineTo(nx + node.width, lineY);
+          ctx.stroke();
+          // Small circle at the start of the line
+          ctx.fillStyle = cssCache.stateSuccess;
+          ctx.beginPath();
+          ctx.arc(nx, lineY, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       // Text
@@ -481,8 +568,8 @@
       }
       if (dragState.dragging) {
         const world = screenToWorld(x, y);
-        const target = getNodeAt(world.x, world.y);
-        dropTargetId = target && target.id !== dragState.nodeId ? target.id : null;
+        dropZone = getDropZone(world.x, world.y, dragState.nodeId);
+        dropTargetId = dropZone?.targetId ?? null;
         canvas.style.cursor = "grabbing";
         render();
       }
@@ -504,19 +591,36 @@
     const world = screenToWorld(x, y);
 
     if (dragState && !readonly) {
-      if (dragState.dragging && dropTargetId) {
-        // Reparent
+      if (dragState.dragging && dropZone) {
+        // Reparent with position awareness
         const srcId = dragState.nodeId;
-        if (srcId !== root.id && dropTargetId !== srcId) {
+        const targetId = dropZone.targetId;
+        const position = dropZone.position;
+
+        if (srcId !== root.id && targetId !== srcId) {
           const srcNode = findNode(root, srcId);
-          if (srcNode && !isDescendant(srcNode, dropTargetId)) {
+          if (srcNode && !isDescendant(srcNode, targetId)) {
             removeNode(root, srcId);
-            const target = findNode(root, dropTargetId);
-            if (target) {
-              if (!target.children) target.children = [];
-              target.children.push(srcNode);
-              notifyChange();
+
+            if (position === "child") {
+              // Add as child of target
+              const target = findNode(root, targetId);
+              if (target) {
+                if (!target.children) target.children = [];
+                target.children.push(srcNode);
+              }
+            } else {
+              // Insert before or after the target as a sibling
+              const parent = findParent(root, targetId);
+              if (parent && parent.children) {
+                const idx = parent.children.findIndex(c => c.id === targetId);
+                if (idx !== -1) {
+                  const insertIdx = position === "before" ? idx : idx + 1;
+                  parent.children.splice(insertIdx, 0, srcNode);
+                }
+              }
             }
+            notifyChange();
           }
         }
       } else if (!dragState.dragging) {
@@ -535,6 +639,7 @@
         }
       }
       dropTargetId = null;
+      dropZone = null;
       dragState = null;
       canvas.style.cursor = "default";
     }
