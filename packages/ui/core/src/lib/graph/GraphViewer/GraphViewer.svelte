@@ -109,6 +109,11 @@
   let simNodes: SimNode[] = [];
   let animFrame = 0;
   let simulationRunning = false;
+  let alpha = 1.0; // cooling factor — decays each frame
+  const ALPHA_DECAY = 0.98;
+  const ALPHA_MIN = 0.001;
+  const VELOCITY_DAMPING = 0.82;
+  const MAX_VELOCITY = 15;
 
   let transform = $state({ x: 0, y: 0, scale: 1 });
   let searchQuery = $state("");
@@ -207,7 +212,9 @@
     }));
 
     assignCommunityColors();
+    alpha = 1.0;
     simulationRunning = true;
+    cancelAnimationFrame(animFrame);
     runSimulation();
   }
 
@@ -221,9 +228,10 @@
     const linkDist = cfg.linkDistance;
     const centerStr = cfg.centerStrength;
 
-    let totalEnergy = 0;
+    // Apply alpha cooling — all forces scaled by alpha
+    alpha *= ALPHA_DECAY;
 
-    // repulsion between all node pairs
+    // repulsion between all node pairs (scaled by alpha)
     for (let i = 0; i < simNodes.length; i++) {
       for (let j = i + 1; j < simNodes.length; j++) {
         const a = simNodes[i];
@@ -231,7 +239,7 @@
         let dx = b.x - a.x;
         let dy = b.y - a.y;
         let dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        let force = strength / (dist * dist);
+        let force = (strength / (dist * dist)) * alpha;
         let fx = (dx / dist) * force;
         let fy = (dy / dist) * force;
         if (!a.pinned) { a.vx -= fx; a.vy -= fy; }
@@ -239,7 +247,7 @@
       }
     }
 
-    // attraction along edges
+    // attraction along edges (scaled by alpha)
     for (const e of edges) {
       const a = nodeMap.get(e.source);
       const b = nodeMap.get(e.target);
@@ -247,29 +255,36 @@
       let dx = b.x - a.x;
       let dy = b.y - a.y;
       let dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      let force = (dist - linkDist) * 0.1;
+      let force = (dist - linkDist) * 0.1 * alpha;
       let fx = (dx / dist) * force;
       let fy = (dy / dist) * force;
       if (!a.pinned) { a.vx += fx; a.vy += fy; }
       if (!b.pinned) { b.vx -= fx; b.vy -= fy; }
     }
 
-    // center gravity + velocity update
+    // center gravity + velocity update with damping and capping
     for (const n of simNodes) {
       if (n.pinned) continue;
-      n.vx += (cx - n.x) * centerStr;
-      n.vy += (cy - n.y) * centerStr;
-      n.vx *= 0.9;
-      n.vy *= 0.9;
+      n.vx += (cx - n.x) * centerStr * alpha;
+      n.vy += (cy - n.y) * centerStr * alpha;
+      n.vx *= VELOCITY_DAMPING;
+      n.vy *= VELOCITY_DAMPING;
+      // Cap velocity to prevent wild oscillations
+      const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
+      if (speed > MAX_VELOCITY) {
+        n.vx = (n.vx / speed) * MAX_VELOCITY;
+        n.vy = (n.vy / speed) * MAX_VELOCITY;
+      }
       n.x += n.vx;
       n.y += n.vy;
-      totalEnergy += n.vx * n.vx + n.vy * n.vy;
     }
 
     render();
 
-    if (totalEnergy < 0.01 && !draggingNode) {
+    // Stop when alpha is exhausted (simulation has cooled)
+    if (alpha < ALPHA_MIN && !draggingNode) {
       simulationRunning = false;
+      render(); // final render
       return;
     }
 
@@ -495,6 +510,12 @@
     if (draggingNode) {
       draggingNode.pinned = false;
       draggingNode = null;
+      // Reheat slightly after drag so nodes settle
+      alpha = Math.max(alpha, 0.1);
+      if (!simulationRunning) {
+        simulationRunning = true;
+        runSimulation();
+      }
     }
     if (!isPanning) {
       const { x, y } = getCanvasCoords(e);
@@ -612,25 +633,29 @@
 
   let resizeObserver: ResizeObserver;
 
+  let mounted = false;
+
   onMount(() => {
     resizeCanvas();
     resizeObserver = new ResizeObserver(resizeCanvas);
     resizeObserver.observe(container);
-    initSimulation();
+    mounted = true;
+    // initSimulation is triggered by the $effect below
   });
 
   onDestroy(() => {
     simulationRunning = false;
     cancelAnimationFrame(animFrame);
     resizeObserver?.disconnect();
+    mounted = false;
   });
 
-  // re-init when data changes
+  // Init/re-init when data changes (also fires on mount)
   $effect(() => {
-    // access reactive deps
-    nodes;
-    edges;
-    if (canvas && canvasWidth > 0) {
+    // access reactive deps to track changes
+    const _n = nodes;
+    const _e = edges;
+    if (mounted && canvas && canvasWidth > 0) {
       initSimulation();
     }
   });
