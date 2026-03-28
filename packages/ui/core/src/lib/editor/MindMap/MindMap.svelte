@@ -557,23 +557,38 @@
         ctx.fill();
       }
 
-      // Note/link indicators (small icons top-right of node)
+      // Note/link indicators — small icons below the node, clickable
       const nodeData = findNode(root, node.id);
-      if (nodeData) {
-        let iconX = nx + node.width - 6;
-        const iconY = ny + 3;
-        if (nodeData.link) {
-          ctx.font = "10px sans-serif";
-          ctx.fillStyle = cssCache.actionSecondary;
-          ctx.textAlign = "right";
-          ctx.fillText("🔗", iconX, iconY + 10);
-          iconX -= 14;
+      if (nodeData && (nodeData.note || nodeData.link)) {
+        const badgeY = ny + node.height + 4;
+        let badgeX = node.x; // centered
+        const badges: Array<{ type: "note" | "link"; x: number }> = [];
+
+        if (nodeData.note && nodeData.link) {
+          badges.push({ type: "note", x: node.x - 12 });
+          badges.push({ type: "link", x: node.x + 12 });
+        } else if (nodeData.note) {
+          badges.push({ type: "note", x: node.x });
+        } else {
+          badges.push({ type: "link", x: node.x });
         }
-        if (nodeData.note) {
+
+        for (const badge of badges) {
+          // Small rounded pill
+          const bw = 20;
+          const bh = 16;
+          ctx.fillStyle = badge.type === "note" ? cssCache.stateWarning : cssCache.actionSecondary;
+          ctx.globalAlpha = 0.9;
+          roundRect(ctx, badge.x - bw / 2, badgeY, bw, bh, 4);
+          ctx.fill();
+          ctx.globalAlpha = 1.0;
+
+          // Icon text
           ctx.font = "10px sans-serif";
-          ctx.fillStyle = cssCache.stateWarning;
-          ctx.textAlign = "right";
-          ctx.fillText("📝", iconX, iconY + 10);
+          ctx.fillStyle = cssCache.bgPrimary;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(badge.type === "note" ? "📝" : "🔗", badge.x, badgeY + bh / 2);
         }
       }
 
@@ -672,6 +687,36 @@
     return null;
   }
 
+  function getBadgeHit(wx: number, wy: number): { nodeId: string; type: "note" | "link" } | null {
+    for (const node of layoutNodes) {
+      const nodeData = findNode(root, node.id);
+      if (!nodeData || (!nodeData.note && !nodeData.link)) continue;
+
+      const ny = node.y - node.height / 2;
+      const badgeY = ny + node.height + 4;
+      const bw = 20;
+      const bh = 16;
+
+      const badges: Array<{ type: "note" | "link"; x: number }> = [];
+      if (nodeData.note && nodeData.link) {
+        badges.push({ type: "note", x: node.x - 12 });
+        badges.push({ type: "link", x: node.x + 12 });
+      } else if (nodeData.note) {
+        badges.push({ type: "note", x: node.x });
+      } else {
+        badges.push({ type: "link", x: node.x });
+      }
+
+      for (const badge of badges) {
+        if (wx >= badge.x - bw / 2 - 4 && wx <= badge.x + bw / 2 + 4 &&
+            wy >= badgeY - 4 && wy <= badgeY + bh + 4) {
+          return { nodeId: node.id, type: badge.type };
+        }
+      }
+    }
+    return null;
+  }
+
   function isCollapseToggle(node: LayoutNode, wx: number, _wy: number): boolean {
     if (!node.hasChildren) return false;
     const direction = node.x >= canvasWidth / 2 ? 1 : -1;
@@ -724,8 +769,9 @@
       render();
     } else {
       const world = screenToWorld(x, y);
+      const badge = getBadgeHit(world.x, world.y);
       const node = getNodeAt(world.x, world.y);
-      canvas.style.cursor = node ? "pointer" : "default";
+      canvas.style.cursor = badge ? "pointer" : node ? "pointer" : "default";
     }
     lastMouse = { x, y };
   }
@@ -796,18 +842,43 @@
           }
         }
       } else if (!dragState.dragging) {
-        // Click
-        const node = getNodeAt(world.x, world.y);
-        if (node) {
-          if (isCollapseToggle(node, world.x, world.y)) {
-            toggleCollapse(node.id);
+        // Click — check badge icons first, then node body
+        const badge = getBadgeHit(world.x, world.y);
+        if (badge) {
+          // Open note or link editor/action
+          selectedNodeId = badge.nodeId;
+          const containerRect = container.getBoundingClientRect();
+          const screenX = world.x * transform.scale + transform.x;
+          const screenY = world.y * transform.scale + transform.y;
+          if (badge.type === "note") {
+            const nodeData = findNode(root, badge.nodeId);
+            noteEditor = { nodeId: badge.nodeId, x: screenX, y: screenY + 20, value: nodeData?.note || "" };
+            linkEditor = null;
           } else {
-            selectedNodeId = node.id;
+            const nodeData = findNode(root, badge.nodeId);
+            if (nodeData?.link) {
+              // If link exists, open it in a new tab
+              window.open(nodeData.link, "_blank", "noopener,noreferrer");
+            } else {
+              // If no link, open the link editor
+              linkEditor = { nodeId: badge.nodeId, x: screenX, y: screenY + 20, value: "" };
+              noteEditor = null;
+            }
+          }
+          render();
+        } else {
+          const node = getNodeAt(world.x, world.y);
+          if (node) {
+            if (isCollapseToggle(node, world.x, world.y)) {
+              toggleCollapse(node.id);
+            } else {
+              selectedNodeId = node.id;
+              render();
+            }
+          } else {
+            selectedNodeId = null;
             render();
           }
-        } else {
-          selectedNodeId = null;
-          render();
         }
       }
       dropTargetId = null;
