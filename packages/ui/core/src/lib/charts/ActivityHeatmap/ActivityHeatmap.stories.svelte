@@ -8,24 +8,24 @@
     tags: ["autodocs"],
   });
 
+  // Use seeded pseudo-random for consistent data across renders
+  function seededRandom(seed) {
+    let s = seed;
+    return () => { s = (s * 16807 + 0) % 2147483647; return s / 2147483647; };
+  }
+
   function generateContributions() {
     const data = [];
+    const rng = seededRandom(42);
     const end = new Date("2026-03-28");
-    const start = new Date(end);
-    start.setDate(start.getDate() - 364);
+    const cursor = new Date(end);
+    cursor.setDate(cursor.getDate() - 364);
 
-    const cursor = new Date(start);
     while (cursor <= end) {
-      const dayOfWeek = cursor.getDay();
-      const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
-      const base = isWeekday ? 4 : 1;
-      const value = Math.random() < 0.15 ? 0 : Math.floor(Math.random() * (isWeekday ? 15 : 6) + base * Math.random());
-
-      const y = cursor.getFullYear();
-      const m = String(cursor.getMonth() + 1).padStart(2, "0");
-      const d = String(cursor.getDate()).padStart(2, "0");
-
-      data.push({ date: `${y}-${m}-${d}`, value });
+      const dow = cursor.getDay();
+      const isWeekday = dow >= 1 && dow <= 5;
+      const value = rng() < 0.15 ? 0 : Math.floor(rng() * (isWeekday ? 15 : 6));
+      data.push({ date: `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(cursor.getDate()).padStart(2, "0")}`, value });
       cursor.setDate(cursor.getDate() + 1);
     }
     return data;
@@ -33,20 +33,15 @@
 
   function generateDeployments() {
     const data = [];
+    const rng = seededRandom(99);
     const end = new Date("2026-03-28");
-    const start = new Date(end);
-    start.setDate(start.getDate() - 364);
+    const cursor = new Date(end);
+    cursor.setDate(cursor.getDate() - 364);
 
-    const cursor = new Date(start);
     while (cursor <= end) {
-      const value = Math.random() < 0.7 ? 0 : Math.floor(Math.random() * 5 + 1);
-
-      const y = cursor.getFullYear();
-      const m = String(cursor.getMonth() + 1).padStart(2, "0");
-      const d = String(cursor.getDate()).padStart(2, "0");
-
+      const value = rng() < 0.7 ? 0 : Math.floor(rng() * 5 + 1);
       if (value > 0) {
-        data.push({ date: `${y}-${m}-${d}`, value });
+        data.push({ date: `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(cursor.getDate()).padStart(2, "0")}`, value });
       }
       cursor.setDate(cursor.getDate() + 1);
     }
@@ -55,20 +50,15 @@
 
   function generateSparse() {
     const data = [];
-    const end = new Date("2026-03-28");
-    const start = new Date(end);
+    const rng = seededRandom(7);
+    const start = new Date("2026-03-28");
     start.setDate(start.getDate() - 364);
 
     for (let i = 0; i < 30; i++) {
-      const offset = Math.floor(Math.random() * 365);
+      const offset = Math.floor(rng() * 365);
       const d = new Date(start);
       d.setDate(d.getDate() + offset);
-
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-
-      data.push({ date: `${y}-${m}-${day}`, value: Math.floor(Math.random() * 10 + 1) });
+      data.push({ date: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`, value: Math.floor(rng() * 10 + 1) });
     }
     return data;
   }
