@@ -143,15 +143,18 @@
     position: absolute;
     top: 100%;
     left: 0;
-    background: var(--color-surface-raised, var(--color-surface-base));
-    border: 1px solid var(--color-border-subtle);
+    min-width: 600px;
+    max-width: 900px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
     padding: var(--space-6);
     margin-top: var(--space-2);
-    box-shadow: var(--shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.3));
+    box-shadow: var(--shadow-lg);
     z-index: 1001;
     animation: cy-megamenu-slide 0.2s ease-out;
     font-family: var(--font-body);
+    overflow: visible;
   }
 
   @keyframes cy-megamenu-slide {
@@ -167,8 +170,8 @@
 
   .cy-megamenu__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-8);
   }
 
   .cy-megamenu__section-title {
