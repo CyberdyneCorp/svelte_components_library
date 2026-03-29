@@ -35,33 +35,40 @@
       ],
     },
   ];
-
-  const twoColumnSections = [
-    defaultSections[0],
-    defaultSections[1],
-  ];
 </script>
 
-<Story name="Default" args={{ sections: defaultSections }}>
-  {#snippet children(args)}
-    <MegaMenu {...args}>
+<Story name="Default">
+  <div style="position: relative; min-height: 350px;">
+    <MegaMenu sections={defaultSections}>
       {#snippet trigger()}
-        <button style="padding: 8px 16px; background: var(--color-surface-hover, #222); color: var(--color-text-primary, #fff); border: 1px solid var(--color-border-subtle, #333); border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
+        <button style="padding: 8px 16px; background: var(--color-surface-hover); color: var(--color-text-primary); border: 1px solid var(--color-border-default); border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
           Explore ▾
         </button>
       {/snippet}
     </MegaMenu>
-  {/snippet}
+  </div>
 </Story>
 
-<Story name="TwoColumn" args={{ sections: twoColumnSections }}>
-  {#snippet children(args)}
-    <MegaMenu {...args}>
+<Story name="Open">
+  <div style="position: relative; min-height: 350px;">
+    <MegaMenu sections={defaultSections} open={true}>
       {#snippet trigger()}
-        <button style="padding: 8px 16px; background: var(--color-surface-hover, #222); color: var(--color-text-primary, #fff); border: 1px solid var(--color-border-subtle, #333); border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
+        <button style="padding: 8px 16px; background: var(--color-action-brand-default); color: var(--color-action-brand-text); border: none; border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
+          Explore ▾
+        </button>
+      {/snippet}
+    </MegaMenu>
+  </div>
+</Story>
+
+<Story name="TwoColumn">
+  <div style="position: relative; min-height: 300px;">
+    <MegaMenu sections={defaultSections.slice(0, 2)} open={true}>
+      {#snippet trigger()}
+        <button style="padding: 8px 16px; background: var(--color-surface-hover); color: var(--color-text-primary); border: 1px solid var(--color-border-default); border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
           Products ▾
         </button>
       {/snippet}
     </MegaMenu>
-  {/snippet}
+  </div>
 </Story>
