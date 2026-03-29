@@ -2,213 +2,121 @@ import { Meta } from "@storybook/blocks";
 
 <Meta title="Overview/Showcase" />
 
+<div style={{ fontFamily: 'Inter, system-ui, sans-serif', maxWidth: '800px' }}>
+
 # Component Showcase
 
-This page demonstrates how Cyberdyne components compose together in real-world scenarios. Browse the individual component stories to see each one in isolation with full interactive controls.
+<p style={{ color: '#8a8a9e', marginBottom: '2rem' }}>
+  Real-world composition examples showing how Cyberdyne components work together. Click any story link to see it live.
+</p>
 
 ---
 
 ## Building a Dashboard
 
-Combine layout, metrics, and charts to create data-rich dashboards.
+<p style={{ color: '#6a6a7e', marginBottom: '1rem' }}>Combine layout, metrics, and charts to create data-rich dashboards.</p>
 
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **MetricCard** | `Crypto / MetricCard / Default` | Key metric display with trend indicator |
-| **LineChart** | `Charts / LineChart / MultiSeries` | GPT-4 vs Claude vs Gemini training loss |
-| **BarChart** | `Charts / BarChart / Default` | ML component importance scores |
-| **PieChart** | `Charts / PieChart / Default` | Asset allocation breakdown |
-| **Gauge** | `Charts / Gauge / Default` | System health metric gauge |
-| **Sparkline** | `Charts / Sparkline / Default` | Inline price trend indicator |
-| **Table** | `Data Display / Table / Crypto Market` | 12-row sortable crypto market table |
-| **FilterBar** | `Data Display / FilterBar / Default` | Combined filter chips for tables and lists |
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 2rem', marginBottom: '2rem', fontSize: '0.875rem' }}>
+  <div><strong>MetricCard</strong> — <a href="?path=/story/crypto-metriccard--default">Key metric with trend</a></div>
+  <div><strong>LineChart</strong> — <a href="?path=/story/charts-linechart--multi-series">Multi-series training loss</a></div>
+  <div><strong>BarChart</strong> — <a href="?path=/story/charts-barchart--default">Feature importance scores</a></div>
+  <div><strong>PieChart</strong> — <a href="?path=/story/charts-piechart--default">Asset allocation</a></div>
+  <div><strong>Gauge</strong> — <a href="?path=/story/charts-gauge--default">System health metric</a></div>
+  <div><strong>Sparkline</strong> — <a href="?path=/story/charts-sparkline--default">Inline trend indicator</a></div>
+  <div><strong>Table</strong> — <a href="?path=/story/data-display-table--crypto-market">Sortable crypto market</a></div>
+  <div><strong>FilterBar</strong> — <a href="?path=/story/data-display-filterbar--default">Combined filter chips</a></div>
+</div>
 
 ---
 
 ## Building a PM Tool
 
-Components for project management: task boards, velocity tracking, and team analytics.
+<p style={{ color: '#6a6a7e', marginBottom: '1rem' }}>Task boards, velocity tracking, and team analytics.</p>
 
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **Kanban** | `Data Display / Kanban / Default` | Draggable kanban board |
-| **GanttChart** | `Charts / GanttChart / Default` | SVG timeline with task bars, dependencies, and groups |
-| **BurndownChart** | `Charts / BurndownChart / Default` | Sprint burndown with ideal vs actual lines |
-| **VelocityChart** | `Charts / VelocityChart / Default` | Sprint velocity tracking over time |
-| **CumulativeFlow** | `Charts / CumulativeFlow / Default` | Cumulative flow diagram for workflow stages |
-| **AgingWIP** | `Charts / AgingWIP / Default` | Work-in-progress aging analysis |
-| **SortableList** | `Data Display / SortableList / Default` | Drag-to-reorder list with HTML5 DnD |
-| **StarRating** | `Primitives / StarRating / Default` | Interactive star rating with half-star support |
-| **ActivityHeatmap** | `Charts / ActivityHeatmap / Default` | GitHub-style contribution grid heatmap |
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 2rem', marginBottom: '2rem', fontSize: '0.875rem' }}>
+  <div><strong>Kanban</strong> — <a href="?path=/story/data-display-kanban--sprint-board">Draggable sprint board</a></div>
+  <div><strong>GanttChart</strong> — <a href="?path=/story/charts-ganttchart--sprint-plan">Timeline with dependencies</a></div>
+  <div><strong>BurndownChart</strong> — <a href="?path=/story/charts-burndownchart--on-track">Sprint burndown vs ideal</a></div>
+  <div><strong>VelocityChart</strong> — <a href="?path=/story/charts-velocitychart--default">Velocity + average</a></div>
+  <div><strong>CumulativeFlow</strong> — <a href="?path=/story/charts-cumulativeflow--default">CFD workflow stages</a></div>
+  <div><strong>AgingWIP</strong> — <a href="?path=/story/charts-agingwip--default">WIP aging analysis</a></div>
+  <div><strong>SortableList</strong> — <a href="?path=/story/data-display-sortablelist--default">Drag-to-reorder backlog</a></div>
+  <div><strong>ActivityHeatmap</strong> — <a href="?path=/story/charts-activityheatmap--contributions">Activity grid</a></div>
+  <div><strong>StarRating</strong> — <a href="?path=/story/primitives-starrating--default">Satisfaction scores</a></div>
+</div>
 
 ---
 
 ## Building a Crypto App
 
-Full Web3 experience from login to staking.
+<p style={{ color: '#6a6a7e', marginBottom: '1rem' }}>DeFi interfaces: wallets, swaps, staking, transactions.</p>
 
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **LoginPage** | `Auth / LoginPage / Both` | Full login with credential + wallet modes |
-| **WalletConnect** | `Auth / WalletConnect / Default` | Wallet connection flow |
-| **SwapInterface** | `Crypto / SwapInterface / Default` | Token swap interface with price estimation |
-| **TokenBalance** | `Crypto / TokenBalance / WithChange` | ETH & BTC balances with price changes |
-| **TransactionList** | `Crypto / TransactionList / WithPending` | Mixed transaction statuses |
-| **GasEstimate** | `Crypto / GasEstimate / Default` | Gas fee selector (slow/standard/fast) |
-| **TierBadge** | `Crypto / TierBadge / AllTiers` | 6-tier NFT access system |
-| **StakingCard** | `Crypto / StakingCard / Default` | Staking position display with rewards |
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 2rem', marginBottom: '2rem', fontSize: '0.875rem' }}>
+  <div><strong>LoginPage</strong> — <a href="?path=/story/auth-loginpage--both-credentials-wallet">Credentials + wallet</a></div>
+  <div><strong>WalletConnect</strong> — <a href="?path=/story/auth-walletconnect--default">Multi-wallet connection</a></div>
+  <div><strong>SwapInterface</strong> — <a href="?path=/story/crypto-swapinterface--default">DEX token swap</a></div>
+  <div><strong>TokenBalance</strong> — <a href="?path=/story/crypto-tokenbalance--with-change">Balance + price change</a></div>
+  <div><strong>TransactionList</strong> — <a href="?path=/story/crypto-transactionlist--with-pending">Tx history</a></div>
+  <div><strong>GasEstimate</strong> — <a href="?path=/story/crypto-gasestimate--default">Gas fee selector</a></div>
+  <div><strong>TierBadge</strong> — <a href="?path=/story/crypto-tierbadge--all-tiers">NFT tier system</a></div>
+  <div><strong>StakingCard</strong> — <a href="?path=/story/crypto-stakingcard--active">Staking position</a></div>
+</div>
 
 ---
 
 ## Building a Knowledge Base
 
-Tools for documentation, code review, and knowledge graph exploration.
+<p style={{ color: '#6a6a7e', marginBottom: '1rem' }}>Graphs, editors, document navigation, and collaboration.</p>
 
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **GraphViewer** | `Graph / GraphViewer / KnowledgeGraph` | 15-node ML knowledge graph with community detection |
-| **MindMap** | `Editor / MindMap / Default` | Interactive mind map with drag-reparent, undo/redo, and markdown export |
-| **MarkdownEditor** | `Editor / MarkdownEditor / SplitMode` | Side-by-side editing with live preview |
-| **FileTree** | `Data Display / FileTree / Default` | Collapsible file/folder tree view |
-| **DiffViewer** | `Data Display / DiffViewer / Default` | Side-by-side code diff comparison |
-| **SemanticSearch** | `Graph / SemanticSearch / Default` | Semantic similarity search interface |
-| **CommentThread** | `Chat / CommentThread / Default` | Threaded comment discussion with replies |
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 2rem', marginBottom: '2rem', fontSize: '0.875rem' }}>
+  <div><strong>GraphViewer</strong> — <a href="?path=/story/graph-graphviewer--cyberdyne-ecosystem">Knowledge graph</a></div>
+  <div><strong>MindMap</strong> — <a href="?path=/story/editor-mindmap--project-planning">Mind map + MD export</a></div>
+  <div><strong>MarkdownEditor</strong> — <a href="?path=/story/editor-markdowneditor--with-mermaid">Split editor + Mermaid</a></div>
+  <div><strong>FileTree</strong> — <a href="?path=/story/data-display-filetree--project-structure">File browser</a></div>
+  <div><strong>DiffViewer</strong> — <a href="?path=/story/data-display-diffviewer--code-diff">Code diff</a></div>
+  <div><strong>SemanticSearch</strong> — <a href="?path=/story/graph-semanticsearch--default">Vector search results</a></div>
+  <div><strong>CommentThread</strong> — <a href="?path=/story/chat-commentthread--default">Nested comments</a></div>
+  <div><strong>OrgChart</strong> — <a href="?path=/story/data-display-orgchart--company">Org hierarchy</a></div>
+</div>
 
 ---
 
 ## Building an ML Platform
 
-Components for model training, monitoring, and evaluation.
+<p style={{ color: '#6a6a7e', marginBottom: '1rem' }}>Model management, experiments, inference monitoring.</p>
 
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **NotebookCell** | `ML / NotebookCell / Default` | Jupyter-style notebook cell with code and output |
-| **ModelCard** | `ML / ModelCard / Default` | ML model summary card with metrics |
-| **Terminal** | `ML / Terminal / CommandOutput` | nvidia-smi GPU monitoring |
-| **LogViewer** | `ML / LogViewer / Default` | Pipeline logs with severity filtering |
-| **CodeBlock** | `ML / CodeBlock / TypeScript` | Syntax-highlighted code |
-| **ConfusionMatrix** | `ML / ConfusionMatrix / Default` | Classification confusion matrix heatmap |
-| **StepProgress** | `ML / StepProgress / Horizontal` | ML pipeline steps |
-| **DataChart** | `Charts / LineChart / MultiSeries` | Training loss curves across model generations |
-
----
-
-## Charts
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **LineChart** | `Charts / LineChart / MultiSeries` | GPT-4 vs Claude vs Gemini training loss |
-| **BarChart** | `Charts / BarChart / Default` | ML component importance scores |
-| **AreaChart** | `Charts / AreaChart / Stacked` | Multi-asset portfolio allocation |
-| **HeatmapChart** | `Charts / HeatmapChart / CorrelationMatrix` | Feature correlation with diverging colors |
-| **HeatmapChart** | `Charts / HeatmapChart / Attention` | Transformer attention weights |
-| **PieChart** | `Charts / PieChart / Default` | Asset allocation breakdown |
-| **Sparkline** | `Charts / Sparkline / Default` | Inline price trend indicator |
-| **Gauge** | `Charts / Gauge / Default` | System health metric gauge |
-| **TreeMap** | `Charts / TreeMap / Default` | Hierarchical data proportional visualization |
-| **GanttChart** | `Charts / GanttChart / Default` | SVG timeline with task bars, dependencies, and groups |
-| **ActivityHeatmap** | `Charts / ActivityHeatmap / Default` | GitHub-style contribution grid heatmap |
-
-## Data Display
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **Table** | `Data Display / Table / Crypto Market` | 12-row sortable crypto market table |
-| **Table** | `Data Display / Table / ML Model Comparison` | Model benchmarks with striped rows |
-| **Table** | `Data Display / Table / Validator Nodes` | Cyberdyne validator node monitoring |
-| **DataTable** | `Data Display / DataTable / Default` | Sortable, paginated data table |
-| **FileTree** | `Data Display / FileTree / Default` | Collapsible file/folder tree view |
-| **DiffViewer** | `Data Display / DiffViewer / Default` | Side-by-side code diff comparison |
-| **Calendar** | `Data Display / Calendar / Default` | Interactive calendar with events |
-| **Kanban** | `Data Display / Kanban / Default` | Draggable kanban board |
-| **FilterBar** | `Data Display / FilterBar / Default` | Combined filter chips for tables and lists |
-| **SortableList** | `Data Display / SortableList / Default` | Drag-to-reorder list with HTML5 DnD |
-
-## Graph
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **GraphViewer** | `Graph / GraphViewer / KnowledgeGraph` | 15-node ML knowledge graph with community detection |
-| **GraphViewer** | `Graph / GraphViewer / BlockchainNetwork` | DeFi protocol network with weighted edges |
-| **GraphViewer** | `Graph / GraphViewer / LargeGraph` | 100-node stress test |
-| **SemanticSearch** | `Graph / SemanticSearch / Default` | Semantic similarity search interface |
-
-## Editor
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **MarkdownEditor** | `Editor / MarkdownEditor / SplitMode` | Side-by-side editing with live preview |
-| **MarkdownEditor** | `Editor / MarkdownEditor / Mermaid` | Embedded Mermaid diagram rendering |
-| **MindMap** | `Editor / MindMap / Default` | Interactive mind map with drag-reparent, undo/redo, and markdown export |
-
-## Maps
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **MapView** | `Maps / MapView / ValidatorNodes` | Cyberdyne validator node locations on interactive map |
-
-## Forms
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **ColorPicker** | `Forms / ColorPicker / Default` | Color selection with hex/rgb input |
-| **SearchInput** | `Forms / SearchInput / Default` | Search field with autocomplete |
-| **DatePicker** | `Forms / DatePicker / Default` | Calendar-based date selection |
-| **TimePicker** | `Forms / TimePicker / Default` | Time selection with hour/minute controls |
-| **DateRangePicker** | `Forms / DateRangePicker / WithPresets` | Calendar with preset ranges |
-| **MultiSelect** | `Forms / MultiSelect / WithGroups` | Grouped multi-select |
-| **CodeEditor** | `Forms / CodeEditor / Solidity` | Editable smart contract code |
-
-## Feedback
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **Carousel** | `Feedback / Carousel / Default` | Image/content carousel with navigation controls |
-
-## Layout
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **PageShell** | `Layout / PageShell / Default` | Full page shell with header, sidebar, and content area |
-| **SplitView** | `Layout / SplitView / Horizontal` | Resizable panels |
-
-## Chat
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **CommentThread** | `Chat / CommentThread / Default` | Threaded comment discussion with replies |
-
-## Primitives
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **ThemeToggle** | `Primitives / ThemeToggle / Default` | Dark/light theme toggle switch |
-| **StarRating** | `Primitives / StarRating / Default` | Interactive star rating with half-star support |
-
-## Overlay
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **CommandPalette** | `Overlay / CommandPalette / Default` | Cmd+K search overlay |
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 2rem', marginBottom: '2rem', fontSize: '0.875rem' }}>
+  <div><strong>NotebookCell</strong> — <a href="?path=/story/ml-notebookcell--default">Jupyter-style cell</a></div>
+  <div><strong>ModelCard</strong> — <a href="?path=/story/ml-modelcard--deployed">Model with metrics</a></div>
+  <div><strong>Terminal</strong> — <a href="?path=/story/ml-terminal--smart-contract-deployment">Terminal output</a></div>
+  <div><strong>LogViewer</strong> — <a href="?path=/story/ml-logviewer--cyberdyne-system-logs">Log feed + filter</a></div>
+  <div><strong>CodeBlock</strong> — <a href="?path=/story/ml-codeblock--type-script">Syntax-highlighted code</a></div>
+  <div><strong>ConfusionMatrix</strong> — <a href="?path=/story/ml-confusionmatrix--multi-class">Classification results</a></div>
+  <div><strong>StepProgress</strong> — <a href="?path=/story/ml-stepprogress--horizontal">Pipeline steps</a></div>
+</div>
 
 ---
 
-## Test Data
+## Navigation and Menus
 
-The library ships with a shared test data module at `_testdata/index.ts` containing realistic Cyberdyne-themed data:
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 2rem', marginBottom: '2rem', fontSize: '0.875rem' }}>
+  <div><strong>NavBar</strong> — <a href="?path=/story/navigation-navbar--default">Top nav with dropdowns</a></div>
+  <div><strong>MegaMenu</strong> — <a href="?path=/story/navigation-megamenu--open">Multi-column dropdown</a></div>
+  <div><strong>MenuBar</strong> — <a href="?path=/story/navigation-menubar--default">File/Edit/View bar</a></div>
+  <div><strong>Sidebar</strong> — <a href="?path=/story/navigation-sidebar--default">Multi-level sidebar</a></div>
+  <div><strong>CommandPalette</strong> — <a href="?path=/story/overlay-commandpalette--default">Cmd+K overlay</a></div>
+  <div><strong>BottomNav</strong> — <a href="?path=/story/navigation-bottomnav--default">Mobile bottom nav</a></div>
+</div>
 
-- **Crypto market** -- Top 10 tokens with prices, market caps, volumes, sparklines
-- **Transactions** -- Send, receive, swap, approve with various statuses
-- **Training metrics** -- Loss curves, accuracy, validation loss over 15 epochs
-- **Model benchmarks** -- MMLU, HumanEval, GSM8K scores
-- **Confusion matrix** -- 4-class blockchain transaction classification
-- **Portfolio timeline** -- 12-month portfolio growth with asset allocation breakdown
-- **Validator nodes** -- 6 Cyberdyne validators with uptime, rewards, status
-- **Knowledge graph** -- 29 nodes across 5 groups (Infrastructure, Finance, AI/ML, Products, Science)
-- **System logs** -- 12 entries from ml-service, chain-watcher, yieldpath, vision-factory
-- **Deployment terminal** -- Full smart contract deployment output
+---
 
-Import in your own stories:
-```ts
-import { cryptoMarket, trainingMetrics, systemLogs } from "../_testdata/index.js";
-```
+## Editors
+
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 2rem', marginBottom: '2rem', fontSize: '0.875rem' }}>
+  <div><strong>MarkdownEditor</strong> — <a href="?path=/story/editor-markdowneditor--split-mode">Edit + preview</a></div>
+  <div><strong>RichTextEditor</strong> — <a href="?path=/story/editor-richtexteditor--with-content">WYSIWYG</a></div>
+  <div><strong>MindMap</strong> — <a href="?path=/story/editor-mindmap--project-planning">Drag, edit, export</a></div>
+  <div><strong>CodeEditor</strong> — <a href="?path=/story/forms-codeeditor--type-script">Syntax input</a></div>
+</div>
+
+</div>
