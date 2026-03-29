@@ -114,57 +114,43 @@
     return `${y}-${m}-${day}`;
   }
 
-  // Build grid: array of weeks, each week is array of 7 day cells
+  // Build grid + month labels in a single pass
   type Cell = { date: string; value: number; col: number; row: number };
-
-  let grid = $derived.by((): Cell[] => {
-    const cells: Cell[] = [];
-    const cursor = new Date(dateStart);
-    let col = 0;
-
-    while (cursor <= dateEnd) {
-      const row = cursor.getDay(); // 0=Sun, 6=Sat
-      const dateStr = toISODate(cursor);
-      const value = dataMap.get(dateStr) || 0;
-      // Remap: Mon=0..Sun=6 for display (Mon at top)
-      const displayRow = row === 0 ? 6 : row - 1;
-      cells.push({ date: dateStr, value, col, row: displayRow });
-
-      // Advance day, new week on Sunday
-      cursor.setDate(cursor.getDate() + 1);
-      if (cursor.getDay() === 0) col++;
-    }
-    return cells;
-  });
-
-  let numWeeks = $derived.by(() => {
-    if (!grid.length) return 0;
-    return Math.max(...grid.map((c) => c.col)) + 1;
-  });
-
-  // Month labels
   type MonthLabel = { label: string; col: number };
 
-  let monthLabels = $derived.by((): MonthLabel[] => {
-    const labels: MonthLabel[] = [];
-    let lastMonth = -1;
+  let gridData = $derived.by((): { cells: Cell[]; months: MonthLabel[]; weeks: number } => {
+    const cells: Cell[] = [];
+    const months: MonthLabel[] = [];
     const cursor = new Date(dateStart);
     let col = 0;
+    let lastMonth = -1;
 
     while (cursor <= dateEnd) {
+      const dow = cursor.getDay();
+      const dateStr = toISODate(cursor);
+      const value = dataMap.get(dateStr) || 0;
+      const displayRow = dow === 0 ? 6 : dow - 1;
+      cells.push({ date: dateStr, value, col, row: displayRow });
+
+      // Month labels — check at start of each week
       const month = cursor.getMonth();
-      if (month !== lastMonth && cursor.getDay() === 0) {
-        labels.push({
+      if (month !== lastMonth && dow === 0) {
+        months.push({
           label: cursor.toLocaleDateString("en-US", { month: "short" }),
           col,
         });
         lastMonth = month;
       }
+
       cursor.setDate(cursor.getDate() + 1);
       if (cursor.getDay() === 0) col++;
     }
-    return labels;
+    return { cells, months, weeks: col + 1 };
   });
+
+  let grid = $derived(gridData.cells);
+  let numWeeks = $derived(gridData.weeks);
+  let monthLabels = $derived(gridData.months);
 
   let svgWidth = $derived(DAY_LABEL_WIDTH + numWeeks * (cellSize + cellGap));
   let svgHeight = $derived(MONTH_LABEL_HEIGHT + 7 * (cellSize + cellGap) + LEGEND_HEIGHT);
@@ -218,21 +204,35 @@
       {/each}
     {/if}
 
-    <!-- Cells -->
-    {#each grid as cell}
-      <rect
-        x={DAY_LABEL_WIDTH + cell.col * (cellSize + cellGap)}
-        y={MONTH_LABEL_HEIGHT + cell.row * (cellSize + cellGap)}
-        width={cellSize}
-        height={cellSize}
-        rx="2"
-        ry="2"
-        fill={colors[getLevel(cell.value)]}
-        class="cy-heatmap__cell"
-        onmouseenter={(e) => onCellMouseEnter(e, cell)}
-        onmouseleave={onCellMouseLeave}
-      />
-    {/each}
+    <!-- Cells (event delegation via group) -->
+    <g
+      class="cy-heatmap__cells"
+      onmousemove={(e) => {
+        if (!showTooltip || !containerEl) return;
+        const target = e.target as SVGElement;
+        const idx = target.dataset?.idx;
+        if (idx != null) {
+          const cell = grid[+idx];
+          const bounds = containerEl.getBoundingClientRect();
+          hoveredCell = { date: cell.date, value: cell.value, x: e.clientX - bounds.left + 12, y: e.clientY - bounds.top - 8 };
+        }
+      }}
+      onmouseleave={onCellMouseLeave}
+    >
+      {#each grid as cell, i}
+        <rect
+          x={DAY_LABEL_WIDTH + cell.col * (cellSize + cellGap)}
+          y={MONTH_LABEL_HEIGHT + cell.row * (cellSize + cellGap)}
+          width={cellSize}
+          height={cellSize}
+          rx="2"
+          ry="2"
+          fill={colors[getLevel(cell.value)]}
+          class="cy-heatmap__cell"
+          data-idx={i}
+        />
+      {/each}
+    </g>
 
     <!-- Legend -->
     <text
@@ -300,7 +300,6 @@
   }
 
   .cy-heatmap__cell {
-    transition: opacity 100ms ease;
     stroke: var(--color-surface-default);
     stroke-width: 1;
   }
@@ -308,7 +307,6 @@
   .cy-heatmap__cell:hover {
     opacity: 0.8;
     stroke: var(--color-border-default);
-    stroke-width: 1.5;
   }
 
   .cy-heatmap__legend-text {
