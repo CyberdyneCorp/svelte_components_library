@@ -56,6 +56,10 @@ export { Sidebar } from "./navigation/Sidebar/index.js";
 export { Header } from "./navigation/Header/index.js";
 export { MenuItem } from "./navigation/MenuItem/index.js";
 export { BreadcrumbOverflow } from "./navigation/BreadcrumbOverflow/index.js";
+export { NavBar } from "./navigation/NavBar/index.js";
+export { MegaMenu } from "./navigation/MegaMenu/index.js";
+export { MenuBar } from "./navigation/MenuBar/index.js";
+export { BottomNav } from "./navigation/BottomNav/index.js";
 
 // Data Display
 export { Table } from "./data/Table/index.js";
