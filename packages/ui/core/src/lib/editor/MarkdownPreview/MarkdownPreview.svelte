@@ -20,6 +20,14 @@
       .replace(/'/g, "&#039;");
   }
 
+  function sanitizeUrl(url: string): string {
+    const trimmed = url.trim().toLowerCase();
+    if (trimmed.startsWith("javascript:") || trimmed.startsWith("data:") || trimmed.startsWith("vbscript:")) {
+      return "#";
+    }
+    return url;
+  }
+
   function parseMarkdown(md: string): string {
     if (!md) return "";
 
@@ -101,10 +109,14 @@
     });
 
     // 9. Images (before links to avoid conflict)
-    html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="cy-md-img">');
+    html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt: string, url: string) => {
+      return `<img src="${sanitizeUrl(url)}" alt="${alt}" class="cy-md-img">`;
+    });
 
     // 8. Links
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text: string, url: string) => {
+      return `<a href="${sanitizeUrl(url)}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+    });
 
     // 5. Bold
     html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");

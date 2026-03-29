@@ -1,6 +1,8 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import { onDestroy } from "svelte";
+
   let {
     address = "",
     truncate = true,
@@ -14,6 +16,7 @@
   } = $props();
 
   let copied = $state(false);
+  let copyTimer: ReturnType<typeof setTimeout> | undefined;
 
   let displayAddress = $derived(
     truncate && address && address.length > 12
@@ -34,8 +37,13 @@
       document.body.removeChild(el);
     }
     copied = true;
-    setTimeout(() => (copied = false), 2000);
+    clearTimeout(copyTimer);
+    copyTimer = setTimeout(() => (copied = false), 2000);
   }
+
+  onDestroy(() => {
+    clearTimeout(copyTimer);
+  });
 </script>
 
 <div class="cy-address cy-address--{size}">

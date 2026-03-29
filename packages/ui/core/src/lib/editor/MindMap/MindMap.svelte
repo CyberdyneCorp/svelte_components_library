@@ -866,7 +866,10 @@
             const nodeData = findNode(root, badge.nodeId);
             if (nodeData?.link) {
               // If link exists, open it in a new tab
-              window.open(nodeData.link, "_blank", "noopener,noreferrer");
+              const trimmedLink = nodeData.link.trim().toLowerCase();
+              if (trimmedLink.startsWith("http://") || trimmedLink.startsWith("https://")) {
+                window.open(nodeData.link, "_blank", "noopener,noreferrer");
+              }
             } else {
               // If no link, open the link editor
               linkEditor = { nodeId: badge.nodeId, x: screenX, y: screenY + 20, value: "" };
@@ -1241,6 +1244,7 @@
 
   onDestroy(() => {
     resizeObserver?.disconnect();
+    cancelAnimationFrame(fadeAnimFrame);
     mounted = false;
   });
 

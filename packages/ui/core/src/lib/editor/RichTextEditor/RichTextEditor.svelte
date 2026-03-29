@@ -74,16 +74,33 @@
     headingOpen = false;
   }
 
+  function sanitizeHtml(html: string): string {
+    return html
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/\bon\w+\s*=\s*["'][^"']*["']/gi, "")
+      .replace(/\bon\w+\s*=\s*[^\s>]+/gi, "")
+      .replace(/javascript\s*:/gi, "");
+  }
+
+  function sanitizeUrl(url: string): string {
+    const trimmed = url.trim().toLowerCase();
+    if (trimmed.startsWith("javascript:") || trimmed.startsWith("data:") || trimmed.startsWith("vbscript:")) {
+      return "#";
+    }
+    return url;
+  }
+
   function insertLink() {
     const url = prompt("Enter URL:");
     if (url) {
-      exec("createLink", url);
+      const safeUrl = sanitizeUrl(url);
+      exec("createLink", safeUrl);
     }
   }
 
   $effect(() => {
     if (editorEl && value !== editorEl.innerHTML) {
-      editorEl.innerHTML = value;
+      editorEl.innerHTML = sanitizeHtml(value);
     }
   });
 </script>

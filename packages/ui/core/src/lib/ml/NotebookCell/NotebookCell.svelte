@@ -23,6 +23,16 @@
 
   let outputCollapsed = $state(false);
 
+  function sanitizeHtml(html: string): string {
+    return html
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/\bon\w+\s*=\s*["'][^"']*["']/gi, "")
+      .replace(/\bon\w+\s*=\s*[^\s>]+/gi, "")
+      .replace(/javascript\s*:/gi, "");
+  }
+
+  let sanitizedOutput = $derived(outputType === "html" ? sanitizeHtml(output) : output);
+
   let lines = $derived(code.split("\n"));
   let lineCount = $derived(lines.length);
 
@@ -91,7 +101,7 @@
         {#if !outputCollapsed}
           <div class="cy-nc__output" class:cy-nc__output--error={outputType === "error"}>
             {#if outputType === "html"}
-              {@html output}
+              {@html sanitizedOutput}
             {:else if outputType === "image"}
               <img class="cy-nc__output-img" src={output} alt="Cell output" />
             {:else}

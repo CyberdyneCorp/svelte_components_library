@@ -1,6 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import { onDestroy } from "svelte";
   import MarkdownToolbar from "../MarkdownToolbar/MarkdownToolbar.svelte";
   import MarkdownPreview from "../MarkdownPreview/MarkdownPreview.svelte";
 
@@ -94,6 +95,10 @@
       debouncedValue = value;
     }, 150);
   }
+
+  onDestroy(() => {
+    clearTimeout(debounceTimer);
+  });
 </script>
 
 <div class="cy-md-editor" style="height: {height}">

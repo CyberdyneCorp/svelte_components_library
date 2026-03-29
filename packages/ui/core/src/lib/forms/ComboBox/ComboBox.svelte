@@ -51,18 +51,22 @@
     });
   });
 
+  function escapeHtml(text: string): string {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
   function highlightMatch(text: string): string {
-    if (!search.trim()) return text;
+    if (!search.trim()) return escapeHtml(text);
     const s = search.toLowerCase();
     const t = text.toLowerCase();
     let result = "";
     let si = 0;
     for (let i = 0; i < text.length; i++) {
       if (si < s.length && t[i] === s[si]) {
-        result += `<mark class="cy-cb__match">${text[i]}</mark>`;
+        result += `<mark class="cy-cb__match">${escapeHtml(text[i])}</mark>`;
         si++;
       } else {
-        result += text[i];
+        result += escapeHtml(text[i]);
       }
     }
     return result;

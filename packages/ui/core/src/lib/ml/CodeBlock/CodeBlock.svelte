@@ -1,6 +1,8 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import { onDestroy } from "svelte";
+
   let {
     code = "",
     language = "typescript",
@@ -16,6 +18,7 @@
   } = $props();
 
   let copied = $state(false);
+  let copyTimer: ReturnType<typeof setTimeout> | undefined;
 
   const lines = $derived(code.split("\n"));
 
@@ -63,11 +66,16 @@
     try {
       await navigator.clipboard.writeText(code);
       copied = true;
-      setTimeout(() => (copied = false), 2000);
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => (copied = false), 2000);
     } catch {
       // Clipboard API not available
     }
   }
+
+  onDestroy(() => {
+    clearTimeout(copyTimer);
+  });
 </script>
 
 <div class="cy-code" style:max-height={maxHeight}>

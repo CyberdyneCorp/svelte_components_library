@@ -176,6 +176,12 @@
   let progressPct = $derived(duration > 0 ? (currentTime / duration) * 100 : 0);
   let bufferedPct = $derived(duration > 0 ? (buffered / duration) * 100 : 0);
 
+  import { onDestroy } from "svelte";
+
+  onDestroy(() => {
+    clearTimeout(hideTimer);
+  });
+
   $effect(() => {
     if (videoEl) {
       videoEl.muted = muted;

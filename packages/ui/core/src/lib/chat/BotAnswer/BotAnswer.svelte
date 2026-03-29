@@ -11,8 +11,12 @@
     variant?: "default" | "surface";
   } = $props();
 
+  function escapeHtml(text: string): string {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
   let formattedContent = $derived(
-    content.replace(/`([^`]+)`/g, '<code class="cy-bot-answer__code">$1</code>')
+    escapeHtml(content).replace(/`([^`]+)`/g, '<code class="cy-bot-answer__code">$1</code>')
   );
 </script>
 

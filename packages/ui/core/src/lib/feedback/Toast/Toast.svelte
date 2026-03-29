@@ -1,7 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-  import { type Snippet, setContext, onMount } from "svelte";
+  import { type Snippet, setContext, onMount, onDestroy } from "svelte";
 
   let {
     children,
@@ -21,21 +21,29 @@
 
   let toasts: ToastItem[] = $state([]);
   let nextId = 0;
+  let timerIds: ReturnType<typeof setTimeout>[] = [];
 
   function addToast(variant: ToastVariant, message: string, action?: { label: string; onclick: () => void }) {
     const id = nextId++;
     toasts.push({ id, variant, message, action });
-    setTimeout(() => dismiss(id), 5000);
+    const timerId = setTimeout(() => dismiss(id), 5000);
+    timerIds.push(timerId);
   }
 
   function dismiss(id: number) {
     const idx = toasts.findIndex((t) => t.id === id);
     if (idx === -1) return;
     toasts[idx].dismissing = true;
-    setTimeout(() => {
+    const timerId = setTimeout(() => {
       toasts = toasts.filter((t) => t.id !== id);
     }, 300);
+    timerIds.push(timerId);
   }
+
+  onDestroy(() => {
+    timerIds.forEach((id) => clearTimeout(id));
+    timerIds = [];
+  });
 
   const toastApi = {
     success: (msg: string, action?: { label: string; onclick: () => void }) => addToast("success", msg, action),

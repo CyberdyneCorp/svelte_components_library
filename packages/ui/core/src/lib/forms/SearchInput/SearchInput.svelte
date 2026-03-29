@@ -111,11 +111,15 @@
     }
   }
 
+  function escapeHtml(text: string): string {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
   function highlightMatch(text: string, query: string): string {
-    if (!query || query.length === 0) return text;
+    if (!query || query.length === 0) return escapeHtml(text);
     const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const regex = new RegExp(`(${escaped})`, "gi");
-    return text.replace(regex, '<mark class="cy-search__highlight">$1</mark>');
+    return escapeHtml(text).replace(regex, '<mark class="cy-search__highlight">$1</mark>');
   }
 
   $effect(() => {
