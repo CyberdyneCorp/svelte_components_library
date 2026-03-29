@@ -1,10 +1,10 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
-  import MegaMenu from "./MegaMenu.svelte";
+  import MegaMenuDemo from "./MegaMenuDemo.svelte";
 
   const { Story } = defineMeta({
     title: "Navigation/MegaMenu",
-    component: MegaMenu,
+    component: MegaMenuDemo,
     tags: ["autodocs"],
   });
 
@@ -12,63 +12,33 @@
     {
       title: "Platform",
       items: [
-        { label: "CyberdyneDAO", href: "/platform/dao", description: "Decentralized governance", icon: "🏛" },
-        { label: "YieldPath", href: "/platform/yield", description: "Yield aggregation protocol", icon: "📈" },
-        { label: "Vision Factory", href: "/platform/vision", description: "AI analytics engine", icon: "🔮" },
-        { label: "Terraform Game", href: "/platform/terraform", description: "On-chain strategy game", icon: "🎮" },
+        { label: "CyberdyneDAO", href: "/dao", description: "Decentralized governance", icon: "🏛" },
+        { label: "YieldPath", href: "/yield", description: "Yield aggregation protocol", icon: "📈" },
+        { label: "Vision Factory", href: "/vision", description: "AI analytics engine", icon: "🔮" },
+        { label: "Terraform Game", href: "/terraform", description: "On-chain strategy game", icon: "🎮" },
       ],
     },
     {
       title: "Developer",
       items: [
-        { label: "API Docs", href: "/dev/api", description: "REST and GraphQL reference", icon: "📡" },
-        { label: "SDKs", href: "/dev/sdks", description: "Client libraries", icon: "📦" },
-        { label: "CLI Tools", href: "/dev/cli", description: "Command-line utilities", icon: "⌨" },
+        { label: "API Docs", href: "/api", description: "REST and GraphQL reference", icon: "📡" },
+        { label: "SDKs", href: "/sdks", description: "Client libraries", icon: "📦" },
+        { label: "CLI Tools", href: "/cli", description: "Command-line utilities", icon: "⌨" },
       ],
     },
     {
       title: "Resources",
       items: [
-        { label: "Blog", href: "/resources/blog", description: "Latest news and updates", icon: "📝" },
-        { label: "Community", href: "/resources/community", description: "Join the discussion", icon: "💬" },
-        { label: "Support", href: "/resources/support", description: "Get help", icon: "🛟" },
+        { label: "Blog", href: "/blog", description: "Latest news and updates", icon: "📝" },
+        { label: "Community", href: "/community", description: "Join the discussion", icon: "💬" },
+        { label: "Support", href: "/support", description: "Get help", icon: "🛟" },
       ],
     },
   ];
 </script>
 
-<Story name="Default">
-  <div style="position: relative; min-height: 350px;">
-    <MegaMenu sections={defaultSections}>
-      {#snippet trigger()}
-        <button style="padding: 8px 16px; background: var(--color-surface-hover); color: var(--color-text-primary); border: 1px solid var(--color-border-default); border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
-          Explore ▾
-        </button>
-      {/snippet}
-    </MegaMenu>
-  </div>
-</Story>
+<Story name="Default" args={{ sections: defaultSections }} />
 
-<Story name="Open">
-  <div style="position: relative; min-height: 350px;">
-    <MegaMenu sections={defaultSections} open={true}>
-      {#snippet trigger()}
-        <button style="padding: 8px 16px; background: var(--color-action-brand-default); color: var(--color-action-brand-text); border: none; border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
-          Explore ▾
-        </button>
-      {/snippet}
-    </MegaMenu>
-  </div>
-</Story>
+<Story name="Open" args={{ sections: defaultSections, startOpen: true }} />
 
-<Story name="TwoColumn">
-  <div style="position: relative; min-height: 300px;">
-    <MegaMenu sections={defaultSections.slice(0, 2)} open={true}>
-      {#snippet trigger()}
-        <button style="padding: 8px 16px; background: var(--color-surface-hover); color: var(--color-text-primary); border: 1px solid var(--color-border-default); border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
-          Products ▾
-        </button>
-      {/snippet}
-    </MegaMenu>
-  </div>
-</Story>
+<Story name="TwoColumn" args={{ sections: defaultSections.slice(0, 2), startOpen: true }} />

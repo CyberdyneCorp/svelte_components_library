@@ -62,6 +62,7 @@
   }
 
   function handleOutsideClick(e: MouseEvent) {
+    if (!open) return; // Don't close if already closed
     const target = e.target as HTMLElement;
     if (!target.closest(".cy-megamenu")) {
       open = false;
@@ -78,11 +79,11 @@
   onmouseleave={handleMouseLeave}
   aria-label="Mega menu"
 >
-  <button class="cy-megamenu__trigger" onclick={handleTriggerClick} aria-expanded={open} aria-haspopup="true">
+  <div class="cy-megamenu__trigger" onclick={handleTriggerClick} role="button" tabindex="0" aria-expanded={open} aria-haspopup="true" onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTriggerClick(); } }}>
     {#if trigger}
       {@render trigger()}
     {/if}
-  </button>
+  </div>
 
   {#if open}
     <div
