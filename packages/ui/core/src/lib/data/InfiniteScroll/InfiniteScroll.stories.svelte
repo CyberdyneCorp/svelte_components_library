@@ -3,7 +3,7 @@
   import InfiniteScroll from "./InfiniteScroll.svelte";
 
   const { Story } = defineMeta({
-    title: "Data/InfiniteScroll",
+    title: "Data Display/InfiniteScroll",
     component: InfiniteScroll,
     tags: ["autodocs"],
   });

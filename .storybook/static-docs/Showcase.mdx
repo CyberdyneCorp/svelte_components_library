@@ -4,24 +4,96 @@ import { Meta } from "@storybook/blocks";
 
 # Component Showcase
 
-This page demonstrates how Cyberdyne components compose together in real-world scenarios.
+This page demonstrates how Cyberdyne components compose together in real-world scenarios. Browse the individual component stories to see each one in isolation with full interactive controls.
 
-Browse the individual component stories to see each one in isolation with full interactive controls.
+---
 
-## Key Demos
+## Building a Dashboard
 
-### Data-Heavy Components
+Combine layout, metrics, and charts to create data-rich dashboards.
 
 | Component | Story | What to See |
 |-----------|-------|-------------|
+| **MetricCard** | `Crypto / MetricCard / Default` | Key metric display with trend indicator |
+| **LineChart** | `Charts / LineChart / MultiSeries` | GPT-4 vs Claude vs Gemini training loss |
+| **BarChart** | `Charts / BarChart / Default` | ML component importance scores |
+| **PieChart** | `Charts / PieChart / Default` | Asset allocation breakdown |
+| **Gauge** | `Charts / Gauge / Default` | System health metric gauge |
+| **Sparkline** | `Charts / Sparkline / Default` | Inline price trend indicator |
 | **Table** | `Data Display / Table / Crypto Market` | 12-row sortable crypto market table |
-| **Table** | `Data Display / Table / ML Model Comparison` | Model benchmarks with striped rows |
-| **Table** | `Data Display / Table / Validator Nodes` | Cyberdyne validator node monitoring |
-| **GraphViewer** | `Graph / GraphViewer / KnowledgeGraph` | 15-node ML knowledge graph with community detection |
-| **GraphViewer** | `Graph / GraphViewer / BlockchainNetwork` | DeFi protocol network with weighted edges |
-| **GraphViewer** | `Graph / GraphViewer / LargeGraph` | 100-node stress test |
+| **FilterBar** | `Data Display / FilterBar / Default` | Combined filter chips for tables and lists |
 
-### Charts
+---
+
+## Building a PM Tool
+
+Components for project management: task boards, velocity tracking, and team analytics.
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **Kanban** | `Data Display / Kanban / Default` | Draggable kanban board |
+| **GanttChart** | `Charts / GanttChart / Default` | SVG timeline with task bars, dependencies, and groups |
+| **BurndownChart** | `Charts / BurndownChart / Default` | Sprint burndown with ideal vs actual lines |
+| **VelocityChart** | `Charts / VelocityChart / Default` | Sprint velocity tracking over time |
+| **CumulativeFlow** | `Charts / CumulativeFlow / Default` | Cumulative flow diagram for workflow stages |
+| **AgingWIP** | `Charts / AgingWIP / Default` | Work-in-progress aging analysis |
+| **SortableList** | `Data Display / SortableList / Default` | Drag-to-reorder list with HTML5 DnD |
+| **StarRating** | `Primitives / StarRating / Default` | Interactive star rating with half-star support |
+| **ActivityHeatmap** | `Charts / ActivityHeatmap / Default` | GitHub-style contribution grid heatmap |
+
+---
+
+## Building a Crypto App
+
+Full Web3 experience from login to staking.
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **LoginPage** | `Auth / LoginPage / Both` | Full login with credential + wallet modes |
+| **WalletConnect** | `Auth / WalletConnect / Default` | Wallet connection flow |
+| **SwapInterface** | `Crypto / SwapInterface / Default` | Token swap interface with price estimation |
+| **TokenBalance** | `Crypto / TokenBalance / WithChange` | ETH & BTC balances with price changes |
+| **TransactionList** | `Crypto / TransactionList / WithPending` | Mixed transaction statuses |
+| **GasEstimate** | `Crypto / GasEstimate / Default` | Gas fee selector (slow/standard/fast) |
+| **TierBadge** | `Crypto / TierBadge / AllTiers` | 6-tier NFT access system |
+| **StakingCard** | `Crypto / StakingCard / Default` | Staking position display with rewards |
+
+---
+
+## Building a Knowledge Base
+
+Tools for documentation, code review, and knowledge graph exploration.
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **GraphViewer** | `Graph / GraphViewer / KnowledgeGraph` | 15-node ML knowledge graph with community detection |
+| **MindMap** | `Editor / MindMap / Default` | Interactive mind map with drag-reparent, undo/redo, and markdown export |
+| **MarkdownEditor** | `Editor / MarkdownEditor / SplitMode` | Side-by-side editing with live preview |
+| **FileTree** | `Data Display / FileTree / Default` | Collapsible file/folder tree view |
+| **DiffViewer** | `Data Display / DiffViewer / Default` | Side-by-side code diff comparison |
+| **SemanticSearch** | `Graph / SemanticSearch / Default` | Semantic similarity search interface |
+| **CommentThread** | `Chat / CommentThread / Default` | Threaded comment discussion with replies |
+
+---
+
+## Building an ML Platform
+
+Components for model training, monitoring, and evaluation.
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **NotebookCell** | `ML / NotebookCell / Default` | Jupyter-style notebook cell with code and output |
+| **ModelCard** | `ML / ModelCard / Default` | ML model summary card with metrics |
+| **Terminal** | `ML / Terminal / CommandOutput` | nvidia-smi GPU monitoring |
+| **LogViewer** | `ML / LogViewer / Default` | Pipeline logs with severity filtering |
+| **CodeBlock** | `ML / CodeBlock / TypeScript` | Syntax-highlighted code |
+| **ConfusionMatrix** | `ML / ConfusionMatrix / Default` | Classification confusion matrix heatmap |
+| **StepProgress** | `ML / StepProgress / Horizontal` | ML pipeline steps |
+| **DataChart** | `Charts / LineChart / MultiSeries` | Training loss curves across model generations |
+
+---
+
+## Charts
 
 | Component | Story | What to See |
 |-----------|-------|-------------|
@@ -37,50 +109,13 @@ Browse the individual component stories to see each one in isolation with full i
 | **GanttChart** | `Charts / GanttChart / Default` | SVG timeline with task bars, dependencies, and groups |
 | **ActivityHeatmap** | `Charts / ActivityHeatmap / Default` | GitHub-style contribution grid heatmap |
 
-### Crypto / Web3
+## Data Display
 
 | Component | Story | What to See |
 |-----------|-------|-------------|
-| **LoginPage** | `Auth / LoginPage / Both` | Full login with credential + wallet modes |
-| **TokenBalance** | `Auth / TokenBalance / WithChange` | ETH & BTC balances with price changes |
-| **TransactionList** | `Crypto / TransactionList / WithPending` | Mixed transaction statuses |
-| **GasEstimate** | `Crypto / GasEstimate / Default` | Gas fee selector (slow/standard/fast) |
-| **TierBadge** | `Crypto / TierBadge / AllTiers` | 6-tier NFT access system |
-| **SwapInterface** | `Crypto / SwapInterface / Default` | Token swap interface with price estimation |
-| **TokenSelector** | `Crypto / TokenSelector / Default` | Searchable token selection dropdown |
-| **StakingCard** | `Crypto / StakingCard / Default` | Staking position display with rewards |
-| **TransactionConfirm** | `Crypto / TransactionConfirm / Default` | Transaction confirmation dialog with details |
-
-### ML / Developer Tools
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **Terminal** | `ML / Terminal / CommandOutput` | nvidia-smi GPU monitoring |
-| **LogViewer** | `ML / LogViewer / Default` | Pipeline logs with severity filtering |
-| **CodeBlock** | `ML / CodeBlock / TypeScript` | Syntax-highlighted code |
-| **StepProgress** | `ML / StepProgress / Horizontal` | ML pipeline steps |
-| **NotebookCell** | `ML / NotebookCell / Default` | Jupyter-style notebook cell with code and output |
-| **ModelCard** | `ML / ModelCard / Default` | ML model summary card with metrics |
-| **ConfusionMatrix** | `ML / ConfusionMatrix / Default` | Classification confusion matrix heatmap |
-
-### Editor
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **MarkdownEditor** | `Editor / MarkdownEditor / SplitMode` | Side-by-side editing with live preview |
-| **MarkdownEditor** | `Editor / MarkdownEditor / Mermaid` | Embedded Mermaid diagram rendering |
-| **MindMap** | `Editor / MindMap / Default` | Interactive mind map with drag-reparent, undo/redo, and markdown export |
-
-### Maps
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
-| **MapView** | `Maps / MapView / ValidatorNodes` | Cyberdyne validator node locations on interactive map |
-
-### Data Display (New)
-
-| Component | Story | What to See |
-|-----------|-------|-------------|
+| **Table** | `Data Display / Table / Crypto Market` | 12-row sortable crypto market table |
+| **Table** | `Data Display / Table / ML Model Comparison` | Model benchmarks with striped rows |
+| **Table** | `Data Display / Table / Validator Nodes` | Cyberdyne validator node monitoring |
 | **DataTable** | `Data Display / DataTable / Default` | Sortable, paginated data table |
 | **FileTree** | `Data Display / FileTree / Default` | Collapsible file/folder tree view |
 | **DiffViewer** | `Data Display / DiffViewer / Default` | Side-by-side code diff comparison |
@@ -89,7 +124,30 @@ Browse the individual component stories to see each one in isolation with full i
 | **FilterBar** | `Data Display / FilterBar / Default` | Combined filter chips for tables and lists |
 | **SortableList** | `Data Display / SortableList / Default` | Drag-to-reorder list with HTML5 DnD |
 
-### Forms (New)
+## Graph
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **GraphViewer** | `Graph / GraphViewer / KnowledgeGraph` | 15-node ML knowledge graph with community detection |
+| **GraphViewer** | `Graph / GraphViewer / BlockchainNetwork` | DeFi protocol network with weighted edges |
+| **GraphViewer** | `Graph / GraphViewer / LargeGraph` | 100-node stress test |
+| **SemanticSearch** | `Graph / SemanticSearch / Default` | Semantic similarity search interface |
+
+## Editor
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **MarkdownEditor** | `Editor / MarkdownEditor / SplitMode` | Side-by-side editing with live preview |
+| **MarkdownEditor** | `Editor / MarkdownEditor / Mermaid` | Embedded Mermaid diagram rendering |
+| **MindMap** | `Editor / MindMap / Default` | Interactive mind map with drag-reparent, undo/redo, and markdown export |
+
+## Maps
+
+| Component | Story | What to See |
+|-----------|-------|-------------|
+| **MapView** | `Maps / MapView / ValidatorNodes` | Cyberdyne validator node locations on interactive map |
+
+## Forms
 
 | Component | Story | What to See |
 |-----------|-------|-------------|
@@ -97,56 +155,58 @@ Browse the individual component stories to see each one in isolation with full i
 | **SearchInput** | `Forms / SearchInput / Default` | Search field with autocomplete |
 | **DatePicker** | `Forms / DatePicker / Default` | Calendar-based date selection |
 | **TimePicker** | `Forms / TimePicker / Default` | Time selection with hour/minute controls |
+| **DateRangePicker** | `Forms / DateRangePicker / WithPresets` | Calendar with preset ranges |
+| **MultiSelect** | `Forms / MultiSelect / WithGroups` | Grouped multi-select |
+| **CodeEditor** | `Forms / CodeEditor / Solidity` | Editable smart contract code |
 
-### Feedback (New)
+## Feedback
 
 | Component | Story | What to See |
 |-----------|-------|-------------|
 | **Carousel** | `Feedback / Carousel / Default` | Image/content carousel with navigation controls |
 
-### Layout (New)
+## Layout
 
 | Component | Story | What to See |
 |-----------|-------|-------------|
 | **PageShell** | `Layout / PageShell / Default` | Full page shell with header, sidebar, and content area |
+| **SplitView** | `Layout / SplitView / Horizontal` | Resizable panels |
 
-### Chat (New)
+## Chat
 
 | Component | Story | What to See |
 |-----------|-------|-------------|
 | **CommentThread** | `Chat / CommentThread / Default` | Threaded comment discussion with replies |
 
-### Primitives (New)
+## Primitives
 
 | Component | Story | What to See |
 |-----------|-------|-------------|
 | **ThemeToggle** | `Primitives / ThemeToggle / Default` | Dark/light theme toggle switch |
 | **StarRating** | `Primitives / StarRating / Default` | Interactive star rating with half-star support |
 
-### Advanced Interactions
+## Overlay
 
 | Component | Story | What to See |
 |-----------|-------|-------------|
 | **CommandPalette** | `Overlay / CommandPalette / Default` | Cmd+K search overlay |
-| **SplitView** | `Layout / SplitView / Horizontal` | Resizable panels |
-| **DateRangePicker** | `Forms / DateRangePicker / WithPresets` | Calendar with preset ranges |
-| **MultiSelect** | `Forms / MultiSelect / WithGroups` | Grouped multi-select |
-| **CodeEditor** | `Forms / CodeEditor / Solidity` | Editable smart contract code |
+
+---
 
 ## Test Data
 
 The library ships with a shared test data module at `_testdata/index.ts` containing realistic Cyberdyne-themed data:
 
-- **Crypto market** — Top 10 tokens with prices, market caps, volumes, sparklines
-- **Transactions** — Send, receive, swap, approve with various statuses
-- **Training metrics** — Loss curves, accuracy, validation loss over 15 epochs
-- **Model benchmarks** — MMLU, HumanEval, GSM8K scores
-- **Confusion matrix** — 4-class blockchain transaction classification
-- **Portfolio timeline** — 12-month portfolio growth with asset allocation breakdown
-- **Validator nodes** — 6 Cyberdyne validators with uptime, rewards, status
-- **Knowledge graph** — 29 nodes across 5 groups (Infrastructure, Finance, AI/ML, Products, Science)
-- **System logs** — 12 entries from ml-service, chain-watcher, yieldpath, vision-factory
-- **Deployment terminal** — Full smart contract deployment output
+- **Crypto market** -- Top 10 tokens with prices, market caps, volumes, sparklines
+- **Transactions** -- Send, receive, swap, approve with various statuses
+- **Training metrics** -- Loss curves, accuracy, validation loss over 15 epochs
+- **Model benchmarks** -- MMLU, HumanEval, GSM8K scores
+- **Confusion matrix** -- 4-class blockchain transaction classification
+- **Portfolio timeline** -- 12-month portfolio growth with asset allocation breakdown
+- **Validator nodes** -- 6 Cyberdyne validators with uptime, rewards, status
+- **Knowledge graph** -- 29 nodes across 5 groups (Infrastructure, Finance, AI/ML, Products, Science)
+- **System logs** -- 12 entries from ml-service, chain-watcher, yieldpath, vision-factory
+- **Deployment terminal** -- Full smart contract deployment output
 
 Import in your own stories:
 ```ts

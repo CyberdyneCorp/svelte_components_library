@@ -78,7 +78,7 @@
   };
 
   const { Story } = defineMeta({
-    title: "Data/OrgChart",
+    title: "Data Display/OrgChart",
     component: OrgChart,
     tags: ["autodocs"],
   });

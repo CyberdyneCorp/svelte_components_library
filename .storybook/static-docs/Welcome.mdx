@@ -4,33 +4,82 @@ import { Meta } from "@storybook/blocks";
 
 # Cyberdyne Design System
 
-Welcome to the **Cyberdyne Component Library** — the unified design system powering Cyberdyne's ecosystem of products across **Crypto**, **Machine Learning**, **Research**, **Editor**, and **Maps**.
+> The unified component library powering Cyberdyne's ecosystem of products across Crypto, Machine Learning, Research, Editor, and Maps.
+
+---
+
+## At a Glance
+
+| | |
+|---|---|
+| **139 Components** | Production-ready UI building blocks |
+| **15 Categories** | From primitives to full-page compositions |
+| **661 Tests** | Comprehensive test coverage across all packages |
+| **Dark + Light Theme** | First-class support for both modes via CSS custom properties |
+
+---
+
+## Component Categories
+
+| Category | Components | Description |
+|----------|-----------|-------------|
+| **Primitives** | 14 | Buttons, badges, avatars, tooltips, icons |
+| **Forms** | 19 | Text inputs, selects, date pickers, code editors |
+| **Feedback** | 12 | Alerts, notifications, dialogs, skeletons, accordions |
+| **Navigation** | 10 | Tabs, breadcrumbs, sidebars, menus |
+| **Data Display** | 16 | Tables, calendars, kanban boards, file trees, diff viewers |
+| **Layout** | 8 | Cards, drawers, split views, page shells |
+| **Overlay** | 5 | Modals, command palettes, context menus |
+| **Charts** | 14 | Line, bar, area, pie, heatmap, gauge, treemap, Gantt, activity heatmap |
+| **Crypto / Web3** | 13 | Token balances, swap interfaces, staking cards, gas estimates |
+| **Auth** | 2 | Login pages, wallet connect flows |
+| **Chat** | 7 | Chatbox, bot answers, comment threads, prompt examples |
+| **ML / Data Tools** | 11 | Terminals, log viewers, code blocks, notebook cells, model cards |
+| **Graph** | 2 | Knowledge graphs, semantic search |
+| **Editor** | 5 | Markdown editor, mind map, rich text tools |
+| **Maps** | 1 | Interactive geospatial map view |
+
+---
+
+## Quick Links
+
+- **[Getting Started](?path=/docs/overview-getting-started--docs)** -- Installation, theming, and your first component
+- **[Design Tokens](?path=/docs/design-tokens-colors--docs)** -- Colors, typography, and spacing tokens
+- **[Showcase](?path=/docs/overview-showcase--docs)** -- Real-world composition examples and key demos
+
+---
+
+## What's New
+
+Recent additions to the library:
+
+- **PM Charts** -- BurndownChart, VelocityChart, CumulativeFlow, AgingWIP for project management dashboards
+- **MindMap** -- Interactive mind mapping with drag-reparent, undo/redo, and markdown export
+- **MegaMenu** -- Multi-column dropdown navigation for complex site structures
+- **NavBar** -- Responsive top navigation bar with brand, links, and actions
+- **OrgChart** -- Hierarchical organization chart with expandable nodes and detail panels
+- **VirtualizedList** -- High-performance scrolling for lists with 10,000+ items
+
+---
 
 ## Vision
 
-Cyberdyne builds at the intersection of blockchain infrastructure, AI/ML pipelines, and cutting-edge research platforms. This component library ensures a cohesive, dark-themed, cyberpunk-inspired UI across all products:
+Cyberdyne builds at the intersection of blockchain infrastructure, AI/ML pipelines, and cutting-edge research platforms. This component library ensures a cohesive, cyberpunk-inspired UI across all products:
 
-- **CyberdyneDAO** — Web3 terminal platform with NFT-gated access
-- **YieldPath** — AI-powered DeFi life planner
-- **Vision Factory** — Computer vision ML pipeline
-- **Terraform Game** — Blockchain RTS strategy game
-- **Research Tools** — Internal ML & data exploration interfaces
-- **MarkdownEditor** — Rich markdown editing with split preview and Mermaid diagram support
-- **MapView** — Interactive map visualizations for validator nodes and geospatial data
+- **CyberdyneDAO** -- Web3 terminal platform with NFT-gated access
+- **YieldPath** -- AI-powered DeFi life planner
+- **Vision Factory** -- Computer vision ML pipeline
+- **Terraform Game** -- Blockchain RTS strategy game
+- **Research Tools** -- Internal ML and data exploration interfaces
+- **MarkdownEditor** -- Rich markdown editing with split preview and Mermaid diagram support
+- **MapView** -- Interactive map visualizations for validator nodes and geospatial data
 
 ## Design Principles
 
-### 1. Dark-First
-Every component is designed for dark environments. We use deep blacks and dark greys as our canvas, with vibrant neon accents that reference the cyberpunk aesthetic.
-
-### 2. Signal over Noise
-In crypto and ML interfaces, data density is high. Our components prioritize clarity: monospace fonts for data, generous spacing, and clear visual hierarchy.
-
-### 3. Accessible by Default
-All components meet WCAG 2.1 AA standards. Focus indicators use our signature cyan glow. Motion respects `prefers-reduced-motion`.
-
-### 4. Composable
-Components are built with Svelte 5 runes and snippets. They compose naturally and expose CSS custom properties for deep customization.
+1. **Dark-First** -- Every component is designed for dark environments with vibrant neon accents referencing the cyberpunk aesthetic.
+2. **Signal over Noise** -- In crypto and ML interfaces, data density is high. Components prioritize clarity with monospace fonts, generous spacing, and clear visual hierarchy.
+3. **Accessible by Default** -- All components meet WCAG 2.1 AA standards. Focus indicators use the signature cyan glow. Motion respects `prefers-reduced-motion`.
+4. **Composable** -- Built with Svelte 5 runes and snippets. Components compose naturally and expose CSS custom properties for deep customization.
 
 ## Tech Stack
 
@@ -44,30 +93,10 @@ Components are built with Svelte 5 runes and snippets. They compose naturally an
 | Build | Vite + svelte-package |
 | Monorepo | pnpm workspaces |
 
-## Packages
-
-| Package | Description |
-|---------|------------|
-| `@cyberdyne/svelte-ui-foundation` | Design tokens, colors, typography, spacing |
-| `@cyberdyne/svelte-ui-core` | 139 UI components across 15 categories |
-
-## Quick Start
-
-```bash
-# Install the packages
-pnpm add @cyberdyne/svelte-ui-foundation @cyberdyne/svelte-ui-core
-
-# Import the foundation styles in your app entry point
-import "@cyberdyne/svelte-ui-foundation/styles";
-
-# Use components
-import { Button, Card, TextInput } from "@cyberdyne/svelte-ui-core";
-```
-
 ## Color Palette
 
 Our three signature colors map to Cyberdyne's domains:
 
-- **Neon Green `#00ff41`** — Crypto / Blockchain (Matrix-inspired)
-- **Electric Cyan `#00d4ff`** — Machine Learning / Data
-- **Violet `#a855f7`** — Research / Innovation
+- **Neon Green `#00ff41`** -- Crypto / Blockchain (Matrix-inspired)
+- **Electric Cyan `#00d4ff`** -- Machine Learning / Data
+- **Violet `#a855f7`** -- Research / Innovation

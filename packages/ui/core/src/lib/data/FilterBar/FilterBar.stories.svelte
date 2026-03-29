@@ -3,7 +3,7 @@
   import FilterBar from "./FilterBar.svelte";
 
   const { Story } = defineMeta({
-    title: "Data/FilterBar",
+    title: "Data Display/FilterBar",
     component: FilterBar,
     tags: ["autodocs"],
   });

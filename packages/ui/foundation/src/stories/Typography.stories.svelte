@@ -2,7 +2,7 @@
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
   const { Story } = defineMeta({
-    title: "Foundation/Typography",
+    title: "Design Tokens/Typography",
     tags: ["autodocs"],
   });
 </script>

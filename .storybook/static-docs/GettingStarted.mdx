@@ -85,9 +85,9 @@ All components use CSS custom properties. Override any token in your app:
 
 The design system uses three font families:
 
-- **Space Grotesk** — Display headings and titles
-- **Inter** — Body text and form inputs
-- **JetBrains Mono** — Code, labels, data values
+- **Space Grotesk** -- Display headings and titles
+- **Inter** -- Body text and form inputs
+- **JetBrains Mono** -- Code, labels, data values
 
 Fonts are loaded via Google Fonts in the foundation CSS. For self-hosting, override the `--font-display`, `--font-body`, and `--font-mono` variables.
 
@@ -143,4 +143,159 @@ Use [changesets](https://github.com/changesets/changesets) for versioning:
 pnpm changeset     # Create a changeset
 pnpm version-packages  # Apply versions
 pnpm release       # Build and publish
+```
+
+---
+
+## Recipes
+
+Common composition patterns for building full pages with Cyberdyne components.
+
+### Dashboard Page
+
+Combine `PageShell` for structure, `Header` for navigation, and fill the content area with metrics and charts.
+
+```svelte
+<script>
+  import {
+    PageShell, PageHeader, Card,
+    MetricCard, LineChart, BarChart, PieChart,
+    FilterBar
+  } from "@cyberdyne/svelte-ui-core";
+</script>
+
+<PageShell>
+  <PageHeader title="Analytics Dashboard" />
+
+  <FilterBar
+    filters={[
+      { key: "period", label: "Period", options: ["7d", "30d", "90d"] },
+      { key: "network", label: "Network", options: ["Ethereum", "Polygon", "Arbitrum"] },
+    ]}
+  />
+
+  <!-- Metrics row -->
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+    <MetricCard label="Total Value Locked" value="$2.4B" change={+5.2} />
+    <MetricCard label="Active Users" value="12,847" change={+12.1} />
+    <MetricCard label="Transactions" value="89,421" change={-2.3} />
+    <MetricCard label="Gas Saved" value="142 ETH" change={+8.7} />
+  </div>
+
+  <!-- Charts row -->
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+    <Card>
+      <LineChart data={revenueData} series={["actual", "projected"]} />
+    </Card>
+    <Card>
+      <PieChart data={allocationData} />
+    </Card>
+  </div>
+
+  <Card>
+    <BarChart data={weeklyVolume} />
+  </Card>
+</PageShell>
+```
+
+### Settings Page
+
+Use `PageShell` with `Tabs` to organize settings sections, `Accordion` for collapsible groups, and form components for inputs.
+
+```svelte
+<script>
+  import {
+    PageShell, PageHeader, Card,
+    Tabs, Accordion,
+    TextInput, Select, Switch, Button
+  } from "@cyberdyne/svelte-ui-core";
+
+  let activeTab = $state("profile");
+</script>
+
+<PageShell>
+  <PageHeader title="Settings" />
+
+  <Tabs
+    bind:active={activeTab}
+    items={[
+      { key: "profile", label: "Profile" },
+      { key: "security", label: "Security" },
+      { key: "notifications", label: "Notifications" },
+      { key: "api", label: "API Keys" },
+    ]}
+  />
+
+  {#if activeTab === "profile"}
+    <Card>
+      <TextInput label="Display Name" value="alex.cyberdyne" />
+      <TextInput label="Email" value="alex@cyberdyne.io" type="email" />
+      <Select label="Timezone" options={timezones} />
+      <Button variant="brand">Save Changes</Button>
+    </Card>
+  {/if}
+
+  {#if activeTab === "notifications"}
+    <Accordion>
+      <Accordion.Item title="Email Notifications">
+        <Switch label="Transaction confirmations" checked />
+        <Switch label="Weekly portfolio summary" checked />
+        <Switch label="Price alerts" />
+      </Accordion.Item>
+      <Accordion.Item title="Push Notifications">
+        <Switch label="Security alerts" checked />
+        <Switch label="Staking rewards" checked />
+      </Accordion.Item>
+    </Accordion>
+  {/if}
+</PageShell>
+```
+
+### Chat Interface
+
+Compose a conversational AI interface with `ChatPanel`, `ChatResponse`, `Chatbox`, and `BotAnswer`.
+
+```svelte
+<script>
+  import {
+    Card,
+    ChatResponse, Chatbox, BotAnswer, PromptExample
+  } from "@cyberdyne/svelte-ui-core";
+
+  let messages = $state([]);
+  let isLoading = $state(false);
+</script>
+
+<Card style="display: flex; flex-direction: column; height: 600px;">
+  <!-- Message history -->
+  <div style="flex: 1; overflow-y: auto; padding: 1rem;">
+    {#if messages.length === 0}
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+        <PromptExample
+          text="Explain how staking rewards work"
+          onclick={() => sendMessage("Explain how staking rewards work")}
+        />
+        <PromptExample
+          text="Show me the top DeFi protocols"
+          onclick={() => sendMessage("Show me the top DeFi protocols")}
+        />
+      </div>
+    {/if}
+
+    {#each messages as msg}
+      {#if msg.role === "user"}
+        <ChatResponse variant="user">{msg.content}</ChatResponse>
+      {:else}
+        <BotAnswer content={msg.content} />
+      {/if}
+    {/each}
+  </div>
+
+  <!-- Input area -->
+  <Chatbox
+    placeholder="Ask Cyberdyne AI..."
+    loading={isLoading}
+    onsubmit={(text) => sendMessage(text)}
+  />
+</Card>
 ```

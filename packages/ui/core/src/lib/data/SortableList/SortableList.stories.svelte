@@ -3,7 +3,7 @@
   import SortableList from "./SortableList.svelte";
 
   const { Story } = defineMeta({
-    title: "Data/SortableList",
+    title: "Data Display/SortableList",
     component: SortableList,
     tags: ["autodocs"],
   });

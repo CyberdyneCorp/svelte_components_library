@@ -3,7 +3,7 @@
   import StickyNote from "./StickyNote.svelte";
 
   const { Story } = defineMeta({
-    title: "Data/StickyNote",
+    title: "Data Display/StickyNote",
     component: StickyNote,
     tags: ["autodocs"],
   });

@@ -13,7 +13,7 @@
   const largeItems = Array.from({ length: 10000 }, (_, i) => `Record ${i + 1} — Large dataset entry`);
 
   const { Story } = defineMeta({
-    title: "Data/VirtualizedList",
+    title: "Data Display/VirtualizedList",
     component: VirtualizedList,
     tags: ["autodocs"],
   });
