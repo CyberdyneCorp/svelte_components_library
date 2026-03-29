@@ -86,21 +86,23 @@
 
         {#if item.type === "folder"}
           <span class="cy-file-tree__chevron" class:cy-file-tree__chevron--open={expanded}>
-            &#9654;
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
           </span>
-          <span class="cy-file-tree__icon">
-            {#if item.icon}
-              {item.icon}
-            {:else if expanded}
-              &#128194;
-            {:else}
-              &#128193;
-            {/if}
+          <span class="cy-file-tree__icon cy-file-tree__icon--folder">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" opacity="0.8">
+              {#if expanded}
+                <path d="M2 4a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v2H4a2 2 0 0 0-2 2v6c0 .6.4 1 1 1h17a1 1 0 0 0 1-1l1-9H4l-2 1z"/>
+              {:else}
+                <path d="M2 4a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4z"/>
+              {/if}
+            </svg>
           </span>
         {:else}
           <span class="cy-file-tree__chevron cy-file-tree__chevron--spacer"></span>
           <span class="cy-file-tree__icon" style:color={getFileColor(item.name)}>
-            {item.icon || "&#128196;"}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
           </span>
         {/if}
 
@@ -207,9 +209,13 @@
   }
 
   .cy-file-tree__icon {
-    font-size: 0.875rem;
-    line-height: 1;
+    display: inline-flex;
+    align-items: center;
     flex-shrink: 0;
+  }
+
+  .cy-file-tree__icon--folder {
+    color: var(--color-state-warning);
   }
 
   .cy-file-tree__name {
