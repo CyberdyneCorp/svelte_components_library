@@ -148,6 +148,10 @@ export { Gauge } from "./charts/Gauge/index.js";
 export { TreeMap } from "./charts/TreeMap/index.js";
 export { GanttChart } from "./charts/GanttChart/index.js";
 export { ActivityHeatmap } from "./charts/ActivityHeatmap/index.js";
+export { CumulativeFlow } from "./charts/CumulativeFlow/index.js";
+export { AgingWIP } from "./charts/AgingWIP/index.js";
+export { BurndownChart } from "./charts/BurndownChart/index.js";
+export { VelocityChart } from "./charts/VelocityChart/index.js";
 
 // Editor
 export { MarkdownEditor } from "./editor/MarkdownEditor/index.js";
