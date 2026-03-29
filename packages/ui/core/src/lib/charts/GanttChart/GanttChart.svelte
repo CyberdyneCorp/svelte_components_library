@@ -268,6 +268,8 @@
       width={timelineWidth}
       height={svgHeight}
       class="cy-gantt__svg"
+      role="img"
+      aria-label="Gantt chart"
     >
       <!-- Grid lines -->
       {#each headerTicks as tick}
@@ -354,6 +356,8 @@
             onmousemove={(e) => onBarMouseMove(e, t)}
             onmouseleave={onBarMouseLeave}
             onclick={() => onTaskClick?.(t)}
+            role="button"
+            tabindex="0"
           />
           <!-- Progress fill -->
           {#if showProgress && (t.progress ?? 0) > 0}

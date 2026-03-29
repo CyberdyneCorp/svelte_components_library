@@ -132,6 +132,7 @@
               onmousemove={onCellMove}
               onmouseleave={onCellLeave}
               role="gridcell"
+              tabindex="0"
             >
               {#if showValues && cellLargeEnough}
                 <span class="cy-heatmap__cell-val" style="color: {textColor(val)}">{formatVal(val)}</span>

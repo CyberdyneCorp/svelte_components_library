@@ -145,6 +145,8 @@
     class="cy-area-chart__svg"
     onmousemove={onMouseMove}
     onmouseleave={onMouseLeave}
+    role="img"
+    aria-label="Area chart"
   >
     <defs>
       {#each displaySeries as s, i}

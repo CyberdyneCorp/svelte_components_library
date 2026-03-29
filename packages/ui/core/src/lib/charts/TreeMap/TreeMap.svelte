@@ -141,6 +141,8 @@
     viewBox="0 0 {containerW} {containerH}"
     class="cy-treemap__svg"
     preserveAspectRatio="none"
+    role="img"
+    aria-label="Tree map"
   >
     {#each rects as rect, i}
       <rect

@@ -102,7 +102,7 @@
     <label class="cy-ti__label" for={inputId}>{label}</label>
   {/if}
 
-  <div class="cy-ti__control" onclick={() => inputEl?.focus()}>
+  <div class="cy-ti__control" onclick={() => inputEl?.focus()} role="textbox" tabindex="0">
     <div class="cy-ti__tags">
       {#each tags as tag, i}
         <span class="cy-ti__tag">

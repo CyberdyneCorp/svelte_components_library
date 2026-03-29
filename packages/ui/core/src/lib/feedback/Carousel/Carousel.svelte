@@ -131,6 +131,7 @@
       onpointermove={handlePointerMove}
       onpointerup={handlePointerUp}
       onpointercancel={handlePointerUp}
+      role="presentation"
     >
       {#each items as item, i}
         <div

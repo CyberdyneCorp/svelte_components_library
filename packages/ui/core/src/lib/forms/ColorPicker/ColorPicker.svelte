@@ -19,7 +19,7 @@
 
   let open = $state(false);
   let dropdownEl: HTMLDivElement;
-  let nativeInput: HTMLInputElement;
+  let nativeInput = $state<HTMLInputElement | null>(null);
 
   function toggle() {
     if (disabled) return;
@@ -68,7 +68,7 @@
 
 <div class="cy-color-picker" class:cy-color-picker--disabled={disabled} bind:this={dropdownEl}>
   {#if label}
-    <label class="cy-color-picker__label">{label}</label>
+    <label class="cy-color-picker__label" for="cy-color-picker-input">{label}</label>
   {/if}
 
   <div class="cy-color-picker__trigger-row">
@@ -86,6 +86,7 @@
     {#if showInput}
       <input
         class="cy-color-picker__hex-display"
+        id="cy-color-picker-input"
         type="text"
         value={value}
         oninput={handleHexInput}

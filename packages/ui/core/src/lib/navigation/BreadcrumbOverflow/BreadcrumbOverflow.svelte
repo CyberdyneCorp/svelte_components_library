@@ -146,6 +146,7 @@
             bind:this={dropdownRef}
             class="cy-breadcrumb-of__dropdown"
             role="menu"
+            tabindex="-1"
             onkeydown={handleDropdownKeydown}
           >
             {#each hiddenItems as hidden, hi}

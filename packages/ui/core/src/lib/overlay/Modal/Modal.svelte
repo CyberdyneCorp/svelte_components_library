@@ -59,7 +59,7 @@
 
 {#if open}
   <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-  <div class="cy-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" onkeydown={handleKeydown} onclick={handleBackdropClick}>
+  <div class="cy-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1" onkeydown={handleKeydown} onclick={handleBackdropClick}>
     <div class="cy-modal cy-modal--{size}" bind:this={modalEl}>
       <div class="cy-modal__header">
         <h2 class="cy-modal__title" id="modal-title">{title}</h2>

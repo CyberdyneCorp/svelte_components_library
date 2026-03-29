@@ -126,8 +126,10 @@
     class="cy-ms__control"
     class:cy-ms__control--open={open}
     role="combobox"
+    aria-controls="listbox-id"
     aria-expanded={open}
     aria-haspopup="listbox"
+    tabindex="0"
     onclick={() => { if (!disabled) { open = true; } }}
     onkeydown={handleKeydown}
   >

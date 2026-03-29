@@ -153,6 +153,7 @@
       onblur={handleBlur}
       autocomplete="off"
       role="combobox"
+      aria-controls="listbox-id"
       aria-expanded={open}
       aria-invalid={!!error}
     />

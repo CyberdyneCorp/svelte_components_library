@@ -115,7 +115,7 @@
 
 {#if open}
   <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-  <div class="cy-cmd-overlay" role="dialog" aria-modal="true" aria-label="Command palette" onclick={handleBackdropClick} onkeydown={handleKeydown}>
+  <div class="cy-cmd-overlay" role="dialog" aria-modal="true" aria-label="Command palette" tabindex="-1" onclick={handleBackdropClick} onkeydown={handleKeydown}>
     <div class="cy-cmd">
       <div class="cy-cmd__header">
         <svg class="cy-cmd__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

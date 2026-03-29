@@ -145,6 +145,7 @@
       onkeydown={handleKeydown}
       onfocus={handleFocus}
       role="combobox"
+      aria-controls="listbox-id"
       aria-expanded={shouldShowResults}
       aria-autocomplete="list"
       autocomplete="off"

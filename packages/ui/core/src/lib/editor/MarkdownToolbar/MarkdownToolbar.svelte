@@ -124,7 +124,7 @@
 
 <svelte:window onclick={handleWindowClick} />
 
-<div class="cy-md-toolbar" class:cy-md-toolbar--disabled={disabled}>
+<div class="cy-md-toolbar" class:cy-md-toolbar--disabled={disabled} role="toolbar">
   <!-- Bold -->
   <button
     type="button"
@@ -180,7 +180,7 @@
       </svg>
     </button>
     {#if showHeadingDropdown}
-      <div class="cy-md-toolbar__dropdown" onclick={(e) => e.stopPropagation()}>
+      <div class="cy-md-toolbar__dropdown" onclick={(e) => e.stopPropagation()} role="presentation">
         <button type="button" onclick={() => handleHeading(1)}>H1</button>
         <button type="button" onclick={() => handleHeading(2)}>H2</button>
         <button type="button" onclick={() => handleHeading(3)}>H3</button>

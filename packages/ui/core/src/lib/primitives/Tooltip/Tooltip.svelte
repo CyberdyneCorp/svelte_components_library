@@ -30,6 +30,7 @@
   onmouseleave={hide}
   onfocusin={show}
   onfocusout={hide}
+  role="presentation"
 >
   {#if children}
     {@render children()}

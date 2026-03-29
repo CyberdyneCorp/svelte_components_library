@@ -133,6 +133,8 @@
     class="cy-pie-chart__svg"
     width={size}
     height={size}
+    role="img"
+    aria-label="Pie chart"
   >
     {#each slices as slice}
       <path

@@ -43,6 +43,7 @@
     role="dialog"
     aria-modal="true"
     aria-labelledby="drawer-title"
+    tabindex="-1"
     onclick={handleBackdropClick}
     onkeydown={handleKeydown}
   >

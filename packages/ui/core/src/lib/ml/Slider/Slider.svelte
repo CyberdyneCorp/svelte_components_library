@@ -28,7 +28,7 @@
   {#if label || showValue}
     <div class="cy-slider__header">
       {#if label}
-        <label class="cy-slider__label">{label}</label>
+        <label class="cy-slider__label" for="cy-slider-input">{label}</label>
       {/if}
       {#if showValue}
         <span class="cy-slider__value">{value}{unit}</span>
@@ -38,6 +38,7 @@
   <div class="cy-slider__track-wrapper">
     <input
       type="range"
+      id="cy-slider-input"
       class="cy-slider__input"
       bind:value
       {min}

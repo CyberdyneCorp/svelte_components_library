@@ -84,8 +84,7 @@
   });
 </script>
 
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="cy-dropdown" bind:this={containerEl} onkeydown={handleKeydown}>
+<div class="cy-dropdown" bind:this={containerEl} onkeydown={handleKeydown} role="presentation">
   <div class="cy-dropdown__trigger" onclick={toggle} role="button" tabindex="0" aria-haspopup="listbox" aria-expanded={open}>
     {@render trigger()}
   </div>

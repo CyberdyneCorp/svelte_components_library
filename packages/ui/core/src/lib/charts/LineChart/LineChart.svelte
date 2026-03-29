@@ -109,6 +109,8 @@
     class="cy-line-chart__svg"
     onmousemove={onMouseMove}
     onmouseleave={onMouseLeave}
+    role="img"
+    aria-label="Line chart"
   >
     {#if showGrid}
       {#each yTicks as tick}

@@ -27,8 +27,10 @@
     onmonthchange?: (month: number, year: number) => void;
   } = $props();
 
-  let currentMonth = $state(month);
-  let currentYear = $state(year);
+  let internalMonth: number | undefined = $state(undefined);
+  let internalYear: number | undefined = $state(undefined);
+  let currentMonth = $derived(internalMonth ?? month);
+  let currentYear = $derived(internalYear ?? year);
 
   const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -127,22 +129,24 @@
 
   function prevMonth() {
     if (currentMonth === 0) {
-      currentMonth = 11;
-      currentYear--;
+      internalMonth = 11;
+      internalYear = currentYear - 1;
     } else {
-      currentMonth--;
+      internalMonth = currentMonth - 1;
+      internalYear = currentYear;
     }
-    onmonthchange?.(currentMonth, currentYear);
+    onmonthchange?.(internalMonth, internalYear);
   }
 
   function nextMonth() {
     if (currentMonth === 11) {
-      currentMonth = 0;
-      currentYear++;
+      internalMonth = 0;
+      internalYear = currentYear + 1;
     } else {
-      currentMonth++;
+      internalMonth = currentMonth + 1;
+      internalYear = currentYear;
     }
-    onmonthchange?.(currentMonth, currentYear);
+    onmonthchange?.(internalMonth, internalYear);
   }
 
   function selectDate(day: (typeof calendarDays)[0]) {

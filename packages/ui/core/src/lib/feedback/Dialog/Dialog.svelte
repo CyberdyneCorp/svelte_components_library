@@ -71,7 +71,7 @@
 
 {#if open}
   <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-  <div class="cy-dialog-overlay" role="dialog" aria-modal="true" aria-labelledby="dialog-title" onkeydown={handleKeydown} onclick={handleBackdropClick}>
+  <div class="cy-dialog-overlay" role="dialog" aria-modal="true" aria-labelledby="dialog-title" tabindex="-1" onkeydown={handleKeydown} onclick={handleBackdropClick}>
     <div class="cy-dialog" bind:this={dialogEl}>
       <div class="cy-dialog__header">
         <h2 class="cy-dialog__title" id="dialog-title">{title}</h2>

@@ -312,7 +312,6 @@
     {#each allNodes as pn (pn.node.id)}
       {@const node = pn.node}
       {@const isSelected = selectedId === node.id}
-      <!-- svelte-ignore a11y_no_static_element_interactions -->
       <g
         class="cy-org__node-group"
         transform="translate({pn.x}, {pn.y})"
@@ -404,7 +403,6 @@
 
         <!-- Collapse toggle -->
         {#if collapsible && hasChildren(node)}
-          <!-- svelte-ignore a11y_no_static_element_interactions -->
           <g
             class="cy-org__toggle"
             transform={direction === "horizontal"
@@ -433,7 +431,7 @@
   </svg>
 
   {#if detailNode}
-    <div class="cy-org__detail" onclick={(e) => e.stopPropagation()}>
+    <div class="cy-org__detail" onclick={(e) => e.stopPropagation()} role="presentation">
       <div class="cy-org__detail-header">
         <div class="cy-org__detail-avatar">
           {detailNode.label.split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase()}

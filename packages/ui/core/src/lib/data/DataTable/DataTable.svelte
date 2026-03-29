@@ -174,7 +174,7 @@
             >
               <div class="cy-datatable__th-content">
                 {#if col.sortable}
-                  <button class="cy-datatable__sort-btn" onclick={() => toggleSort(col.key)}>
+                  <button class="cy-datatable__sort-btn" aria-label="Sort by {col.label}" onclick={() => toggleSort(col.key)}>
                     {col.label}
                     <span class="cy-datatable__sort-icon" class:cy-datatable__sort-icon--active={sortKey === col.key}>
                       {#if sortKey === col.key && sortDir === "desc"}
@@ -237,7 +237,7 @@
               {/if}
               {#if expandable}
                 <td class="cy-datatable__td cy-datatable__td--expand" onclick={(e) => { e.stopPropagation(); toggleExpandRow(rid); }}>
-                  <button class="cy-datatable__expand-btn" class:cy-datatable__expand-btn--open={expandedRows.includes(rid)}>
+                  <button class="cy-datatable__expand-btn" aria-label="Expand row" class:cy-datatable__expand-btn--open={expandedRows.includes(rid)}>
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                       <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -269,6 +269,7 @@
       <div class="cy-datatable__pagination">
         <button
           class="cy-datatable__page-btn"
+          aria-label="Previous page"
           disabled={currentPage <= 1}
           onclick={() => { currentPage = currentPage - 1; }}
         >
@@ -287,6 +288,7 @@
         {/each}
         <button
           class="cy-datatable__page-btn"
+          aria-label="Next page"
           disabled={currentPage >= totalPages}
           onclick={() => { currentPage = currentPage + 1; }}
         >

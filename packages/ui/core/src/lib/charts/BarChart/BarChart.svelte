@@ -25,9 +25,9 @@
 
   const viewW = 600;
   const viewH = 300;
-  const padding = horizontal
+  let padding = $derived(horizontal
     ? { top: 20, right: 40, bottom: 30, left: 80 }
-    : { top: 20, right: 20, bottom: 50, left: 50 };
+    : { top: 20, right: 20, bottom: 50, left: 50 });
 
   let plotW = $derived(viewW - padding.left - padding.right);
   let plotH = $derived(viewH - padding.top - padding.bottom);
@@ -56,6 +56,8 @@
     viewBox="0 0 {viewW} {viewH}"
     preserveAspectRatio="xMidYMid meet"
     class="cy-bar-chart__svg"
+    role="img"
+    aria-label="Bar chart"
   >
     {#if showGrid}
       {#each ticks as tick}
@@ -127,6 +129,7 @@
           style={isHovered ? `filter: drop-shadow(0 0 8px ${color})` : ""}
           onmouseenter={() => hoveredIndex = i}
           onmouseleave={() => hoveredIndex = null}
+          role="presentation"
         />
         <text
           x={padding.left - 6}
@@ -157,6 +160,7 @@
           style={isHovered ? `filter: drop-shadow(0 0 8px ${color})` : ""}
           onmouseenter={() => hoveredIndex = i}
           onmouseleave={() => hoveredIndex = null}
+          role="presentation"
         />
         <text
           x={barX + barW / 2}

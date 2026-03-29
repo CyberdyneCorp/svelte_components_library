@@ -1,6 +1,8 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import FileTree from './FileTree.svelte';
+
   type FileTreeItem = {
     name: string;
     type: "file" | "folder";
@@ -71,7 +73,7 @@
   {#each items as item}
     {@const path = getPath(item)}
     {@const expanded = isExpanded(item)}
-    <li class="cy-file-tree__item" role="treeitem" aria-expanded={item.type === "folder" ? expanded : undefined}>
+    <li class="cy-file-tree__item" role="treeitem" aria-selected={selectedPath === path} aria-expanded={item.type === "folder" ? expanded : undefined}>
       <button
         class="cy-file-tree__row"
         class:cy-file-tree__row--selected={selectedPath === path}
@@ -106,7 +108,7 @@
       </button>
 
       {#if item.type === "folder" && expanded && item.children}
-        <svelte:self
+        <FileTree
           items={item.children}
           bind:selectedPath
           {onselect}

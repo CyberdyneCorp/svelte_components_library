@@ -23,7 +23,8 @@
     bottom?: Snippet;
   } = $props();
 
-  let splitPercent = $state(initialSplit);
+  let internalSplit: number | undefined = $state(undefined);
+  let splitPercent = $derived(internalSplit ?? initialSplit);
   let dragging = $state(false);
   let containerEl: HTMLDivElement | undefined = $state();
 
@@ -48,7 +49,7 @@
       const minPercent = (minSize / totalSize) * 100;
       const maxPercent = 100 - minPercent;
 
-      splitPercent = Math.min(maxPercent, Math.max(minPercent, newPercent));
+      internalSplit = Math.min(maxPercent, Math.max(minPercent, newPercent));
     };
 
     const onMouseUp = () => {
@@ -68,9 +69,9 @@
     const minPercent = (minSize / totalSize) * 100;
 
     if (panel === "first") {
-      splitPercent = minPercent;
+      internalSplit = minPercent;
     } else {
-      splitPercent = 100 - minPercent;
+      internalSplit = 100 - minPercent;
     }
   }
 

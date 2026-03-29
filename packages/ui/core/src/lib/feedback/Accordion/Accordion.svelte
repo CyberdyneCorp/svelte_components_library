@@ -11,18 +11,20 @@
     defaultOpen?: string[];
   } = $props();
 
-  let openItems: Set<string> = $state(new Set(defaultOpen));
+  let internalOpenItems: Set<string> | undefined = $state(undefined);
+  let openItems = $derived(internalOpenItems ?? new Set(defaultOpen));
 
   function toggle(id: string) {
-    if (openItems.has(id)) {
-      openItems.delete(id);
-      openItems = new Set(openItems);
+    const current = new Set(openItems);
+    if (current.has(id)) {
+      current.delete(id);
+      internalOpenItems = current;
     } else {
       if (multiple) {
-        openItems.add(id);
-        openItems = new Set(openItems);
+        current.add(id);
+        internalOpenItems = current;
       } else {
-        openItems = new Set([id]);
+        internalOpenItems = new Set([id]);
       }
     }
   }

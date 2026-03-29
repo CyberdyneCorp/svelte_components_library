@@ -316,6 +316,7 @@
     role="textbox"
     aria-multiline="true"
     aria-label="Rich text editor"
+    tabindex="0"
     data-placeholder={placeholder}
     style:min-height={height}
     oninput={handleInput}
