@@ -15,16 +15,17 @@ describe("ActivityHeatmap", () => {
     expect(el).toBeInTheDocument();
   });
 
-  it("renders an SVG element", () => {
+  it("renders a canvas element", () => {
     render(ActivityHeatmap, { props: { data } });
-    const svg = document.querySelector("svg");
-    expect(svg).toBeInTheDocument();
+    const canvas = document.querySelector("canvas");
+    expect(canvas).toBeInTheDocument();
   });
 
-  it("renders cells for data points", () => {
-    render(ActivityHeatmap, { props: { data } });
-    const cells = document.querySelectorAll("rect");
-    expect(cells.length).toBeGreaterThan(0);
+  it("shows label when provided", () => {
+    render(ActivityHeatmap, { props: { data, label: "Commits" } });
+    const label = document.querySelector(".cy-heatmap__label");
+    expect(label).toBeInTheDocument();
+    expect(label?.textContent).toBe("Commits");
   });
 
   it("renders with empty data", () => {
