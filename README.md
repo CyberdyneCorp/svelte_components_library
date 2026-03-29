@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **131 components** across 15 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **135 components** across 15 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdyne/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdyne/svelte-ui-core` | 131 UI components across 15 categories |
+| `@cyberdyne/svelte-ui-core` | 135 UI components across 15 categories |
 
 ## Installation
 
@@ -77,7 +77,7 @@ Use components:
 </Card>
 ```
 
-## Components (131)
+## Components (135)
 
 ### Primitives (14)
 `Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle` · `StarRating`
@@ -115,8 +115,8 @@ Use components:
 ### Graph & Search (2)
 `GraphViewer` (force-directed network graph with community detection, zoom/pan, search) · `SemanticSearch` (vector search results with relevance scores)
 
-### Charts (10)
-`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart` · `PieChart` · `Sparkline` · `Gauge` · `TreeMap` · `GanttChart` · `ActivityHeatmap`
+### Charts (14)
+`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart` · `PieChart` · `Sparkline` · `Gauge` · `TreeMap` · `GanttChart` · `ActivityHeatmap` · `CumulativeFlow` (CFD) · `AgingWIP` · `BurndownChart` · `VelocityChart`
 
 ### Editor (5)
 `MarkdownEditor` (with Mermaid diagram support) · `MarkdownPreview` · `MarkdownToolbar` · `MindMap`
@@ -220,7 +220,7 @@ pnpm release            # Build & publish
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
-│       └── core/            UI components (131 components)
+│       └── core/            UI components (135 components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
 │               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ...

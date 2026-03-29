@@ -44,7 +44,7 @@ The Cyberdyne Design System is a comprehensive, reusable Svelte 5 component libr
 
 The system encompasses:
 - **Design Tokens** — Colors, typography, spacing, radius, shadows, and animations defined as CSS custom properties
-- **131 UI Components** — Organized across 15 functional categories
+- **135 UI Components** — Organized across 15 functional categories
 - **Storybook Documentation** — Interactive component playground with auto-generated API docs
 - **CI/CD Pipeline** — Automated testing, versioning, and publishing workflows
 
@@ -125,7 +125,7 @@ svelte_components_library/
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS layers (colors, typography, spacing, ...)
-│       └── core/            UI components (131 components)
+│       └── core/            UI components (135 components)
 │           └── src/lib/
 │               ├── primitives/   14 components
 │               ├── forms/        19 components
@@ -332,7 +332,7 @@ export type BreakpointKey, SpacingKey, RadiusKey
 ### 5.2 @cyberdyne/svelte-ui-core
 
 **Version:** 0.1.0
-**Purpose:** 131 UI components
+**Purpose:** 135 UI components
 **Dependency:** `@cyberdyne/svelte-ui-foundation` (workspace:*)
 
 **Export Path:** `.` — All components from a single entry point
@@ -848,7 +848,7 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | Package | Target (gzipped) | Notes |
 |---------|------------------|-------|
 | Foundation CSS | < 5KB | Tokens only, no components |
-| Core (full) | < 100KB | All 131 components |
+| Core (full) | < 100KB | All 135 components |
 | Core (tree-shaken) | < 15KB | Typical import of 5–10 components |
 
 ### 13.2 Runtime Performance
