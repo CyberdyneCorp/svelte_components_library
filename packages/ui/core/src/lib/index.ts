@@ -156,8 +156,12 @@ export { CumulativeFlow } from "./charts/CumulativeFlow/index.js";
 export { AgingWIP } from "./charts/AgingWIP/index.js";
 export { BurndownChart } from "./charts/BurndownChart/index.js";
 export { VelocityChart } from "./charts/VelocityChart/index.js";
+export { SankeyChart } from "./charts/SankeyChart/index.js";
+export { ScatterChart } from "./charts/ScatterChart/index.js";
+export { VennDiagram } from "./charts/VennDiagram/index.js";
 
 // Editor
+export { BlockEditor } from "./editor/BlockEditor/index.js";
 export { MarkdownEditor } from "./editor/MarkdownEditor/index.js";
 export { MarkdownPreview } from "./editor/MarkdownPreview/index.js";
 export { MarkdownToolbar } from "./editor/MarkdownToolbar/index.js";

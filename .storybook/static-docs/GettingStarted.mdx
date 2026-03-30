@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/blocks";
+import { Meta } from "@storybook/addon-docs/blocks";
 
 <Meta title="Overview/Getting Started" />
 
@@ -101,14 +101,169 @@ Fonts are loaded via Google Fonts in the foundation CSS. For self-hosting, overr
   <div><strong>Data Display</strong> (16) — Tables, kanban, calendar, file trees</div>
   <div><strong>Layout</strong> (8) — Cards, drawers, split views, page shells</div>
   <div><strong>Overlay</strong> (5) — Modals, command palette, popovers</div>
-  <div><strong>Charts</strong> (14) — Line, bar, pie, Gantt, burndown, heatmap</div>
+  <div><strong>Charts</strong> (17) — Line, bar, pie, scatter, sankey, Venn, Gantt, heatmap</div>
   <div><strong>Crypto/Web3</strong> (13) — Swap, staking, gas, token balance</div>
   <div><strong>Chat</strong> (7) — Chatbox, comments, bot answers</div>
   <div><strong>ML/Data</strong> (11) — Terminal, notebooks, model cards, logs</div>
-  <div><strong>Editor</strong> (5) — Markdown, mind map, rich text</div>
+  <div><strong>Editor</strong> (6) — Block editor, markdown, mind map, rich text</div>
   <div><strong>Graph</strong> (2) — Knowledge graph, semantic search</div>
   <div><strong>Auth</strong> (2) — Login, wallet connect</div>
   <div><strong>Maps</strong> (1) — Leaflet with dark tiles</div>
+</div>
+
+## Customization & Extensibility
+
+Every component is designed as a **headless behavior shell** — zero business logic baked in. You inject behavior via callbacks, custom items, and CSS overrides.
+
+### Callback Props
+
+All interactive components expose `on*` callback props so you can inject your own logic without forking the component.
+
+```svelte
+<script>
+  import { BlockEditor } from "@cyberdyne/svelte-ui-core";
+
+  let markdown = $state("");
+
+  function handleBlockCommit(block) {
+    // Custom validation, analytics, auto-save — your logic here
+    console.log(`Block ${block.id} committed:`, block.type);
+    saveToServer(markdown);
+  }
+
+  function handleBlockDelete(block) {
+    if (block.type === "heading") {
+      // Prevent heading deletion with custom confirmation
+      if (!confirm("Delete this heading?")) return;
+    }
+  }
+</script>
+
+<BlockEditor
+  bind:value={markdown}
+  onchange={(md) => debouncedSave(md)}
+  onblockcommit={handleBlockCommit}
+  onblockcreate={(block) => trackAnalytics("block_created", block.type)}
+  onblockdelete={handleBlockDelete}
+  onblockreorder={(blocks) => logReorder(blocks)}
+/>
+```
+
+### Custom Slash Menu Items
+
+Override or extend the slash command menu by passing your own `slashMenuItems` array.
+
+```svelte
+<script>
+  import { BlockEditor } from "@cyberdyne/svelte-ui-core";
+
+  const customSlashItems = [
+    { label: "Alert Box", type: "blockquote", template: "> **Warning:** ", icon: "!", description: "Warning callout" },
+    { label: "API Endpoint", type: "code-block", template: "```http\nGET /api/v1/\n```", icon: "{}", description: "HTTP request block" },
+    { label: "Heading 1", type: "heading", template: "# ", icon: "H1", description: "Large heading" },
+    { label: "Heading 2", type: "heading", template: "## ", icon: "H2", description: "Medium heading" },
+    { label: "Bullet List", type: "unordered-list", template: "- ", icon: "•", description: "Unordered list" },
+    { label: "Code Block", type: "code-block", template: "```\n\n```", icon: "<>", description: "Fenced code block" },
+  ];
+</script>
+
+<BlockEditor slashMenuItems={customSlashItems} />
+```
+
+### Custom Toolbar Actions
+
+Inject extra buttons into the toolbar with `toolbarActions`. Each action receives the active textarea element.
+
+```svelte
+<script>
+  import { BlockEditor, insertMarkdown } from "@cyberdyne/svelte-ui-core";
+
+  const extraTools = [
+    {
+      label: "Insert timestamp",
+      icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+      action: (textarea) => {
+        const now = new Date().toISOString().split("T")[0];
+        insertMarkdown(textarea, "", "", now);
+      },
+    },
+    {
+      label: "Wrap in callout",
+      icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>',
+      action: (textarea) => {
+        insertMarkdown(textarea, "> **Note:** ", "", "your note here");
+      },
+    },
+  ];
+</script>
+
+<BlockEditor toolbarActions={extraTools} />
+```
+
+### CSS Custom Properties
+
+Every component uses CSS custom properties. Override at any scope — global, page, or per-instance:
+
+```svelte
+<!-- Global override via :root -->
+<style>
+  :root {
+    --color-action-brand-default: #ff6b00;
+  }
+</style>
+
+<!-- Per-instance override via class -->
+<BlockEditor class="my-editor" />
+
+<style>
+  :global(.my-editor) {
+    --color-surface-default: #1a1a2e;
+    --color-border-subtle: #333;
+  }
+</style>
+```
+
+### Sizing & Layout
+
+Components that accept `height`, `minHeight`, and `class` props let you control sizing without wrapper divs:
+
+```svelte
+<BlockEditor height="500px" minHeight="300px" class="full-width-editor" />
+```
+
+### Using Utility Functions Standalone
+
+All BlockEditor parsing and insertion utilities are exported for use outside the component:
+
+```svelte
+<script>
+  import {
+    parseMarkdownToBlocks,
+    serializeBlocksToMarkdown,
+    detectBlockType,
+    insertMarkdown,
+  } from "@cyberdyne/svelte-ui-core";
+
+  // Parse markdown into blocks for custom processing
+  const blocks = parseMarkdownToBlocks(rawMarkdown);
+  const headings = blocks.filter(b => b.type === "heading");
+
+  // Re-serialize after transformation
+  const output = serializeBlocksToMarkdown(blocks);
+</script>
+```
+
+### Pattern: All Components Follow the Same Contract
+
+This extensibility pattern is consistent across the library:
+
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '1.5rem', fontSize: '0.875rem' }}>
+  <div><strong>Callbacks</strong> — <code>onchange</code>, <code>onsubmit</code>, <code>onclick</code>, etc.</div>
+  <div><strong>CSS class</strong> — <code>class</code> prop for custom styling</div>
+  <div><strong>CSS variables</strong> — Override design tokens at any scope</div>
+  <div><strong>Bindable state</strong> — <code>bind:value</code> for two-way data flow</div>
+  <div><strong>Custom items</strong> — Arrays of objects for menus, tabs, filters</div>
+  <div><strong>Disabled/readonly</strong> — Consistent state props across all components</div>
 </div>
 
 ## Accessibility
@@ -150,6 +305,48 @@ pnpm release       # Build and publish
 ## Recipes
 
 Common composition patterns for building full pages with Cyberdyne components.
+
+### Block-Based Document Editor
+
+Build a Notion-like document editor with custom slash commands and auto-save.
+
+```svelte
+<script>
+  import { BlockEditor } from "@cyberdyne/svelte-ui-core";
+
+  let content = $state("# My Document\n\nStart writing here...");
+  let saveStatus = $state("saved");
+
+  const customSlash = [
+    { label: "Heading 1", type: "heading", template: "# ", icon: "H1", description: "Large heading" },
+    { label: "Heading 2", type: "heading", template: "## ", icon: "H2", description: "Medium heading" },
+    { label: "Bullet List", type: "unordered-list", template: "- ", icon: "•", description: "Unordered list" },
+    { label: "Task List", type: "task-list", template: "- [ ] ", icon: "☐", description: "Checklist" },
+    { label: "Code Block", type: "code-block", template: "```\n\n```", icon: "<>", description: "Code" },
+    { label: "Callout", type: "blockquote", template: "> **Note:** ", icon: "!", description: "Info callout" },
+    { label: "API Block", type: "code-block", template: "```http\nGET /api/v1/resource\nAuthorization: Bearer token\n```", icon: "{}", description: "API request" },
+  ];
+
+  let saveTimer;
+  function autoSave(md) {
+    saveStatus = "saving...";
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      await fetch("/api/documents/1", { method: "PUT", body: md });
+      saveStatus = "saved";
+    }, 1000);
+  }
+</script>
+
+<BlockEditor
+  bind:value={content}
+  height="600px"
+  slashMenuItems={customSlash}
+  onchange={autoSave}
+  onblockcommit={(block) => console.log("Committed:", block.type)}
+/>
+<small>{saveStatus}</small>
+```
 
 ### Dashboard Page
 

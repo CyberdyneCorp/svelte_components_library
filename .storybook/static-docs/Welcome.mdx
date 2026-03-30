@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/blocks";
+import { Meta } from "@storybook/addon-docs/blocks";
 
 <Meta title="Overview/Welcome" />
 
@@ -12,7 +12,7 @@ import { Meta } from "@storybook/blocks";
 
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
   <div style={{ padding: '1.25rem', borderRadius: '10px', border: '1px solid #2a2a38', textAlign: 'center' }}>
-    <div style={{ fontSize: '2rem', fontWeight: 700, fontFamily: 'JetBrains Mono, monospace' }}>139</div>
+    <div style={{ fontSize: '2rem', fontWeight: 700, fontFamily: 'JetBrains Mono, monospace' }}>143</div>
     <div style={{ fontSize: '0.8rem', color: '#6a6a7e', marginTop: '4px' }}>Components</div>
   </div>
   <div style={{ padding: '1.25rem', borderRadius: '10px', border: '1px solid #2a2a38', textAlign: 'center' }}>
@@ -20,7 +20,7 @@ import { Meta } from "@storybook/blocks";
     <div style={{ fontSize: '0.8rem', color: '#6a6a7e', marginTop: '4px' }}>Categories</div>
   </div>
   <div style={{ padding: '1.25rem', borderRadius: '10px', border: '1px solid #2a2a38', textAlign: 'center' }}>
-    <div style={{ fontSize: '2rem', fontWeight: 700, fontFamily: 'JetBrains Mono, monospace' }}>661</div>
+    <div style={{ fontSize: '2rem', fontWeight: 700, fontFamily: 'JetBrains Mono, monospace' }}>710</div>
     <div style={{ fontSize: '0.8rem', color: '#6a6a7e', marginTop: '4px' }}>Unit Tests</div>
   </div>
   <div style={{ padding: '1.25rem', borderRadius: '10px', border: '1px solid #2a2a38', textAlign: 'center' }}>
@@ -42,11 +42,11 @@ import { Meta } from "@storybook/blocks";
     { name: 'Data Display', count: 16, desc: 'Tables, kanban, calendar, file trees' },
     { name: 'Layout', count: 8, desc: 'Cards, drawers, split views, page shells' },
     { name: 'Overlay', count: 5, desc: 'Modals, command palette, popovers' },
-    { name: 'Charts', count: 14, desc: 'Line, bar, pie, Gantt, burndown, heatmap' },
+    { name: 'Charts', count: 17, desc: 'Line, bar, pie, scatter, sankey, Venn, Gantt, heatmap' },
     { name: 'Crypto / Web3', count: 13, desc: 'Swap, staking, gas, token balance' },
     { name: 'Chat', count: 7, desc: 'Chatbox, responses, comments, prompts' },
     { name: 'ML / Data', count: 11, desc: 'Terminal, notebook, model cards, logs' },
-    { name: 'Editor', count: 5, desc: 'Markdown, mind map, rich text' },
+    { name: 'Editor', count: 6, desc: 'Block editor, markdown, mind map, rich text' },
     { name: 'Graph', count: 2, desc: 'Force-directed graph, semantic search' },
     { name: 'Auth', count: 2, desc: 'Login page, wallet connect' },
     { name: 'Maps', count: 1, desc: 'Leaflet with dark tiles, geolocation' },
@@ -84,6 +84,8 @@ import { Meta } from "@storybook/blocks";
 
 ## What's New
 
+- **SankeyChart, ScatterChart, VennDiagram** — Three new chart types for flow analysis, correlation, and set comparison
+- **BlockEditor** — Notion-like block-based markdown editor with inline preview, slash commands, and drag reorder
 - **PM Charts** — BurndownChart, VelocityChart, CumulativeFlow, AgingWIP for project management
 - **MindMap** — Interactive mind mapping with drag-reparent, undo/redo, markdown export
 - **MegaMenu + NavBar** — Multi-column dropdown nav and responsive top bar
