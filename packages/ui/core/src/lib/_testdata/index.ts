@@ -1,6 +1,6 @@
 /**
  * Shared test/demo data for Storybook stories.
- * Import from "@cyberdyne/svelte-ui-core/_testdata" or relatively.
+ * Import from "@cyberdynecorp/svelte-ui-core/_testdata" or relatively.
  */
 
 // ─── Crypto Market Data ───────────────────────────────────────

@@ -35,8 +35,8 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 
 | Package | Description |
 |---------|------------|
-| `@cyberdyne/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdyne/svelte-ui-core` | 139 UI components across 15 categories |
+| `@cyberdynecorp/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
+| `@cyberdynecorp/svelte-ui-core` | 139 UI components across 15 categories |
 
 ## Installation
 
@@ -45,7 +45,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 echo "@cyberdyne:registry=https://npm.pkg.github.com" >> .npmrc
 
 # Install
-pnpm add @cyberdyne/svelte-ui-foundation @cyberdyne/svelte-ui-core
+pnpm add @cyberdynecorp/svelte-ui-foundation @cyberdynecorp/svelte-ui-core
 ```
 
 ### Setup
@@ -54,7 +54,7 @@ Import the foundation styles in your root layout:
 
 ```svelte
 <script>
-  import "@cyberdyne/svelte-ui-foundation/styles";
+  import "@cyberdynecorp/svelte-ui-foundation/styles";
 </script>
 
 {@render children()}
@@ -67,7 +67,7 @@ Use components:
   import {
     Button, Card, TextInput, Badge,
     TokenBalance, Terminal, CommandPalette
-  } from "@cyberdyne/svelte-ui-core";
+  } from "@cyberdynecorp/svelte-ui-core";
 </script>
 
 <Card variant="elevated">

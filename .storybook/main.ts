@@ -1,5 +1,10 @@
+// This file has been automatically migrated to valid ESM format by Storybook.
+import { fileURLToPath } from "node:url";
 import type { StorybookConfig } from "@storybook/svelte-vite";
-import path from "path";
+import path, { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const config: StorybookConfig = {
   stories: [
@@ -7,35 +12,35 @@ const config: StorybookConfig = {
     "../packages/**/*.mdx",
     "../packages/**/src/**/*.stories.@(js|ts|svelte)",
   ],
+
   addons: [
     "@storybook/addon-svelte-csf",
-    "@storybook/addon-essentials",
     "@storybook/addon-a11y",
-    "@storybook/addon-interactions",
+    "@storybook/addon-docs",
+    "@storybook/addon-vitest"
   ],
+
   framework: {
     name: "@storybook/svelte-vite",
     options: {},
   },
-  docs: {
-    autodocs: "tag",
-  },
+
   viteFinal: async (config) => {
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@cyberdyne/svelte-ui-core": path.resolve(
+      "@cyberdynecorp/svelte-ui-core": path.resolve(
         __dirname,
         "../packages/ui/core/src/lib/index.ts",
       ),
-      "@cyberdyne/svelte-ui-foundation": path.resolve(
+      "@cyberdynecorp/svelte-ui-foundation": path.resolve(
         __dirname,
         "../packages/ui/foundation/src/lib/index.ts",
       ),
     };
 
     return config;
-  },
+  }
 };
 
 export default config;

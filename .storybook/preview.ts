@@ -1,4 +1,4 @@
-import type { Preview } from "@storybook/svelte";
+import type { Preview } from "@storybook/svelte-vite";
 import "../packages/ui/foundation/src/lib/styles/index.css";
 
 const preview: Preview = {
@@ -20,7 +20,7 @@ const preview: Preview = {
     theme: "dark",
   },
   parameters: {
-    backgrounds: { disable: true },
+    backgrounds: { disabled: true },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -30,7 +30,12 @@ const preview: Preview = {
     docs: {
       toc: true,
     },
-    a11y: {},
+    a11y: {
+      // 'todo' - show a11y violations in the test UI only
+      // 'error' - fail CI on a11y violations
+      // 'off' - skip a11y checks entirely
+      test: "todo",
+    },
     layout: "padded",
   },
   decorators: [
@@ -39,10 +44,8 @@ const preview: Preview = {
 
       if (typeof document !== "undefined") {
         document.documentElement.setAttribute("data-theme", theme);
-        document.body.style.backgroundColor =
-          theme === "light" ? "#f8f8fc" : "#0a0a0f";
-        document.body.style.color =
-          theme === "light" ? "#12121a" : "#f0f0ff";
+        document.body.style.backgroundColor = theme === "light" ? "#f8f8fc" : "#0a0a0f";
+        document.body.style.color = theme === "light" ? "#12121a" : "#f0f0ff";
       }
 
       return Story(context.args);

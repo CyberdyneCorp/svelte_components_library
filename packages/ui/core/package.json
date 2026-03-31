@@ -1,5 +1,5 @@
 {
-  "name": "@cyberdyne/svelte-ui-core",
+  "name": "@cyberdynecorp/svelte-ui-core",
   "version": "0.1.0",
   "type": "module",
   "svelte": "./src/lib/index.ts",
@@ -10,7 +10,9 @@
       "default": "./src/lib/index.ts"
     }
   },
-  "files": ["src/lib"],
+  "files": [
+    "src/lib"
+  ],
   "scripts": {
     "build": "svelte-package",
     "svelte-check": "svelte-check --tsconfig ./tsconfig.json"
@@ -19,7 +21,7 @@
     "svelte": "^5.0.0"
   },
   "dependencies": {
-    "@cyberdyne/svelte-ui-foundation": "workspace:*"
+    "@cyberdynecorp/svelte-ui-foundation": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.3.10",

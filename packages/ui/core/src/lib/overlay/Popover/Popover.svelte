@@ -10,8 +10,8 @@
     open = $bindable(false),
     closeOnClickOutside = true,
   }: {
-    trigger: Snippet;
-    content: Snippet;
+    trigger?: Snippet;
+    content?: Snippet;
     position?: "top" | "bottom" | "left" | "right";
     open: boolean;
     closeOnClickOutside?: boolean;
@@ -49,14 +49,14 @@
 
 <div class="cy-popover" bind:this={containerEl}>
   <div class="cy-popover__trigger" onclick={toggle} role="button" tabindex="0" aria-expanded={open}>
-    {@render trigger()}
+    {@render trigger?.()}
   </div>
 
   {#if open}
     <div class="cy-popover__content cy-popover__content--{position}">
       <div class="cy-popover__arrow cy-popover__arrow--{position}"></div>
       <div class="cy-popover__body">
-        {@render content()}
+        {@render content?.()}
       </div>
     </div>
   {/if}

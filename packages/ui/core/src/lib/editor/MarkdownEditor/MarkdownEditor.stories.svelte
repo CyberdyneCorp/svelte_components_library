@@ -24,7 +24,7 @@ Welcome to the **Cyberdyne** component library. This editor supports *rich markd
 ### Code Example
 
 \`\`\`typescript
-import { MarkdownEditor } from "@cyberdyne/ui";
+import { MarkdownEditor } from "@cyberdynecorp/ui";
 
 const config = {
   theme: "dark",

@@ -20,7 +20,7 @@ Create or update your `.npmrc`:
 ### 2. Install packages
 
 ```bash
-pnpm add @cyberdyne/svelte-ui-foundation @cyberdyne/svelte-ui-core
+pnpm add @cyberdynecorp/svelte-ui-foundation @cyberdynecorp/svelte-ui-core
 ```
 
 ### 3. Import foundation styles
@@ -30,7 +30,7 @@ In your root layout or app entry point:
 ```svelte
 <!-- +layout.svelte -->
 <script>
-  import "@cyberdyne/svelte-ui-foundation/styles";
+  import "@cyberdynecorp/svelte-ui-foundation/styles";
 </script>
 
 {@render children()}
@@ -40,7 +40,7 @@ In your root layout or app entry point:
 
 ```svelte
 <script>
-  import { Button, Card, TextInput, Badge, DataTable, MarkdownEditor, MapView } from "@cyberdyne/svelte-ui-core";
+  import { Button, Card, TextInput, Badge, DataTable, MarkdownEditor, MapView } from "@cyberdynecorp/svelte-ui-core";
 
   let query = $state("");
 </script>
@@ -121,7 +121,7 @@ All interactive components expose `on*` callback props so you can inject your ow
 
 ```svelte
 <script>
-  import { BlockEditor } from "@cyberdyne/svelte-ui-core";
+  import { BlockEditor } from "@cyberdynecorp/svelte-ui-core";
 
   let markdown = $state("");
 
@@ -155,7 +155,7 @@ Override or extend the slash command menu by passing your own `slashMenuItems` a
 
 ```svelte
 <script>
-  import { BlockEditor } from "@cyberdyne/svelte-ui-core";
+  import { BlockEditor } from "@cyberdynecorp/svelte-ui-core";
 
   const customSlashItems = [
     { label: "Alert Box", type: "blockquote", template: "> **Warning:** ", icon: "!", description: "Warning callout" },
@@ -176,7 +176,7 @@ Inject extra buttons into the toolbar with `toolbarActions`. Each action receive
 
 ```svelte
 <script>
-  import { BlockEditor, insertMarkdown } from "@cyberdyne/svelte-ui-core";
+  import { BlockEditor, insertMarkdown } from "@cyberdynecorp/svelte-ui-core";
 
   const extraTools = [
     {
@@ -242,7 +242,7 @@ All BlockEditor parsing and insertion utilities are exported for use outside the
     serializeBlocksToMarkdown,
     detectBlockType,
     insertMarkdown,
-  } from "@cyberdyne/svelte-ui-core";
+  } from "@cyberdynecorp/svelte-ui-core";
 
   // Parse markdown into blocks for custom processing
   const blocks = parseMarkdownToBlocks(rawMarkdown);
@@ -268,13 +268,205 @@ This extensibility pattern is consistent across the library:
 
 ## Accessibility
 
-All components include:
-- Semantic HTML elements
-- ARIA attributes where needed
-- Keyboard navigation support
-- Focus-visible indicators (cyan glow ring)
-- `prefers-reduced-motion` support
-- Color contrast ratios meeting WCAG 2.1 AA
+Every component in the Cyberdyne library is built with **WCAG 2.1 AA** compliance as a baseline. Accessibility is not a feature — it's a structural requirement. Here's what that means in practice, and how to use these components without breaking accessibility.
+
+### What is Accessibility (a11y)?
+
+Accessibility ensures that your application can be used by **everyone**, including people who:
+
+- **Navigate with keyboards** — cannot use a mouse (motor impairments, power users)
+- **Use screen readers** — rely on software that reads the interface aloud (blind or low-vision users)
+- **Have color vision differences** — cannot distinguish certain color combinations
+- **Are sensitive to motion** — experience discomfort from animations
+- **Use assistive technologies** — switch controls, voice recognition, magnifiers
+
+Failing to build accessible interfaces excludes ~15% of the world's population and may violate legal requirements (ADA, Section 508, EN 301 549).
+
+### What the Library Provides
+
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem', fontSize: '0.875rem' }}>
+  <div style={{ padding: '0.75rem', borderRadius: '6px', border: '1px solid #2a2a38' }}>
+    <strong>Semantic HTML</strong>
+    <div style={{ color: '#6a6a7e', fontSize: '0.8rem', marginTop: '4px' }}>
+      Components use <code>&lt;button&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;dialog&gt;</code>, <code>&lt;table&gt;</code> etc. instead of generic <code>&lt;div&gt;</code>s. Screen readers interpret these natively.
+    </div>
+  </div>
+  <div style={{ padding: '0.75rem', borderRadius: '6px', border: '1px solid #2a2a38' }}>
+    <strong>ARIA Attributes</strong>
+    <div style={{ color: '#6a6a7e', fontSize: '0.8rem', marginTop: '4px' }}>
+      <code>aria-label</code>, <code>aria-expanded</code>, <code>aria-selected</code>, <code>aria-live</code>, <code>role</code> attributes are applied where native semantics aren't sufficient.
+    </div>
+  </div>
+  <div style={{ padding: '0.75rem', borderRadius: '6px', border: '1px solid #2a2a38' }}>
+    <strong>Keyboard Navigation</strong>
+    <div style={{ color: '#6a6a7e', fontSize: '0.8rem', marginTop: '4px' }}>
+      All interactive components support Tab, Enter, Space, Escape, and arrow keys. Dropdowns, menus, tabs, and modals follow WAI-ARIA patterns.
+    </div>
+  </div>
+  <div style={{ padding: '0.75rem', borderRadius: '6px', border: '1px solid #2a2a38' }}>
+    <strong>Focus Indicators</strong>
+    <div style={{ color: '#6a6a7e', fontSize: '0.8rem', marginTop: '4px' }}>
+      All focusable elements show a cyan glow ring on <code>:focus-visible</code>. The ring is never suppressed via <code>outline: none</code>.
+    </div>
+  </div>
+  <div style={{ padding: '0.75rem', borderRadius: '6px', border: '1px solid #2a2a38' }}>
+    <strong>Color Contrast</strong>
+    <div style={{ color: '#6a6a7e', fontSize: '0.8rem', marginTop: '4px' }}>
+      Text and interactive elements meet WCAG AA contrast ratios (4.5:1 for normal text, 3:1 for large text). The dark theme uses high-contrast neon accents.
+    </div>
+  </div>
+  <div style={{ padding: '0.75rem', borderRadius: '6px', border: '1px solid #2a2a38' }}>
+    <strong>Motion Preferences</strong>
+    <div style={{ color: '#6a6a7e', fontSize: '0.8rem', marginTop: '4px' }}>
+      Animations respect <code>prefers-reduced-motion</code>. Users who opt out of motion see instant state changes instead of transitions.
+    </div>
+  </div>
+</div>
+
+### ARIA Patterns Used
+
+Here's how the library applies ARIA across component categories:
+
+**Dropdowns, Menus, Select**
+```svelte
+<!-- Trigger declares the popup relationship -->
+<button aria-haspopup="listbox" aria-expanded={open}>
+  Select option
+</button>
+
+<!-- Menu uses listbox/option roles -->
+<div role="listbox">
+  <button role="option" aria-selected={i === focusedIndex}>
+    Option text
+  </button>
+</div>
+```
+
+**Tabs**
+```svelte
+<div role="tablist">
+  <button role="tab" aria-selected={active === tab.key}>
+    {tab.label}
+  </button>
+</div>
+<div role="tabpanel">
+  <!-- Panel content -->
+</div>
+```
+
+**Modals & Dialogs**
+```svelte
+<div role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+  <h2 id="dialog-title">Confirm Action</h2>
+  <!-- Focus is trapped inside while open -->
+  <!-- Escape key closes the dialog -->
+</div>
+```
+
+**Charts & Visualizations**
+```svelte
+<svg role="img" aria-label="Line chart showing model training loss over 50 epochs">
+  <!-- SVG content is decorative; the aria-label provides the meaning -->
+</svg>
+```
+
+**Live Regions (Toasts, Alerts)**
+```svelte
+<div role="alert" aria-live="assertive">
+  Transaction confirmed successfully
+</div>
+```
+
+### Keyboard Shortcuts Reference
+
+| Component | Keys | Action |
+|-----------|------|--------|
+| **Button** | `Enter`, `Space` | Activate |
+| **Dropdown/Select** | `↑` `↓` | Navigate options |
+| | `Enter`, `Space` | Select option |
+| | `Escape` | Close |
+| **Tabs** | `←` `→` | Switch tab |
+| **Modal/Dialog** | `Escape` | Close |
+| | `Tab` | Cycle focus within modal |
+| **CommandPalette** | `↑` `↓` | Navigate results |
+| | `Enter` | Select result |
+| | `Escape` | Close |
+| **BlockEditor** | `Enter` | Commit block, new block |
+| | `Escape` | Commit block |
+| | `↑` `↓` | Navigate between blocks |
+| | `Backspace` (empty) | Delete block |
+| | `/` | Open slash menu |
+| **DataTable** | `Tab` | Navigate cells |
+| **Kanban** | Drag handle | Reorder cards |
+
+### Best Practices When Using Components
+
+**Always provide labels for inputs:**
+```svelte
+<!-- Good: label prop creates accessible association -->
+<TextInput label="Email address" bind:value={email} />
+
+<!-- Good: aria-label for icon-only buttons -->
+<IconButton icon="search" aria-label="Search transactions" />
+
+<!-- Bad: no label, screen reader says "edit text" -->
+<TextInput bind:value={email} />
+```
+
+**Add context to icon-only actions:**
+```svelte
+<!-- Good: title prop adds tooltip + accessible name -->
+<Button variant="ghost" title="Delete item" onclick={handleDelete}>
+  <Icon name="trash" />
+</Button>
+
+<!-- Good: visually-hidden label -->
+<button onclick={handleDelete}>
+  <Icon name="trash" />
+  <span class="sr-only">Delete item</span>
+</button>
+```
+
+**Provide alt text for dynamic images:**
+```svelte
+<!-- In MarkdownPreview, images get alt from markdown syntax -->
+<!-- ![Description of image](url) -->
+
+<!-- When using Avatar, provide a name -->
+<Avatar src={user.photo} alt="{user.name}'s profile photo" />
+```
+
+**Don't suppress focus rings:**
+```css
+/* Never do this */
+*:focus { outline: none; }
+
+/* The library uses :focus-visible which only shows for keyboard users */
+/* If you must customize, replace don't remove: */
+.my-button:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+```
+
+**Test with keyboard-only navigation:**
+1. Unplug your mouse
+2. Tab through the interface
+3. Verify every interactive element is reachable
+4. Verify focus order makes logical sense
+5. Verify modals trap focus and Escape closes them
+
+### Screen Reader Testing
+
+For production apps, test with at least one screen reader:
+
+- **macOS**: VoiceOver (built-in, `Cmd + F5`)
+- **Windows**: NVDA (free) or JAWS
+- **Mobile**: TalkBack (Android) or VoiceOver (iOS)
+
+### Storybook A11y Addon
+
+The library includes `@storybook/addon-a11y` which runs automated checks on every story. Look for the **Accessibility** tab in the Storybook panel to see violations, passes, and incomplete checks for each component.
 
 ## Contributing
 
@@ -312,7 +504,7 @@ Build a Notion-like document editor with custom slash commands and auto-save.
 
 ```svelte
 <script>
-  import { BlockEditor } from "@cyberdyne/svelte-ui-core";
+  import { BlockEditor } from "@cyberdynecorp/svelte-ui-core";
 
   let content = $state("# My Document\n\nStart writing here...");
   let saveStatus = $state("saved");
@@ -358,7 +550,7 @@ Combine `PageShell` for structure, `Header` for navigation, and fill the content
     PageShell, PageHeader, Card,
     MetricCard, LineChart, BarChart, PieChart,
     FilterBar
-  } from "@cyberdyne/svelte-ui-core";
+  } from "@cyberdynecorp/svelte-ui-core";
 </script>
 
 <PageShell>
@@ -405,7 +597,7 @@ Use `PageShell` with `Tabs` to organize settings sections, `Accordion` for colla
     PageShell, PageHeader, Card,
     Tabs, Accordion,
     TextInput, Select, Switch, Button
-  } from "@cyberdyne/svelte-ui-core";
+  } from "@cyberdynecorp/svelte-ui-core";
 
   let activeTab = $state("profile");
 </script>
@@ -457,7 +649,7 @@ Compose a conversational AI interface with `ChatPanel`, `ChatResponse`, `Chatbox
   import {
     Card,
     ChatResponse, Chatbox, BotAnswer, PromptExample
-  } from "@cyberdyne/svelte-ui-core";
+  } from "@cyberdynecorp/svelte-ui-core";
 
   let messages = $state([]);
   let isLoading = $state(false);

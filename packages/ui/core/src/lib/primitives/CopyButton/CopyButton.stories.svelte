@@ -19,8 +19,8 @@
       font-family: var(--font-mono);
       font-size: 0.8125rem;
       color: var(--color-action-brand-default);
-    ">npm install @cyberdyne/core</code>
-    <CopyButton text="npm install @cyberdyne/core" />
+    ">npm install @cyberdynecorp/core</code>
+    <CopyButton text="npm install @cyberdynecorp/core" />
   </div>
 </Story>
 

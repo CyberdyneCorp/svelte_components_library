@@ -154,15 +154,15 @@ svelte_components_library/
 ### 3.2 Package Dependency Graph
 
 ```
-@cyberdyne/svelte-ui-core
-  └── depends on → @cyberdyne/svelte-ui-foundation (workspace:*)
+@cyberdynecorp/svelte-ui-core
+  └── depends on → @cyberdynecorp/svelte-ui-foundation (workspace:*)
 
-@cyberdyne/svelte-ui-foundation
+@cyberdynecorp/svelte-ui-foundation
   └── peer dependency → svelte ^5.0.0
 
 Consumer Application
-  ├── @cyberdyne/svelte-ui-foundation (styles + tokens)
-  └── @cyberdyne/svelte-ui-core (components)
+  ├── @cyberdynecorp/svelte-ui-foundation (styles + tokens)
+  └── @cyberdynecorp/svelte-ui-core (components)
       └── internally imports foundation tokens
 ```
 
@@ -304,7 +304,7 @@ Loaded via Google Fonts CDN in `typography.css`:
 
 ## 5. Package Structure
 
-### 5.1 @cyberdyne/svelte-ui-foundation
+### 5.1 @cyberdynecorp/svelte-ui-foundation
 
 **Version:** 0.1.0
 **Purpose:** Design tokens and global styles — zero component code
@@ -329,11 +329,11 @@ export const colors: { primitives: { neonGreen: {...}, cyan: {...}, ... } }
 export type BreakpointKey, SpacingKey, RadiusKey
 ```
 
-### 5.2 @cyberdyne/svelte-ui-core
+### 5.2 @cyberdynecorp/svelte-ui-core
 
 **Version:** 0.1.0
 **Purpose:** 139 UI components
-**Dependency:** `@cyberdyne/svelte-ui-foundation` (workspace:*)
+**Dependency:** `@cyberdynecorp/svelte-ui-foundation` (workspace:*)
 
 **Export Path:** `.` — All components from a single entry point
 
@@ -685,7 +685,7 @@ Based on a 4px base grid:
 ```
 
 ```bash
-pnpm add @cyberdyne/svelte-ui-foundation @cyberdyne/svelte-ui-core
+pnpm add @cyberdynecorp/svelte-ui-foundation @cyberdynecorp/svelte-ui-core
 ```
 
 ---
@@ -922,7 +922,7 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | P1 | Chromatic integration | Visual regression testing |
 | P2 | Figma token sync | Automated design-to-code token pipeline |
 | ~~P2~~ | ~~Playwright E2E tests~~ | ~~Delivered — @playwright/test integrated~~ |
-| P2 | Tailwind CSS preset | `@cyberdyne/svelte-config-tailwind` for consumer apps |
+| P2 | Tailwind CSS preset | `@cyberdynecorp/svelte-config-tailwind` for consumer apps |
 | ~~P3~~ | ~~Chart components~~ | ~~Delivered — 8 chart components (LineChart, BarChart, AreaChart, HeatmapChart, PieChart, Sparkline, Gauge, TreeMap)~~ |
 | P3 | i18n support | Internationalization for labels and content |
 | P3 | RTL support | Right-to-left layout support |

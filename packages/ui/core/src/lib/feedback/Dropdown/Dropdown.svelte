@@ -10,7 +10,7 @@
     align = "left",
   }: {
     items: Array<{ label: string; value: string; icon?: string; variant?: "default" | "danger" }>;
-    trigger: Snippet;
+    trigger?: Snippet;
     onselect?: (value: string) => void;
     align?: "left" | "right";
   } = $props();
@@ -86,7 +86,7 @@
 
 <div class="cy-dropdown" bind:this={containerEl} onkeydown={handleKeydown} role="presentation">
   <div class="cy-dropdown__trigger" onclick={toggle} role="button" tabindex="0" aria-haspopup="listbox" aria-expanded={open}>
-    {@render trigger()}
+    {@render trigger?.()}
   </div>
 
   {#if open}

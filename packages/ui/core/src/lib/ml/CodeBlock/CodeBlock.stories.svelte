@@ -54,4 +54,4 @@ class NeuralNet(nn.Module):
 
 <Story name="JSON" args={{ language: "json", code: jsonCode }} />
 
-<Story name="WithCopy" args={{ language: "typescript", copyable: true, code: "npm install @cyberdyne/ml-core" }} />
+<Story name="WithCopy" args={{ language: "typescript", copyable: true, code: "npm install @cyberdynecorp/ml-core" }} />

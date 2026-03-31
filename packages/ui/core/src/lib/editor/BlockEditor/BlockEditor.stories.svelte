@@ -22,7 +22,7 @@ This is a **Notion-like** block editor. Click any block to edit it in markdown, 
 ### Code Example
 
 \`\`\`typescript
-import { BlockEditor } from "@cyberdyne/ui";
+import { BlockEditor } from "@cyberdynecorp/ui";
 
 function setup() {
   console.log("Block editing!");

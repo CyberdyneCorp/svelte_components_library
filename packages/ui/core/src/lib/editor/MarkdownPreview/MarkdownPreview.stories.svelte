@@ -77,7 +77,7 @@ This document demonstrates **all markdown features** supported by the *Cyberdyne
 
 ## Code Examples
 
-Inline: \`npm install @cyberdyne/core\`
+Inline: \`npm install @cyberdynecorp/core\`
 
 \`\`\`python
 def hello():
