@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/svelte";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import AddressDisplay from "./AddressDisplay.svelte";
 
 const fullAddress = "0x1234567890abcdef1234567890abcdef12345678";
@@ -81,7 +81,7 @@ describe("AddressDisplay", () => {
     vi.useFakeTimers();
     const { container } = render(AddressDisplay, { props: { address: fullAddress } });
     await fireEvent.click(screen.getByLabelText("Copy address"));
-    vi.advanceTimersByTime(2000);
+    await vi.advanceTimersByTimeAsync(2000);
     const rect = container.querySelector("rect");
     expect(rect).toBeInTheDocument();
     vi.useRealTimers();

@@ -1,15 +1,17 @@
 <svelte:options runes={true} />
 
-<script lang="ts">
-  import FileTree from './FileTree.svelte';
-
-  type FileTreeItem = {
+<script module lang="ts">
+  export type FileTreeItem = {
     name: string;
     type: "file" | "folder";
     children?: FileTreeItem[];
     icon?: string;
     expanded?: boolean;
   };
+</script>
+
+<script lang="ts">
+  import FileTree from './FileTree.svelte';
 
   let {
     items = [],

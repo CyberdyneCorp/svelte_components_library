@@ -22,7 +22,7 @@
     width = "100%",
     onnavigate,
   }: {
-    trigger: Snippet;
+    trigger?: Snippet;
     sections?: MegaMenuSection[];
     open?: boolean;
     width?: string;

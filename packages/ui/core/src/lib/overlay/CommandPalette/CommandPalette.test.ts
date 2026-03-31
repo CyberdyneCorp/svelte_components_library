@@ -168,9 +168,10 @@ describe("CommandPalette", () => {
 
   it("shows navigation hints in footer", () => {
     render(CommandPalette, { props: { open: true, commands } });
-    expect(screen.getByText("navigate")).toBeInTheDocument();
-    expect(screen.getByText("select")).toBeInTheDocument();
-    expect(screen.getByText("close")).toBeInTheDocument();
+    const hint = screen.getByText(/navigate/);
+    expect(hint).toBeInTheDocument();
+    expect(hint.textContent).toContain("select");
+    expect(hint.textContent).toContain("close");
   });
 
   it("has accessible dialog label", () => {

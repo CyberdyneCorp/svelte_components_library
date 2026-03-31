@@ -105,7 +105,8 @@ describe("FilterBar", () => {
       props: { filters: [multiselectFilter], activeFilters: { tags: ["bug"] }, onchange },
     });
     await fireEvent.click(screen.getByText("Tags:"));
-    await fireEvent.click(screen.getByText("Bug"));
+    const bugCheckbox = screen.getByRole("checkbox", { name: "Bug" });
+    await fireEvent.click(bugCheckbox);
     expect(onchange).toHaveBeenCalledWith({});
   });
 

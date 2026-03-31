@@ -13,7 +13,7 @@
     items?: any[];
     itemHeight?: number;
     height?: string;
-    renderItem: Snippet<[{ item: any; index: number }]>;
+    renderItem?: Snippet<[{ item: any; index: number }]>;
     overscan?: number;
   } = $props();
 
@@ -62,7 +62,7 @@
     <div class="cy-virtualized-list__items" style="transform: translateY({offsetY}px)">
       {#each visibleItems as { item, index } (index)}
         <div class="cy-virtualized-list__item" style="height: {itemHeight}px">
-          {@render renderItem({ item, index })}
+          {#if renderItem}{@render renderItem({ item, index })}{/if}
         </div>
       {/each}
     </div>

@@ -39,10 +39,14 @@
     "@testing-library/svelte": "^5.3.1",
     "@typescript-eslint/eslint-plugin": "^8.33.0",
     "@typescript-eslint/parser": "^8.33.0",
+    "@vitest/browser": "3.2.4",
+    "@vitest/coverage-v8": "3.2.4",
     "eslint": "^9.27.0",
     "eslint-plugin-storybook": "10.3.3",
     "eslint-plugin-svelte": "^3.9.0",
+    "globals": "^17.4.0",
     "jsdom": "^29.0.1",
+    "playwright": "^1.58.2",
     "prettier": "^3.5.3",
     "prettier-plugin-svelte": "^3.3.3",
     "storybook": "^10.3.3",
@@ -50,10 +54,7 @@
     "svelte-check": "^4.2.1",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
-    "vitest": "^3.1.4",
-    "playwright": "^1.58.2",
-    "@vitest/browser": "3.2.4",
-    "@vitest/coverage-v8": "3.2.4"
+    "vitest": "^3.1.4"
   },
   "engines": {
     "node": ">=20",

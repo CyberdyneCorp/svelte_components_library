@@ -1,7 +1,7 @@
 <svelte:options runes={true} />
 
-<script lang="ts">
-  type OrgNode = {
+<script module lang="ts">
+  export type OrgNode = {
     id: string;
     label: string;
     title?: string;
@@ -13,7 +13,9 @@
     department?: string;
     links?: Array<{ label: string; url: string }>;
   };
+</script>
 
+<script lang="ts">
   let {
     root = { id: "root", label: "CEO", children: [] },
     direction = "vertical",

@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/svelte";
 import { describe, it, expect, vi } from "vitest";
+import { tick } from "svelte";
 import MegaMenu from "./MegaMenu.svelte";
 
 const sections = [
@@ -118,7 +119,8 @@ describe("MegaMenu", () => {
     const { container } = render(MegaMenu, { props: { sections, open: true } });
     const megamenu = container.querySelector(".cy-megamenu")!;
     await fireEvent.mouseLeave(megamenu);
-    vi.advanceTimersByTime(300);
+    await vi.advanceTimersByTimeAsync(300);
+    await tick();
     expect(container.querySelector(".cy-megamenu__panel")).not.toBeInTheDocument();
     vi.useRealTimers();
   });

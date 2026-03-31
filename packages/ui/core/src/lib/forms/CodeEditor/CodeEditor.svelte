@@ -143,7 +143,6 @@
         {readonly}
         spellcheck="false"
         autocomplete="off"
-        autocorrect="off"
         autocapitalize="off"
         onkeydown={handleKeydown}
         onscroll={handleScroll}

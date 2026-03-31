@@ -59,7 +59,7 @@
       >
         {opt}
         {#if opt !== "all"}
-          <span class="cy-log__count">{logs.filter((l) => opt === "all" || l.level === opt).length}</span>
+          <span class="cy-log__count">{logs.filter((l) => l.level === opt).length}</span>
         {/if}
       </button>
     {/each}

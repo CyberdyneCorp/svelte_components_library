@@ -1,6 +1,6 @@
 <svelte:options runes={true} />
 
-<script lang="ts">
+<script module lang="ts">
   export type CommentType = {
     id: string;
     author: string;
@@ -10,7 +10,9 @@
     replies?: CommentType[];
     reactions?: Array<{ emoji: string; count: number }>;
   };
+</script>
 
+<script lang="ts">
   let {
     comments = [],
     onreply = (_parentId: string, _content: string) => {},

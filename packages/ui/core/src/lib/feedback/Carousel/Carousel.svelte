@@ -83,7 +83,10 @@
     dragging = true;
     dragStartX = e.clientX;
     dragDelta = 0;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    const el = e.currentTarget as HTMLElement;
+    if (typeof el.setPointerCapture === "function") {
+      el.setPointerCapture(e.pointerId);
+    }
   }
 
   function handlePointerMove(e: PointerEvent) {

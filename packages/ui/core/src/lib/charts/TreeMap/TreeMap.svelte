@@ -1,7 +1,10 @@
 <svelte:options runes={true} />
 
+<script module lang="ts">
+  export type TreeNode = { label: string; value: number; color?: string; children?: TreeNode[] };
+</script>
+
 <script lang="ts">
-  type TreeNode = { label: string; value: number; color?: string; children?: TreeNode[] };
   type Rect = { x: number; y: number; w: number; h: number; node: TreeNode; color: string; depth: number };
 
   let {

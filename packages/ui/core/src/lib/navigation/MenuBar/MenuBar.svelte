@@ -1,7 +1,7 @@
 <svelte:options runes={true} />
 
-<script lang="ts">
-  type MenuBarAction = {
+<script module lang="ts">
+  export type MenuBarAction = {
     label: string;
     shortcut?: string;
     action?: string;
@@ -10,11 +10,13 @@
     children?: MenuBarAction[];
   };
 
-  type MenuBarItem = {
+  export type MenuBarItem = {
     label: string;
     items: MenuBarAction[];
   };
+</script>
 
+<script lang="ts">
   let {
     menus = [],
     onaction,

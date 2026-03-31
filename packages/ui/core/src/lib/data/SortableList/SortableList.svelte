@@ -13,7 +13,7 @@
     handle = true,
   }: {
     items?: SortableItem[];
-    renderItem: Snippet<[{ item: SortableItem; index: number; dragHandle: Snippet }]>;
+    renderItem?: Snippet<[{ item: SortableItem; index: number; dragHandle: Snippet }]>;
     onreorder?: (items: SortableItem[]) => void;
     disabled?: boolean;
     handle?: boolean;
@@ -152,7 +152,7 @@
       {#if isOver}
         <div class="cy-sortable-list__indicator"></div>
       {/if}
-      {@render renderItem({ item, index, dragHandle: dragHandleSnippet })}
+      {@render renderItem?.({ item, index, dragHandle: dragHandleSnippet })}
     </div>
   {/each}
 </div>

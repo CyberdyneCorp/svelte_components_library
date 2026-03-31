@@ -68,7 +68,7 @@
 
     // Inline math ($...$) — after inline code to avoid conflicts
     const inlineMathBlocks: string[] = [];
-    html = html.replace(/\$([^\$\n]+?)\$/g, (_match, tex: string) => {
+    html = html.replace(/\$([^$\n]+?)\$/g, (_match, tex: string) => {
       const idx = inlineMathBlocks.length;
       inlineMathBlocks.push(tex);
       return `\x00INLINEMATH${idx}\x00`;

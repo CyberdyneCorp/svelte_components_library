@@ -82,7 +82,6 @@
         bind:value={code}
         spellcheck="false"
         autocomplete="off"
-        autocorrect="off"
         autocapitalize="off"
         onkeydown={handleKeydown}
         aria-label="Code cell {cellNumber}"

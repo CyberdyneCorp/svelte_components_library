@@ -1,9 +1,7 @@
 <svelte:options runes={true} />
 
-<script lang="ts">
-  import { onMount, onDestroy, untrack } from "svelte";
-
-  type MindMapNode = {
+<script module lang="ts">
+  export type MindMapNode = {
     id: string;
     label: string;
     children?: MindMapNode[];
@@ -12,6 +10,10 @@
     note?: string;
     link?: string;
   };
+</script>
+
+<script lang="ts">
+  import { onMount, onDestroy, untrack } from "svelte";
 
   type LayoutNode = {
     id: string;
@@ -597,11 +599,12 @@
     }
 
     // --- Ghost node while dragging ---
-    if (dragState?.dragging) {
-      const dragNode = layoutNodes.find(n => n.id === dragState.nodeId);
+    const dsDraw = dragState;
+    if (dsDraw && dsDraw.dragging) {
+      const dragNode = layoutNodes.find(n => n.id === dsDraw.nodeId);
       if (dragNode) {
-        const gx = dragState.worldX;
-        const gy = dragState.worldY;
+        const gx = dsDraw.worldX;
+        const gy = dsDraw.worldY;
         const gw = dragNode.width;
         const gh = dragNode.height;
 
@@ -788,14 +791,15 @@
     const { x, y } = getCanvasCoords(e);
     const world = screenToWorld(x, y);
 
-    if (dragState && !readonly) {
-      if (dragState.dragging && !dropZone) {
+    const ds = dragState;
+    if (ds && !readonly) {
+      if (ds.dragging && !dropZone) {
         // Dropped on empty space — fade out the ghost
-        const dragNode = layoutNodes.find(n => n.id === dragState.nodeId);
+        const dragNode = layoutNodes.find(n => n.id === ds.nodeId);
         if (dragNode) {
           fadeGhost = {
-            worldX: dragState.worldX,
-            worldY: dragState.worldY,
+            worldX: ds.worldX,
+            worldY: ds.worldY,
             width: dragNode.width,
             height: dragNode.height,
             label: dragNode.label,
@@ -815,11 +819,11 @@
           animateFade();
         }
       }
-      if (dragState.dragging && dropZone) {
+      if (ds.dragging && dropZone) {
         // Save state before reparenting
         saveUndoSnapshot();
         // Reparent with position awareness
-        const srcId = dragState.nodeId;
+        const srcId = ds.nodeId;
         const targetId = dropZone.targetId;
         const position = dropZone.position;
 
@@ -849,7 +853,7 @@
             notifyChange();
           }
         }
-      } else if (!dragState.dragging) {
+      } else if (!ds.dragging) {
         // Click — check badge icons first, then node body
         const badge = getBadgeHit(world.x, world.y);
         if (badge) {

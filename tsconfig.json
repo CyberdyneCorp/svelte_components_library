@@ -12,7 +12,8 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "types": ["@testing-library/jest-dom"]
   },
   "exclude": ["node_modules", "dist", "docs"]
 }

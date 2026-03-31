@@ -1,14 +1,16 @@
 <svelte:options runes={true} />
 
-<script lang="ts">
-  type SidebarItem = {
+<script module lang="ts">
+  export type SidebarItem = {
     id: string;
     label: string;
     icon?: string;
     href?: string;
     children?: SidebarItem[];
   };
+</script>
 
+<script lang="ts">
   let {
     items = [],
     activeId = "",
