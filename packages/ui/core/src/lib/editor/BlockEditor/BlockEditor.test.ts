@@ -1008,6 +1008,11 @@ describe("block-utils", () => {
       expect(detectBlockType("----")).toBe("horizontal-rule");
     });
 
+    it("detects math blocks", () => {
+      expect(detectBlockType("$$\nE = mc^2\n$$")).toBe("math");
+      expect(detectBlockType("$$")).toBe("math");
+    });
+
     it("detects images", () => {
       expect(detectBlockType("![alt](url)")).toBe("image");
       expect(detectBlockType("![](image.png)")).toBe("image");
@@ -1144,6 +1149,23 @@ describe("block-utils", () => {
       expect(blocks[0].type).toBe("mermaid");
     });
 
+    it("handles math blocks", () => {
+      const md = "$$\nE = mc^2\n$$";
+      const blocks = parseMarkdownToBlocks(md);
+      expect(blocks.length).toBe(1);
+      expect(blocks[0].type).toBe("math");
+      expect(blocks[0].content).toContain("E = mc^2");
+    });
+
+    it("handles math blocks in mixed content", () => {
+      const md = "# Title\n\n$$\n\\int_0^1 x dx\n$$\n\nParagraph";
+      const blocks = parseMarkdownToBlocks(md);
+      expect(blocks.length).toBe(3);
+      expect(blocks[0].type).toBe("heading");
+      expect(blocks[1].type).toBe("math");
+      expect(blocks[2].type).toBe("paragraph");
+    });
+
     it("handles complex mixed content", () => {
       const md =
         "# Title\n\nSome text\n\n- item 1\n- item 2\n\n```js\ncode\n```\n\n> quote\n\n---\n\n![img](url)";
@@ -1202,6 +1224,7 @@ describe("block-utils", () => {
       expect(isMultiLineBlock("unordered-list")).toBe(true);
       expect(isMultiLineBlock("ordered-list")).toBe(true);
       expect(isMultiLineBlock("task-list")).toBe(true);
+      expect(isMultiLineBlock("math")).toBe(true);
     });
 
     it("returns false for single-line types", () => {

@@ -339,6 +339,34 @@
       <circle cx="12" cy="5" r="2" /><circle cx="5" cy="19" r="2" /><circle cx="19" cy="19" r="2" /><line x1="12" y1="7" x2="5" y2="17" /><line x1="12" y1="7" x2="19" y2="17" />
     </svg>
   </button>
+
+  <div class="cy-md-toolbar__sep"></div>
+
+  <!-- Inline math -->
+  <button
+    type="button"
+    class="cy-md-toolbar__btn"
+    title="Inline math"
+    {disabled}
+    onclick={() => insertMarkdown("$", "$", "E = mc^2")}
+  >
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4L8 20" /><path d="M6 8h8" /><circle cx="18" cy="18" r="3" />
+    </svg>
+  </button>
+
+  <!-- Math block -->
+  <button
+    type="button"
+    class="cy-md-toolbar__btn"
+    title="Math block"
+    {disabled}
+    onclick={() => insertBlock("$$\n\\int_{a}^{b} f(x) \\, dx\n$$")}
+  >
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M12 7L8 17" /><path d="M7 10h6" /><circle cx="16" cy="16" r="2" />
+    </svg>
+  </button>
 </div>
 
 <style>

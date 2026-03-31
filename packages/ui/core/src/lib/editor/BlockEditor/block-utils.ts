@@ -11,7 +11,8 @@ export type BlockType =
   | "table"
   | "horizontal-rule"
   | "image"
-  | "mermaid";
+  | "mermaid"
+  | "math";
 
 export interface Block {
   id: string;
@@ -33,6 +34,7 @@ export function detectBlockType(content: string): BlockType {
   const firstLine = trimmed.split("\n")[0];
 
   if (/^#{1,6}\s/.test(firstLine)) return "heading";
+  if (/^\$\$/.test(firstLine)) return "math";
   if (/^```mermaid/.test(firstLine)) return "mermaid";
   if (/^```/.test(firstLine)) return "code-block";
   if (/^[-*]\s+\[[ x]\]\s/.test(firstLine)) return "task-list";
@@ -67,6 +69,22 @@ export function parseMarkdownToBlocks(markdown: string): Block[] {
     // Skip empty lines between blocks
     if (lines[i].trim() === "") {
       i++;
+      continue;
+    }
+
+    // Display math blocks — collect until closing $$
+    if (/^\$\$/.test(lines[i])) {
+      const mathLines: string[] = [lines[i]];
+      i++;
+      while (i < lines.length && !/^\$\$\s*$/.test(lines[i])) {
+        mathLines.push(lines[i]);
+        i++;
+      }
+      if (i < lines.length) {
+        mathLines.push(lines[i]); // closing $$
+        i++;
+      }
+      blocks.push(createBlock(mathLines.join("\n")));
       continue;
     }
 
@@ -172,6 +190,7 @@ export function parseMarkdownToBlocks(markdown: string): Block[] {
       i < lines.length &&
       lines[i].trim() !== "" &&
       !/^#{1,6}\s/.test(lines[i]) &&
+      !/^\$\$/.test(lines[i]) &&
       !/^```/.test(lines[i]) &&
       !/^\|.+\|/.test(lines[i]) &&
       !/^>\s?/.test(lines[i]) &&
@@ -208,6 +227,7 @@ export function isMultiLineBlock(type: BlockType): boolean {
     "unordered-list",
     "ordered-list",
     "task-list",
+    "math",
   ].includes(type);
 }
 

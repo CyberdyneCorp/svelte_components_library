@@ -4,6 +4,7 @@
   import { onDestroy } from "svelte";
   import MarkdownToolbar from "../MarkdownToolbar/MarkdownToolbar.svelte";
   import MarkdownPreview from "../MarkdownPreview/MarkdownPreview.svelte";
+  import EditablePreview from "./EditablePreview.svelte";
 
   let {
     value = $bindable(""),
@@ -26,6 +27,8 @@
   } = $props();
 
   let textareaEl: HTMLTextAreaElement | null = $state(null);
+  let previewTextareaEl: HTMLTextAreaElement | null = $state(null);
+  let effectiveTextarea = $derived(mode === "preview" ? previewTextareaEl : textareaEl);
   let previewEl: HTMLDivElement | null = $state(null);
   let debouncedValue = $state(value);
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
@@ -130,11 +133,11 @@
   </div>
 
   <!-- Toolbar -->
-  {#if showToolbar && mode !== "preview" && !readonly}
+  {#if showToolbar && !readonly}
     <MarkdownToolbar
-      bind:textarea={textareaEl}
+      bind:textarea={effectiveTextarea}
       oninsert={handleToolbarInsert}
-      disabled={readonly}
+      disabled={readonly || (mode === "preview" && !previewTextareaEl)}
     />
   {/if}
 
@@ -166,7 +169,16 @@
         class:cy-md-editor__preview-pane--full={mode === "preview"}
         bind:this={previewEl}
       >
-        <MarkdownPreview content={debouncedValue} />
+        {#if mode === "preview" && !readonly}
+          <EditablePreview
+            bind:value
+            {readonly}
+            onchange={(v) => { value = v; onchange?.(v); }}
+            onactivetextarea={(el) => { previewTextareaEl = el; }}
+          />
+        {:else}
+          <MarkdownPreview content={debouncedValue} />
+        {/if}
       </div>
     {/if}
   </div>

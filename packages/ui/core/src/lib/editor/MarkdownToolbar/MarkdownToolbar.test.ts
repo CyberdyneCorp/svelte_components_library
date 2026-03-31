@@ -565,6 +565,63 @@ describe("MarkdownToolbar", () => {
     expect(seps.length).toBeGreaterThan(0);
   });
 
+  // Inline math
+  it("has inline math button", () => {
+    render(MarkdownToolbar);
+    const btn = document.querySelector('[title="Inline math"]');
+    expect(btn).toBeInTheDocument();
+  });
+
+  it("inserts inline math around selected text", async () => {
+    const textarea = createTextarea("E = mc^2", 0, 8);
+    const oninsert = vi.fn();
+    render(MarkdownToolbar, { props: { textarea, oninsert } });
+
+    const btn = document.querySelector('[title="Inline math"]') as HTMLElement;
+    await fireEvent.click(btn);
+
+    expect(textarea.value).toBe("$E = mc^2$");
+    expect(oninsert).toHaveBeenCalled();
+
+    document.body.removeChild(textarea);
+  });
+
+  it("inserts inline math default text when nothing selected", async () => {
+    const textarea = createTextarea("", 0, 0);
+    const oninsert = vi.fn();
+    render(MarkdownToolbar, { props: { textarea, oninsert } });
+
+    const btn = document.querySelector('[title="Inline math"]') as HTMLElement;
+    await fireEvent.click(btn);
+
+    expect(textarea.value).toBe("$E = mc^2$");
+    expect(oninsert).toHaveBeenCalled();
+
+    document.body.removeChild(textarea);
+  });
+
+  // Math block
+  it("has math block button", () => {
+    render(MarkdownToolbar);
+    const btn = document.querySelector('[title="Math block"]');
+    expect(btn).toBeInTheDocument();
+  });
+
+  it("inserts math block", async () => {
+    const textarea = createTextarea("", 0, 0);
+    const oninsert = vi.fn();
+    render(MarkdownToolbar, { props: { textarea, oninsert } });
+
+    const btn = document.querySelector('[title="Math block"]') as HTMLElement;
+    await fireEvent.click(btn);
+
+    expect(textarea.value).toContain("$$");
+    expect(textarea.value).toContain("\\int_{a}^{b}");
+    expect(oninsert).toHaveBeenCalled();
+
+    document.body.removeChild(textarea);
+  });
+
   it("code block insert adds proper newlines when cursor is mid-text", async () => {
     const textarea = createTextarea("some text here", 9, 9);
     const oninsert = vi.fn();

@@ -37,6 +37,14 @@
     const codeBlocks: string[] = [];
     const mermaidBlocks: string[] = [];
 
+    // Display math blocks ($$...$$)
+    const mathBlocks: string[] = [];
+    html = html.replace(/\$\$\n([\s\S]*?)\n?\$\$/g, (_match, tex: string) => {
+      const idx = mathBlocks.length;
+      mathBlocks.push(tex.trim());
+      return `\x00MATHBLOCK${idx}\x00`;
+    });
+
     // Fenced code blocks (with optional language)
     html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_match, lang: string, code: string) => {
       if (lang === "mermaid") {
@@ -56,6 +64,14 @@
       const idx = inlineCodeBlocks.length;
       inlineCodeBlocks.push(`<code class="cy-md-inline-code">${escapeHtml(code)}</code>`);
       return `\x00INLINECODE${idx}\x00`;
+    });
+
+    // Inline math ($...$) — after inline code to avoid conflicts
+    const inlineMathBlocks: string[] = [];
+    html = html.replace(/\$([^\$\n]+?)\$/g, (_match, tex: string) => {
+      const idx = inlineMathBlocks.length;
+      inlineMathBlocks.push(tex);
+      return `\x00INLINEMATH${idx}\x00`;
     });
 
     // 4. Headings
@@ -137,8 +153,17 @@
       if (/^<(h[1-6]|ul|ol|table|blockquote|hr|pre|div)/.test(trimmed)) return trimmed;
       if (/\x00CODEBLOCK\d+\x00/.test(trimmed)) return trimmed;
       if (/\x00MERMAIDBLOCK\d+\x00/.test(trimmed)) return trimmed;
+      if (/\x00MATHBLOCK\d+\x00/.test(trimmed)) return trimmed;
       return `<p>${trimmed.replace(/\n/g, "<br>")}</p>`;
     }).join("\n");
+
+    // Restore inline math (placeholder for $effect rendering)
+    inlineMathBlocks.forEach((_tex, idx) => {
+      html = html.replace(
+        `\x00INLINEMATH${idx}\x00`,
+        `<span class="cy-md-math-inline" data-math-inline-idx="${idx}"></span>`
+      );
+    });
 
     // Restore inline code
     inlineCodeBlocks.forEach((block, idx) => {
@@ -150,6 +175,14 @@
       html = html.replace(`\x00CODEBLOCK${idx}\x00`, block);
     });
 
+    // Restore display math blocks
+    mathBlocks.forEach((_tex, idx) => {
+      html = html.replace(
+        `\x00MATHBLOCK${idx}\x00`,
+        `<div class="cy-md-math" data-math-idx="${idx}"></div>`
+      );
+    });
+
     // Restore mermaid blocks (use data-idx, raw text stored in mermaidBlocksRef)
     mermaidBlocks.forEach((block, idx) => {
       html = html.replace(
@@ -158,13 +191,17 @@
       );
     });
 
-    // Store mermaid source for the $effect to pick up
+    // Store sources for $effect to pick up
     mermaidBlocksRef = mermaidBlocks;
+    mathBlocksRef = mathBlocks;
+    inlineMathBlocksRef = inlineMathBlocks;
 
     return html;
   }
 
   let mermaidBlocksRef: string[] = [];
+  let mathBlocksRef: string[] = [];
+  let inlineMathBlocksRef: string[] = [];
   let renderedHtml = $derived(parseMarkdown(content));
 
   // Mermaid rendering
@@ -252,6 +289,88 @@
             el.innerHTML = svg;
           } catch (err: any) {
             el.innerHTML = `<div class="cy-md-mermaid-error">Diagram error: ${escapeHtml(err?.message || "Invalid syntax")}</div>`;
+          }
+        }
+      });
+    });
+  });
+
+  // KaTeX rendering
+  let katexLoaded = $state(false);
+  let katexModule: any = $state(null);
+
+  async function loadKatex() {
+    if (katexLoaded) return katexModule;
+
+    if (typeof window !== "undefined" && (window as any).katex) {
+      katexModule = (window as any).katex;
+      katexLoaded = true;
+      return katexModule;
+    }
+
+    return new Promise<any>((resolve) => {
+      // Load KaTeX CSS first
+      if (!document.querySelector('link[href*="katex"]')) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css";
+        document.head.appendChild(link);
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js";
+      script.onload = () => {
+        const k = (window as any).katex;
+        if (k) {
+          katexModule = k;
+          katexLoaded = true;
+          resolve(k);
+        } else {
+          resolve(null);
+        }
+      };
+      script.onerror = () => resolve(null);
+      document.head.appendChild(script);
+    });
+  }
+
+  $effect(() => {
+    void renderedHtml;
+    if (!containerEl) return;
+
+    const displayEls = containerEl.querySelectorAll<HTMLElement>(".cy-md-math");
+    const inlineEls = containerEl.querySelectorAll<HTMLElement>(".cy-md-math-inline");
+    if (displayEls.length === 0 && inlineEls.length === 0) return;
+
+    queueMicrotask(() => {
+      loadKatex().then((katex) => {
+        if (!katex) return;
+
+        for (const el of displayEls) {
+          const idxStr = el.getAttribute("data-math-idx");
+          if (idxStr === null) continue;
+          const idx = parseInt(idxStr, 10);
+          const tex = mathBlocksRef[idx];
+          if (!tex || el.innerHTML) continue;
+
+          try {
+            el.innerHTML = katex.renderToString(tex, { displayMode: true, throwOnError: false });
+          } catch (err: any) {
+            el.innerHTML = `<div class="cy-md-math-error">Math error: ${escapeHtml(err?.message || "Invalid LaTeX")}</div>`;
+          }
+        }
+
+        for (const el of inlineEls) {
+          const idxStr = el.getAttribute("data-math-inline-idx");
+          if (idxStr === null) continue;
+          const idx = parseInt(idxStr, 10);
+          const tex = inlineMathBlocksRef[idx];
+          if (!tex || el.innerHTML) continue;
+
+          try {
+            el.innerHTML = katex.renderToString(tex, { displayMode: false, throwOnError: false });
+          } catch (err: any) {
+            el.innerHTML = `<span class="cy-md-math-error">${escapeHtml(err?.message || "Invalid LaTeX")}</span>`;
           }
         }
       });
@@ -506,6 +625,24 @@
 
   .cy-md-preview :global(.cy-md-mermaid svg) {
     max-width: 100%;
+  }
+
+  .cy-md-preview :global(.cy-md-math) {
+    margin: 1.5em 0;
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+
+  .cy-md-preview :global(.cy-md-math-inline) {
+    display: inline;
+  }
+
+  .cy-md-preview :global(.cy-md-math-error) {
+    color: var(--color-state-error);
+    font-family: var(--font-mono, "JetBrains Mono", monospace);
+    font-size: 0.875rem;
   }
 
   .cy-md-preview :global(.cy-md-mermaid-error) {
