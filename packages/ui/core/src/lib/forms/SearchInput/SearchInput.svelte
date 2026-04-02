@@ -18,6 +18,7 @@
     debounce = 300,
     onquery,
     onselect,
+    oninput,
     disabled = false,
   }: {
     value?: string;
@@ -28,6 +29,7 @@
     debounce?: number;
     onquery?: (query: string) => void;
     onselect?: (result: { id: string; label: string }) => void;
+    oninput?: (e: Event) => void;
     disabled?: boolean;
   } = $props();
 

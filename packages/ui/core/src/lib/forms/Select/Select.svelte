@@ -8,6 +8,7 @@
     placeholder = "Select an option...",
     error = "",
     disabled = false,
+    onchange,
   }: {
     value?: string;
     label?: string;
@@ -15,6 +16,7 @@
     placeholder?: string;
     error?: string;
     disabled?: boolean;
+    onchange?: (e: Event) => void;
   } = $props();
 
   let inputId = `cy-select-${Math.random().toString(36).slice(2, 9)}`;
@@ -31,6 +33,7 @@
       id={inputId}
       bind:value
       {disabled}
+      {onchange}
       aria-invalid={!!error}
       aria-describedby={error ? `${inputId}-error` : undefined}
     >

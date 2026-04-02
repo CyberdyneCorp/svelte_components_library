@@ -10,6 +10,7 @@
     disabled = false,
     rows = 4,
     maxlength = undefined,
+    oninput,
   }: {
     value?: string;
     label?: string;
@@ -19,6 +20,7 @@
     disabled?: boolean;
     rows?: number;
     maxlength?: number | undefined;
+    oninput?: (e: Event) => void;
   } = $props();
 
   let inputId = `cy-textarea-${Math.random().toString(36).slice(2, 9)}`;
@@ -38,6 +40,7 @@
     {disabled}
     {rows}
     {maxlength}
+    {oninput}
     aria-invalid={!!error}
     aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
   ></textarea>

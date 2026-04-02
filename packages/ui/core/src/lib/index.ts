@@ -52,7 +52,7 @@ export { VideoPlayer } from "./feedback/VideoPlayer/index.js";
 // Navigation
 export { Tabs } from "./navigation/Tabs/index.js";
 export { Breadcrumb } from "./navigation/Breadcrumb/index.js";
-export { Sidebar } from "./navigation/Sidebar/index.js";
+export { Sidebar, type SidebarItem } from "./navigation/Sidebar/index.js";
 export { Header } from "./navigation/Header/index.js";
 export { MenuItem } from "./navigation/MenuItem/index.js";
 export { BreadcrumbOverflow } from "./navigation/BreadcrumbOverflow/index.js";

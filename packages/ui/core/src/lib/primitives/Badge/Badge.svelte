@@ -8,7 +8,7 @@
     size = "md",
     children,
   }: {
-    variant?: "success" | "warning" | "error" | "info" | "neutral";
+    variant?: "success" | "warning" | "error" | "danger" | "info" | "neutral";
     size?: "sm" | "md";
     children?: Snippet;
   } = $props();
@@ -76,6 +76,13 @@
     color: var(--color-state-info);
     border-color: var(--color-action-secondary-default);
     box-shadow: var(--shadow-glow-cyan);
+  }
+
+  /* Danger (alias for error, stronger red) */
+  .cy-badge--danger {
+    background: var(--color-state-error-bg);
+    color: var(--color-state-error);
+    border-color: var(--color-state-error);
   }
 
   /* Neutral */

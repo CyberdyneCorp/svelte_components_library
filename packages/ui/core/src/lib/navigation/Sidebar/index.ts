@@ -1,1 +1,1 @@
-export { default as Sidebar } from "./Sidebar.svelte";
+export { default as Sidebar, type SidebarItem } from "./Sidebar.svelte";

@@ -11,6 +11,7 @@
     required = false,
     type = "text",
     id = "",
+    oninput,
   }: {
     value?: string;
     label?: string;
@@ -21,6 +22,7 @@
     required?: boolean;
     type?: "text" | "email" | "url" | "number";
     id?: string;
+    oninput?: (e: Event) => void;
   } = $props();
 
   let inputId = $derived(id || `cy-input-${Math.random().toString(36).slice(2, 9)}`);
@@ -42,6 +44,7 @@
     {placeholder}
     {disabled}
     {required}
+    {oninput}
     aria-invalid={!!error}
     aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
   />
