@@ -31,7 +31,7 @@
     showDependencies?: boolean;
     showProgress?: boolean;
     onTaskClick?: (task: Task) => void;
-    zoom?: "day" | "week" | "month";
+    zoom?: "day" | "week" | "month" | "quarter" | "year";
   } = $props();
 
   const ROW_HEIGHT = 36;
@@ -87,7 +87,9 @@
   let dayWidth = $derived.by(() => {
     if (zoom === "day") return 32;
     if (zoom === "week") return 16;
-    return 6;
+    if (zoom === "month") return 6;
+    if (zoom === "quarter") return 2;
+    return 0.8; // year
   });
 
   let timelineWidth = $derived(totalDays * dayWidth);
@@ -174,8 +176,7 @@
         ticks.push({ label: `${month} ${cursor.getDate()}`, x });
         cursor.setDate(cursor.getDate() + 7);
       }
-    } else {
-      // month
+    } else if (zoom === "month") {
       cursor.setDate(1);
       if (cursor < viewStart) cursor.setMonth(cursor.getMonth() + 1);
       while (cursor <= viewEnd) {
@@ -183,6 +184,27 @@
         const month = cursor.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
         ticks.push({ label: month, x });
         cursor.setMonth(cursor.getMonth() + 1);
+      }
+    } else if (zoom === "quarter") {
+      // Show quarter labels: Q1 2026, Q2 2026, etc.
+      cursor.setDate(1);
+      cursor.setMonth(Math.floor(cursor.getMonth() / 3) * 3);
+      if (cursor < viewStart) cursor.setMonth(cursor.getMonth() + 3);
+      while (cursor <= viewEnd) {
+        const x = daysBetween(viewStart, cursor) * dayWidth;
+        const q = Math.floor(cursor.getMonth() / 3) + 1;
+        ticks.push({ label: `Q${q} ${cursor.getFullYear()}`, x });
+        cursor.setMonth(cursor.getMonth() + 3);
+      }
+    } else {
+      // year
+      cursor.setDate(1);
+      cursor.setMonth(0);
+      if (cursor < viewStart) cursor.setFullYear(cursor.getFullYear() + 1);
+      while (cursor <= viewEnd) {
+        const x = daysBetween(viewStart, cursor) * dayWidth;
+        ticks.push({ label: `${cursor.getFullYear()}`, x });
+        cursor.setFullYear(cursor.getFullYear() + 1);
       }
     }
     return ticks;
