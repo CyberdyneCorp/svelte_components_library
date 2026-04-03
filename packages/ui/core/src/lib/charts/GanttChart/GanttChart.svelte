@@ -32,6 +32,7 @@
     showProgress?: boolean;
     onTaskClick?: (task: Task) => void;
     zoom?: "day" | "week" | "month" | "quarter" | "year";
+    onTaskMove?: (task: Task, newStart: string, newEnd: string) => void;
   } = $props();
 
   const ROW_HEIGHT = 36;
@@ -262,6 +263,62 @@
   function formatDate(s: string): string {
     return new Date(s).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   }
+
+  // --- Drag to move ---
+  let dragging: { task: Task; startMouseX: number; origTaskX: number; duration: number } | null = $state(null);
+
+  function onBarDragStart(e: MouseEvent, task: Task) {
+    if (!onTaskMove) return;
+    e.preventDefault();
+    const duration = daysBetween(parseDate(task.start), parseDate(task.end));
+    const scrollLeft = containerEl?.querySelector('.cy-gantt__timeline')?.scrollLeft ?? 0;
+    dragging = {
+      task,
+      startMouseX: e.clientX,
+      origTaskX: taskX(task),
+      duration,
+    };
+
+    function onMouseMove(ev: MouseEvent) {
+      if (!dragging) return;
+      const dx = ev.clientX - dragging.startMouseX;
+      const newX = dragging.origTaskX + dx;
+      const dayOffset = newX / dayWidth;
+      const newStartDate = new Date(viewStart);
+      newStartDate.setDate(newStartDate.getDate() + Math.round(dayOffset));
+      // Update visual position via CSS transform on the dragged bars
+      const bars = containerEl?.querySelectorAll(`[data-task-id="${dragging.task.id}"]`);
+      bars?.forEach(el => {
+        (el as SVGElement).setAttribute('transform', `translate(${dx}, 0)`);
+      });
+    }
+
+    function onMouseUp(ev: MouseEvent) {
+      if (!dragging) return;
+      const dx = ev.clientX - dragging.startMouseX;
+      const dayShift = Math.round(dx / dayWidth);
+      if (dayShift !== 0) {
+        const oldStart = parseDate(dragging.task.start);
+        const newStart = new Date(oldStart);
+        newStart.setDate(newStart.getDate() + dayShift);
+        const newEnd = new Date(newStart);
+        newEnd.setDate(newEnd.getDate() + dragging.duration);
+        const fmt = (d: Date) => d.toISOString().split('T')[0];
+        onTaskMove?.(dragging.task, fmt(newStart), fmt(newEnd));
+      }
+      // Reset transforms
+      const bars = containerEl?.querySelectorAll(`[data-task-id="${dragging.task.id}"]`);
+      bars?.forEach(el => {
+        (el as SVGElement).removeAttribute('transform');
+      });
+      dragging = null;
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    }
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  }
 </script>
 
 <div class="cy-gantt" style="height: {height};" bind:this={containerEl}>
@@ -374,10 +431,13 @@
             fill={taskColor(t)}
             opacity="0.35"
             class="cy-gantt__bar"
+            class:cy-gantt__bar--draggable={!!onTaskMove}
+            data-task-id={t.id}
             onmouseenter={(e) => onBarMouseMove(e, t)}
             onmousemove={(e) => onBarMouseMove(e, t)}
             onmouseleave={onBarMouseLeave}
-            onclick={() => onTaskClick?.(t)}
+            onmousedown={(e) => onBarDragStart(e, t)}
+            onclick={() => { if (!dragging) onTaskClick?.(t); }}
             role="button"
             tabindex="0"
           />
@@ -393,6 +453,7 @@
               fill={taskColor(t)}
               opacity="0.85"
               class="cy-gantt__bar-progress"
+              data-task-id={t.id}
               pointer-events="none"
             />
           {/if}
@@ -403,6 +464,7 @@
               y={y + BAR_HEIGHT / 2 + 1}
               class="cy-gantt__bar-text"
               dominant-baseline="central"
+              data-task-id={t.id}
               pointer-events="none"
             >{t.label}</text>
           {/if}
@@ -547,6 +609,14 @@
   .cy-gantt__bar {
     cursor: pointer;
     transition: opacity 150ms ease;
+  }
+
+  .cy-gantt__bar--draggable {
+    cursor: grab;
+  }
+
+  .cy-gantt__bar--draggable:active {
+    cursor: grabbing;
   }
 
   .cy-gantt__bar:hover {
