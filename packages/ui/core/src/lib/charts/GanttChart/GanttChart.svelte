@@ -21,6 +21,7 @@
     showDependencies = true,
     showProgress = true,
     onTaskClick,
+    onTaskMove,
     zoom = "week",
   }: {
     tasks?: Task[];
