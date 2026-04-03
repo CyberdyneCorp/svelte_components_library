@@ -438,7 +438,7 @@
             onmousemove={(e) => onBarMouseMove(e, t)}
             onmouseleave={onBarMouseLeave}
             onmousedown={(e) => onBarDragStart(e, t)}
-            onclick={() => { if (!dragging) onTaskClick?.(t); }}
+            ondblclick={() => onTaskClick?.(t)}
             role="button"
             tabindex="0"
           />
