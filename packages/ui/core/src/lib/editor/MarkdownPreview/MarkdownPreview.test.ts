@@ -137,6 +137,22 @@ describe("MarkdownPreview", () => {
     expect(mermaid).toBeInTheDocument();
   });
 
+  it("renders mermaid container for invalid syntax (pre-render)", () => {
+    render(MarkdownPreview, { props: { content: "```mermaid\ninvalid <br/> stuff\n```" } });
+    const mermaid = document.querySelector(".cy-md-mermaid");
+    expect(mermaid).toBeInTheDocument();
+    expect(mermaid?.getAttribute("data-mermaid-idx")).toBe("0");
+  });
+
+  it("renders multiple mermaid blocks with separate indices", () => {
+    const md = "```mermaid\nflowchart TD\n    A-->B\n```\n\n```mermaid\npie\n    \"A\" : 50\n```";
+    render(MarkdownPreview, { props: { content: md } });
+    const blocks = document.querySelectorAll(".cy-md-mermaid");
+    expect(blocks.length).toBe(2);
+    expect(blocks[0]?.getAttribute("data-mermaid-idx")).toBe("0");
+    expect(blocks[1]?.getAttribute("data-mermaid-idx")).toBe("1");
+  });
+
   // Math
   it("renders display math container", () => {
     render(MarkdownPreview, { props: { content: "$$\nE = mc^2\n$$" } });

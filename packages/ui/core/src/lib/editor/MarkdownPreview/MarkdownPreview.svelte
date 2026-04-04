@@ -208,24 +208,27 @@
   let mermaidLoaded = $state(false);
   let mermaidModule: any = $state(null);
 
+  const mermaidConfig = {
+    startOnLoad: false,
+    suppressErrors: true,
+    theme: "dark" as const,
+    themeVariables: {
+      primaryColor: "#00ff41",
+      primaryTextColor: "#f0f0ff",
+      primaryBorderColor: "#00ff41",
+      lineColor: "#00d4ff",
+      secondaryColor: "#12121a",
+      tertiaryColor: "#1a1a24",
+    },
+  };
+
   async function loadMermaid() {
     if (mermaidLoaded) return mermaidModule;
 
     // Check if already loaded globally
     if (typeof window !== "undefined" && (window as any).mermaid) {
       const m = (window as any).mermaid;
-      m.initialize({
-        startOnLoad: false,
-        theme: "dark",
-        themeVariables: {
-          primaryColor: "#00ff41",
-          primaryTextColor: "#f0f0ff",
-          primaryBorderColor: "#00ff41",
-          lineColor: "#00d4ff",
-          secondaryColor: "#12121a",
-          tertiaryColor: "#1a1a24",
-        },
-      });
+      m.initialize(mermaidConfig);
       mermaidModule = m;
       mermaidLoaded = true;
       return m;
@@ -238,18 +241,7 @@
       script.onload = () => {
         const m = (window as any).mermaid;
         if (m) {
-          m.initialize({
-            startOnLoad: false,
-            theme: "dark",
-            themeVariables: {
-              primaryColor: "#00ff41",
-              primaryTextColor: "#f0f0ff",
-              primaryBorderColor: "#00ff41",
-              lineColor: "#00d4ff",
-              secondaryColor: "#12121a",
-              tertiaryColor: "#1a1a24",
-            },
-          });
+          m.initialize(mermaidConfig);
           mermaidModule = m;
           mermaidLoaded = true;
           resolve(m);
@@ -260,6 +252,25 @@
       script.onerror = () => resolve(null);
       document.head.appendChild(script);
     });
+  }
+
+  /**
+   * Clean up a mermaid error message for user-friendly display.
+   * Strips HTML tags, excessive whitespace, and internal parser details.
+   */
+  function cleanMermaidError(raw: string): string {
+    // Strip HTML tags that mermaid injects (like <br/>, <span>, etc.)
+    let msg = raw.replace(/<[^>]+>/g, " ");
+    // Collapse whitespace
+    msg = msg.replace(/\s+/g, " ").trim();
+    // Extract the useful part — usually before "Expecting..."
+    const expectingIdx = msg.indexOf("Expecting");
+    if (expectingIdx > 0 && expectingIdx < 200) {
+      msg = msg.substring(0, expectingIdx).trim();
+    }
+    // Cap length
+    if (msg.length > 200) msg = msg.substring(0, 200) + "...";
+    return msg || "Invalid diagram syntax";
   }
 
   $effect(() => {
@@ -281,14 +292,56 @@
           if (idxStr === null) continue;
           const idx = parseInt(idxStr, 10);
           const diagramDef = mermaidBlocksRef[idx];
-          if (!diagramDef || el.querySelector("svg")) continue;
+          if (!diagramDef || el.querySelector("svg") || el.querySelector(".cy-md-mermaid-error")) continue;
+
+          // First validate the syntax before attempting render
+          let isValid = true;
+          try {
+            await mermaid.parse(diagramDef);
+          } catch {
+            isValid = false;
+          }
+
+          if (!isValid) {
+            el.innerHTML = `<div class="cy-md-mermaid-error">
+              <div class="cy-md-mermaid-error-icon">&#x26A0;</div>
+              <div class="cy-md-mermaid-error-text">
+                <strong>Invalid Mermaid diagram</strong>
+                <p>The diagram syntax could not be parsed. Check for special characters, unquoted labels, or unsupported features.</p>
+              </div>
+              <details class="cy-md-mermaid-error-source">
+                <summary>View source</summary>
+                <pre>${escapeHtml(diagramDef)}</pre>
+              </details>
+            </div>`;
+            continue;
+          }
 
           try {
             const id = `mermaid-${Math.random().toString(36).slice(2, 10)}`;
             const { svg } = await mermaid.render(id, diagramDef);
             el.innerHTML = svg;
           } catch (err: any) {
-            el.innerHTML = `<div class="cy-md-mermaid-error">Diagram error: ${escapeHtml(err?.message || "Invalid syntax")}</div>`;
+            // Mermaid 11 may insert error SVGs into the DOM before throwing.
+            // Clean up any orphaned error elements it created.
+            document.querySelectorAll('[id^="d"]').forEach((errEl) => {
+              if (errEl.classList.contains("mermaid") && errEl.closest("body > *") === errEl) {
+                errEl.remove();
+              }
+            });
+
+            const friendlyMsg = cleanMermaidError(err?.message || "");
+            el.innerHTML = `<div class="cy-md-mermaid-error">
+              <div class="cy-md-mermaid-error-icon">&#x26A0;</div>
+              <div class="cy-md-mermaid-error-text">
+                <strong>Diagram rendering failed</strong>
+                <p>${escapeHtml(friendlyMsg)}</p>
+              </div>
+              <details class="cy-md-mermaid-error-source">
+                <summary>View source</summary>
+                <pre>${escapeHtml(diagramDef)}</pre>
+              </details>
+            </div>`;
           }
         }
       });
@@ -646,9 +699,60 @@
   }
 
   .cy-md-preview :global(.cy-md-mermaid-error) {
-    color: var(--color-state-error);
-    font-family: var(--font-mono, "JetBrains Mono", monospace);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+    width: 100%;
+    padding: 1em;
+    background: var(--color-surface-raised, #1a1a24);
+    border: 1px solid var(--color-state-warning, #f59e0b);
+    border-radius: 8px;
+    color: var(--color-text-secondary, #a0a0b0);
+    font-family: var(--font-body, "Inter", sans-serif);
     font-size: 0.875rem;
-    padding: 0.5em;
+  }
+
+  .cy-md-preview :global(.cy-md-mermaid-error-icon) {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .cy-md-preview :global(.cy-md-mermaid-error-text strong) {
+    color: var(--color-state-warning, #f59e0b);
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.25em;
+  }
+
+  .cy-md-preview :global(.cy-md-mermaid-error-text p) {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .cy-md-preview :global(.cy-md-mermaid-error-source) {
+    font-size: 0.75rem;
+  }
+
+  .cy-md-preview :global(.cy-md-mermaid-error-source summary) {
+    cursor: pointer;
+    color: var(--color-text-tertiary, #707080);
+    user-select: none;
+  }
+
+  .cy-md-preview :global(.cy-md-mermaid-error-source summary:hover) {
+    color: var(--color-text-secondary, #a0a0b0);
+  }
+
+  .cy-md-preview :global(.cy-md-mermaid-error-source pre) {
+    margin: 0.5em 0 0;
+    padding: 0.75em;
+    background: var(--color-surface-default, #12121a);
+    border-radius: 4px;
+    font-family: var(--font-mono, "JetBrains Mono", monospace);
+    font-size: 0.75rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    color: var(--color-text-tertiary, #707080);
   }
 </style>
