@@ -159,6 +159,7 @@ export { VelocityChart } from "./charts/VelocityChart/index.js";
 export { SankeyChart } from "./charts/SankeyChart/index.js";
 export { ScatterChart } from "./charts/ScatterChart/index.js";
 export { VennDiagram } from "./charts/VennDiagram/index.js";
+export { WordCloud } from "./charts/WordCloud/index.js";
 
 // Editor
 export { BlockEditor } from "./editor/BlockEditor/index.js";
