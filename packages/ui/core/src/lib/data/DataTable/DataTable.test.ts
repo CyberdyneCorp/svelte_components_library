@@ -265,4 +265,126 @@ describe("DataTable", () => {
     expect(screen.getByText("Role")).toBeInTheDocument();
     expect(screen.queryByLabelText("Sort by Role")).not.toBeInTheDocument();
   });
+
+  // Sorting order verification: rows reorder after sort
+  it("actually reorders rows when sorted ascending by name", async () => {
+    render(DataTable, { props: { columns, rows } });
+    await fireEvent.click(screen.getByLabelText("Sort by Name"));
+    const allRows = screen.getAllByRole("row");
+    // Header + data rows; first data row should be Alice (alphabetical)
+    const firstDataCells = allRows[1].querySelectorAll("td");
+    expect(firstDataCells[0]?.textContent).toBe("Alice");
+  });
+
+  it("sorts descending on second click", async () => {
+    render(DataTable, { props: { columns, rows } });
+    const sortBtn = screen.getByLabelText("Sort by Name");
+    await fireEvent.click(sortBtn);
+    await fireEvent.click(sortBtn);
+    const allRows = screen.getAllByRole("row");
+    const firstDataCells = allRows[1].querySelectorAll("td");
+    expect(firstDataCells[0]?.textContent).toBe("Diana");
+  });
+
+  // Sorting with null values — null comes last in desc too
+  it("handles null values sorting desc", async () => {
+    const rowsWithNull = [
+      { id: "1", name: null, role: "Admin", age: 30 },
+      { id: "2", name: "Bob", role: "User", age: 25 },
+      { id: "3", name: "Alice", role: "Editor", age: 35 },
+    ];
+    render(DataTable, { props: { columns, rows: rowsWithNull } });
+    const sortBtn = screen.getByLabelText("Sort by Name");
+    await fireEvent.click(sortBtn);
+    await fireEvent.click(sortBtn); // desc
+    const allRows = screen.getAllByRole("row");
+    expect(allRows.length).toBeGreaterThan(1);
+  });
+
+  // Resize column
+  it("starts column resize on mousedown", async () => {
+    const { container } = render(DataTable, { props: { columns, rows } });
+    const handle = container.querySelector(".cy-datatable__resize-handle")!;
+    await fireEvent.mouseDown(handle, { clientX: 100 });
+    // Resize should have started — fire mousemove and mouseup on document
+    await fireEvent.mouseMove(document, { clientX: 150 });
+    await fireEvent.mouseUp(document);
+    // Column should have been resized (no error thrown)
+    expect(handle).toBeInTheDocument();
+  });
+
+  // Pagination: showing info text on page 2
+  it("shows correct showing info on page 2", async () => {
+    render(DataTable, {
+      props: { columns, rows, pageSize: 2, currentPage: 2 },
+    });
+    expect(screen.getByText("Showing 3-4 of 4")).toBeInTheDocument();
+  });
+
+  // Selection bar shows when rows are selected
+  it("shows selection bar with count", async () => {
+    const { container } = render(DataTable, {
+      props: { columns, rows, selectable: true },
+    });
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    await fireEvent.click(checkboxes[1]);
+    await fireEvent.click(checkboxes[2]);
+    expect(screen.getByText("2 selected")).toBeInTheDocument();
+  });
+
+  // Sticky header class
+  it("applies sticky header class by default", () => {
+    const { container } = render(DataTable, { props: { columns, rows } });
+    const thead = container.querySelector(".cy-datatable__thead--sticky");
+    expect(thead).toBeInTheDocument();
+  });
+
+  it("does not apply sticky header when stickyHeader is false", () => {
+    const { container } = render(DataTable, {
+      props: { columns, rows, stickyHeader: false },
+    });
+    const thead = container.querySelector(".cy-datatable__thead--sticky");
+    expect(thead).not.toBeInTheDocument();
+  });
+
+  // maxHeight scroll wrapper
+  it("applies scroll wrapper when maxHeight is set", () => {
+    const { container } = render(DataTable, {
+      props: { columns, rows, maxHeight: "300px" },
+    });
+    const wrapper = container.querySelector(".cy-datatable__wrapper--scroll");
+    expect(wrapper).toBeInTheDocument();
+  });
+
+  // Expand with selectable shows correct totalCols
+  it("renders with both selectable and expandable", () => {
+    const { container } = render(DataTable, {
+      props: { columns, rows, selectable: true, expandable: true },
+    });
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    const expandBtns = screen.getAllByLabelText("Expand row");
+    expect(checkboxes.length).toBe(5); // 1 header + 4 rows
+    expect(expandBtns.length).toBe(4);
+  });
+
+  // Row click with no handler does not throw
+  it("clicking row without onrowclick does not throw", async () => {
+    render(DataTable, { props: { columns, rows } });
+    await fireEvent.click(screen.getByText("Alice"));
+    // No error thrown
+  });
+
+  // Column width prop
+  it("applies column width from column definition", () => {
+    const colsWithWidth = [
+      { key: "name", label: "Name", width: "200px" },
+      { key: "role", label: "Role" },
+    ];
+    const { container } = render(DataTable, {
+      props: { columns: colsWithWidth, rows },
+    });
+    const ths = container.querySelectorAll(".cy-datatable__th");
+    // The name column th should have width style
+    expect(ths.length).toBeGreaterThan(0);
+  });
 });

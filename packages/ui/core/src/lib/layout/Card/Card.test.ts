@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/svelte";
-import { describe, it, expect } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/svelte";
+import { describe, it, expect, vi } from "vitest";
 import Card from "./Card.svelte";
 
 describe("Card", () => {
@@ -31,5 +31,65 @@ describe("Card", () => {
     const { container } = render(Card);
     const card = container.querySelector(".cy-card");
     expect(card?.className).not.toContain("hoverable");
+  });
+
+  it("applies outlined variant class", () => {
+    const { container } = render(Card, { props: { variant: "outlined" } });
+    const card = container.querySelector(".cy-card");
+    expect(card?.className).toContain("outlined");
+  });
+
+  it("applies small padding class", () => {
+    const { container } = render(Card, { props: { padding: "sm" } });
+    const card = container.querySelector(".cy-card");
+    expect(card?.className).toContain("pad-sm");
+  });
+
+  it("applies default padding class (md)", () => {
+    const { container } = render(Card);
+    const card = container.querySelector(".cy-card");
+    expect(card?.className).toContain("pad-md");
+  });
+
+  it("applies hoverable class when onclick is provided", () => {
+    const handler = vi.fn();
+    const { container } = render(Card, { props: { onclick: handler } });
+    const card = container.querySelector(".cy-card");
+    expect(card?.className).toContain("hoverable");
+  });
+
+  it("sets role=button when onclick is provided", () => {
+    const handler = vi.fn();
+    const { container } = render(Card, { props: { onclick: handler } });
+    const card = container.querySelector(".cy-card");
+    expect(card).toHaveAttribute("role", "button");
+  });
+
+  it("sets tabindex=0 when onclick is provided", () => {
+    const handler = vi.fn();
+    const { container } = render(Card, { props: { onclick: handler } });
+    const card = container.querySelector(".cy-card");
+    expect(card).toHaveAttribute("tabindex", "0");
+  });
+
+  it("does not set role or tabindex without onclick", () => {
+    const { container } = render(Card);
+    const card = container.querySelector(".cy-card");
+    expect(card).not.toHaveAttribute("role");
+    expect(card).not.toHaveAttribute("tabindex");
+  });
+
+  it("fires onclick handler when clicked", async () => {
+    const handler = vi.fn();
+    const { container } = render(Card, { props: { onclick: handler } });
+    const card = container.querySelector(".cy-card")!;
+    await fireEvent.click(card);
+    expect(handler).toHaveBeenCalledOnce();
+  });
+
+  it("applies default variant class", () => {
+    const { container } = render(Card);
+    const card = container.querySelector(".cy-card");
+    expect(card?.className).toContain("cy-card--default");
   });
 });

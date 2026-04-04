@@ -187,4 +187,175 @@ describe("MarkdownPreview", () => {
     expect(codeBlock?.innerHTML).toContain("&lt;script&gt;");
     expect(codeBlock?.innerHTML).toContain("&lt;/script&gt;");
   });
+
+  // Additional heading levels
+  it("renders h3 headings", () => {
+    render(MarkdownPreview, { props: { content: "### H3 Title" } });
+    const h3 = document.querySelector("h3");
+    expect(h3).toBeInTheDocument();
+    expect(h3?.textContent).toBe("H3 Title");
+  });
+
+  it("renders h4 headings", () => {
+    render(MarkdownPreview, { props: { content: "#### H4 Title" } });
+    const h4 = document.querySelector("h4");
+    expect(h4).toBeInTheDocument();
+    expect(h4?.textContent).toBe("H4 Title");
+  });
+
+  it("renders h5 headings", () => {
+    render(MarkdownPreview, { props: { content: "##### H5 Title" } });
+    const h5 = document.querySelector("h5");
+    expect(h5).toBeInTheDocument();
+  });
+
+  it("renders h6 headings", () => {
+    render(MarkdownPreview, { props: { content: "###### H6 Title" } });
+    const h6 = document.querySelector("h6");
+    expect(h6).toBeInTheDocument();
+  });
+
+  // Bold with underscores
+  it("renders bold with underscores", () => {
+    render(MarkdownPreview, { props: { content: "__bold text__" } });
+    const strong = document.querySelector("strong");
+    expect(strong).toBeInTheDocument();
+    expect(strong?.textContent).toBe("bold text");
+  });
+
+  // Italic with underscores
+  it("renders italic with underscores", () => {
+    render(MarkdownPreview, { props: { content: "_italic text_" } });
+    const em = document.querySelector("em");
+    expect(em).toBeInTheDocument();
+    expect(em?.textContent).toBe("italic text");
+  });
+
+  // Code blocks with language class
+  it("renders code blocks with language class", () => {
+    render(MarkdownPreview, { props: { content: "```python\nprint('hello')\n```" } });
+    const code = document.querySelector(".cy-md-pre code.language-python");
+    expect(code).toBeInTheDocument();
+  });
+
+  // Code blocks without language
+  it("renders code blocks without language class", () => {
+    render(MarkdownPreview, { props: { content: "```\nplain code\n```" } });
+    const code = document.querySelector(".cy-md-pre code");
+    expect(code).toBeInTheDocument();
+    expect(code?.classList.length).toBe(0); // no language class
+  });
+
+  // Horizontal rules with different markers
+  it("renders horizontal rule with asterisks", () => {
+    render(MarkdownPreview, { props: { content: "***" } });
+    const hr = document.querySelector("hr");
+    expect(hr).toBeInTheDocument();
+  });
+
+  it("renders horizontal rule with underscores", () => {
+    render(MarkdownPreview, { props: { content: "___" } });
+    const hr = document.querySelector("hr");
+    expect(hr).toBeInTheDocument();
+  });
+
+  // Tables with multiple rows
+  it("renders table with multiple rows", () => {
+    const md = "| A | B | C |\n|---|---|---|\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |";
+    render(MarkdownPreview, { props: { content: md } });
+    const rows = document.querySelectorAll(".cy-md-table tbody tr");
+    expect(rows.length).toBe(2);
+    const headers = document.querySelectorAll(".cy-md-table th");
+    expect(headers.length).toBe(3);
+  });
+
+  // Consecutive blockquotes merge
+  it("merges consecutive blockquotes", () => {
+    render(MarkdownPreview, { props: { content: "> Line 1\n> Line 2" } });
+    const blockquotes = document.querySelectorAll("blockquote");
+    expect(blockquotes.length).toBe(1);
+  });
+
+  // Images with alt text
+  it("renders image with correct src", () => {
+    render(MarkdownPreview, { props: { content: "![Photo](https://example.com/photo.jpg)" } });
+    const img = document.querySelector("img.cy-md-img") as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img?.src).toBe("https://example.com/photo.jpg");
+    expect(img?.alt).toBe("Photo");
+  });
+
+  // Links with target blank
+  it("renders links with target _blank and rel noopener", () => {
+    render(MarkdownPreview, { props: { content: "[Example](https://example.com)" } });
+    const link = document.querySelector("a") as HTMLAnchorElement;
+    expect(link?.target).toBe("_blank");
+    expect(link?.rel).toContain("noopener");
+  });
+
+  // Sanitize data: URLs
+  it("sanitizes data: URLs in links", () => {
+    render(MarkdownPreview, { props: { content: "[click](data:text/html,<script>)" } });
+    const link = document.querySelector("a");
+    expect(link?.getAttribute("href")).toBe("#");
+  });
+
+  // Sanitize vbscript: URLs
+  it("sanitizes vbscript: URLs in links", () => {
+    render(MarkdownPreview, { props: { content: "[click](vbscript:alert(1))" } });
+    const link = document.querySelector("a");
+    expect(link?.getAttribute("href")).toBe("#");
+  });
+
+  // Sanitize URLs in images
+  it("sanitizes javascript URLs in images", () => {
+    render(MarkdownPreview, { props: { content: "![img](javascript:alert(1))" } });
+    const img = document.querySelector("img");
+    expect(img?.getAttribute("src")).toBe("#");
+  });
+
+  // Task lists checked/unchecked
+  it("renders checked and unchecked task items", () => {
+    render(MarkdownPreview, { props: { content: "- [x] Done\n- [ ] Todo" } });
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    expect(checkboxes.length).toBe(2);
+    expect((checkboxes[0] as HTMLInputElement).checked).toBe(true);
+    expect((checkboxes[1] as HTMLInputElement).checked).toBe(false);
+  });
+
+  // Paragraphs
+  it("wraps plain text in paragraphs", () => {
+    render(MarkdownPreview, { props: { content: "Hello world" } });
+    const p = document.querySelector("p");
+    expect(p).toBeInTheDocument();
+    expect(p?.textContent).toBe("Hello world");
+  });
+
+  // Line breaks within paragraphs
+  it("renders line breaks within paragraphs", () => {
+    render(MarkdownPreview, { props: { content: "Line 1\nLine 2" } });
+    const br = document.querySelector("br");
+    expect(br).toBeInTheDocument();
+  });
+
+  // Multiple paragraphs separated by blank lines
+  it("renders multiple paragraphs", () => {
+    render(MarkdownPreview, { props: { content: "First paragraph\n\nSecond paragraph" } });
+    const paragraphs = document.querySelectorAll("p");
+    expect(paragraphs.length).toBe(2);
+  });
+
+  // Escapes HTML entities in inline code
+  it("escapes HTML in inline code", () => {
+    render(MarkdownPreview, { props: { content: "`<div>test</div>`" } });
+    const code = document.querySelector(".cy-md-inline-code");
+    expect(code?.innerHTML).toContain("&lt;div&gt;");
+  });
+
+  // Unordered list with asterisk
+  it("renders unordered lists with asterisk marker", () => {
+    render(MarkdownPreview, { props: { content: "* Item A\n* Item B" } });
+    const ul = document.querySelector("ul");
+    expect(ul).toBeInTheDocument();
+  });
 });

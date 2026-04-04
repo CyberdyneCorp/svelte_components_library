@@ -273,4 +273,49 @@ describe("RangeSlider", () => {
     const low = container.querySelector("[aria-label='Low value']")!;
     expect(low.getAttribute("aria-valuenow")).toBe("20");
   });
+
+  it("does not start drag when disabled", async () => {
+    const { container } = render(RangeSlider, {
+      props: { low: 20, high: 80, disabled: true },
+    });
+    const low = container.querySelector("[aria-label='Low value']")!;
+    await fireEvent.mouseDown(low);
+    // No drag started, so mouse move should not change values
+    await fireEvent.mouseMove(document, { clientX: 999 });
+    await fireEvent.mouseUp(document);
+    expect(low.getAttribute("aria-valuenow")).toBe("20");
+  });
+
+  it("handles touchstart on low thumb", async () => {
+    const { container } = render(RangeSlider, {
+      props: { low: 20, high: 80 },
+    });
+    const low = container.querySelector("[aria-label='Low value']")!;
+    await fireEvent.touchStart(low);
+    await fireEvent.touchEnd(document);
+  });
+
+  it("handles touchstart on high thumb", async () => {
+    const { container } = render(RangeSlider, {
+      props: { low: 20, high: 80 },
+    });
+    const high = container.querySelector("[aria-label='High value']")!;
+    await fireEvent.touchStart(high);
+    await fireEvent.touchEnd(document);
+  });
+
+  it("shows label and values together", () => {
+    const { container } = render(RangeSlider, {
+      props: { label: "Range", low: 10, high: 90, showValues: true },
+    });
+    expect(container.querySelector(".cy-rs__label")?.textContent).toBe("Range");
+    expect(container.querySelector(".cy-rs__range-text")).toBeInTheDocument();
+  });
+
+  it("does not render header when no label and showValues false", () => {
+    const { container } = render(RangeSlider, {
+      props: { showValues: false, label: "" },
+    });
+    expect(container.querySelector(".cy-rs__header")).not.toBeInTheDocument();
+  });
 });

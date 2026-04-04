@@ -344,4 +344,69 @@ describe("SearchInput", () => {
     expect(active.length).toBe(0);
     vi.useRealTimers();
   });
+
+  it("closes dropdown on click outside", async () => {
+    vi.useFakeTimers();
+    const { container } = render(SearchInput, {
+      props: { results, debounce: 0 },
+    });
+    const input = container.querySelector("input")!;
+    await fireEvent.input(input, { target: { value: "a" } });
+    vi.advanceTimersByTime(0);
+    expect(container.querySelector(".cy-search__dropdown")).toBeInTheDocument();
+    // Click outside the container
+    await fireEvent.mouseDown(document.body);
+    expect(container.querySelector(".cy-search__dropdown")).not.toBeInTheDocument();
+    vi.useRealTimers();
+  });
+
+  it("does not close dropdown on click inside", async () => {
+    vi.useFakeTimers();
+    const { container } = render(SearchInput, {
+      props: { results, debounce: 0 },
+    });
+    const input = container.querySelector("input")!;
+    await fireEvent.input(input, { target: { value: "a" } });
+    vi.advanceTimersByTime(0);
+    // Click inside the container
+    await fireEvent.mouseDown(input);
+    expect(container.querySelector(".cy-search__dropdown")).toBeInTheDocument();
+    vi.useRealTimers();
+  });
+
+  it("does not navigate keys when dropdown is closed", async () => {
+    const { container } = render(SearchInput, {
+      props: { results },
+    });
+    const input = container.querySelector("input")!;
+    // Dropdown not open, ArrowDown should be ignored
+    await fireEvent.keyDown(input, { key: "ArrowDown" });
+    expect(container.querySelector(".cy-search__result--active")).not.toBeInTheDocument();
+  });
+
+  it("highlights match text in results", async () => {
+    vi.useFakeTimers();
+    const { container } = render(SearchInput, {
+      props: { results: [{ id: "1", label: "Apple" }], debounce: 0 },
+    });
+    const input = container.querySelector("input")!;
+    await fireEvent.input(input, { target: { value: "App" } });
+    vi.advanceTimersByTime(0);
+    const mark = container.querySelector(".cy-search__highlight");
+    expect(mark).toBeInTheDocument();
+    expect(mark?.textContent).toBe("App");
+    vi.useRealTimers();
+  });
+
+  it("renders results without group header when group is empty", async () => {
+    vi.useFakeTimers();
+    const { container } = render(SearchInput, {
+      props: { results: [{ id: "1", label: "Item" }], debounce: 0 },
+    });
+    const input = container.querySelector("input")!;
+    await fireEvent.input(input, { target: { value: "a" } });
+    vi.advanceTimersByTime(0);
+    expect(container.querySelector(".cy-search__group-header")).not.toBeInTheDocument();
+    vi.useRealTimers();
+  });
 });
