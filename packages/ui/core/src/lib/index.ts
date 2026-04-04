@@ -108,6 +108,7 @@ export { PromptExample } from "./chat/PromptExample/index.js";
 export { WelcomeText } from "./chat/WelcomeText/index.js";
 export { BotAnswer } from "./chat/BotAnswer/index.js";
 export { CommentThread } from "./chat/CommentThread/index.js";
+export { ChatSidebar } from "./chat/ChatSidebar/index.js";
 
 // Crypto / Web3
 export { TokenBalance } from "./crypto/TokenBalance/index.js";

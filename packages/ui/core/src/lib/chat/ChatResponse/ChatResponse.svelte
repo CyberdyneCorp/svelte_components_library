@@ -1,16 +1,20 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import MarkdownPreview from "../../editor/MarkdownPreview/MarkdownPreview.svelte";
+
   let {
     role = "user",
     content = "",
     timestamp = "",
     avatar = "",
+    markdown = false,
   }: {
     role?: "user" | "assistant" | "system";
     content?: string;
     timestamp?: string;
     avatar?: string;
+    markdown?: boolean;
   } = $props();
 </script>
 
@@ -28,7 +32,13 @@
   {/if}
 
   <div class="cy-chat-response__bubble">
-    <p class="cy-chat-response__content">{content}</p>
+    {#if markdown && role === "assistant"}
+      <div class="cy-chat-response__content cy-chat-response__content--markdown">
+        <MarkdownPreview {content} />
+      </div>
+    {:else}
+      <p class="cy-chat-response__content">{content}</p>
+    {/if}
     {#if timestamp}
       <time class="cy-chat-response__time">{timestamp}</time>
     {/if}
@@ -128,5 +138,13 @@
 
   .cy-chat-response--user .cy-chat-response__time {
     text-align: right;
+  }
+
+  .cy-chat-response__content--markdown {
+    margin: 0;
+  }
+
+  .cy-chat-response__content--markdown :global(.cy-md-preview) {
+    font-size: 0.875rem;
   }
 </style>

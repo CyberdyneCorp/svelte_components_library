@@ -29,4 +29,26 @@ describe("ChatResponse", () => {
     render(ChatResponse, { props: { role: "user" } });
     expect(screen.getByText("U")).toBeInTheDocument();
   });
+
+  it("renders plain text when markdown is false", () => {
+    render(ChatResponse, {
+      props: { role: "assistant", content: "**bold**", markdown: false },
+    });
+    expect(screen.getByText("**bold**")).toBeInTheDocument();
+  });
+
+  it("renders markdown content for assistant when markdown is true", () => {
+    const { container } = render(ChatResponse, {
+      props: { role: "assistant", content: "**bold**", markdown: true },
+    });
+    const mdPreview = container.querySelector(".cy-md-preview");
+    expect(mdPreview).toBeInTheDocument();
+  });
+
+  it("renders plain text for user role even when markdown is true", () => {
+    render(ChatResponse, {
+      props: { role: "user", content: "**bold**", markdown: true },
+    });
+    expect(screen.getByText("**bold**")).toBeInTheDocument();
+  });
 });
