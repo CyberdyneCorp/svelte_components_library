@@ -34,6 +34,7 @@ export { ColorPicker } from "./forms/ColorPicker/index.js";
 export { SearchInput } from "./forms/SearchInput/index.js";
 export { DatePicker } from "./forms/DatePicker/index.js";
 export { TimePicker } from "./forms/TimePicker/index.js";
+export { ScheduleConfig } from "./forms/ScheduleConfig/index.js";
 
 // Feedback
 export { Alert } from "./feedback/Alert/index.js";
