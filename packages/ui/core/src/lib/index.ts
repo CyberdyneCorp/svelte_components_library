@@ -173,3 +173,12 @@ export { RichTextEditor } from "./editor/RichTextEditor/index.js";
 
 // Maps
 export { MapView } from "./maps/MapView/index.js";
+
+// Retro (CyberdyneOS desktop aesthetic)
+export { RetroWindow } from "./retro/RetroWindow/index.js";
+export { StartMenu, type StartMenuItem } from "./retro/StartMenu/index.js";
+export { Taskbar, type TaskbarItem } from "./retro/Taskbar/index.js";
+export { DesktopIcon } from "./retro/DesktopIcon/index.js";
+export { DesktopGrid } from "./retro/DesktopGrid/index.js";
+export { RetroTerminal, type RetroTerminalLine, type RetroTerminalLineKind } from "./retro/RetroTerminal/index.js";
+export { ConnectWalletModal, type WalletProvider } from "./retro/ConnectWalletModal/index.js";
