@@ -21,7 +21,7 @@
     "svelte": "^5.0.0"
   },
   "dependencies": {
-    "@cyberdynecorp/svelte-ui-foundation": "^0.1.1"
+    "@cyberdynecorp/svelte-ui-foundation": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.3.10",
