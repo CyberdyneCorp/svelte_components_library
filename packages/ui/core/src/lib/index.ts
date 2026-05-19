@@ -212,3 +212,32 @@ export { PriceChart, type OHLCCandle } from "./retro/PriceChart/index.js";
 export { DepthChart, type DepthLevel } from "./retro/DepthChart/index.js";
 export { TVLSparkline } from "./retro/TVLSparkline/index.js";
 export { PoolRangeHistogram, type LiquidityBucket } from "./retro/PoolRangeHistogram/index.js";
+
+// Flow (Node Editor)
+export { FlowPort } from "./flow/FlowPort/index.js";
+export { FlowEdge } from "./flow/FlowEdge/index.js";
+export { FlowNode } from "./flow/FlowNode/index.js";
+export { NodeEditor } from "./flow/NodeEditor/index.js";
+export { NodePalette } from "./flow/NodePalette/index.js";
+export { NodeInspector } from "./flow/NodeInspector/index.js";
+export { FlowMinimap } from "./flow/FlowMinimap/index.js";
+export { FlowCanvasControls } from "./flow/FlowCanvasControls/index.js";
+export {
+  edgePath,
+  portPos,
+  DEFAULT_PORT_COLORS,
+  NODE_DEFAULT_WIDTH,
+  NODE_HEADER_HEIGHT,
+  NODE_PORT_ROW_HEIGHT,
+} from "./flow/index.js";
+export type {
+  PortSide,
+  PortSpec,
+  PortRef,
+  PortColors,
+  FlowNodeRow,
+  FlowNodeSpec,
+  FlowEdgeSpec,
+  Viewport,
+  ConnectionDraft,
+} from "./flow/index.js";

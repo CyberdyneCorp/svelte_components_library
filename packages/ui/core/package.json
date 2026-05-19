@@ -1,6 +1,6 @@
 {
   "name": "@cyberdynecorp/svelte-ui-core",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "type": "module",
   "svelte": "./dist/index.js",
   "exports": {
@@ -11,8 +11,7 @@
     }
   },
   "files": [
-    "dist",
-    "src/lib"
+    "dist"
   ],
   "scripts": {
     "build": "svelte-package",
@@ -22,7 +21,7 @@
     "svelte": "^5.0.0"
   },
   "dependencies": {
-    "@cyberdynecorp/svelte-ui-foundation": "workspace:*"
+    "@cyberdynecorp/svelte-ui-foundation": "^0.1.1"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.3.10",

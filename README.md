@@ -2,11 +2,11 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **139 components** across 15 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **154 components** across 15 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
-**Live documentation:** Once deployed, access via GitHub Pages.
+**Live documentation:** [https://cyberdynecorp.github.io/svelte_components_library/](https://cyberdynecorp.github.io/svelte_components_library/)
 
 **Local development:**
 
@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdynecorp/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdynecorp/svelte-ui-core` | 139 UI components across 15 categories |
+| `@cyberdynecorp/svelte-ui-core` | 146 UI components across 15 categories |
 
 ## Installation
 
@@ -77,13 +77,13 @@ Use components:
 </Card>
 ```
 
-## Components (139)
+## Components (154)
 
 ### Primitives (14)
 `Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle` · `StarRating`
 
-### Forms (19)
-`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `ComboBox` · `RangeSlider` · `CodeEditor` · `ColorPicker` · `SearchInput` · `DatePicker` · `TimePicker`
+### Forms (20)
+`TextInput` · `PasswordInput` · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `ComboBox` · `RangeSlider` · `CodeEditor` · `ColorPicker` · `SearchInput` · `DatePicker` · `TimePicker` · `ScheduleConfig`
 
 ### Feedback (12)
 `Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary` · `Carousel`
@@ -123,6 +123,9 @@ Use components:
 
 ### Maps (1)
 `MapView` (Leaflet with dark tiles, custom controls, geolocation)
+
+### Flow / Node Editor (8)
+`NodeEditor` (pan/zoom canvas with edge dragging and drop targets) · `FlowNode` (draggable node card with typed ports) · `FlowPort` (typed in/out port primitive) · `FlowEdge` (bezier connector with flow animation) · `NodePalette` (grouped, filterable, draggable palette) · `NodeInspector` (tabbed inspector shell) · `FlowMinimap` (graph overview with click-to-pan) · `FlowCanvasControls` (zoom in/out/fit/reset cluster)
 
 ## Design System
 
@@ -220,7 +223,7 @@ pnpm release            # Build & publish
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
-│       └── core/            UI components (139 components)
+│       └── core/            UI components (154 components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
 │               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ...
