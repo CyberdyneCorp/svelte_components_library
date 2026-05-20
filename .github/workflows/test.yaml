@@ -17,4 +17,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm build
+      # The Storybook vitest project renders stories in a real browser via
+      # Playwright — install the browser + its OS deps before running tests.
+      - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test

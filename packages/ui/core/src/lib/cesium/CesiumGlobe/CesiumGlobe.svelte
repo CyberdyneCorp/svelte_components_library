@@ -134,7 +134,16 @@
       ...viewerOptions,
     };
 
-    const v = new Cesium.Viewer(container, mergedOptions);
+    let v: Viewer;
+    try {
+      v = new Cesium.Viewer(container, mergedOptions);
+    } catch (e) {
+      // Most commonly a missing/failed WebGL context (headless test
+      // environments, GPU-blocklisted browsers). Fail into the error overlay
+      // instead of throwing an unhandled rejection out of onMount.
+      error = e instanceof Error ? e.message : "Failed to initialize Cesium viewer";
+      return;
+    }
     viewer = v;
 
     if (ionAvailable) {
