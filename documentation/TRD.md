@@ -5,8 +5,8 @@
 | Field | Value |
 |-------|-------|
 | **Project** | Cyberdyne Design System |
-| **Version** | 0.1.0 |
-| **Date** | 2026-03-27 |
+| **Version** | 0.1.2 |
+| **Date** | 2026-05-20 |
 | **Owner** | Cyberdyne Corp |
 | **Repository** | `CyberdyneCorp/svelte_components_library` |
 | **Status** | Active Development |
@@ -44,7 +44,7 @@ The Cyberdyne Design System is a comprehensive, reusable Svelte 5 component libr
 
 The system encompasses:
 - **Design Tokens** — Colors, typography, spacing, radius, shadows, and animations defined as CSS custom properties
-- **139 UI Components** — Organized across 15 functional categories
+- **243 UI Components** — Organized across 18 functional categories
 - **Storybook Documentation** — Interactive component playground with auto-generated API docs
 - **CI/CD Pipeline** — Automated testing, versioning, and publishing workflows
 
@@ -125,23 +125,26 @@ svelte_components_library/
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS layers (colors, typography, spacing, ...)
-│       └── core/            UI components (139 components)
+│       └── core/            UI components (243 components)
 │           └── src/lib/
 │               ├── primitives/   14 components
-│               ├── forms/        19 components
-│               ├── feedback/     11 components
-│               ├── navigation/   5 components
-│               ├── data/         15 components
-│               ├── layout/       8 components
+│               ├── forms/        20 components
+│               ├── feedback/     13 components
+│               ├── navigation/   10 components
+│               ├── data/         17 components
+│               ├── layout/       9 components
 │               ├── overlay/      5 components
 │               ├── auth/         2 components
-│               ├── chat/         7 components
+│               ├── chat/         8 components
 │               ├── crypto/       13 components
 │               ├── ml/           11 components
 │               ├── graph/        2 components
-│               ├── charts/       10 components
-│               ├── editor/       4 components
+│               ├── charts/       19 components
+│               ├── editor/       6 components
 │               ├── maps/         1 component
+│               ├── cesium/       49 components (+ utils; cesium peer dep)
+│               ├── retro/        36 components (CyberdyneOS desktop)
+│               ├── flow/         8 components (node-graph editor)
 │               └── _testdata/    Shared test data module
 ├── package.json             Root workspace config
 ├── pnpm-workspace.yaml      Workspace package paths
@@ -155,7 +158,10 @@ svelte_components_library/
 
 ```
 @cyberdynecorp/svelte-ui-core
-  └── depends on → @cyberdynecorp/svelte-ui-foundation (workspace:*)
+  ├── depends on → @cyberdynecorp/svelte-ui-foundation (workspace:*)
+  ├── peer dependency → svelte ^5.0.0
+  └── peer dependency → cesium ^1.124.0 (OPTIONAL — only the cesium/ category;
+        lazy-imported per component, never bundled, SSR-safe)
 
 @cyberdynecorp/svelte-ui-foundation
   └── peer dependency → svelte ^5.0.0
@@ -165,6 +171,11 @@ Consumer Application
   └── @cyberdynecorp/svelte-ui-core (components)
       └── internally imports foundation tokens
 ```
+
+> The `maps/MapView` (Leaflet) component loads Leaflet from a CDN at runtime;
+> the `cesium/` category requires the optional `cesium` peer dependency plus
+> consumer-side asset hosting (see `Overview/Cesium Integration` in Storybook
+> and `documentation/CESIUM_ROADMAP.md`).
 
 ### 3.3 Design Token Architecture
 
@@ -255,6 +266,8 @@ ComponentName/
 | Vite | ^6.3.5 | Build tool and dev server |
 | pnpm | >=9 | Package manager (workspaces) |
 | Node.js | >=20 | Runtime |
+| CesiumJS | ^1.124.0 | 3D globe engine — **optional peer dependency**, used only by the `cesium/` category, lazy-imported and never bundled |
+| Leaflet | 1.9.x (CDN) | 2D map engine for `maps/MapView` — loaded at runtime from a CDN, not a package dependency |
 
 ### 4.2 Build & Packaging
 
@@ -331,9 +344,10 @@ export type BreakpointKey, SpacingKey, RadiusKey
 
 ### 5.2 @cyberdynecorp/svelte-ui-core
 
-**Version:** 0.1.0
-**Purpose:** 139 UI components
+**Version:** 0.1.2
+**Purpose:** 243 UI components
 **Dependency:** `@cyberdynecorp/svelte-ui-foundation` (workspace:*)
+**Peer dependencies:** `svelte` ^5.0.0; `cesium` ^1.124.0 (optional — only the `cesium/` category)
 
 **Export Path:** `.` — All components from a single entry point
 
@@ -467,7 +481,7 @@ Based on a 4px base grid:
 | `ThemeToggle` | theme (bindable), size | Dark/light theme toggle switch |
 | `StarRating` | value (bindable), max, size, readonly, halfStars | Interactive star rating with half-star support |
 
-### 7.2 Forms (19 components)
+### 7.2 Forms (20 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -490,8 +504,9 @@ Based on a 4px base grid:
 | `CodeEditor` | value (bindable), language, lineNumbers, readonly | Editable code input with syntax highlighting |
 | `DatePicker` | value (bindable), label, placeholder, min, max, disabled | Calendar-based single date selection |
 | `TimePicker` | value (bindable), label, format, step, disabled | Time selection with hour and minute controls |
+| `ScheduleConfig` | value (bindable), presets | Recurring-event frequency builder (interval / daily / weekly / monthly cron-style schedule) |
 
-### 7.3 Feedback (11 components)
+### 7.3 Feedback (13 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -506,8 +521,10 @@ Based on a 4px base grid:
 | `Stepper` | steps, currentStep, orientation | Multi-step progress with labels and state tracking |
 | `ErrorBoundary` | fallback, onError | Graceful error catching with fallback UI |
 | `Carousel` | items, autoplay, interval, showDots, showArrows | Image/content carousel with navigation controls |
+| `VideoPlayer` | src, poster, autoplay, loop, controls | Themed HTML5 video player with custom controls |
+| `GlobeLoader` | size, ink, background, topoJsonUrl, glow, interactive | Self-contained animated rotating globe + satellites loader (2D canvas, no Cesium); drag to spin |
 
-### 7.4 Navigation (5 components)
+### 7.4 Navigation (10 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -516,8 +533,13 @@ Based on a 4px base grid:
 | `Sidebar` | items, activeId, collapsed | Multi-level collapsible sidebar |
 | `Header` | title, children, logo | Top navigation bar |
 | `MenuItem` | label, icon, active, href, onclick, children | Reusable navigation menu item |
+| `BreadcrumbOverflow` | items, maxVisible | Breadcrumb that collapses middle items into an overflow menu |
+| `NavBar` | brand, items, actions, sticky | Top application navigation bar with brand + action slots |
+| `MegaMenu` | sections, trigger | Multi-column dropdown mega menu |
+| `MenuBar` | menus | Desktop-style horizontal menu bar with nested menus |
+| `BottomNav` | items, activeId (bindable) | Mobile bottom tab navigation |
 
-### 7.5 Data Display (15 components)
+### 7.5 Data Display (17 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -536,8 +558,10 @@ Based on a 4px base grid:
 | `InfiniteScroll` | onLoadMore, threshold, loading, hasMore, children | Infinite scroll container with loading trigger |
 | `FilterBar` | filters, active (bindable), onchange | Combined filter chips for tables and lists |
 | `SortableList` | items (bindable), onreorder, handle, disabled | Drag-to-reorder list with HTML5 Drag and Drop |
+| `OrgChart` | nodes, rootId, orientation, oncollapse | Hierarchical org/tree chart with collapsible nodes |
+| `WeatherCard` | data, location, loading, error, source, dismissible | Current-conditions card (temp, feels-like, wind dir, humidity, cloud, pressure) — controlled |
 
-### 7.6 Layout (8 components)
+### 7.6 Layout (9 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -549,6 +573,7 @@ Based on a 4px base grid:
 | `SplitView` | direction, sizes (bindable), minSize, maxSize | Resizable split panels (horizontal/vertical) |
 | `GridLayout` | columns, gap, responsive, children | Responsive CSS grid layout container |
 | `PageShell` | sidebar, header, footer, children | Full page shell combining header, sidebar, and content area |
+| `FloatingPanel` | title, open (bindable), header, footer, children, minWidth, minHeight, defaultWidth, initialX/Y, resizable, onclose | Draggable + resizable floating window with titlebar and close |
 
 ### 7.7 Overlay (5 components)
 
@@ -567,7 +592,7 @@ Based on a 4px base grid:
 | `LoginPage` | mode, title, subtitle, email (bindable), password (bindable), error, loading, walletSection, onsubmit | Full login page (credentials + wallet + both modes) |
 | `WalletConnect` | wallets, connecting (bindable), disabled, onconnect | Wallet connection list (MetaMask, WalletConnect, Coinbase, Phantom) |
 
-### 7.9 Chat (7 components)
+### 7.9 Chat (8 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -578,6 +603,7 @@ Based on a 4px base grid:
 | `WelcomeText` | title, subtitle, children | Empty chat welcome screen |
 | `BotAnswer` | content, typing, variant | Bot response with typing dots animation |
 | `CommentThread` | comments, onreply, onedit, ondelete | Threaded comment discussion with nested replies |
+| `ChatSidebar` | conversations, activeId (bindable), onselect, onrename, ondelete, onnew | Conversation list sidebar with right-click rename/delete context menu |
 
 ### 7.10 Crypto / Web3 (13 components)
 
@@ -620,7 +646,7 @@ Based on a 4px base grid:
 | `GraphViewer` | nodes, edges, layout, zoomable, searchable | Force-directed network graph with community detection, zoom/pan, and search |
 | `SemanticSearch` | results, query, onselect | Vector search results display with relevance scores |
 
-### 7.13 Charts (10 components)
+### 7.13 Charts (19 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -634,21 +660,86 @@ Based on a 4px base grid:
 | `TreeMap` | data, colorScale, showLabels, padding | Hierarchical treemap for proportional data display |
 | `GanttChart` | tasks, groups, dependencies, startDate, endDate, onTaskClick | SVG timeline with task bars, dependency arrows, and group rows |
 | `ActivityHeatmap` | data, startDate, endDate, colorScale, tooltipFormat | GitHub-style contribution grid heatmap |
+| `CumulativeFlow` | data, series, xAxis, yAxis | Cumulative flow diagram (stacked band areas) for WIP over time |
+| `AgingWIP` | items, columns, thresholds | Aging work-in-progress scatter by workflow stage |
+| `BurndownChart` | data, ideal, actual, xAxis, yAxis | Sprint burndown with ideal vs. actual lines |
+| `VelocityChart` | sprints, committed, completed | Per-sprint velocity bars (committed vs. completed) |
+| `SankeyChart` | nodes, links | Flow/Sankey diagram with proportional links |
+| `ScatterChart` | data, series, xAxis, yAxis, sizeBy | Scatter / bubble plot with optional size encoding |
+| `VennDiagram` | sets, intersections | 2–3 set Venn diagram with overlap labels |
+| `WordCloud` | words, scale, rotation, palette | Frequency-scaled word cloud layout |
+| `ElevationProfile` | samples, from, to, showLineOfSight, fresnel, showStats | Distance-vs-elevation cross-section with terrain fill + optional line-of-sight & Fresnel-zone overlay (pairs with Cesium `createTerrainSampler`) |
 
-### 7.14 Editor (4 components)
+### 7.14 Editor (6 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
+| `BlockEditor` | value (bindable), slashMenuItems, toolbarActions, onchange, onblockcommit, onblockcreate, onblockdelete, onblockreorder | Notion-style block editor with slash menu, custom toolbar actions, and per-block callbacks |
 | `MarkdownEditor` | value (bindable), mode, toolbar, placeholder | Markdown editor with edit, split, and preview modes; configurable toolbar; Mermaid diagram support via CDN |
 | `MarkdownPreview` | content, sanitize | Rendered markdown preview using built-in regex parser with dynamic Mermaid diagram rendering |
 | `MarkdownToolbar` | onapply | Formatting toolbar with 15 buttons (bold, italic, headings, lists, links, code, etc.) and keyboard shortcuts |
 | `MindMap` | nodes (bindable), rootId, onNodeClick, onReparent | Interactive mind map with drag-reparent, undo/redo, notes, links, and markdown export |
+| `RichTextEditor` | value (bindable), toolbar, placeholder, onchange | WYSIWYG rich-text editor (contenteditable) with formatting toolbar |
 
 ### 7.15 Maps (1 component)
 
 | Component | Props | Description |
 |-----------|-------|------------|
 | `MapView` | center, zoom, markers, tileUrl, maxZoom | Interactive map powered by Leaflet with CartoDB dark tiles, custom zoom/reset/locate controls, colored markers, and geolocation support |
+
+### 7.16 Cesium — 3D Globe (49 components)
+
+CesiumJS-backed 3D globe toolkit. **Headless and controlled** — consumers own all data via props and receive events via callbacks. Architecture: one `<CesiumGlobe>` viewer host shares the `Cesium.Viewer` via Svelte context (`useCesiumViewer`); every layer resolves it, mounts its primitives in an `$effect`, and cleans up on destroy. `cesium` is an **optional peer dependency**, lazy-imported per component (SSR-safe, never bundled). Requires consumer-side asset hosting — see `Overview/Cesium Integration` in Storybook and `documentation/CESIUM_ROADMAP.md`. Also exports utilities: `useCesiumViewer`, `provideCesiumViewer`, `createTerrainSampler`, `createScreenPicker`, `diffById`, `removeEntitiesById`, the GIBS catalog helpers, and `GOOGLE_PHOTOREALISTIC_ION_ASSET_ID`.
+
+| Group | Components |
+|-------|-----------|
+| **Engine** (3) | `CesiumGlobe` (viewer host; bindable camera, OSM fallback, picking), `Terrain` (ellipsoid/world/ion/url + exaggeration), `ImageryLayer` (osm/urlTemplate/wms/wmts/ion/bing/arcgis) |
+| **Tilesets & contours** (4) | `Cesium3DTiles` (generic tileset + per-feature hook), `OsmBuildingsLayer` (per-OSM-id tinting), `GooglePhotorealisticTiles` (ion asset 2275207 or Google API key), `ElevationContours` (terrain contour overlay + shaded ramp) |
+| **Vector** (8) | `GeoJsonLayer`, `KmlLayer`, `CzmlLayer`, `MarkersLayer` (draggable), `PolygonsLayer` (draw mode), `PolylinesLayer`, `LabelsLayer`, `PolygonHeatmapsLayer` |
+| **Live entities** (22) | `TrackedEntitiesLayer` (primitive) + `AircraftLayer`, `VesselsLayer`, `SatellitesLayer`, `EarthquakesLayer`, `WildfiresLayer`, `VolcanoesLayer`, `AirportsLayer`, `TowersLayer`, `CellSitesLayer`, `WebcamsLayer`, `PowerPlantsLayer`, `AirQualityLayer`, `TideGaugesLayer`, `GdacsLayer`, `TsunamiLayer`, `CyclonesLayer`, `AuroraLayer`, `SubmarineCablesLayer`, `FarmsLayer` (clustered), `CoverageLayer`, `UserLocationLayer` |
+| **Raster timelines** (2) | `WeatherTileLayer` (animated frames + crossfade), `NasaGibsLayer` (GIBS product catalog) |
+| **Particles & flow** (4) | `WindParticlesLayer`, `WaveParticlesLayer`, `StreamlinesLayer`, `WindSimDomainPreview` |
+| **Chrome** (6) | `CesiumControls`, `CesiumCompass`, `CesiumCoordinatesHud`, `CesiumLayerControl`, `BaseLayerPicker`, `CesiumMinimap` |
+
+### 7.17 Retro — CyberdyneOS Desktop (36 components)
+
+A retro / pixel desktop-OS aesthetic suite for DAO and DeFi surfaces.
+
+| Component | Description |
+|-----------|------------|
+| `RetroWindow` | Draggable pixel window with title bar and controls |
+| `WindowManager` (util) | `createWindowManager()` store for z-order / focus / minimize of multiple windows |
+| `WindowStatusBar` | Status strip for a retro window |
+| `StartMenu` | OS-style start menu with grouped items |
+| `Taskbar` | Bottom taskbar with running-window buttons |
+| `DesktopIcon` / `DesktopGrid` | Clickable desktop icons + auto-arranging grid |
+| `RetroTerminal` | Pixel terminal with typed line kinds |
+| `BootScreen` | Animated boot/POST sequence screen |
+| `Clock` | Taskbar clock |
+| `CRTBackground` / `CRTEffect` | Scanline CRT backdrop + overlay effect |
+| `ConnectWalletModal` | Retro wallet-connect modal (MetaMask/WalletConnect/etc.) |
+| `PixelButton` / `PixelInput` / `PixelCheckbox` / `PixelRadio` / `PixelToggle` | Pixel form primitives |
+| `PixelTabs` / `PixelScrollArea` / `PixelTooltip` / `PixelAlert` / `PixelProgressBar` / `PixelNotification` / `PixelFileIcon` | Pixel UI primitives |
+| `RetroContextMenu` | Right-click pixel context menu |
+| `StatCard` / `ProposalRow` / `StatusDotList` | DAO dashboard widgets |
+| `ShoppingCartPanel` | Retro cart panel with items + suggestions |
+| `LiquidityRangeBar` / `LiquidityPositionCard` / `PoolRangeHistogram` / `TokenPairIcon` | DeFi liquidity-pool widgets |
+| `PriceChart` (OHLC) / `DepthChart` / `TVLSparkline` | Retro market charts |
+
+### 7.18 Flow — Node Editor (8 components)
+
+Headless, controlled node-graph editor primitives (n8n / ComfyUI style). See `documentation/NODE_EDITOR_ROADMAP.md`. Also exports helpers `edgePath`, `portPos`, and `DEFAULT_PORT_COLORS` / node-dimension constants.
+
+| Component | Description |
+|-----------|------------|
+| `NodeEditor` | Pan / wheel-zoom / drop canvas; renders edges as an SVG layer and delegates nodes to a snippet |
+| `FlowNode` | Opinionated node card (header drag handle + typed port rows + data rows) |
+| `FlowPort` | Typed in/out port primitive with compatibility highlight |
+| `FlowEdge` | Bezier connector (+ `edgePath` helper) with flow animation + hit area |
+| `NodePalette` | Grouped, filterable, draggable node source list |
+| `NodeInspector` | Tabbed right-panel scaffold for node parameters |
+| `FlowMinimap` | Overview of all node bounds with click-to-pan |
+| `FlowCanvasControls` | Floating zoom cluster (+, −, fit, 1:1) |
 
 ---
 
@@ -814,6 +905,9 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 |---------|----------|---------|
 | README.md | Root | Quick start, component list, project overview |
 | TRD.md | `documentation/` | This document — full technical specification |
+| CESIUM_ROADMAP.md | `documentation/` | Design + delivery plan for the `cesium/` 3D globe suite (architecture, milestones, acceptance criteria) |
+| NODE_EDITOR_ROADMAP.md | `documentation/` | Design + delivery plan for the `flow/` node-graph editor |
+| Cesium Integration | Storybook `Overview/Cesium Integration` | Consumer setup: install, asset copy, `CESIUM_BASE_URL`, Ion + Google keys, CSP, troubleshooting |
 
 ---
 
@@ -848,7 +942,7 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | Package | Target (gzipped) | Notes |
 |---------|------------------|-------|
 | Foundation CSS | < 5KB | Tokens only, no components |
-| Core (full) | < 100KB | All 139 components |
+| Core (full, excl. cesium) | < 180KB | All 243 components; `cesium` is a peer dep and is **not** counted — it is lazy-imported and never bundled |
 | Core (tree-shaken) | < 15KB | Typical import of 5–10 components |
 
 ### 13.2 Runtime Performance
@@ -917,13 +1011,16 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 
 | Priority | Item | Description |
 |----------|------|------------|
-| P1 | Dark/Light theme toggle | Semantic token remapping for light mode |
+| ~~P1~~ | ~~Dark/Light theme toggle~~ | ~~Delivered — `ThemeToggle` + light-mode token remapping~~ |
 | ~~P1~~ | ~~MarkdownEditor package~~ | ~~Delivered in Editor category (regex-based parser, not Milkdown)~~ |
+| ~~P1~~ | ~~3D globe (Cesium) suite~~ | ~~Delivered — 49-component `cesium/` category (see CESIUM_ROADMAP.md)~~ |
+| ~~P1~~ | ~~Node-graph editor~~ | ~~Delivered — 8-component `flow/` category (see NODE_EDITOR_ROADMAP.md)~~ |
+| ~~P1~~ | ~~Retro / CyberdyneOS desktop suite~~ | ~~Delivered — 36-component `retro/` category~~ |
 | P1 | Chromatic integration | Visual regression testing |
 | P2 | Figma token sync | Automated design-to-code token pipeline |
-| ~~P2~~ | ~~Playwright E2E tests~~ | ~~Delivered — @playwright/test integrated~~ |
+| ~~P2~~ | ~~Playwright E2E tests~~ | ~~Delivered — @playwright/test integrated; Cesium globe smoke test~~ |
 | P2 | Tailwind CSS preset | `@cyberdynecorp/svelte-config-tailwind` for consumer apps |
-| ~~P3~~ | ~~Chart components~~ | ~~Delivered — 8 chart components (LineChart, BarChart, AreaChart, HeatmapChart, PieChart, Sparkline, Gauge, TreeMap)~~ |
+| ~~P3~~ | ~~Chart components~~ | ~~Delivered — 19 chart components (incl. Sankey, Scatter, Venn, Gantt, Burndown, ElevationProfile, …)~~ |
 | P3 | i18n support | Internationalization for labels and content |
 | P3 | RTL support | Right-to-left layout support |
 
@@ -932,9 +1029,10 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | Category | Planned Components |
 |----------|-------------------|
 | Gaming | Minimap, ResourceBar, AbilityPanel, HealthBar, Leaderboard |
-| ~~Data Viz~~ | ~~Delivered — LineChart, BarChart, PieChart, HeatmapChart, AreaChart, Sparkline, Gauge, TreeMap~~ |
-| ~~Advanced Forms~~ | ~~Delivered — DatePicker, TimePicker, ~~ColorPicker~~, TagInput, ComboBox~~ |
-| Layout | Resizable panels, Masonry grid, Virtual list |
+| ~~Data Viz~~ | ~~Delivered — 19 chart components + Cesium geospatial layers~~ |
+| ~~Advanced Forms~~ | ~~Delivered — DatePicker, TimePicker, ColorPicker, TagInput, ComboBox, ScheduleConfig~~ |
+| ~~Layout~~ | ~~Delivered — SplitView (resizable panels), GridLayout, VirtualizedList, FloatingPanel; Masonry grid still open~~ |
+| ~~Geospatial~~ | ~~Delivered — `cesium/` (49) + `maps/MapView` + `ElevationProfile` + `GlobeLoader`~~ |
 
 ---
 
