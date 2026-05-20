@@ -49,6 +49,7 @@ export { Stepper } from "./feedback/Stepper/index.js";
 export { ErrorBoundary } from "./feedback/ErrorBoundary/index.js";
 export { Carousel } from "./feedback/Carousel/index.js";
 export { VideoPlayer } from "./feedback/VideoPlayer/index.js";
+export { GlobeLoader } from "./feedback/GlobeLoader/index.js";
 
 // Navigation
 export { Tabs } from "./navigation/Tabs/index.js";
@@ -79,6 +80,7 @@ export { DataTable } from "./data/DataTable/index.js";
 export { FilterBar } from "./data/FilterBar/index.js";
 export { SortableList } from "./data/SortableList/index.js";
 export { OrgChart } from "./data/OrgChart/index.js";
+export { WeatherCard } from "./data/WeatherCard/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
@@ -89,6 +91,7 @@ export { Drawer } from "./layout/Drawer/index.js";
 export { SplitView } from "./layout/SplitView/index.js";
 export { GridLayout } from "./layout/GridLayout/index.js";
 export { PageShell } from "./layout/PageShell/index.js";
+export { FloatingPanel } from "./layout/FloatingPanel/index.js";
 
 // Overlay
 export { Modal } from "./overlay/Modal/index.js";
@@ -162,6 +165,7 @@ export { SankeyChart } from "./charts/SankeyChart/index.js";
 export { ScatterChart } from "./charts/ScatterChart/index.js";
 export { VennDiagram } from "./charts/VennDiagram/index.js";
 export { WordCloud } from "./charts/WordCloud/index.js";
+export { ElevationProfile } from "./charts/ElevationProfile/index.js";
 
 // Editor
 export { BlockEditor } from "./editor/BlockEditor/index.js";
