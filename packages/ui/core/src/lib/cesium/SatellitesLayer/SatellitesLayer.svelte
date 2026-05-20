@@ -3,7 +3,7 @@
 <script lang="ts">
   import TrackedEntitiesLayer from "../TrackedEntitiesLayer/TrackedEntitiesLayer.svelte";
   import { satellite as satelliteGlyph } from "../glyphs.js";
-  import type { Satellite, TrackedEntity } from "../types.js";
+  import type { LabelMode, Satellite, TrackedEntity } from "../types.js";
 
   type Props = {
     /**
@@ -13,8 +13,13 @@
      */
     satellites: Satellite[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
+    /** Deprecated alias for `labelMode` (`true` → `"all"`). Prefer `labelMode`. */
     alwaysShowLabels?: boolean;
+    /** Which satellites show their name label. Defaults to `"selected"`. */
+    labelMode?: LabelMode;
     /** Colour by constellation group. Falls back to `defaultColor`. */
     colorByGroup?: Partial<Record<string, string>>;
     defaultColor?: string;
@@ -36,8 +41,10 @@
   let {
     satellites,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     alwaysShowLabels = false,
+    labelMode,
     colorByGroup,
     defaultColor = "#00d4ff",
     size = 22,
@@ -73,9 +80,11 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   {alwaysShowLabels}
+  {labelMode}
   idPrefix="sat"
   defaultColor={defaultColor}
   defaultSize={size}

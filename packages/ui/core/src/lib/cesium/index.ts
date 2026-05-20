@@ -88,6 +88,7 @@ export type {
   ColorScaleStop,
   CzmlInput,
   TrackedEntity,
+  LabelMode,
   Aircraft,
   Vessel,
   Satellite,

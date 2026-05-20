@@ -13,6 +13,16 @@
     title = "",
     /** Accessible name when label is not visible (icon-only buttons). */
     ariaLabel = "",
+    /** Forwarded to the inner `<button id>`. */
+    id,
+    /**
+     * Arbitrary `data-*` attributes forwarded to the inner `<button>`.
+     * Keys may be written with or without the `data-` prefix — e.g.
+     * `{ testid: "add-row" }` or `{ "data-testid": "add-row" }` both render
+     * `data-testid="add-row"`. Lets Playwright/Cypress select the real button
+     * without a wrapper element.
+     */
+    dataAttrs,
     onclick,
     children,
   }: {
@@ -23,23 +33,37 @@
     type?: "button" | "submit" | "reset";
     title?: string;
     ariaLabel?: string;
+    id?: string;
+    dataAttrs?: Record<string, string>;
     onclick?: (e: MouseEvent) => void;
     children?: Snippet;
   } = $props();
 
   let isDisabled = $derived(disabled || loading);
+
+  // Normalise data-attr keys to always carry the `data-` prefix.
+  const resolvedDataAttrs = $derived.by(() => {
+    if (!dataAttrs) return {} as Record<string, string>;
+    const out: Record<string, string> = {};
+    for (const [k, v] of Object.entries(dataAttrs)) {
+      out[k.startsWith("data-") ? k : `data-${k}`] = v;
+    }
+    return out;
+  });
 </script>
 
 <button
   class="cy-btn cy-btn--{variant} cy-btn--{size}"
   class:cy-btn--loading={loading}
   {type}
+  {id}
   disabled={isDisabled}
   aria-disabled={isDisabled}
   aria-busy={loading}
   aria-label={ariaLabel || undefined}
   title={title || undefined}
   {onclick}
+  {...resolvedDataAttrs}
 >
   {#if loading}
     <span class="cy-btn__spinner" aria-hidden="true"></span>

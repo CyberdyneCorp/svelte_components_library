@@ -8,6 +8,8 @@
   type Props = {
     cellSites: CellSite[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     /** Hex colour by radio technology. */
     colorByRadio?: Partial<Record<string, string>>;
@@ -23,6 +25,7 @@
   let {
     cellSites,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     colorByRadio,
     onclick,
@@ -53,6 +56,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="cell"

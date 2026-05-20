@@ -23,6 +23,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Create Release PR or Publish
+        id: changesets
         uses: changesets/action@v1
         with:
           publish: pnpm release
@@ -30,3 +31,27 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Smoke check: when a publish happened, download the just-published
+      # @cyberdynecorp/svelte-ui-core tarball and assert every barrel export
+      # is present in dist/index.d.ts + the cesium/ tree shipped. Catches
+      # "version bumped but tarball is a stale build" regressions.
+      - name: Verify published tarball exports
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISHED: ${{ steps.changesets.outputs.publishedPackages }}
+        run: |
+          VERSION=$(node -e "const p=JSON.parse(process.env.PUBLISHED||'[]');const c=p.find(x=>x.name==='@cyberdynecorp/svelte-ui-core');if(!c){console.log('');process.exit(0);}console.log(c.version)")
+          if [ -z "$VERSION" ]; then
+            echo "No @cyberdynecorp/svelte-ui-core in publishedPackages — skipping export check."
+            exit 0
+          fi
+          # GitHub Packages can lag a few seconds after publish; retry briefly.
+          for attempt in 1 2 3 4 5; do
+            if node scripts/verify-published-exports.mjs "$VERSION"; then exit 0; fi
+            echo "retry $attempt: registry not ready, waiting 10s..."
+            sleep 10
+          done
+          echo "verify-published-exports failed after retries"
+          exit 1

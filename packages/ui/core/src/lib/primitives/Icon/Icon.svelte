@@ -24,7 +24,12 @@
     | "shield"
     | "zap"
     | "activity"
-    | "lock";
+    | "lock"
+    | "target"
+    | "maximize"
+    | "download"
+    | "play"
+    | "pause";
 
   let {
     name = "",
@@ -58,6 +63,8 @@
     "zap": "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
     "activity": "M22 12h-4l-3 9L9 3l-3 9H2",
     "lock": "M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm2-3a5 5 0 0 1 10 0v3H7V8z",
+    "download": "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3",
+    "play": "M6 4l14 8-14 8V4z",
   };
 
   let path = $derived(icons[name] ?? "");
@@ -85,6 +92,15 @@
     <rect x="4" y="4" width="16" height="16" rx="2" />
     <rect x="9" y="9" width="6" height="6" />
     <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3" />
+  {:else if name === "target"}
+    <circle cx="12" cy="12" r="8" />
+    <circle cx="12" cy="12" r="2" />
+    <path d="M12 1v3M12 20v3M1 12h3M20 12h3" />
+  {:else if name === "maximize"}
+    <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3" />
+  {:else if name === "pause"}
+    <rect x="6" y="4" width="4" height="16" rx="1" />
+    <rect x="14" y="4" width="4" height="16" rx="1" />
   {:else}
     <path d={path} />
   {/if}

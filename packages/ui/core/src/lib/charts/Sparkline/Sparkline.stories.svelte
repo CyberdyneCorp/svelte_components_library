@@ -50,3 +50,21 @@
     </table>
   </div>
 </Story>
+
+<Story name="ClampedWithLabel">
+  {@const ndvi = Array.from({ length: 24 }, (_, i) => ({ ts: i, value: 0.45 + Math.sin(i / 3) * 0.18 }))}
+  <div style="display:flex; flex-direction:column; gap:1rem; max-width:200px;">
+    <Sparkline samples={ndvi} min={0} max={1} label="NDVI" fill="gradient" color="#22c55e" />
+    <Sparkline samples={ndvi} min={0} max={1} label="NDVI (same scale)" fill="gradient" color="#22c55e" />
+    <Sparkline samples={ndvi} label="NDVI (auto-fit)" fill="gradient" color="#00d4ff" />
+  </div>
+</Story>
+
+<Story name="FillModes">
+  {@const series = [4, 8, 5, 12, 9, 14, 11, 17]}
+  <div style="display:flex; gap:1.5rem; align-items:center;">
+    <Sparkline data={series} fill="none" label="none" />
+    <Sparkline data={series} fill="solid" label="solid" />
+    <Sparkline data={series} fill="gradient" label="gradient" />
+  </div>
+</Story>

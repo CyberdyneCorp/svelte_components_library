@@ -8,6 +8,8 @@
   type Props = {
     wildfires: Wildfire[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     /** Filter by minimum detection confidence (0..100). */
     minConfidence?: number;
@@ -19,6 +21,7 @@
   let {
     wildfires,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     minConfidence = 0,
     minBrightnessK = 0,
@@ -68,6 +71,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="fire"

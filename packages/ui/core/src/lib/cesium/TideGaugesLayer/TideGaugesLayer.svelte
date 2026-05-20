@@ -8,6 +8,8 @@
   type Props = {
     gauges: TideGauge[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     onclick?: (gauge: TideGauge) => void;
   };
@@ -15,6 +17,7 @@
   let {
     gauges,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     onclick,
   }: Props = $props();
@@ -53,6 +56,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="tide"

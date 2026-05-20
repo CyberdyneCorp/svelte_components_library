@@ -1,12 +1,21 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
+  type Row = Record<string, any>;
   type Column = {
     key: string;
     label: string;
     sortable?: boolean;
     width?: string;
     resizable?: boolean;
+    /**
+     * Per-cell render override. Receives the whole row so a cell can render a
+     * checkbox, a severity chip, or formatted/mono numbers. Falls back to
+     * `row[col.key]` text when omitted.
+     */
+    cell?: Snippet<[Row]>;
   };
 
   let {
@@ -245,7 +254,13 @@
                 </td>
               {/if}
               {#each columns as col}
-                <td class="cy-datatable__td">{row[col.key] ?? ""}</td>
+                <td class="cy-datatable__td">
+                  {#if col.cell}
+                    {@render col.cell(row)}
+                  {:else}
+                    {row[col.key] ?? ""}
+                  {/if}
+                </td>
               {/each}
             </tr>
             {#if expandable && expandedRows.includes(rid)}

@@ -8,6 +8,8 @@
   type Props = {
     towers: Tower[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     color?: string;
     onclick?: (tower: Tower) => void;
@@ -16,6 +18,7 @@
   let {
     towers,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     color = "#a855f7",
     onclick,
@@ -41,6 +44,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="tower"

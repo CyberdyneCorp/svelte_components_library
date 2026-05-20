@@ -8,6 +8,8 @@
   type Props = {
     webcams: Webcam[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     color?: string;
     onclick?: (webcam: Webcam) => void;
@@ -16,6 +18,7 @@
   let {
     webcams,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     color = "#00ff41",
     onclick,
@@ -42,6 +45,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="webcam"

@@ -16,6 +16,8 @@
      */
     location: UserLocation | null;
     visible?: boolean;
+    /** Uniform layer opacity 0–1, applied to the pin + accuracy ring alpha. */
+    opacity?: number;
     color?: string;
     /** Show the horizontal accuracy ring around the location. */
     showAccuracy?: boolean;
@@ -24,9 +26,12 @@
   let {
     location,
     visible = true,
+    opacity = 1,
     color = "#00d4ff",
     showAccuracy = true,
   }: Props = $props();
+
+  const alpha = $derived(Math.max(0, Math.min(1, opacity)));
 
   const getViewer = useCesiumViewer();
   let dataSource: CustomDataSource | null = null;
@@ -53,6 +58,7 @@
     void location;
     void color;
     void showAccuracy;
+    void alpha;
     if (!CesiumMod || !dataSource) return;
     sync(CesiumMod);
   });
@@ -108,11 +114,11 @@
             positions(location.accuracyM),
           ) as never,
           material: Cesium.Color.fromCssColorString(color).withAlpha(
-            0.18,
+            0.18 * alpha,
           ) as never,
           outline: true as never,
           outlineColor: Cesium.Color.fromCssColorString(color).withAlpha(
-            0.45,
+            0.45 * alpha,
           ) as never,
         },
       });
@@ -127,6 +133,7 @@
         height: 36,
         heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
         verticalOrigin: Cesium.VerticalOrigin.CENTER,
+        color: Cesium.Color.WHITE.withAlpha(alpha),
       },
     });
   }

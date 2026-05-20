@@ -1,15 +1,36 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
+  type AccordionItem = {
+    id: string;
+    title: string;
+    /**
+     * Body content. A plain string renders as text (back-compat); a Snippet
+     * lets you render rich children (forms, sliders, sub-components).
+     */
+    content: string | Snippet;
+    /**
+     * Right-aligned controls in the header (e.g. a visibility Switch + count
+     * Badge). Clicks here do NOT toggle the panel.
+     */
+    actions?: Snippet;
+  };
+
   let {
     items = [],
     multiple = false,
     defaultOpen = [],
   }: {
-    items: Array<{ id: string; title: string; content: string }>;
+    items: AccordionItem[];
     multiple?: boolean;
     defaultOpen?: string[];
   } = $props();
+
+  function isSnippet(c: string | Snippet): c is Snippet {
+    return typeof c === "function";
+  }
 
   let internalOpenItems: Set<string> | undefined = $state(undefined);
   let openItems = $derived(internalOpenItems ?? new Set(defaultOpen));
@@ -34,25 +55,39 @@
   {#each items as item (item.id)}
     {@const isOpen = openItems.has(item.id)}
     <div class="cy-accordion__item" class:cy-accordion__item--open={isOpen}>
-      <button
-        class="cy-accordion__trigger"
-        aria-expanded={isOpen}
-        aria-controls="accordion-panel-{item.id}"
-        id="accordion-header-{item.id}"
-        onclick={() => toggle(item.id)}
-      >
-        <span class="cy-accordion__title">{item.title}</span>
-        <svg
-          class="cy-accordion__chevron"
-          class:cy-accordion__chevron--open={isOpen}
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
+      <div class="cy-accordion__header">
+        <button
+          class="cy-accordion__trigger"
+          aria-expanded={isOpen}
+          aria-controls="accordion-panel-{item.id}"
+          id="accordion-header-{item.id}"
+          onclick={() => toggle(item.id)}
         >
-          <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
+          <svg
+            class="cy-accordion__chevron"
+            class:cy-accordion__chevron--open={isOpen}
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="cy-accordion__title">{item.title}</span>
+        </button>
+        {#if item.actions}
+          <!-- Header actions live outside the toggle button so clicking them
+               (e.g. a visibility Switch) doesn't expand/collapse the panel. -->
+          <div
+            class="cy-accordion__actions"
+            role="presentation"
+            onclick={(e) => e.stopPropagation()}
+            onkeydown={(e) => e.stopPropagation()}
+          >
+            {@render item.actions()}
+          </div>
+        {/if}
+      </div>
       <div
         class="cy-accordion__panel"
         class:cy-accordion__panel--open={isOpen}
@@ -61,7 +96,11 @@
         aria-labelledby="accordion-header-{item.id}"
       >
         <div class="cy-accordion__content">
-          {item.content}
+          {#if isSnippet(item.content)}
+            {@render item.content()}
+          {:else}
+            {item.content}
+          {/if}
         </div>
       </div>
     </div>
@@ -89,25 +128,32 @@
     border-left: 2px solid var(--color-action-brand-default);
   }
 
+  .cy-accordion__header {
+    display: flex;
+    align-items: center;
+    background: var(--color-surface-default);
+    transition: background var(--transition-fast);
+  }
+
+  .cy-accordion__header:hover {
+    background: var(--color-surface-hover);
+  }
+
   .cy-accordion__trigger {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
+    gap: var(--space-2);
+    flex: 1;
+    min-width: 0;
     padding: var(--space-4) var(--space-5);
-    background: var(--color-surface-default);
+    background: transparent;
     border: none;
     color: var(--color-text-primary);
     font-family: var(--font-body);
     font-size: 0.9375rem;
     font-weight: var(--font-weight-medium);
     cursor: pointer;
-    transition: background var(--transition-fast);
     text-align: left;
-  }
-
-  .cy-accordion__trigger:hover {
-    background: var(--color-surface-hover);
   }
 
   .cy-accordion__trigger:focus-visible {
@@ -117,6 +163,17 @@
 
   .cy-accordion__title {
     flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cy-accordion__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding-right: var(--space-5);
+    flex-shrink: 0;
   }
 
   .cy-accordion__chevron {

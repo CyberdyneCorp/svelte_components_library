@@ -5,7 +5,7 @@
   import { useCesiumViewer } from "../viewerContext.js";
   import { diffById } from "../reconcile.js";
   import { circleDot } from "../glyphs.js";
-  import type { LngLat, TrackedEntity } from "../types.js";
+  import type { LabelMode, LngLat, TrackedEntity } from "../types.js";
 
   type Entity = import("cesium").Entity;
   type CustomDataSource = import("cesium").CustomDataSource;
@@ -24,8 +24,23 @@
      * top-down silhouette glyph.
      */
     rotateBillboards?: boolean;
-    /** Show entity.label even when the entity isn't selected. */
+    /**
+     * Deprecated alias for `labelMode`. `true` → `"all"`, `false` → `"selected"`.
+     * Prefer `labelMode`.
+     */
     alwaysShowLabels?: boolean;
+    /**
+     * Which entities show their label:
+     *  - `"all"` — every entity that has a `label`
+     *  - `"perEntity"` — same as `all`; the consumer controls visibility by
+     *    setting or omitting `entity.label` (good for "label only M ≥ 4.5")
+     *  - `"selected"` — only the selected entity (default)
+     *  - `"none"` — never
+     * When unset, derives from `alwaysShowLabels` for back-compat.
+     */
+    labelMode?: LabelMode;
+    /** Uniform layer opacity 0–1, applied to billboard / point / label / trail alpha. */
+    opacity?: number;
     /** Default billboard size when entity.size is unset. */
     defaultSize?: number;
     /** Default colour for the generated dot glyph. */
@@ -41,11 +56,35 @@
     selectedId = $bindable(null),
     rotateBillboards = false,
     alwaysShowLabels = false,
+    labelMode,
+    opacity = 1,
     defaultSize = 24,
     defaultColor = "#00d4ff",
     idPrefix = "tracked",
     onclick,
   }: Props = $props();
+
+  // Resolve label visibility mode (labelMode wins; else derive from the
+  // deprecated alwaysShowLabels boolean).
+  const resolvedLabelMode = $derived<LabelMode>(
+    labelMode ?? (alwaysShowLabels ? "all" : "selected"),
+  );
+
+  function shouldShowLabel(e: TrackedEntity, isSelected: boolean): boolean {
+    if (!e.label) return false;
+    switch (resolvedLabelMode) {
+      case "none":
+        return false;
+      case "all":
+      case "perEntity":
+        return true;
+      case "selected":
+      default:
+        return isSelected;
+    }
+  }
+
+  const alpha = $derived(Math.max(0, Math.min(1, opacity)));
 
   const getViewer = useCesiumViewer();
   let dataSource: CustomDataSource | null = null;
@@ -76,7 +115,8 @@
   $effect(() => {
     void entities;
     void rotateBillboards;
-    void alwaysShowLabels;
+    void resolvedLabelMode;
+    void alpha;
     void defaultSize;
     void defaultColor;
     void selectedId;
@@ -156,6 +196,8 @@
         height: size,
         heightReference: heightRef,
         verticalOrigin: Cesium.VerticalOrigin.CENTER,
+        // Multiplies the billboard image — drives uniform layer opacity.
+        color: Cesium.Color.WHITE.withAlpha(alpha),
         alignedAxis:
           rotateBillboards && typeof e.headingDeg === "number"
             ? Cesium.Cartesian3.UNIT_Z
@@ -163,19 +205,18 @@
         rotation: billboardRotation(Cesium, e),
         scale: isSelected ? 1.25 : 1,
       },
-      label:
-        e.label && (alwaysShowLabels || isSelected)
-          ? {
-              text: e.label,
-              font: "11px JetBrains Mono, monospace",
-              fillColor: Cesium.Color.WHITE,
-              outlineColor: Cesium.Color.BLACK,
-              outlineWidth: 2,
-              style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-              pixelOffset: new Cesium.Cartesian2(0, -(size / 2) - 6),
-              verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-            }
-          : undefined,
+      label: shouldShowLabel(e, isSelected)
+        ? {
+            text: e.label,
+            font: "11px JetBrains Mono, monospace",
+            fillColor: Cesium.Color.WHITE.withAlpha(alpha),
+            outlineColor: Cesium.Color.BLACK.withAlpha(alpha),
+            outlineWidth: 2,
+            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+            pixelOffset: new Cesium.Cartesian2(0, -(size / 2) - 6),
+            verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+          }
+        : undefined,
     });
 
     if (e.trail && e.trail.length >= 2) {
@@ -186,7 +227,7 @@
           width: (e.trailWidth ?? 1.5) as never,
           material: Cesium.Color.fromCssColorString(
             e.trailColor ?? e.color ?? defaultColor,
-          ).withAlpha(0.65) as never,
+          ).withAlpha(0.65 * alpha) as never,
           clampToGround: (typeof e.altitudeM !== "number") as never,
         },
       });
@@ -209,12 +250,13 @@
       entity.billboard.height = (e.size ?? defaultSize) as never;
       entity.billboard.rotation = billboardRotation(Cesium, e) as never;
       entity.billboard.scale = (isSelected ? 1.25 : 1) as never;
+      entity.billboard.color = Cesium.Color.WHITE.withAlpha(alpha) as never;
       if (rotateBillboards && typeof e.headingDeg === "number") {
         entity.billboard.alignedAxis = Cesium.Cartesian3.UNIT_Z as never;
       }
     }
-    // Label show/hide based on selection.
-    if (e.label && (alwaysShowLabels || isSelected)) {
+    // Label show/hide per labelMode + opacity.
+    if (shouldShowLabel(e, isSelected)) {
       if (!entity.label) {
         // Recreate the bundle to attach a label cleanly.
         dataSource.entities.remove(entity);
@@ -222,6 +264,9 @@
         return;
       }
       entity.label.text = e.label as never;
+      entity.label.show = true as never;
+      entity.label.fillColor = Cesium.Color.WHITE.withAlpha(alpha) as never;
+      entity.label.outlineColor = Cesium.Color.BLACK.withAlpha(alpha) as never;
     } else if (entity.label) {
       entity.label.show = false as never;
     }
@@ -232,7 +277,7 @@
         existingTrail.polyline.positions = trailPositions(Cesium, e) as never;
         existingTrail.polyline.material = Cesium.Color.fromCssColorString(
           e.trailColor ?? e.color ?? defaultColor,
-        ).withAlpha(0.65) as never;
+        ).withAlpha(0.65 * alpha) as never;
       } else if (!existingTrail) {
         dataSource.entities.add({
           id: trail,
@@ -241,7 +286,7 @@
             width: (e.trailWidth ?? 1.5) as never,
             material: Cesium.Color.fromCssColorString(
               e.trailColor ?? e.color ?? defaultColor,
-            ).withAlpha(0.65) as never,
+            ).withAlpha(0.65 * alpha) as never,
             clampToGround: (typeof e.altitudeM !== "number") as never,
           },
         });

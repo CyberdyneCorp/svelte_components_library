@@ -15,6 +15,8 @@
   type Props = {
     cyclones: Cyclone[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1, applied to track, cone, head + label alpha. */
+    opacity?: number;
     selectedId?: string | null;
     /** Render the forecast cone polygon (default true). */
     showCone?: boolean;
@@ -26,11 +28,14 @@
   let {
     cyclones,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     showCone = true,
     showForecast = true,
     onclick,
   }: Props = $props();
+
+  const alpha = $derived(Math.max(0, Math.min(1, opacity)));
 
   const getViewer = useCesiumViewer();
   let dataSource: CustomDataSource | null = null;
@@ -60,6 +65,7 @@
     void cyclones;
     void showCone;
     void showForecast;
+    void alpha;
     if (!CesiumMod || !dataSource) return;
     sync(CesiumMod);
   });
@@ -137,7 +143,7 @@
         polyline: {
           positions: trackPositions(Cesium, c),
           width: 3 as never,
-          material: Cesium.Color.fromCssColorString(color) as never,
+          material: Cesium.Color.fromCssColorString(color).withAlpha(alpha) as never,
           clampToGround: true as never,
         },
       });
@@ -150,7 +156,7 @@
           positions: forecastPositions(Cesium, c),
           width: 2 as never,
           material: new Cesium.PolylineDashMaterialProperty({
-            color: Cesium.Color.fromCssColorString(color),
+            color: Cesium.Color.fromCssColorString(color).withAlpha(alpha),
             dashLength: 14,
           }) as never,
           clampToGround: true as never,
@@ -163,10 +169,10 @@
         id: id.cone,
         polygon: {
           hierarchy: new Cesium.PolygonHierarchy(conePositions(Cesium, c)) as never,
-          material: Cesium.Color.fromCssColorString(color).withAlpha(0.15) as never,
+          material: Cesium.Color.fromCssColorString(color).withAlpha(0.15 * alpha) as never,
           outline: true as never,
           outlineColor: Cesium.Color.fromCssColorString(color).withAlpha(
-            0.5,
+            0.5 * alpha,
           ) as never,
         },
       });
@@ -183,13 +189,14 @@
           height: 30,
           heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
           verticalOrigin: Cesium.VerticalOrigin.CENTER,
+          color: Cesium.Color.WHITE.withAlpha(alpha),
         },
         label: c.name
           ? {
               text: c.name,
               font: "12px JetBrains Mono, monospace",
-              fillColor: Cesium.Color.WHITE,
-              outlineColor: Cesium.Color.BLACK,
+              fillColor: Cesium.Color.WHITE.withAlpha(alpha),
+              outlineColor: Cesium.Color.BLACK.withAlpha(alpha),
               outlineWidth: 2,
               style: Cesium.LabelStyle.FILL_AND_OUTLINE,
               pixelOffset: new Cesium.Cartesian2(0, -22),

@@ -34,6 +34,18 @@ describe("StarRating", () => {
     expect(slider?.getAttribute("aria-valuenow")).toBe("3");
   });
 
+  it("renders unrated (valuenow 0) when value is undefined", () => {
+    const { container } = render(StarRating, { props: { value: undefined } });
+    const slider = container.querySelector("[role='slider']");
+    expect(slider?.getAttribute("aria-valuenow")).toBe("0");
+  });
+
+  it("renders unrated when value is null", () => {
+    const { container } = render(StarRating, { props: { value: null } });
+    const slider = container.querySelector("[role='slider']");
+    expect(slider?.getAttribute("aria-valuenow")).toBe("0");
+  });
+
   it("has correct aria-valuemin", () => {
     const { container } = render(StarRating, { props: {} });
     const slider = container.querySelector("[role='slider']");

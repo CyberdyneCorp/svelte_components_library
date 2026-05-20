@@ -8,6 +8,8 @@
   type Props = {
     buoys: TsunamiBuoy[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     onclick?: (buoy: TsunamiBuoy) => void;
   };
@@ -15,6 +17,7 @@
   let {
     buoys,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     onclick,
   }: Props = $props();
@@ -56,6 +59,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="tsu"

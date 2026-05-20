@@ -14,6 +14,8 @@
   type Props = {
     farms: Farm[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1, applied to the crop billboard alpha. */
+    opacity?: number;
     selectedId?: string | null;
     /** Cluster nearby farms below this pixel range. */
     clusterPixelRange?: number;
@@ -37,6 +39,7 @@
   let {
     farms,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     clusterPixelRange = 60,
     minimumClusterSize = 3,
@@ -44,6 +47,8 @@
     defaultColor = "#22c55e",
     onclick,
   }: Props = $props();
+
+  const alpha = $derived(Math.max(0, Math.min(1, opacity)));
 
   const getViewer = useCesiumViewer();
   let dataSource: CustomDataSource | null = null;
@@ -75,6 +80,7 @@
   $effect(() => {
     void farms;
     void colorByCrop;
+    void alpha;
     if (!CesiumMod || !dataSource) return;
     sync(CesiumMod);
   });
@@ -115,6 +121,7 @@
         height: 22,
         heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
         verticalOrigin: Cesium.VerticalOrigin.CENTER,
+        color: Cesium.Color.WHITE.withAlpha(alpha),
       },
     });
   }

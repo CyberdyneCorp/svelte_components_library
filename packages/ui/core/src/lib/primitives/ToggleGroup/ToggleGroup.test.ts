@@ -34,4 +34,34 @@ describe("ToggleGroup", () => {
     await fireEvent.click(radios[2]);
     expect(onchange).toHaveBeenCalledWith("c");
   });
+
+  it("multiple mode renders checkboxes and uses a group role", () => {
+    const { container } = render(ToggleGroup, {
+      props: { options, multiple: true, value: ["a"] },
+    });
+    expect(container.querySelector("[role='group']")).toBeInTheDocument();
+    const boxes = screen.getAllByRole("checkbox");
+    expect(boxes).toHaveLength(3);
+    expect(boxes[0].getAttribute("aria-checked")).toBe("true");
+  });
+
+  it("multiple mode toggles values into a string[] via onchange", async () => {
+    const onchange = vi.fn();
+    render(ToggleGroup, {
+      props: { options, multiple: true, value: ["a"], onchange },
+    });
+    const boxes = screen.getAllByRole("checkbox");
+    await fireEvent.click(boxes[1]); // add "b"
+    expect(onchange).toHaveBeenCalledWith(["a", "b"]);
+  });
+
+  it("multiple mode removes an already-selected value", async () => {
+    const onchange = vi.fn();
+    render(ToggleGroup, {
+      props: { options, multiple: true, value: ["a", "b"], onchange },
+    });
+    const boxes = screen.getAllByRole("checkbox");
+    await fireEvent.click(boxes[0]); // remove "a"
+    expect(onchange).toHaveBeenCalledWith(["b"]);
+  });
 });

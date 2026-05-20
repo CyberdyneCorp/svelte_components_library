@@ -1,6 +1,8 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import Table from "./Table.svelte";
+  import Badge from "../../primitives/Badge/Badge.svelte";
+  import Checkbox from "../../forms/Checkbox/Checkbox.svelte";
 
   const cryptoRows = [
     { rank: 1, token: "BTC", name: "Bitcoin", price: "$67,891.00", marketCap: "$1.33T", change: "+1.8%", volume: "$32.1B" },
@@ -59,3 +61,31 @@
 <Story name="Crypto Market (Striped)" args={{ columns: defaultCols, rows: cryptoRows, striped: true }} />
 
 <Story name="ML Model Comparison" args={{ columns: modelCols, rows: modelRows, striped: true }} />
+
+<Story name="CustomCellSnippets">
+  {#snippet selectCell(row)}
+    <Checkbox ariaLabel={`Select ${row.zone}`} checked={row.selected} />
+  {/snippet}
+  {#snippet statusCell(row)}
+    <Badge variant={row.status === "critical" ? "error" : row.status === "warn" ? "warning" : "success"}>
+      {row.status}
+    </Badge>
+  {/snippet}
+  {#snippet gapCell(row)}
+    <span style="font-family: var(--font-mono); ">{row.gap.toFixed(2)} m</span>
+  {/snippet}
+
+  <Table
+    columns={[
+      { key: "select", label: "", width: "48px", cell: selectCell },
+      { key: "zone", label: "Zone", sortable: true },
+      { key: "status", label: "Status", cell: statusCell },
+      { key: "gap", label: "Gap", sortable: true, cell: gapCell },
+    ]}
+    rows={[
+      { zone: "Coastal A", status: "critical", gap: 2.1, selected: true },
+      { zone: "Coastal B", status: "warn", gap: 0.8, selected: false },
+      { zone: "Inland C", status: "good", gap: 0.3, selected: false },
+    ]}
+  />
+</Story>

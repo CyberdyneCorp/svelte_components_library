@@ -237,6 +237,48 @@ describe("NumberInput", () => {
     expect((input as HTMLInputElement).value).toBe("0");
   });
 
+  it("renders empty (not 0) with no value", () => {
+    const { container } = render(NumberInput);
+    const input = container.querySelector("input") as HTMLInputElement;
+    expect(input.value).toBe("");
+  });
+
+  it("renders empty when value is undefined (optional bind)", () => {
+    const { container } = render(NumberInput, { props: { value: undefined } });
+    const input = container.querySelector("input") as HTMLInputElement;
+    expect(input.value).toBe("");
+  });
+
+  it("renders empty when value is null", () => {
+    const { container } = render(NumberInput, { props: { value: null } });
+    const input = container.querySelector("input") as HTMLInputElement;
+    expect(input.value).toBe("");
+  });
+
+  it("clearing the field fires onchange(null)", async () => {
+    const onchange = vi.fn();
+    const { container } = render(NumberInput, { props: { value: 5, onchange } });
+    const input = container.querySelector("input")!;
+    await fireEvent.input(input, { target: { value: "" } });
+    expect(onchange).toHaveBeenCalledWith(null);
+  });
+
+  it("typing fires onchange with the parsed number", async () => {
+    const onchange = vi.fn();
+    const { container } = render(NumberInput, { props: { onchange } });
+    const input = container.querySelector("input")!;
+    await fireEvent.input(input, { target: { value: "42" } });
+    expect(onchange).toHaveBeenCalledWith(42);
+  });
+
+  it("increments from min when empty", async () => {
+    const { container } = render(NumberInput, { props: { min: 10, step: 1 } });
+    const btn = screen.getByRole("button", { name: "Increase" });
+    await fireEvent.click(btn);
+    const input = container.querySelector("input") as HTMLInputElement;
+    expect(input.value).toBe("11");
+  });
+
   it("does not go above max via keyboard", async () => {
     const { container } = render(NumberInput, {
       props: { value: 10, step: 1, max: 10 },

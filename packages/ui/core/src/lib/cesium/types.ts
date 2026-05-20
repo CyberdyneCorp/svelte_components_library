@@ -206,6 +206,16 @@ export type CzmlInput =
  * Generic moving-point entity. Used directly via `<TrackedEntitiesLayer>`
  * or transformed from a domain shape by one of the wrapper components.
  */
+/**
+ * Controls which tracked entities render their text label:
+ *  - `"all"` — every entity that has a `label`
+ *  - `"perEntity"` — same as `all`; the consumer controls visibility by
+ *    setting or omitting `entity.label`
+ *  - `"selected"` — only the selected entity (default)
+ *  - `"none"` — never
+ */
+export type LabelMode = "all" | "none" | "perEntity" | "selected";
+
 export type TrackedEntity = {
   id: string;
   lng: number;

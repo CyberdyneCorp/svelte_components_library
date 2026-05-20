@@ -22,7 +22,12 @@ export type IconName =
   | "shield"
   | "zap"
   | "activity"
-  | "lock";
+  | "lock"
+  | "target"
+  | "maximize"
+  | "download"
+  | "play"
+  | "pause";
 
 export const BUILTIN_ICON_NAMES: readonly IconName[] = [
   "check",
@@ -45,4 +50,9 @@ export const BUILTIN_ICON_NAMES: readonly IconName[] = [
   "zap",
   "activity",
   "lock",
+  "target",
+  "maximize",
+  "download",
+  "play",
+  "pause",
 ];

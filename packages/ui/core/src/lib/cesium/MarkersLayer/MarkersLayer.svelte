@@ -14,6 +14,8 @@
     /** Controlled marker list. */
     markers: Marker[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1, applied to marker billboards + labels. */
+    opacity?: number;
     /** Enables click-and-hold drag on each marker. */
     draggable?: boolean;
     /** Bindable id of the marker the user clicked most recently. */
@@ -27,12 +29,15 @@
   let {
     markers,
     visible = true,
+    opacity = 1,
     draggable = false,
     selectedId = $bindable(null),
     renderMarker,
     onclick,
     onmove,
   }: Props = $props();
+
+  const alpha = $derived(Math.max(0, Math.min(1, opacity)));
 
   const getViewer = useCesiumViewer();
   let dataSource: CustomDataSource | null = null;
@@ -73,6 +78,7 @@
   $effect(() => {
     void markers;
     void renderMarker;
+    void alpha;
     if (!CesiumMod || !dataSource) return;
     syncMarkers(CesiumMod);
   });
@@ -145,13 +151,14 @@
         scale: style.scale,
         heightReference: heightRef,
         verticalOrigin: Cesium.VerticalOrigin.CENTER,
+        color: Cesium.Color.WHITE.withAlpha(alpha),
       },
       label: m.label
         ? {
             text: m.label,
             font: "12px JetBrains Mono, monospace",
-            fillColor: Cesium.Color.WHITE,
-            outlineColor: Cesium.Color.BLACK,
+            fillColor: Cesium.Color.WHITE.withAlpha(alpha),
+            outlineColor: Cesium.Color.BLACK.withAlpha(alpha),
             outlineWidth: 2,
             style: Cesium.LabelStyle.FILL_AND_OUTLINE,
             pixelOffset: new Cesium.Cartesian2(0, -(style.size + 8)),
@@ -177,8 +184,13 @@
     if (entity.billboard) {
       entity.billboard.image = billboardImage(style) as never;
       entity.billboard.scale = style.scale as never;
+      entity.billboard.color = Cesium.Color.WHITE.withAlpha(alpha) as never;
     }
-    if (entity.label && m.label) entity.label.text = m.label as never;
+    if (entity.label && m.label) {
+      entity.label.text = m.label as never;
+      entity.label.fillColor = Cesium.Color.WHITE.withAlpha(alpha) as never;
+      entity.label.outlineColor = Cesium.Color.BLACK.withAlpha(alpha) as never;
+    }
   }
 
   function installHandler(

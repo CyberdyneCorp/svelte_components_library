@@ -38,3 +38,34 @@
     This alert can be dismissed by clicking the X button.
   </Alert>
 </Story>
+
+<Story name="Inline">
+  <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+    <Alert variant="error" inline>Connection timeout (504) after 30s.</Alert>
+    <Alert variant="warning" inline>NDVI tiles unavailable for this date.</Alert>
+    <Alert variant="success" inline>Saved.</Alert>
+  </div>
+</Story>
+
+<Story name="SeverityCards">
+  <div style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 480px;">
+    <Alert severity="critical" card title="Coastal Zone A · 2.1m gap">
+      Sea-wall breach risk — dispatch inspection crew.
+    </Alert>
+    <Alert severity="warn" card title="Zone B · 0.8m gap">
+      Monitor tide gauge; review in 6h.
+    </Alert>
+    <Alert severity="caution" card title="Zone C · 0.3m gap">
+      Within tolerance — log and continue.
+    </Alert>
+    <Alert severity="good" card title="Zone D · nominal">
+      All readings nominal.
+    </Alert>
+  </div>
+</Story>
+
+<Story name="SeverityTopBorder">
+  <Alert severity="critical" card borderSide="top" title="Critical">
+    Top-bordered severity card variant.
+  </Alert>
+</Story>

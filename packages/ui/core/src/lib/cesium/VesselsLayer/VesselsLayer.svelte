@@ -3,13 +3,18 @@
 <script lang="ts">
   import TrackedEntitiesLayer from "../TrackedEntitiesLayer/TrackedEntitiesLayer.svelte";
   import { ship } from "../glyphs.js";
-  import type { TrackedEntity, Vessel } from "../types.js";
+  import type { LabelMode, TrackedEntity, Vessel } from "../types.js";
 
   type Props = {
     vessels: Vessel[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
+    /** Deprecated alias for `labelMode` (`true` → `"all"`). Prefer `labelMode`. */
     alwaysShowLabels?: boolean;
+    /** Which vessels show their name label. Defaults to `"selected"`. */
+    labelMode?: LabelMode;
     /** Per-type colour override. Falls back to "cargo" hue. */
     colorByType?: Partial<Record<string, string>>;
     size?: number;
@@ -27,8 +32,10 @@
   let {
     vessels,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     alwaysShowLabels = false,
+    labelMode,
     colorByType,
     size = 26,
     onclick,
@@ -63,10 +70,12 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   rotateBillboards={true}
   {alwaysShowLabels}
+  {labelMode}
   idPrefix="vessel"
   defaultSize={size}
   onclick={onclick ? handleClick : undefined}

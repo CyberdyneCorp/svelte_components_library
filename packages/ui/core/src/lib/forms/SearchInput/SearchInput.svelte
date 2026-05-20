@@ -1,12 +1,16 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   type SearchResult = {
     id: string;
     label: string;
     description?: string;
     icon?: string;
     group?: string;
+    /** Arbitrary payload round-tripped to `onselect` and `resultItem`. */
+    data?: unknown;
   };
 
   let {
@@ -20,6 +24,11 @@
     onselect,
     oninput,
     disabled = false,
+    /**
+     * Custom render for each result row. Receives the full `SearchResult`
+     * (incl. `data`). When omitted the default label + description row renders.
+     */
+    resultItem,
   }: {
     value?: string;
     placeholder?: string;
@@ -28,9 +37,10 @@
     showResults?: boolean;
     debounce?: number;
     onquery?: (query: string) => void;
-    onselect?: (result: { id: string; label: string }) => void;
+    onselect?: (result: SearchResult) => void;
     oninput?: (e: Event) => void;
     disabled?: boolean;
+    resultItem?: Snippet<[SearchResult]>;
   } = $props();
 
   let activeIndex = $state(-1);
@@ -79,7 +89,7 @@
     value = result.label;
     dropdownOpen = false;
     activeIndex = -1;
-    onselect?.({ id: result.id, label: result.label });
+    onselect?.(result);
   }
 
   function handleKeydown(e: KeyboardEvent) {
@@ -192,15 +202,19 @@
               role="option"
               aria-selected={flatIndex === activeIndex}
             >
-              {#if result.icon}
-                <span class="cy-search__result-icon">{result.icon}</span>
-              {/if}
-              <div class="cy-search__result-text">
-                <span class="cy-search__result-label">{@html highlightMatch(result.label, value)}</span>
-                {#if result.description}
-                  <span class="cy-search__result-desc">{result.description}</span>
+              {#if resultItem}
+                {@render resultItem(result)}
+              {:else}
+                {#if result.icon}
+                  <span class="cy-search__result-icon">{result.icon}</span>
                 {/if}
-              </div>
+                <div class="cy-search__result-text">
+                  <span class="cy-search__result-label">{@html highlightMatch(result.label, value)}</span>
+                  {#if result.description}
+                    <span class="cy-search__result-desc">{result.description}</span>
+                  {/if}
+                </div>
+              {/if}
             </button>
           {/each}
         {/each}

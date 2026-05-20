@@ -89,5 +89,13 @@ export default [js.configs.recommended, ...svelte.configs["flat/recommended"], {
     },
   },
 }, {
+  // Node scripts (build/release tooling) — give them Node globals.
+  files: ["scripts/**/*.{js,mjs,cjs}"],
+  languageOptions: {
+    globals: {
+      ...globals.node,
+    },
+  },
+}, {
   ignores: ["**/dist/", "**/docs/", "**/node_modules/", "**/.svelte-kit/"],
 }, ...storybook.configs["flat/recommended"]];

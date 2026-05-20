@@ -8,6 +8,8 @@
   type Props = {
     airports: Airport[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     /** Show only these airport types. */
     typeFilter?: AirportType[] | null;
@@ -35,6 +37,7 @@
   let {
     airports,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     typeFilter = null,
     colorByType,
@@ -68,6 +71,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="airport"

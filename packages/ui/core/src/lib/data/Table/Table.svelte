@@ -1,10 +1,21 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
+  type Row = Record<string, any>;
   type Column = {
     key: string;
     label: string;
     sortable?: boolean;
+    width?: string;
+    /**
+     * Per-cell render override. Receives the whole row so the cell can pull
+     * multiple fields and run formatters / render components (checkboxes,
+     * severity chips, mono-formatted numbers). When omitted the cell renders
+     * `row[col.key]` as text.
+     */
+    cell?: Snippet<[Row]>;
   };
 
   let {
@@ -13,7 +24,7 @@
     striped = false,
   }: {
     columns?: Column[];
-    rows?: Array<Record<string, any>>;
+    rows?: Row[];
     striped?: boolean;
   } = $props();
 
@@ -47,7 +58,7 @@
     <thead>
       <tr>
         {#each columns as col}
-          <th class="cy-table__th">
+          <th class="cy-table__th" style={col.width ? `width: ${col.width}` : undefined}>
             {#if col.sortable}
               <button class="cy-table__sort-btn" onclick={() => toggleSort(col.key)}>
                 {col.label}
@@ -71,10 +82,16 @@
       </tr>
     </thead>
     <tbody>
-      {#each sortedRows as row, i}
+      {#each sortedRows as row, i (i)}
         <tr class="cy-table__row">
-          {#each columns as col}
-            <td class="cy-table__td">{row[col.key] ?? ""}</td>
+          {#each columns as col (col.key)}
+            <td class="cy-table__td">
+              {#if col.cell}
+                {@render col.cell(row)}
+              {:else}
+                {row[col.key] ?? ""}
+              {/if}
+            </td>
           {/each}
         </tr>
       {/each}

@@ -2,7 +2,10 @@
 
 <script lang="ts">
   let {
-    value = $bindable(0),
+    // No concrete fallback (undefined) so a consumer can `bind:value` an
+    // optional/empty state (`number | null | undefined`) without triggering
+    // Svelte's props_invalid_value error. Nullish renders as an empty field.
+    value = $bindable(),
     label = "",
     min = -Infinity,
     max = Infinity,
@@ -12,8 +15,14 @@
     error = "",
     unit = "",
     size = "md",
+    /**
+     * Fires on every committed value change with `null` when the field is
+     * cleared. Lets consumers keep the source of truth elsewhere / transform
+     * on input instead of using `bind:value`.
+     */
+    onchange,
   }: {
-    value?: number;
+    value?: number | null;
     label?: string;
     min?: number;
     max?: number;
@@ -23,6 +32,7 @@
     error?: string;
     unit?: string;
     size?: "sm" | "md";
+    onchange?: (value: number | null) => void;
   } = $props();
 
   let inputId = `cy-ni-${Math.random().toString(36).slice(2, 9)}`;
@@ -31,25 +41,42 @@
     return Math.min(max, Math.max(min, v));
   }
 
-  function format(v: number): string {
-    return v.toFixed(precision);
+  /** Empty when nullish; otherwise the fixed-precision string. */
+  function format(v: number | null | undefined): string {
+    return v == null || Number.isNaN(v) ? "" : v.toFixed(precision);
+  }
+
+  /** Base for +/- stepping when the field is currently empty. */
+  function stepBase(): number {
+    if (value != null && Number.isFinite(value)) return value;
+    return Number.isFinite(min) ? min : 0;
+  }
+
+  function commit(next: number | null) {
+    value = next;
+    onchange?.(next);
   }
 
   function increment() {
     if (disabled) return;
-    value = clamp(parseFloat((value + step).toFixed(precision)));
+    commit(clamp(parseFloat((stepBase() + step).toFixed(precision))));
   }
 
   function decrement() {
     if (disabled) return;
-    value = clamp(parseFloat((value - step).toFixed(precision)));
+    commit(clamp(parseFloat((stepBase() - step).toFixed(precision))));
   }
 
   function handleInput(e: Event) {
     const target = e.target as HTMLInputElement;
+    // Empty input → null (the "empty until typed" state), not 0.
+    if (target.value.trim() === "") {
+      commit(null);
+      return;
+    }
     const parsed = parseFloat(target.value);
     if (!isNaN(parsed)) {
-      value = clamp(parseFloat(parsed.toFixed(precision)));
+      commit(clamp(parseFloat(parsed.toFixed(precision))));
     }
   }
 

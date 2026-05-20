@@ -11,9 +11,13 @@
   type Props = {
     labels: Label[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1, applied to text + backdrop alpha. */
+    opacity?: number;
   };
 
-  let { labels, visible = true }: Props = $props();
+  let { labels, visible = true, opacity = 1 }: Props = $props();
+
+  const alpha = $derived(Math.max(0, Math.min(1, opacity)));
 
   const getViewer = useCesiumViewer();
   let dataSource: CustomDataSource | null = null;
@@ -39,6 +43,7 @@
 
   $effect(() => {
     void labels;
+    void alpha;
     if (!CesiumMod || !dataSource) return;
     syncLabels(CesiumMod);
   });
@@ -72,13 +77,13 @@
       label: {
         text: l.text,
         font: `${l.fontPx ?? 13}px JetBrains Mono, monospace`,
-        fillColor: Cesium.Color.fromCssColorString(l.color ?? "#f0f0ff"),
+        fillColor: Cesium.Color.fromCssColorString(l.color ?? "#f0f0ff").withAlpha(alpha),
         showBackground: l.showBackground ?? true,
         backgroundColor: Cesium.Color.fromCssColorString(
           l.backgroundColor ?? "#12121a",
-        ).withAlpha(0.85),
+        ).withAlpha(0.85 * alpha),
         backgroundPadding: new Cesium.Cartesian2(8, 4),
-        outlineColor: Cesium.Color.BLACK,
+        outlineColor: Cesium.Color.BLACK.withAlpha(alpha),
         outlineWidth: 2,
         style: Cesium.LabelStyle.FILL_AND_OUTLINE,
         heightReference:

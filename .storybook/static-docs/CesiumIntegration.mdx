@@ -223,6 +223,54 @@ The keystone is `<CesiumGlobe>`, which creates the `Cesium.Viewer` and publishes
 
 Every component lazy-imports `cesium` via `await import("cesium")` inside `onMount` / `$effect`, so SSR never touches `window` and non-cesium routes never pull the WebGL bundle.
 
+### Layers are presentation-only
+
+Layers never own, fetch, or mutate your data. They take a controlled array in and emit picks/moves back out — there is no internal store, no debounce, no polling. You drive updates by reassigning the prop (e.g. on each tick of your ADS-B / AIS feed); the layer diffs by `id` and reconciles only what changed. This keeps a layer a pure projection of your state and makes it trivial to share one source of truth across the globe, a side panel, and a chart.
+
+### Two viewers can coexist
+
+`<CesiumGlobe>` publishes its `Viewer` on Svelte context, and `useCesiumViewer()` walks up to the nearest provider. Because resolution is contextual rather than global, you can mount **two independent `<CesiumGlobe>` instances on the same page** (e.g. a main globe and a comparison globe) and each one's layers bind to their own viewer. Resolution also works through **snippet children** — a layer placed inside a wrapper component's `{@render children()}` still resolves the globe it is rendered under, so you can build your own layout/wrapper components without breaking the context chain. The only rule is that any layer must render somewhere beneath a `<CesiumGlobe>` in the component tree.
+
+### Opacity
+
+Entity / billboard layers accept a uniform `opacity?: number` (0–1) that drives the alpha of every primitive the layer renders — billboard, point, label, and trail. It applies to `MarkersLayer`, `LabelsLayer`, `TrackedEntitiesLayer`, `CyclonesLayer`, `FarmsLayer`, `UserLocationLayer`, and every convenience layer that wraps `TrackedEntitiesLayer` (Aircraft, Vessels, Satellites, Earthquakes, Wildfires, Volcanoes, Airports, Towers, CellSites, Webcams, PowerPlants, AirQuality, TideGauges, Gdacs, Tsunami). Use it to fade a layer in/out without unmounting it.
+
+### Label visibility
+
+Tracked-entity layers expose `labelMode?: "all" | "perEntity" | "selected" | "none"` (default `"selected"` — labels appear only on the picked entity):
+
+- `"all"` — every entity that has a `label`
+- `"perEntity"` — same as `all`, but you control which entities are labelled by setting or omitting `entity.label` (e.g. "label only quakes M ≥ 4.5")
+- `"selected"` — only the currently selected entity
+- `"none"` — never
+
+`alwaysShowLabels` is kept as a deprecated alias (`true` → `"all"`, `false` → `"selected"`); prefer `labelMode`.
+
+### Styling escape hatch
+
+The convenience layers (`AircraftLayer`, `EarthquakesLayer`, …) bake in opinionated glyphs, colour ramps, and sizing, with light override props where it makes sense (`colorByType` / `colorByGroup` / `colorByCrop`, `size`, `defaultColor`). When you need full per-entity control over colour, glyph, size, trail, or conditional labelling, drop down to **`<TrackedEntitiesLayer>`** directly: map your domain objects to `TrackedEntity[]` yourself and you get complete control. The convenience layers are nothing more than thin mappers over it, so there is no feature you lose by using it.
+
+```svelte
+<!-- "Label only the strong quakes" via the escape hatch -->
+<script>
+  import { CesiumGlobe, TrackedEntitiesLayer } from "@cyberdynecorp/svelte-ui-core";
+  let quakes = $state([]);
+  const entities = $derived(
+    quakes.map((q) => ({
+      id: q.id, lng: q.lng, lat: q.lat,
+      color: q.depthKm < 70 ? "#ff4444" : "#00d4ff",
+      size: 8 + q.magnitude * 5,
+      label: q.magnitude >= 4.5 ? `M${q.magnitude.toFixed(1)}` : undefined,
+      meta: q,
+    })),
+  );
+</script>
+
+<CesiumGlobe>
+  <TrackedEntitiesLayer {entities} labelMode="perEntity" opacity={0.9} />
+</CesiumGlobe>
+```
+
 ---
 
 ## 8. Component catalog

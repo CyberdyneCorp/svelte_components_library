@@ -3,22 +3,32 @@
 <script lang="ts">
   import TrackedEntitiesLayer from "../TrackedEntitiesLayer/TrackedEntitiesLayer.svelte";
   import { quakeMark } from "../glyphs.js";
-  import type { Earthquake, TrackedEntity } from "../types.js";
+  import type { Earthquake, LabelMode, TrackedEntity } from "../types.js";
 
   type Props = {
     earthquakes: Earthquake[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     /** Filter by minimum magnitude before rendering. */
     minMagnitude?: number;
+    /**
+     * Which quakes show their magnitude label. Defaults to `"selected"`.
+     * For conditional labelling (e.g. only M ≥ 4.5) use TrackedEntitiesLayer
+     * directly with `labelMode="perEntity"` and set `label` per entity.
+     */
+    labelMode?: LabelMode;
     onclick?: (earthquake: Earthquake) => void;
   };
 
   let {
     earthquakes,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     minMagnitude = 0,
+    labelMode,
     onclick,
   }: Props = $props();
 
@@ -60,8 +70,10 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
+  {labelMode}
   idPrefix="quake"
   onclick={onclick ? handleClick : undefined}
 />

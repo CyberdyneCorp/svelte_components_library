@@ -8,6 +8,8 @@
   type Props = {
     powerPlants: PowerPlant[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     /** Show only these fuel types. */
     fuelFilter?: PowerPlantFuel[] | null;
@@ -34,6 +36,7 @@
   let {
     powerPlants,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     fuelFilter = null,
     minCapacityMw = 0,
@@ -77,6 +80,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="plant"

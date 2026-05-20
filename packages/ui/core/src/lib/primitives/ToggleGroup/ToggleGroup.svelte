@@ -9,38 +9,67 @@
 
   let {
     options = [],
-    value = $bindable(""),
+    value = $bindable(),
+    multiple = false,
     size = "md",
     disabled = false,
     onchange,
   }: {
     options?: ToggleOption[];
-    value?: string;
+    /**
+     * Selected value(s). When `multiple` is false (default) this is a single
+     * `string`; when `multiple` is true it is a `string[]`. Bindable.
+     */
+    value?: string | string[];
+    /** Allow independent on/off selection of each option. */
+    multiple?: boolean;
     size?: "sm" | "md";
     disabled?: boolean;
-    onchange?: (value: string) => void;
+    /** Receives a `string` in single mode, a `string[]` in multiple mode. */
+    onchange?: (value: string | string[]) => void;
   } = $props();
+
+  // Normalised selected set for the active-state checks in the template.
+  const selectedSet = $derived(
+    multiple
+      ? new Set(Array.isArray(value) ? value : value ? [value] : [])
+      : new Set(typeof value === "string" && value ? [value] : []),
+  );
+
+  function isActive(optionValue: string): boolean {
+    return selectedSet.has(optionValue);
+  }
 
   function select(optionValue: string) {
     if (disabled) return;
-    value = optionValue;
-    onchange?.(optionValue);
+    if (multiple) {
+      const current = Array.isArray(value) ? value : value ? [value] : [];
+      const next = current.includes(optionValue)
+        ? current.filter((v) => v !== optionValue)
+        : [...current, optionValue];
+      value = next;
+      onchange?.(next);
+    } else {
+      value = optionValue;
+      onchange?.(optionValue);
+    }
   }
 </script>
 
 <div
   class="cy-toggle-group cy-toggle-group--{size}"
   class:cy-toggle-group--disabled={disabled}
-  role="radiogroup"
+  role={multiple ? "group" : "radiogroup"}
 >
   {#each options as option, i}
     <button
       class="cy-toggle-group__btn"
-      class:cy-toggle-group__btn--active={value === option.value}
+      class:cy-toggle-group__btn--active={isActive(option.value)}
       class:cy-toggle-group__btn--first={i === 0}
       class:cy-toggle-group__btn--last={i === options.length - 1}
-      role="radio"
-      aria-checked={value === option.value}
+      type="button"
+      role={multiple ? "checkbox" : "radio"}
+      aria-checked={isActive(option.value)}
       {disabled}
       onclick={() => select(option.value)}
     >

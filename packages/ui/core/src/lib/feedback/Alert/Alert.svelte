@@ -5,14 +5,36 @@
 
   let {
     variant = "info",
+    /**
+     * Severity tone for action-item / status rows. When set it overrides
+     * `variant` for colouring: critical=red, warn=orange, caution=yellow,
+     * good=green.
+     */
+    severity,
     title = "",
     dismissible = false,
+    /** Compact inline style: short coloured text, no banner chrome. */
+    inline = false,
+    /**
+     * Card style: behaves as a list row (used for severity card lists). No
+     * full banner background; relies on the border accent for the tone.
+     */
+    card = false,
+    /** Which side carries the colour accent border. */
+    borderSide = "left",
+    /** Optional leading icon snippet (e.g. an `<Icon name="alert-circle" />`). */
+    icon,
     ondismiss,
     children,
   }: {
     variant?: "success" | "warning" | "error" | "info";
+    severity?: "critical" | "warn" | "caution" | "good";
     title?: string;
     dismissible?: boolean;
+    inline?: boolean;
+    card?: boolean;
+    borderSide?: "left" | "top";
+    icon?: Snippet;
     ondismiss?: () => void;
     children?: Snippet;
   } = $props();
@@ -23,10 +45,20 @@
     visible = false;
     ondismiss?.();
   }
+
+  // Resolve the tone class — severity wins over variant when present.
+  const tone = $derived(severity ? `sev-${severity}` : variant);
+  const appearance = $derived(inline ? "inline" : card ? "card" : "banner");
 </script>
 
 {#if visible}
-  <div class="cy-alert cy-alert--{variant}" role="alert">
+  <div
+    class="cy-alert cy-alert--{tone} cy-alert--{appearance} cy-alert--border-{borderSide}"
+    role="alert"
+  >
+    {#if icon && !inline}
+      <span class="cy-alert__icon" aria-hidden="true">{@render icon()}</span>
+    {/if}
     <div class="cy-alert__content">
       {#if title}
         <div class="cy-alert__title">{title}</div>
@@ -61,28 +93,83 @@
     animation: cy-fade-in 200ms ease;
   }
 
-  .cy-alert--success {
+  /* ── tones ── */
+  .cy-alert--success,
+  .cy-alert--sev-good {
     background: var(--color-state-success-bg);
     border-color: var(--color-border-subtle);
-    border-left-color: var(--color-state-success);
+    --cy-alert-accent: var(--color-state-success);
   }
-
-  .cy-alert--warning {
+  .cy-alert--warning,
+  .cy-alert--sev-caution {
     background: var(--color-state-warning-bg);
     border-color: var(--color-border-subtle);
-    border-left-color: var(--color-state-warning);
+    --cy-alert-accent: var(--color-state-warning);
   }
-
-  .cy-alert--error {
+  .cy-alert--error,
+  .cy-alert--sev-critical {
     background: var(--color-state-error-bg);
     border-color: var(--color-border-subtle);
-    border-left-color: var(--color-state-error);
+    --cy-alert-accent: var(--color-state-error);
   }
-
   .cy-alert--info {
     background: var(--color-state-info-bg);
     border-color: var(--color-border-subtle);
-    border-left-color: var(--color-state-info);
+    --cy-alert-accent: var(--color-state-info);
+  }
+  .cy-alert--sev-warn {
+    background: var(--color-state-warning-bg);
+    border-color: var(--color-border-subtle);
+    --cy-alert-accent: #ff7a1a;
+  }
+
+  /* Accent border position (banner + card). */
+  .cy-alert--border-left {
+    border-left-color: var(--cy-alert-accent);
+  }
+  .cy-alert--border-top {
+    border-left-width: 1px;
+    border-left-color: var(--color-border-subtle);
+    border-top-width: 3px;
+    border-top-color: var(--cy-alert-accent);
+  }
+
+  /* ── card appearance: row-like, lighter background ── */
+  .cy-alert--card {
+    background: var(--color-surface-default);
+    align-items: center;
+  }
+
+  /* ── inline appearance: short coloured text, no chrome ── */
+  .cy-alert--inline {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-1);
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    animation: none;
+    color: var(--cy-alert-accent);
+    font-size: 0.8125rem;
+  }
+  .cy-alert--inline .cy-alert__content {
+    color: var(--cy-alert-accent);
+  }
+  .cy-alert--inline .cy-alert__title {
+    margin-bottom: 0;
+    color: var(--cy-alert-accent);
+  }
+  .cy-alert--inline .cy-alert__body {
+    color: var(--cy-alert-accent);
+  }
+
+  .cy-alert__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    color: var(--cy-alert-accent);
+    margin-top: 1px;
   }
 
   .cy-alert__content {

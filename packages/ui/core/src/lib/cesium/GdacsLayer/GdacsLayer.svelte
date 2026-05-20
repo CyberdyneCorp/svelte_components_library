@@ -13,6 +13,8 @@
   type Props = {
     events: GdacsEvent[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     /** Show only these alert levels. */
     alertFilter?: GdacsAlertLevel[] | null;
@@ -24,6 +26,7 @@
   let {
     events,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     alertFilter = null,
     typeFilter = null,
@@ -87,6 +90,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="gdacs"

@@ -2,7 +2,10 @@
 
 <script lang="ts">
   let {
-    value = $bindable(0),
+    // No concrete fallback so consumers can `bind:value` an optional
+    // "unrated" state (`number | null | undefined`) without Svelte's
+    // props_invalid_value error. Nullish renders as zero filled stars.
+    value = $bindable(),
     max = 5,
     size = "md",
     readonly = false,
@@ -11,7 +14,7 @@
     allowHalf = false,
     onchange,
   }: {
-    value?: number;
+    value?: number | null;
     max?: number;
     size?: "sm" | "md" | "lg";
     readonly?: boolean;
@@ -20,6 +23,9 @@
     allowHalf?: boolean;
     onchange?: (value: number) => void;
   } = $props();
+
+  // Numeric view of the (possibly nullish) value for rendering + arithmetic.
+  const numValue = $derived(value ?? 0);
 
   let hoverValue = $state(-1);
 
@@ -61,18 +67,18 @@
     const step = allowHalf ? 0.5 : 1;
     if (event.key === "ArrowRight" || event.key === "ArrowUp") {
       event.preventDefault();
-      const newValue = Math.min(max, value + step);
+      const newValue = Math.min(max, numValue + step);
       value = newValue;
       onchange?.(newValue);
     } else if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
       event.preventDefault();
-      const newValue = Math.max(0, value - step);
+      const newValue = Math.max(0, numValue - step);
       value = newValue;
       onchange?.(newValue);
     }
   }
 
-  let displayValue = $derived(hoverValue >= 0 ? hoverValue : value);
+  let displayValue = $derived(hoverValue >= 0 ? hoverValue : numValue);
 
   function getFill(index: number): "full" | "half" | "empty" {
     const starNum = index + 1;
@@ -89,7 +95,7 @@
   aria-label={label || "Star rating"}
   aria-valuemin={0}
   aria-valuemax={max}
-  aria-valuenow={value}
+  aria-valuenow={numValue}
   tabindex={readonly ? -1 : 0}
   onkeydown={handleKeydown}
   onmouseleave={handleMouseLeave}
@@ -149,7 +155,7 @@
     {/each}
 
     {#if showValue}
-      <span class="cy-star-rating__value">{value} / {max}</span>
+      <span class="cy-star-rating__value">{numValue} / {max}</span>
     {/if}
   </div>
 </div>

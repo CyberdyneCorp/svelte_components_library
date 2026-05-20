@@ -155,7 +155,10 @@ describe("SearchInput", () => {
     vi.advanceTimersByTime(0);
     const items = container.querySelectorAll(".cy-search__result");
     await fireEvent.click(items[0]);
-    expect(onselect).toHaveBeenCalledWith({ id: "1", label: "Apple" });
+    // onselect now receives the full SearchResult (superset of {id,label}).
+    expect(onselect).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "1", label: "Apple" }),
+    );
     vi.useRealTimers();
   });
 
@@ -215,7 +218,9 @@ describe("SearchInput", () => {
     vi.advanceTimersByTime(0);
     await fireEvent.keyDown(input, { key: "ArrowDown" });
     await fireEvent.keyDown(input, { key: "Enter" });
-    expect(onselect).toHaveBeenCalledWith({ id: "1", label: "Apple" });
+    expect(onselect).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "1", label: "Apple" }),
+    );
     vi.useRealTimers();
   });
 

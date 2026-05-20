@@ -26,3 +26,19 @@
 <Story name="Small" args={{ options: defaultOptions, value: "edit", size: "sm" }} />
 
 <Story name="WithIcons" args={{ options: iconOptions, value: "grid" }} />
+
+<Story name="Multiple">
+  {@const gdacs = [
+    { value: "EQ", label: "Quake" },
+    { value: "TC", label: "Cyclone" },
+    { value: "FL", label: "Flood" },
+    { value: "DR", label: "Drought" },
+    { value: "WF", label: "Wildfire" },
+  ]}
+  <ToggleGroup
+    multiple
+    options={gdacs}
+    value={["EQ", "FL"]}
+    onchange={(v) => console.log("active types:", v)}
+  />
+</Story>

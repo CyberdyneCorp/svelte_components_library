@@ -27,3 +27,15 @@
     <MetricCard label="Gas Spent" value="$340" change={15.7} changeLabel="vs 7d" variant="warning" />
   </div>
 </Story>
+
+<Story name="Compact (stat bar)">
+  <div style="display: flex; gap: 1.5rem; padding: 0.5rem 1rem; background: var(--color-bg-secondary); border-radius: 8px;">
+    <MetricCard size="compact" label="Aircraft" value="1,204" secondary="23s ago" />
+    <MetricCard size="compact" label="Sun" value="18.9° · 58°" secondary="solar @cam 08:02" />
+    <MetricCard size="compact" label="Surface" value="0 m" secondary="World Terrain" />
+  </div>
+</Story>
+
+<Story name="WithSecondary">
+  <MetricCard label="Camera" value="-23.02°, -43.49°" secondary="0 km altitude" variant="brand" />
+</Story>

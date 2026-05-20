@@ -3,14 +3,18 @@
 <script lang="ts">
   import TrackedEntitiesLayer from "../TrackedEntitiesLayer/TrackedEntitiesLayer.svelte";
   import { airplane } from "../glyphs.js";
-  import type { Aircraft, TrackedEntity } from "../types.js";
+  import type { Aircraft, LabelMode, TrackedEntity } from "../types.js";
 
   type Props = {
     aircraft: Aircraft[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
-    /** Show the operator/callsign label even when not selected. */
+    /** Deprecated alias for `labelMode` (`true` → `"all"`). Prefer `labelMode`. */
     alwaysShowLabels?: boolean;
+    /** Which aircraft show their callsign label. Defaults to `"selected"`. */
+    labelMode?: LabelMode;
     /** Hex colour for the airplane glyph (per-aircraft `meta.color` wins). */
     color?: string;
     size?: number;
@@ -20,8 +24,10 @@
   let {
     aircraft,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     alwaysShowLabels = false,
+    labelMode,
     color = "#00d4ff",
     size = 28,
     onclick,
@@ -52,10 +58,12 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   rotateBillboards={true}
   {alwaysShowLabels}
+  {labelMode}
   idPrefix="aircraft"
   defaultColor={color}
   defaultSize={size}

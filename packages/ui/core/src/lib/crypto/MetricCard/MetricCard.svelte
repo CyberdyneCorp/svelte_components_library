@@ -10,6 +10,10 @@
     changeLabel = "",
     icon,
     variant = "default",
+    /** `compact` = dense 2-line cell with no card chrome (for tight stat bars). */
+    size = "md",
+    /** Muted secondary line under the value (e.g. "23s ago", "World Terrain"). */
+    secondary = "",
   }: {
     label: string;
     value: string;
@@ -17,6 +21,8 @@
     changeLabel?: string;
     icon?: Snippet;
     variant?: "default" | "brand" | "info" | "warning";
+    size?: "compact" | "md" | "lg";
+    secondary?: string;
   } = $props();
 
   let changeClass = $derived(
@@ -34,7 +40,7 @@
   );
 </script>
 
-<div class="cy-metric cy-metric--{variant}">
+<div class="cy-metric cy-metric--{variant} cy-metric--{size}">
   <div class="cy-metric__header">
     <span class="cy-metric__label">{label}</span>
     {#if icon}
@@ -44,6 +50,9 @@
     {/if}
   </div>
   <div class="cy-metric__value">{value}</div>
+  {#if secondary}
+    <div class="cy-metric__secondary">{secondary}</div>
+  {/if}
   {#if change !== undefined}
     <div class="cy-metric__footer">
       <span class="cy-metric__change cy-metric__change--{changeClass}">
@@ -81,6 +90,41 @@
 
   .cy-metric--warning {
     border-left: 3px solid var(--color-state-warning);
+  }
+
+  /* Compact: no card chrome, dense two-line cell for stat bars. */
+  .cy-metric--compact {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+  }
+  .cy-metric--compact:hover {
+    box-shadow: none;
+  }
+  .cy-metric--compact .cy-metric__header {
+    margin-bottom: 0;
+  }
+  .cy-metric--compact .cy-metric__value {
+    font-size: 0.9375rem;
+  }
+  .cy-metric--compact .cy-metric__footer {
+    margin-top: 2px;
+  }
+
+  /* Large: roomier value for hero KPIs. */
+  .cy-metric--lg {
+    padding: var(--space-5, 1.25rem) var(--space-6, 1.5rem);
+  }
+  .cy-metric--lg .cy-metric__value {
+    font-size: 2rem;
+  }
+
+  .cy-metric__secondary {
+    margin-top: 2px;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.6875rem;
+    color: var(--color-text-tertiary);
   }
 
   .cy-metric__header {

@@ -8,6 +8,8 @@
   type Props = {
     volcanoes: Volcano[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
     /** Filter to specific status values; pass null to include everything. */
     statusFilter?: string[] | null;
@@ -17,6 +19,7 @@
   let {
     volcanoes,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
     statusFilter = null,
     onclick,
@@ -62,6 +65,7 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
   idPrefix="volcano"

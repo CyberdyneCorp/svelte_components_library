@@ -3,19 +3,25 @@
 <script lang="ts">
   import TrackedEntitiesLayer from "../TrackedEntitiesLayer/TrackedEntitiesLayer.svelte";
   import { airQuality } from "../glyphs.js";
-  import type { AirQualityStation, TrackedEntity } from "../types.js";
+  import type { AirQualityStation, LabelMode, TrackedEntity } from "../types.js";
 
   type Props = {
     stations: AirQualityStation[];
     visible?: boolean;
+    /** Uniform layer opacity 0–1. */
+    opacity?: number;
     selectedId?: string | null;
+    /** Which stations show their AQI label. Defaults to `"all"` (the value is the datum). */
+    labelMode?: LabelMode;
     onclick?: (station: AirQualityStation) => void;
   };
 
   let {
     stations,
     visible = true,
+    opacity = 1,
     selectedId = $bindable(null),
+    labelMode = "all",
     onclick,
   }: Props = $props();
 
@@ -53,9 +59,10 @@
 
 <TrackedEntitiesLayer
   entities={entities}
+  {opacity}
   {visible}
   bind:selectedId
-  alwaysShowLabels={true}
+  {labelMode}
   idPrefix="aq"
   onclick={onclick ? handleClick : undefined}
 />

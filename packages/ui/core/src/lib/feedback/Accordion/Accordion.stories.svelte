@@ -1,6 +1,9 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import Accordion from "./Accordion.svelte";
+  import Switch from "../../forms/Switch/Switch.svelte";
+  import Badge from "../../primitives/Badge/Badge.svelte";
+  import Slider from "../../ml/Slider/Slider.svelte";
 
   const { Story } = defineMeta({
     title: "Feedback/Accordion",
@@ -32,3 +35,32 @@
 <Story name="MultipleOpen" args={{ multiple: true, items: multipleItems }} />
 
 <Story name="DefaultOpen" args={{ defaultOpen: ["first"], items: defaultOpenItems }} />
+
+<Story name="LayerControlSnippets">
+  {#snippet ndviActions()}
+    <Badge variant="info">8-day</Badge>
+    <Switch checked />
+  {/snippet}
+  {#snippet ndviContent()}
+    <div style="display:flex; flex-direction:column; gap:0.75rem;">
+      <Slider label="Opacity" value={70} unit="%" />
+      <span style="font-size:0.75rem; color:var(--color-text-tertiary);">MODIS Terra · GoogleMapsCompatible_Level9</span>
+    </div>
+  {/snippet}
+  {#snippet windActions()}
+    <Badge variant="neutral">40</Badge>
+    <Switch checked />
+  {/snippet}
+  {#snippet windContent()}
+    <Slider label="Particle count" value={180} min={0} max={400} />
+  {/snippet}
+
+  <Accordion
+    multiple
+    defaultOpen={["ndvi"]}
+    items={[
+      { id: "ndvi", title: "NDVI (8-day)", content: ndviContent, actions: ndviActions },
+      { id: "wind", title: "Wind Particles", content: windContent, actions: windActions },
+    ]}
+  />
+</Story>
