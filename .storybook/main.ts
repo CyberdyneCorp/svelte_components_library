@@ -20,6 +20,8 @@ const config: StorybookConfig = {
     "@storybook/addon-vitest"
   ],
 
+  staticDirs: ["./public"],
+
   framework: {
     name: "@storybook/svelte-vite",
     options: {},

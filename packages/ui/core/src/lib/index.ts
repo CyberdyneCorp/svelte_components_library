@@ -174,6 +174,131 @@ export { RichTextEditor } from "./editor/RichTextEditor/index.js";
 // Maps
 export { MapView } from "./maps/MapView/index.js";
 
+// Cesium (3D Globe)
+export { CesiumGlobe } from "./cesium/CesiumGlobe/index.js";
+export { Terrain } from "./cesium/Terrain/index.js";
+export { ImageryLayer } from "./cesium/ImageryLayer/index.js";
+export { Cesium3DTiles } from "./cesium/Cesium3DTiles/index.js";
+export { OsmBuildingsLayer } from "./cesium/OsmBuildingsLayer/index.js";
+export { GooglePhotorealisticTiles } from "./cesium/GooglePhotorealisticTiles/index.js";
+export { ElevationContours } from "./cesium/ElevationContours/index.js";
+export { GeoJsonLayer } from "./cesium/GeoJsonLayer/index.js";
+export { KmlLayer } from "./cesium/KmlLayer/index.js";
+export { CzmlLayer } from "./cesium/CzmlLayer/index.js";
+export { MarkersLayer } from "./cesium/MarkersLayer/index.js";
+export { PolygonsLayer } from "./cesium/PolygonsLayer/index.js";
+export { PolylinesLayer } from "./cesium/PolylinesLayer/index.js";
+export { LabelsLayer } from "./cesium/LabelsLayer/index.js";
+export { PolygonHeatmapsLayer } from "./cesium/PolygonHeatmapsLayer/index.js";
+export { TrackedEntitiesLayer } from "./cesium/TrackedEntitiesLayer/index.js";
+export { AircraftLayer } from "./cesium/AircraftLayer/index.js";
+export { VesselsLayer } from "./cesium/VesselsLayer/index.js";
+export { SatellitesLayer } from "./cesium/SatellitesLayer/index.js";
+export { EarthquakesLayer } from "./cesium/EarthquakesLayer/index.js";
+export { WildfiresLayer } from "./cesium/WildfiresLayer/index.js";
+export { VolcanoesLayer } from "./cesium/VolcanoesLayer/index.js";
+export { AirportsLayer } from "./cesium/AirportsLayer/index.js";
+export { TowersLayer } from "./cesium/TowersLayer/index.js";
+export { CellSitesLayer } from "./cesium/CellSitesLayer/index.js";
+export { WebcamsLayer } from "./cesium/WebcamsLayer/index.js";
+export { PowerPlantsLayer } from "./cesium/PowerPlantsLayer/index.js";
+export { AirQualityLayer } from "./cesium/AirQualityLayer/index.js";
+export { TideGaugesLayer } from "./cesium/TideGaugesLayer/index.js";
+export { GdacsLayer } from "./cesium/GdacsLayer/index.js";
+export { TsunamiLayer } from "./cesium/TsunamiLayer/index.js";
+export { CyclonesLayer } from "./cesium/CyclonesLayer/index.js";
+export { AuroraLayer } from "./cesium/AuroraLayer/index.js";
+export { SubmarineCablesLayer } from "./cesium/SubmarineCablesLayer/index.js";
+export { FarmsLayer } from "./cesium/FarmsLayer/index.js";
+export { CoverageLayer } from "./cesium/CoverageLayer/index.js";
+export { UserLocationLayer } from "./cesium/UserLocationLayer/index.js";
+export { WeatherTileLayer } from "./cesium/WeatherTileLayer/index.js";
+export { NasaGibsLayer } from "./cesium/NasaGibsLayer/index.js";
+export { WindParticlesLayer } from "./cesium/WindParticlesLayer/index.js";
+export { WaveParticlesLayer } from "./cesium/WaveParticlesLayer/index.js";
+export { StreamlinesLayer } from "./cesium/StreamlinesLayer/index.js";
+export { WindSimDomainPreview } from "./cesium/WindSimDomainPreview/index.js";
+export { CesiumControls } from "./cesium/CesiumControls/index.js";
+export { CesiumCompass } from "./cesium/CesiumCompass/index.js";
+export { CesiumCoordinatesHud } from "./cesium/CesiumCoordinatesHud/index.js";
+export { CesiumLayerControl } from "./cesium/CesiumLayerControl/index.js";
+export { BaseLayerPicker } from "./cesium/BaseLayerPicker/index.js";
+export { CesiumMinimap } from "./cesium/CesiumMinimap/index.js";
+export type { GibsProduct } from "./cesium/index.js";
+export {
+  gibsUrlTemplate,
+  gibsMaxLevel,
+  isNearRealtimeProduct,
+  nearRealtimeTimestamp,
+  defaultGibsCompositeDate,
+  GIBS_PRODUCT_LABELS,
+} from "./cesium/index.js";
+export {
+  provideCesiumViewer,
+  useCesiumViewer,
+  VIEWER_KEY,
+  createTerrainSampler,
+  createScreenPicker,
+  diffById,
+  removeEntitiesById,
+  GOOGLE_PHOTOREALISTIC_ION_ASSET_ID,
+} from "./cesium/index.js";
+export type {
+  CameraState,
+  ViewBBox,
+  LngLat,
+  DefaultBaseLayer,
+  ImageryProviderSpec,
+  TerrainProviderSpec,
+  TilesetSourceSpec,
+  Cesium3DTileStyleSpec,
+  Cesium3DTileVisibleHandler,
+  ContourShadedRamp,
+  Marker,
+  MarkerStyle,
+  Polygon,
+  Polyline,
+  Label,
+  PolygonHeatmapEntry,
+  ColorScale,
+  ColorScaleStop,
+  CzmlInput,
+  TrackedEntity,
+  Aircraft,
+  Vessel,
+  Satellite,
+  Earthquake,
+  Wildfire,
+  Volcano,
+  Airport,
+  AirportType,
+  Tower,
+  CellSite,
+  Webcam,
+  PowerPlant,
+  PowerPlantFuel,
+  AirQualityStation,
+  TideGauge,
+  TsunamiBuoy,
+  GdacsEvent,
+  GdacsEventType,
+  GdacsAlertLevel,
+  Cyclone,
+  AuroraOval,
+  Farm,
+  CoverageCone,
+  SubmarineCable,
+  UserLocation,
+  WindGridPoint,
+  WaveGridPoint,
+  Streamline,
+  WindSimDomain,
+  PickedEntity,
+  TerrainSampler,
+  ScreenPicker,
+  ViewerAccessor,
+} from "./cesium/index.js";
+
 // Retro (CyberdyneOS desktop aesthetic)
 export { RetroWindow } from "./retro/RetroWindow/index.js";
 export { StartMenu, type StartMenuItem } from "./retro/StartMenu/index.js";

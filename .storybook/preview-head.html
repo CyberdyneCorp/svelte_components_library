@@ -1,3 +1,11 @@
+<script>
+  // Cesium reads CESIUM_BASE_URL at Viewer construction to locate its Workers,
+  // Assets, ThirdParty and Widgets directories. `scripts/copy-cesium.mjs`
+  // copies those into `.storybook/public/cesium/` which Storybook serves
+  // from `staticDirs`.
+  window.CESIUM_BASE_URL = "/cesium";
+</script>
+<link rel="stylesheet" href="/cesium/Widgets/widgets.css" />
 <style>
   /* Default dark mode */
   html, body {

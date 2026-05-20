@@ -1,0 +1,253 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Overview/Cesium Integration" />
+
+# Cesium Integration
+
+The `cesium/` category provides a full 3D globe toolkit built on [CesiumJS](https://cesium.com/platform/cesiumjs/) — a viewer host, imagery / terrain / 3D-tile layers, vector and live-entity layers, particle overlays, and UI chrome. Unlike the rest of the library, these components depend on **CesiumJS**, which ships ~12&nbsp;MB of static runtime assets that must be served at a known URL. This page covers the one-time setup required to make that work in a consumer app.
+
+> **Why this is its own page:** the asset-hosting + `CESIUM_BASE_URL` requirement cannot be solved generically inside the library — it depends on your bundler and deploy target. Everything else (the components) is plug-and-play once this is wired.
+
+---
+
+## 1. Install
+
+Cesium is a **peer dependency** of `@cyberdynecorp/svelte-ui-core`, so you pin the version in your own app and the library never bundles it:
+
+```bash
+pnpm add @cyberdynecorp/svelte-ui-core cesium
+```
+
+The minimum supported Cesium version is **1.124.0**. If you don't render any `cesium/` components, you don't need to install `cesium` at all — the peer dependency is marked optional.
+
+---
+
+## 2. Copy Cesium's runtime assets
+
+Cesium loads Web Workers, asset files, third-party libs and widget CSS at runtime from a base URL. The most reliable way to host them under SvelteKit / Vite is a small prebuild copy step.
+
+Create `scripts/copy-cesium.mjs`:
+
+```js
+#!/usr/bin/env node
+import { cpSync, existsSync, mkdirSync, rmSync, realpathSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { createRequire } from "node:module";
+
+const root = dirname(dirname(fileURLToPath(import.meta.url)));
+const require = createRequire(pathToFileURL(join(root, "package.json")));
+const cesiumRoot = dirname(realpathSync(require.resolve("cesium/package.json")));
+const src = join(cesiumRoot, "Build", "Cesium");
+const dst = join(root, "static", "cesium"); // SvelteKit serves static/ at /
+
+if (!existsSync(src)) {
+  console.error(`copy-cesium: not found at ${src}`);
+  process.exit(1);
+}
+rmSync(dst, { recursive: true, force: true });
+mkdirSync(dst, { recursive: true });
+for (const name of ["Workers", "Assets", "ThirdParty", "Widgets", "Cesium.js"]) {
+  const from = join(src, name);
+  if (existsSync(from)) cpSync(from, join(dst, name), { recursive: true, force: true });
+}
+console.log(`copy-cesium: copied → ${dst}`);
+```
+
+Wire it into your build hooks:
+
+```json
+// package.json
+{
+  "scripts": {
+    "predev": "node scripts/copy-cesium.mjs",
+    "prebuild": "node scripts/copy-cesium.mjs"
+  }
+}
+```
+
+> **Why a script, not `vite-plugin-cesium`:** the plugin's `closeBundle` copy hook does not fire reliably under SvelteKit's `adapter-node` pipeline — `build/client/` can end up empty even though the plugin's other hooks run. A standalone prebuild script is deterministic and has zero plugin coupling.
+
+For non-SvelteKit setups, change the `dst` to wherever your bundler serves static files from (`public/cesium`, `dist/cesium`, etc.) and keep the served path matching `CESIUM_BASE_URL` below.
+
+---
+
+## 3. Point Cesium at the assets
+
+Set `window.CESIUM_BASE_URL` **before** the first `Viewer` is constructed. In SvelteKit, do it once in your root layout:
+
+```svelte
+<!-- +layout.svelte -->
+<script>
+  import { browser } from "$app/environment";
+  if (browser) window.CESIUM_BASE_URL = "/cesium";
+
+  import "@cyberdynecorp/svelte-ui-foundation/styles";
+  // Cesium's widget CSS — needed for the credit display + any built-in widgets.
+  import "cesium/Build/Cesium/Widgets/widgets.css";
+</script>
+
+{@render children()}
+```
+
+`<CesiumGlobe>` logs a one-time dev warning if `CESIUM_BASE_URL` is missing, because the failure mode otherwise is silent: Cesium 404s on its Workers and falls back to a slow single-threaded path.
+
+Optionally pass `CESIUM_BASE_URL` to Vite's `define` if a dependency reads it at build time:
+
+```ts
+// vite.config.ts
+export default defineConfig({
+  plugins: [sveltekit()],
+  define: { CESIUM_BASE_URL: JSON.stringify("/cesium") },
+});
+```
+
+---
+
+## 4. Access tokens
+
+There are **two distinct keys**, and they go to **two different props**:
+
+| Key | Unlocks | Prop |
+|-----|---------|------|
+| **Cesium ion access token** | World Terrain, Bing imagery, ion-hosted tilesets — **including Google Photorealistic 3D Tiles** (ion asset 2275207) | `ionToken` on `<CesiumGlobe>` |
+| **Google Maps Platform API key** (Map Tiles API SKU — **billed per session**) | Google Photorealistic 3D Tiles via Google directly | `apiKey` on `<GooglePhotorealisticTiles>` (or `source={{ kind: "google-photorealistic", apiKey }}` on `<Cesium3DTiles>`) |
+
+The library never reads env vars directly — you pass them as props so secrets stay in your app:
+
+```svelte
+<script>
+  import { env } from "$env/dynamic/public";
+  import { CesiumGlobe, Terrain } from "@cyberdynecorp/svelte-ui-core";
+</script>
+
+<CesiumGlobe ionToken={env.PUBLIC_CESIUM_ION_TOKEN}>
+  <Terrain provider={{ kind: "world" }} />
+</CesiumGlobe>
+```
+
+> Anonymous Ion tokens committed to a repo get throttled fast. Treat the token as an environment secret even though it's a "public" client token.
+
+### Google Photorealistic 3D Tiles
+
+`<GooglePhotorealisticTiles>` supports two sourcing paths via its `source` prop:
+
+```svelte
+<!-- Path 1 (default, recommended): via Cesium ion asset 2275207.
+     Needs only the ionToken on the globe — no Google key, no per-session
+     billing on your own Google account, no geocoder restriction. -->
+<CesiumGlobe ionToken={env.PUBLIC_CESIUM_ION_TOKEN}>
+  <GooglePhotorealisticTiles />            <!-- source="ion" is the default -->
+</CesiumGlobe>
+
+<!-- Path 2: directly from Google Maps Platform. Requires an API key with the
+     Map Tiles API SKU (billed per session). Pass acknowledgeGoogleGeocoder
+     to silence Cesium's one-time "only use with Google geocoder" warning. -->
+<CesiumGlobe>
+  <GooglePhotorealisticTiles
+    source="google"
+    apiKey={env.PUBLIC_GOOGLE_MAPS_API_KEY}
+    acknowledgeGoogleGeocoder
+  />
+</CesiumGlobe>
+```
+
+The equivalent via the generic component:
+
+```svelte
+<Cesium3DTiles source={{ kind: "ion", assetId: 2275207 }} />            <!-- ion -->
+<Cesium3DTiles source={{ kind: "google-photorealistic", apiKey,
+  onlyUsingWithGoogleGeocoder: true }} />                              <!-- google -->
+```
+
+The `2275207` constant is exported as `GOOGLE_PHOTOREALISTIC_ION_ASSET_ID`.
+
+---
+
+## 5. Content Security Policy
+
+Cesium uses WebGL, Web Workers (via `blob:`), and cross-origin tile fetches. Minimum CSP additions:
+
+```
+worker-src 'self' blob:;
+img-src 'self' data: blob: https:;
+connect-src 'self' https://api.cesium.com https://assets.ion.cesium.com
+            https://tile.openstreetmap.org https://*.tile.openstreetmap.org
+            https://gibs.earthdata.nasa.gov https://tile.googleapis.com;
+```
+
+Add the specific tile hosts you actually use (RainViewer, Mapbox, Esri, etc.).
+
+---
+
+## 6. Storybook setup (this repo)
+
+The library's own Storybook serves the copied assets via a static dir. The relevant wiring:
+
+- `scripts/copy-cesium.mjs` copies into `.storybook/public/cesium/`
+- `.storybook/main.ts` adds `staticDirs: ["./public"]`
+- `.storybook/preview-head.html` sets `window.CESIUM_BASE_URL = "/cesium"` and links `widgets.css`
+- root `package.json` runs the copy in `predev` / `prebuild-storybook`
+
+If you fork the repo and the Cesium stories render a black box, run `node scripts/copy-cesium.mjs` once and restart Storybook.
+
+---
+
+## 7. Architecture
+
+Every `cesium/` component is **headless and controlled**: the library never owns your data. You pass arrays in via props and get events back via callbacks.
+
+The keystone is `<CesiumGlobe>`, which creates the `Cesium.Viewer` and publishes it on Svelte context. Every layer is a child component that resolves the shared viewer via `useCesiumViewer()`, mounts its primitives in an `$effect`, and cleans up in `onDestroy`. Children render only after the viewer is ready, so a layer can assume the viewer exists.
+
+```svelte
+<script>
+  import {
+    CesiumGlobe, Terrain, ImageryLayer,
+    OsmBuildingsLayer, MarkersLayer, AircraftLayer,
+    CesiumControls, CesiumLayerControl, CesiumMinimap,
+  } from "@cyberdynecorp/svelte-ui-core";
+
+  let markers = $state([{ id: "hq", lng: -122.42, lat: 37.77, label: "HQ" }]);
+  let aircraft = $state([]); // update from your ADS-B feed
+</script>
+
+<CesiumGlobe ionToken={env.PUBLIC_CESIUM_ION_TOKEN} height="80vh">
+  <Terrain provider={{ kind: "world" }} />
+  <OsmBuildingsLayer />
+  <MarkersLayer {markers} draggable onmove={(id, ll) => updateMarker(id, ll)} />
+  <AircraftLayer {aircraft} alwaysShowLabels />
+  <CesiumControls home={{ lng: 0, lat: 20, heightM: 2e7 }} />
+  <CesiumMinimap />
+</CesiumGlobe>
+```
+
+Every component lazy-imports `cesium` via `await import("cesium")` inside `onMount` / `$effect`, so SSR never touches `window` and non-cesium routes never pull the WebGL bundle.
+
+---
+
+## 8. Component catalog
+
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '1.5rem', fontSize: '0.85rem' }}>
+  <div><strong>Engine</strong> — CesiumGlobe, Terrain, ImageryLayer, useCesiumViewer, createTerrainSampler, createScreenPicker</div>
+  <div><strong>3D / Tilesets</strong> — Cesium3DTiles, OsmBuildingsLayer, GooglePhotorealisticTiles, ElevationContours</div>
+  <div><strong>Vector</strong> — GeoJsonLayer, KmlLayer, CzmlLayer, MarkersLayer, PolygonsLayer, PolylinesLayer, LabelsLayer, PolygonHeatmapsLayer</div>
+  <div><strong>Raster timelines</strong> — WeatherTileLayer, NasaGibsLayer</div>
+  <div><strong>Live entities</strong> — TrackedEntitiesLayer, Aircraft, Vessels, Satellites, Earthquakes, Wildfires, Volcanoes, Airports, Towers, CellSites, Webcams, PowerPlants, AirQuality, TideGauges, Gdacs, Tsunami, Cyclones, Aurora, SubmarineCables, Farms, Coverage, UserLocation</div>
+  <div><strong>Particles / flow</strong> — WindParticlesLayer, WaveParticlesLayer, StreamlinesLayer, WindSimDomainPreview</div>
+  <div><strong>Chrome</strong> — CesiumControls, CesiumCompass, CesiumCoordinatesHud, CesiumLayerControl, BaseLayerPicker, CesiumMinimap</div>
+</div>
+
+See `cesium/Examples/FullGlobe` for a composed dashboard using many of these together.
+
+---
+
+## 9. Troubleshooting
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Black box where the globe should be | Assets not served | Run the copy script; confirm `/cesium/Cesium.js` is reachable |
+| Globe renders but slowly; console 404s on `/Workers/*` | `CESIUM_BASE_URL` wrong or set too late | Set it before the first `<CesiumGlobe>` mounts; match the served path |
+| `window is not defined` during SSR | A top-level `import "cesium"` somewhere | Only import cesium dynamically; the library already does — check your own code |
+| Terrain is flat | No Ion token | Pass `ionToken`, or use `<Terrain provider={{ kind: "url", url }} />` with self-hosted terrain |
+| Google tiles 403 | Map Tiles API not enabled / billing off | Enable the SKU in Google Cloud Console |
+| Particle layers look wrong in 2D | They assume a 3D scene | Keep the scene in 3D when using `WindParticlesLayer` etc. |

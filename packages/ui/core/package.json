@@ -18,13 +18,20 @@
     "svelte-check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "peerDependencies": {
-    "svelte": "^5.0.0"
+    "svelte": "^5.0.0",
+    "cesium": "^1.124.0"
+  },
+  "peerDependenciesMeta": {
+    "cesium": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@cyberdynecorp/svelte-ui-foundation": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.3.10",
+    "cesium": "^1.124.0",
     "svelte-check": "^4.2.1",
     "typescript": "^5.8.3"
   }

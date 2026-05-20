@@ -5,6 +5,9 @@ docs/
 build/
 coverage/
 storybook-static/
+.storybook/public/cesium/
+test-results/
+playwright-report/
 *.tsbuildinfo
 .DS_Store
 .env
