@@ -33,6 +33,22 @@ export default [js.configs.recommended, ...svelte.configs["flat/recommended"], {
     "no-control-regex": "off",
   },
 }, {
+  // Svelte 5 rune modules (.svelte.ts / .svelte.js) — declare the rune
+  // globals so `no-undef` doesn't flag $state/$derived/$effect/etc. These
+  // files are otherwise linted by the `**/*.ts` block above (parser + rules).
+  files: ["**/*.svelte.ts", "**/*.svelte.js"],
+  languageOptions: {
+    globals: {
+      $state: "readonly",
+      $derived: "readonly",
+      $effect: "readonly",
+      $props: "readonly",
+      $bindable: "readonly",
+      $inspect: "readonly",
+      $host: "readonly",
+    },
+  },
+}, {
   files: ["**/*.svelte"],
   languageOptions: {
     parserOptions: {

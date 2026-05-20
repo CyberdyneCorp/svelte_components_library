@@ -71,7 +71,8 @@ export function createWindowManager(opts: CreateWindowManagerOptions = {}) {
   function toggleMinimize(id: string) {
     const w = list.find((x) => x.id === id);
     if (!w) return;
-    w.minimized ? restore(id) : minimize(id);
+    if (w.minimized) restore(id);
+    else minimize(id);
   }
 
   function toggleMaximize(id: string) {
