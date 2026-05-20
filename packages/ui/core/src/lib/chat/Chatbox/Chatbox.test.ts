@@ -36,7 +36,7 @@ describe("Chatbox", () => {
     render(Chatbox, { props: { value: "  hello world  ", onsend } });
     const sendBtn = screen.getByLabelText("Send message");
     await fireEvent.click(sendBtn);
-    expect(onsend).toHaveBeenCalledWith("hello world");
+    expect(onsend).toHaveBeenCalledWith("hello world", []);
   });
 
   it("does not call onsend when value is only whitespace", async () => {
@@ -68,7 +68,7 @@ describe("Chatbox", () => {
     const { container } = render(Chatbox, { props: { value: "hello", onsend } });
     const textarea = container.querySelector("textarea")!;
     await fireEvent.keyDown(textarea, { key: "Enter", shiftKey: false });
-    expect(onsend).toHaveBeenCalledWith("hello");
+    expect(onsend).toHaveBeenCalledWith("hello", []);
   });
 
   it("does not send on Shift+Enter", async () => {
@@ -90,11 +90,31 @@ describe("Chatbox", () => {
     expect(screen.queryByLabelText("Attach file")).not.toBeInTheDocument();
   });
 
-  it("calls onattach when attach button is clicked", async () => {
+  it("fires onattach when files are selected via the picker", async () => {
     const onattach = vi.fn();
-    render(Chatbox, { props: { onattach } });
-    await fireEvent.click(screen.getByLabelText("Attach file"));
+    const { container } = render(Chatbox, { props: { onattach } });
+    const fileInput = container.querySelector(
+      "input[type=file]",
+    ) as HTMLInputElement;
+    const file = new File(["hello"], "hello.txt", { type: "text/plain" });
+    await fireEvent.change(fileInput, { target: { files: [file] } });
     expect(onattach).toHaveBeenCalledOnce();
+    expect(onattach.mock.calls[0][0][0].name).toBe("hello.txt");
+  });
+
+  it("rejects oversize files via onerror and does not stage them", async () => {
+    const onattach = vi.fn();
+    const onerror = vi.fn();
+    const { container } = render(Chatbox, {
+      props: { onattach, onerror, maxSizeBytes: 4 },
+    });
+    const fileInput = container.querySelector(
+      "input[type=file]",
+    ) as HTMLInputElement;
+    const big = new File(["abcdefghij"], "big.txt", { type: "text/plain" });
+    await fireEvent.change(fileInput, { target: { files: [big] } });
+    expect(onattach).not.toHaveBeenCalled();
+    expect(onerror).toHaveBeenCalledOnce();
   });
 
   it("shows loading aria-label when loading", () => {
