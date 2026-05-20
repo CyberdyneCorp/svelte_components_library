@@ -35,6 +35,7 @@ export { default as SubmarineCablesLayer } from "./SubmarineCablesLayer/Submarin
 export { default as FarmsLayer } from "./FarmsLayer/FarmsLayer.svelte";
 export { default as CoverageLayer } from "./CoverageLayer/CoverageLayer.svelte";
 export { default as UserLocationLayer } from "./UserLocationLayer/UserLocationLayer.svelte";
+export { default as ModelsLayer } from "./ModelsLayer/ModelsLayer.svelte";
 export { default as WeatherTileLayer } from "./WeatherTileLayer/WeatherTileLayer.svelte";
 export { default as NasaGibsLayer } from "./NasaGibsLayer/NasaGibsLayer.svelte";
 export { default as WindParticlesLayer } from "./WindParticlesLayer/WindParticlesLayer.svelte";
@@ -112,6 +113,7 @@ export type {
   CoverageCone,
   SubmarineCable,
   UserLocation,
+  ModelEntity,
   WindGridPoint,
   WaveGridPoint,
   Streamline,

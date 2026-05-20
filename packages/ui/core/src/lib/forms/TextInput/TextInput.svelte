@@ -11,7 +11,13 @@
     required = false,
     type = "text",
     id = "",
+    /** Bindable reference to the inner `<input>` for imperative focus / select(). */
+    inputRef = $bindable(null),
     oninput,
+    onchange,
+    onfocus,
+    onblur,
+    onkeydown,
   }: {
     value?: string;
     label?: string;
@@ -20,9 +26,25 @@
     error?: string;
     disabled?: boolean;
     required?: boolean;
-    type?: "text" | "email" | "url" | "number";
+    type?:
+      | "text"
+      | "email"
+      | "url"
+      | "number"
+      | "search"
+      | "tel"
+      | "date"
+      | "datetime-local"
+      | "time"
+      | "month"
+      | "week";
     id?: string;
+    inputRef?: HTMLInputElement | null;
     oninput?: (e: Event) => void;
+    onchange?: (e: Event) => void;
+    onfocus?: (e: FocusEvent) => void;
+    onblur?: (e: FocusEvent) => void;
+    onkeydown?: (e: KeyboardEvent) => void;
   } = $props();
 
   let inputId = $derived(id || `cy-input-${Math.random().toString(36).slice(2, 9)}`);
@@ -40,11 +62,16 @@
     class="cy-text-input__field"
     {type}
     id={inputId}
+    bind:this={inputRef}
     bind:value
     {placeholder}
     {disabled}
     {required}
     {oninput}
+    {onchange}
+    {onfocus}
+    {onblur}
+    {onkeydown}
     aria-invalid={!!error}
     aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
   />

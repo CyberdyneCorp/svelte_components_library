@@ -9,6 +9,10 @@
     disabled = false,
     loading = false,
     type = "button",
+    /** Native tooltip on hover. Also used as accessible name when no children are visible. */
+    title = "",
+    /** Accessible name when label is not visible (icon-only buttons). */
+    ariaLabel = "",
     onclick,
     children,
   }: {
@@ -17,6 +21,8 @@
     disabled?: boolean;
     loading?: boolean;
     type?: "button" | "submit" | "reset";
+    title?: string;
+    ariaLabel?: string;
     onclick?: (e: MouseEvent) => void;
     children?: Snippet;
   } = $props();
@@ -31,6 +37,8 @@
   disabled={isDisabled}
   aria-disabled={isDisabled}
   aria-busy={loading}
+  aria-label={ariaLabel || undefined}
+  title={title || undefined}
   {onclick}
 >
   {#if loading}

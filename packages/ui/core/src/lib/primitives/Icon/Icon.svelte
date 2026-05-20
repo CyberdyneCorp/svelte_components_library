@@ -1,12 +1,38 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  // String-literal union of the built-in icon names. Exported below as
+  // `IconName` so consumers get autocomplete; the `name` prop still accepts
+  // any string so a misspelled name renders empty rather than failing typecheck.
+  type BuiltInIconName =
+    | "check"
+    | "x"
+    | "chevron-down"
+    | "chevron-right"
+    | "chevron-left"
+    | "search"
+    | "alert-circle"
+    | "info"
+    | "settings"
+    | "menu"
+    | "plus"
+    | "minus"
+    | "copy"
+    | "external-link"
+    | "terminal"
+    | "cpu"
+    | "shield"
+    | "zap"
+    | "activity"
+    | "lock";
+
   let {
     name = "",
     size = 20,
     color = "currentColor",
   }: {
-    name: string;
+    /** Built-in icon name (autocompletes) or any custom string (renders empty if unknown). */
+    name: BuiltInIconName | (string & {});
     size?: number;
     color?: string;
   } = $props();

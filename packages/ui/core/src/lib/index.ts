@@ -1,7 +1,7 @@
 // Primitives
 export { Button } from "./primitives/Button/index.js";
 export { Badge } from "./primitives/Badge/index.js";
-export { Icon } from "./primitives/Icon/index.js";
+export { Icon, BUILTIN_ICON_NAMES, type IconName } from "./primitives/Icon/index.js";
 export { IconButton } from "./primitives/IconButton/index.js";
 export { Avatar } from "./primitives/Avatar/index.js";
 export { Tooltip } from "./primitives/Tooltip/index.js";
@@ -216,6 +216,7 @@ export { SubmarineCablesLayer } from "./cesium/SubmarineCablesLayer/index.js";
 export { FarmsLayer } from "./cesium/FarmsLayer/index.js";
 export { CoverageLayer } from "./cesium/CoverageLayer/index.js";
 export { UserLocationLayer } from "./cesium/UserLocationLayer/index.js";
+export { ModelsLayer } from "./cesium/ModelsLayer/index.js";
 export { WeatherTileLayer } from "./cesium/WeatherTileLayer/index.js";
 export { NasaGibsLayer } from "./cesium/NasaGibsLayer/index.js";
 export { WindParticlesLayer } from "./cesium/WindParticlesLayer/index.js";
@@ -293,6 +294,7 @@ export type {
   CoverageCone,
   SubmarineCable,
   UserLocation,
+  ModelEntity,
   WindGridPoint,
   WaveGridPoint,
   Streamline,

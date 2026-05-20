@@ -6,11 +6,16 @@
     label = "",
     disabled = false,
     error = "",
+    /** Accessible name when `label` is omitted (e.g. table-row select checkboxes). */
+    ariaLabel = "",
+    onchange,
   }: {
     checked?: boolean;
     label?: string;
     disabled?: boolean;
     error?: string;
+    ariaLabel?: string;
+    onchange?: (checked: boolean, e: Event) => void;
   } = $props();
 
   let inputId = `cy-cb-${Math.random().toString(36).slice(2, 9)}`;
@@ -25,7 +30,10 @@
       bind:checked
       {disabled}
       aria-invalid={!!error}
+      aria-label={!label && ariaLabel ? ariaLabel : undefined}
       aria-describedby={error ? `${inputId}-error` : undefined}
+      onchange={(e) =>
+        onchange?.((e.currentTarget as HTMLInputElement).checked, e)}
     />
     <span class="cy-checkbox__box" aria-hidden="true">
       {#if checked}

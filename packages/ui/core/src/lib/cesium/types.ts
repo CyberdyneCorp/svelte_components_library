@@ -585,6 +585,40 @@ export type TerrainProviderSpec =
   | { kind: "ion"; assetId: number }
   | { kind: "url"; url: string };
 
+/**
+ * 3D model placed on the globe (glTF / .glb). The library never owns the
+ * model URL — pass a URL the consumer hosts or a Cesium ion asset URL.
+ */
+export type ModelEntity = {
+  id: string;
+  lng: number;
+  lat: number;
+  /** Altitude in metres above the ellipsoid. When unset, clamp the bottom to terrain. */
+  altitudeM?: number;
+  /** Compass heading in degrees clockwise from north. Defaults to 0. */
+  headingDeg?: number;
+  pitchDeg?: number;
+  rollDeg?: number;
+  /** URL to a glTF (.gltf) or glb file. Required. */
+  url: string;
+  /** Uniform scale factor applied to the model. Defaults to 1. */
+  scale?: number;
+  /** Smallest screen size in pixels — the model never shrinks below this. */
+  minimumPixelSize?: number;
+  /** Hard cap on the world-space scale, useful for ion-managed models. */
+  maximumScale?: number;
+  /** Optional tint colour blended over the model. */
+  tintColor?: string;
+  /** Blend amount 0..1 between the model's original colour and `tintColor`. */
+  tintAmount?: number;
+  /** Outline colour drawn around the silhouette. */
+  silhouetteColor?: string;
+  /** Silhouette stroke width in pixels. */
+  silhouetteSize?: number;
+  /** Round-tripped to callbacks. */
+  meta?: unknown;
+};
+
 export type PickedEntity = {
   kind: "entity" | "tile-feature" | "primitive";
   entity?: Entity;

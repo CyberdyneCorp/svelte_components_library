@@ -10,6 +10,10 @@
     showValue = true,
     disabled = false,
     unit = "",
+    /** Fires every input event. Use this to drive transforming setters (clamp / round / dispatch). */
+    oninput,
+    /** Fires on the final change (release / blur). */
+    onchange,
   }: {
     value?: number;
     min?: number;
@@ -19,6 +23,8 @@
     showValue?: boolean;
     disabled?: boolean;
     unit?: string;
+    oninput?: (value: number) => void;
+    onchange?: (value: number) => void;
   } = $props();
 
   const fillPercent = $derived(((value - min) / (max - min)) * 100);
@@ -46,6 +52,8 @@
       {step}
       {disabled}
       style:--fill-percent="{fillPercent}%"
+      oninput={(e) => oninput?.(Number((e.currentTarget as HTMLInputElement).value))}
+      onchange={(e) => onchange?.(Number((e.currentTarget as HTMLInputElement).value))}
     />
   </div>
 </div>
