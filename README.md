@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **243 components** across 18 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **244 components** across 18 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -36,13 +36,13 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdynecorp/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdynecorp/svelte-ui-core` | 243 UI components across 18 categories |
+| `@cyberdynecorp/svelte-ui-core` | 244 UI components across 18 categories |
 
 ## Installation
 
 ```bash
 # Configure registry
-echo "@cyberdyne:registry=https://npm.pkg.github.com" >> .npmrc
+echo "@cyberdynecorp:registry=https://npm.pkg.github.com" >> .npmrc
 
 # Install
 pnpm add @cyberdynecorp/svelte-ui-foundation @cyberdynecorp/svelte-ui-core
@@ -84,7 +84,7 @@ Use components:
 </Card>
 ```
 
-## Components (243)
+## Components (244)
 
 ### Primitives (14)
 `Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle` · `StarRating`
@@ -131,10 +131,10 @@ Use components:
 ### Maps (1)
 `MapView` (Leaflet with dark tiles, custom controls, geolocation)
 
-### Cesium — 3D Globe (49)
-Headless, controlled CesiumJS globe toolkit. `cesium` is an **optional peer dependency** (lazy-imported, never bundled).
+### Cesium — 3D Globe (50)
+Headless, controlled CesiumJS globe toolkit. `cesium` is an **optional peer dependency** (lazy-imported, never bundled). Entity/billboard layers take a uniform `opacity` (0–1); tracked-entity layers take `labelMode` (`all`/`perEntity`/`selected`/`none`); `TrackedEntitiesLayer` is the styling escape hatch.
 - **Engine:** `CesiumGlobe` · `Terrain` · `ImageryLayer`
-- **Tilesets/contours:** `Cesium3DTiles` · `OsmBuildingsLayer` · `GooglePhotorealisticTiles` · `ElevationContours`
+- **Tilesets/models/contours:** `Cesium3DTiles` · `OsmBuildingsLayer` · `GooglePhotorealisticTiles` · `ModelsLayer` · `ElevationContours`
 - **Vector:** `GeoJsonLayer` · `KmlLayer` · `CzmlLayer` · `MarkersLayer` · `PolygonsLayer` · `PolylinesLayer` · `LabelsLayer` · `PolygonHeatmapsLayer`
 - **Live entities:** `TrackedEntitiesLayer` · `AircraftLayer` · `VesselsLayer` · `SatellitesLayer` · `EarthquakesLayer` · `WildfiresLayer` · `VolcanoesLayer` · `AirportsLayer` · `TowersLayer` · `CellSitesLayer` · `WebcamsLayer` · `PowerPlantsLayer` · `AirQualityLayer` · `TideGaugesLayer` · `GdacsLayer` · `TsunamiLayer` · `CyclonesLayer` · `AuroraLayer` · `SubmarineCablesLayer` · `FarmsLayer` · `CoverageLayer` · `UserLocationLayer`
 - **Raster timelines:** `WeatherTileLayer` · `NasaGibsLayer`
@@ -246,7 +246,7 @@ pnpm release            # Build & publish
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
-│       └── core/            UI components (243 components)
+│       └── core/            UI components (244 components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
 │               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ScheduleConfig, ...

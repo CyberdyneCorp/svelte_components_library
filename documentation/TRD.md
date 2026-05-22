@@ -5,8 +5,8 @@
 | Field | Value |
 |-------|-------|
 | **Project** | Cyberdyne Design System |
-| **Version** | 0.1.2 |
-| **Date** | 2026-05-20 |
+| **Version** | 0.6.0 |
+| **Date** | 2026-05-22 |
 | **Owner** | Cyberdyne Corp |
 | **Repository** | `CyberdyneCorp/svelte_components_library` |
 | **Status** | Active Development |
@@ -44,7 +44,7 @@ The Cyberdyne Design System is a comprehensive, reusable Svelte 5 component libr
 
 The system encompasses:
 - **Design Tokens** — Colors, typography, spacing, radius, shadows, and animations defined as CSS custom properties
-- **243 UI Components** — Organized across 18 functional categories
+- **244 UI Components** — Organized across 18 functional categories
 - **Storybook Documentation** — Interactive component playground with auto-generated API docs
 - **CI/CD Pipeline** — Automated testing, versioning, and publishing workflows
 
@@ -125,7 +125,7 @@ svelte_components_library/
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       └── styles/  CSS layers (colors, typography, spacing, ...)
-│       └── core/            UI components (243 components)
+│       └── core/            UI components (244 components)
 │           └── src/lib/
 │               ├── primitives/   14 components
 │               ├── forms/        20 components
@@ -142,7 +142,7 @@ svelte_components_library/
 │               ├── charts/       19 components
 │               ├── editor/       6 components
 │               ├── maps/         1 component
-│               ├── cesium/       49 components (+ utils; cesium peer dep)
+│               ├── cesium/       50 components (+ utils; cesium peer dep)
 │               ├── retro/        36 components (CyberdyneOS desktop)
 │               ├── flow/         8 components (node-graph editor)
 │               └── _testdata/    Shared test data module
@@ -319,7 +319,7 @@ Loaded via Google Fonts CDN in `typography.css`:
 
 ### 5.1 @cyberdynecorp/svelte-ui-foundation
 
-**Version:** 0.1.0
+**Version:** 0.1.1
 **Purpose:** Design tokens and global styles — zero component code
 
 **Exports:**
@@ -344,8 +344,8 @@ export type BreakpointKey, SpacingKey, RadiusKey
 
 ### 5.2 @cyberdynecorp/svelte-ui-core
 
-**Version:** 0.1.2
-**Purpose:** 243 UI components
+**Version:** 0.6.0
+**Purpose:** 244 UI components
 **Dependency:** `@cyberdynecorp/svelte-ui-foundation` (workspace:*)
 **Peer dependencies:** `svelte` ^5.0.0; `cesium` ^1.124.0 (optional — only the `cesium/` category)
 
@@ -466,9 +466,9 @@ Based on a 4px base grid:
 
 | Component | Props | Description |
 |-----------|-------|------------|
-| `Button` | variant, size, disabled, loading, type, onclick | Primary action element with 5 variants (brand, secondary, outline, ghost, danger) |
+| `Button` | variant, size, disabled, loading, type, id, title, ariaLabel, dataAttrs, onclick | Primary action element with 5 variants (brand, secondary, outline, ghost, danger); `dataAttrs` forwards `data-*` to the inner button |
 | `Badge` | variant, size | Status indicator pill (success, warning, error, info, neutral) |
-| `Icon` | name, size, color | SVG icon system with 20+ built-in icons |
+| `Icon` | name, size, color | SVG icon system with 25 built-in icons |
 | `IconButton` | icon, label, variant, size, disabled, onclick | Circular icon-only button |
 | `Avatar` | src, alt, initials, size, status | User avatar with image/initials fallback and status dot |
 | `Tooltip` | text, position | Hover tooltip with 4 positions |
@@ -479,7 +479,7 @@ Based on a 4px base grid:
 | `ToggleGroup` | items, value (bindable), multiple, size, variant | Grouped toggle buttons for single/multi selection |
 | `AvatarGroup` | avatars, max, size, overlap | Stacked avatar display with overflow count |
 | `ThemeToggle` | theme (bindable), size | Dark/light theme toggle switch |
-| `StarRating` | value (bindable), max, size, readonly, halfStars | Interactive star rating with half-star support |
+| `StarRating` | value (bindable, `number \| null`), max, size, readonly, halfStars | Interactive star rating with half-star support; nullish value = unrated (optional binds safe) |
 
 ### 7.2 Forms (20 components)
 
@@ -494,11 +494,11 @@ Based on a 4px base grid:
 | `Textarea` | value (bindable), label, placeholder, hint, error, rows, maxlength | Multi-line input with character count |
 | `FileDropzone` | accept, multiple, disabled, maxSize, onfiles | Drag-and-drop file upload zone |
 | `ColorPicker` | value (bindable), label, presets, showInput, disabled | Color selection with preset swatches and hex input |
-| `SearchInput` | value (bindable), placeholder, debounce, results, grouped, onselect | Debounced search field with grouped result dropdown |
+| `SearchInput` | value (bindable), placeholder, debounce, results, grouped, resultItem, onselect | Debounced search field with grouped result dropdown; `resultItem` snippet for custom result rows; `onselect` receives the full result |
 | `DateRangePicker` | startDate (bindable), endDate (bindable), presets, placeholder | Calendar-based date range picker with preset ranges |
 | `MultiSelect` | value (bindable), options, groups, placeholder, searchable | Multi-value selection with grouped options |
 | `TagInput` | tags (bindable), placeholder, maxTags, suggestions | Tag entry with autocomplete suggestions |
-| `NumberInput` | value (bindable), label, min, max, step, error, disabled | Numeric input with increment/decrement controls |
+| `NumberInput` | value (bindable, `number \| null`), label, min, max, step, error, disabled, onchange | Numeric input with increment/decrement controls; nullable value renders an empty field (distinct from `0`), so optional binds are safe |
 | `ComboBox` | value (bindable), options, placeholder, searchable, creatable | Searchable select with optional value creation |
 | `RangeSlider` | min, max, start (bindable), end (bindable), step, label | Dual-handle range slider for value ranges |
 | `CodeEditor` | value (bindable), language, lineNumbers, readonly | Editable code input with syntax highlighting |
@@ -510,12 +510,12 @@ Based on a 4px base grid:
 
 | Component | Props | Description |
 |-----------|-------|------------|
-| `Alert` | variant, title, dismissible, ondismiss | Inline alert with left border accent |
+| `Alert` | variant, severity, title, inline, card, borderSide, icon, dismissible, ondismiss | Alert with left/top border accent; `severity` tones (critical/warn/caution/good), `inline` (no banner chrome), `card` appearance, optional `icon` snippet |
 | `Dialog` | open (bindable), title, confirmLabel, cancelLabel, variant, onconfirm, oncancel | Confirmation dialog modal |
 | `Notification` | variant, message, duration, onclose | Auto-dismissing toast notification |
 | `Toast` | children | Global toast queue manager with context API |
 | `Skeleton` | variant, width, height, lines, animated | Loading placeholder (text, circle, rect, card) |
-| `Accordion` | items, multiple, defaultOpen | Collapsible content sections |
+| `Accordion` | items, multiple, defaultOpen | Collapsible content sections; `items[].content` accepts a string or Snippet, `items[].actions` snippet renders right-aligned header controls that don't toggle the panel |
 | `Dropdown` | items, trigger, onselect, align | Custom dropdown menu with keyboard navigation |
 | `ProgressRing` | value, size, strokeWidth, variant | Circular progress indicator with animated fill |
 | `Stepper` | steps, currentStep, orientation | Multi-step progress with labels and state tracking |
@@ -543,7 +543,7 @@ Based on a 4px base grid:
 
 | Component | Props | Description |
 |-----------|-------|------------|
-| `Table` | columns, rows, striped | Sortable data table with sort indicators |
+| `Table` | columns, rows, striped | Sortable data table with sort indicators; per-column `cell` Snippet render override + `width` |
 | `Pagination` | currentPage (bindable), totalPages, onchange | Page navigation with smart range |
 | `ProgressBar` | value, variant, size, showLabel | Animated progress with glow effects |
 | `StatusBadge` | status, label | Status indicator with pulsing dot |
@@ -553,7 +553,7 @@ Based on a 4px base grid:
 | `DiffViewer` | oldText, newText, mode, language, showLineNumbers | LCS-based text diff viewer with split and unified modes |
 | `Calendar` | date (bindable), events, onselect | Month grid calendar with event markers and date navigation |
 | `Kanban` | columns, ondrop, onmove | Drag-and-drop board with configurable columns and card management |
-| `DataTable` | columns, rows, selectable, expandable, resizable, pagination, pageSize | Enhanced data table with row selection, expandable rows, column resize, and pagination |
+| `DataTable` | columns, rows, selectable, expandable, resizable, pagination, pageSize | Enhanced data table with row selection, expandable rows, column resize, and pagination; per-column `cell` Snippet render override |
 | `VirtualizedList` | items, itemHeight, overscan, containerHeight | Performant scrollable list with windowed rendering |
 | `InfiniteScroll` | onLoadMore, threshold, loading, hasMore, children | Infinite scroll container with loading trigger |
 | `FilterBar` | filters, active (bindable), onchange | Combined filter chips for tables and lists |
@@ -615,7 +615,7 @@ Based on a 4px base grid:
 | `NetworkBadge` | network, chainId, connected, icon | Connected chain indicator pill |
 | `NFTCard` | name, image, collection, tokenId, rarity, price, currency, onclick | NFT display card with hover glow |
 | `PriceDisplay` | symbol, price, change, period | Token price with delta indicator |
-| `MetricCard` | label, value, change, changeLabel, icon, variant | KPI dashboard card |
+| `MetricCard` | label, value, change, changeLabel, icon, variant, size, secondary | KPI dashboard card; `size` (compact/md/lg — compact strips card chrome) + muted `secondary` sub-line |
 | `GasEstimate` | slow, standard, fast, selected (bindable) | Gas fee selector (slow/standard/fast) |
 | `TierBadge` | tier, label, showLevel | 6-level NFT access tier badge with gradient effects |
 | `SwapInterface` | fromToken (bindable), toToken (bindable), amount (bindable), slippage, onswap | Token swap interface with price estimation and slippage control |
@@ -655,7 +655,7 @@ Based on a 4px base grid:
 | `AreaChart` | data, series, xAxis, yAxis, stacked, gradient | Area chart with optional stacking and gradient fill |
 | `HeatmapChart` | data, xLabels, yLabels, colorScale, showValues | Heatmap grid with configurable color scales |
 | `PieChart` | data, donut, showLabels, showLegend | Pie/donut chart with labels and legend |
-| `Sparkline` | data, width, height, color, showDot | Inline mini chart for trend indicators |
+| `Sparkline` | data, samples, min, max, width, height, color, label, fill, showDot, formatValue | Inline mini chart for trend indicators; accepts timestamped `samples`, a `min`/`max` domain clamp, inline `label` legend, and `fill` modes (none/solid/gradient) |
 | `Gauge` | value, min, max, label, thresholds, size | Radial gauge for metric visualization |
 | `TreeMap` | data, colorScale, showLabels, padding | Hierarchical treemap for proportional data display |
 | `GanttChart` | tasks, groups, dependencies, startDate, endDate, onTaskClick | SVG timeline with task bars, dependency arrows, and group rows |
@@ -687,14 +687,16 @@ Based on a 4px base grid:
 |-----------|-------|------------|
 | `MapView` | center, zoom, markers, tileUrl, maxZoom | Interactive map powered by Leaflet with CartoDB dark tiles, custom zoom/reset/locate controls, colored markers, and geolocation support |
 
-### 7.16 Cesium — 3D Globe (49 components)
+### 7.16 Cesium — 3D Globe (50 components)
 
-CesiumJS-backed 3D globe toolkit. **Headless and controlled** — consumers own all data via props and receive events via callbacks. Architecture: one `<CesiumGlobe>` viewer host shares the `Cesium.Viewer` via Svelte context (`useCesiumViewer`); every layer resolves it, mounts its primitives in an `$effect`, and cleans up on destroy. `cesium` is an **optional peer dependency**, lazy-imported per component (SSR-safe, never bundled). Requires consumer-side asset hosting — see `Overview/Cesium Integration` in Storybook and `documentation/CESIUM_ROADMAP.md`. Also exports utilities: `useCesiumViewer`, `provideCesiumViewer`, `createTerrainSampler`, `createScreenPicker`, `diffById`, `removeEntitiesById`, the GIBS catalog helpers, and `GOOGLE_PHOTOREALISTIC_ION_ASSET_ID`.
+CesiumJS-backed 3D globe toolkit. **Headless and controlled** — consumers own all data via props and receive events via callbacks. Architecture: one `<CesiumGlobe>` viewer host shares the `Cesium.Viewer` via Svelte context (`useCesiumViewer`); every layer resolves it, mounts its primitives in an `$effect`, and cleans up on destroy. `useCesiumViewer()` resolves contextually from any descendant of a `<CesiumGlobe>` (including snippet children), so two independent globes can coexist on one page. `cesium` is an **optional peer dependency**, lazy-imported per component (SSR-safe, never bundled). Requires consumer-side asset hosting — see `Overview/Cesium Integration` in Storybook and `documentation/CESIUM_ROADMAP.md`. Also exports utilities: `useCesiumViewer`, `provideCesiumViewer`, `createTerrainSampler`, `createScreenPicker`, `diffById`, `removeEntitiesById`, the GIBS catalog helpers, the `LabelMode` type, and `GOOGLE_PHOTOREALISTIC_ION_ASSET_ID`.
+
+Entity/billboard layers accept a uniform `opacity?: number` (0–1) driving billboard/point/label/trail alpha, and tracked-entity layers expose `labelMode?: "all" | "perEntity" | "selected" | "none"` (default `"selected"`; `alwaysShowLabels` kept as a deprecated alias). `TrackedEntitiesLayer` is the styling escape hatch for full per-entity control (colour / glyph / size / trail / conditional labels) — the convenience layers are thin mappers over it.
 
 | Group | Components |
 |-------|-----------|
 | **Engine** (3) | `CesiumGlobe` (viewer host; bindable camera, OSM fallback, picking), `Terrain` (ellipsoid/world/ion/url + exaggeration), `ImageryLayer` (osm/urlTemplate/wms/wmts/ion/bing/arcgis) |
-| **Tilesets & contours** (4) | `Cesium3DTiles` (generic tileset + per-feature hook), `OsmBuildingsLayer` (per-OSM-id tinting), `GooglePhotorealisticTiles` (ion asset 2275207 or Google API key), `ElevationContours` (terrain contour overlay + shaded ramp) |
+| **Tilesets, models & contours** (5) | `Cesium3DTiles` (generic tileset + per-feature hook), `OsmBuildingsLayer` (per-OSM-id tinting), `GooglePhotorealisticTiles` (ion asset 2275207 or Google API key), `ModelsLayer` (glTF 3D models), `ElevationContours` (terrain contour overlay + shaded ramp) |
 | **Vector** (8) | `GeoJsonLayer`, `KmlLayer`, `CzmlLayer`, `MarkersLayer` (draggable), `PolygonsLayer` (draw mode), `PolylinesLayer`, `LabelsLayer`, `PolygonHeatmapsLayer` |
 | **Live entities** (22) | `TrackedEntitiesLayer` (primitive) + `AircraftLayer`, `VesselsLayer`, `SatellitesLayer`, `EarthquakesLayer`, `WildfiresLayer`, `VolcanoesLayer`, `AirportsLayer`, `TowersLayer`, `CellSitesLayer`, `WebcamsLayer`, `PowerPlantsLayer`, `AirQualityLayer`, `TideGaugesLayer`, `GdacsLayer`, `TsunamiLayer`, `CyclonesLayer`, `AuroraLayer`, `SubmarineCablesLayer`, `FarmsLayer` (clustered), `CoverageLayer`, `UserLocationLayer` |
 | **Raster timelines** (2) | `WeatherTileLayer` (animated frames + crossfade), `NasaGibsLayer` (GIBS product catalog) |
@@ -762,7 +764,7 @@ Headless, controlled node-graph editor primitives (n8n / ComfyUI style). See `do
 ### 8.2 Package Publishing
 
 - **Registry:** GitHub Packages (`https://npm.pkg.github.com`)
-- **Scope:** `@cyberdyne`
+- **Scope:** `@cyberdynecorp`
 - **Access:** Restricted (private packages)
 - **Authentication:** GitHub PAT with `read:packages` scope
 - **Versioning:** Semantic versioning via Changesets
@@ -771,7 +773,7 @@ Headless, controlled node-graph editor primitives (n8n / ComfyUI style). See `do
 
 ```bash
 # .npmrc
-@cyberdyne:registry=https://npm.pkg.github.com
+@cyberdynecorp:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -942,7 +944,7 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | Package | Target (gzipped) | Notes |
 |---------|------------------|-------|
 | Foundation CSS | < 5KB | Tokens only, no components |
-| Core (full, excl. cesium) | < 180KB | All 243 components; `cesium` is a peer dep and is **not** counted — it is lazy-imported and never bundled |
+| Core (full, excl. cesium) | < 180KB | All 244 components; `cesium` is a peer dep and is **not** counted — it is lazy-imported and never bundled |
 | Core (tree-shaken) | < 15KB | Typical import of 5–10 components |
 
 ### 13.2 Runtime Performance
@@ -1013,7 +1015,7 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 |----------|------|------------|
 | ~~P1~~ | ~~Dark/Light theme toggle~~ | ~~Delivered — `ThemeToggle` + light-mode token remapping~~ |
 | ~~P1~~ | ~~MarkdownEditor package~~ | ~~Delivered in Editor category (regex-based parser, not Milkdown)~~ |
-| ~~P1~~ | ~~3D globe (Cesium) suite~~ | ~~Delivered — 49-component `cesium/` category (see CESIUM_ROADMAP.md)~~ |
+| ~~P1~~ | ~~3D globe (Cesium) suite~~ | ~~Delivered — 50-component `cesium/` category (see CESIUM_ROADMAP.md)~~ |
 | ~~P1~~ | ~~Node-graph editor~~ | ~~Delivered — 8-component `flow/` category (see NODE_EDITOR_ROADMAP.md)~~ |
 | ~~P1~~ | ~~Retro / CyberdyneOS desktop suite~~ | ~~Delivered — 36-component `retro/` category~~ |
 | P1 | Chromatic integration | Visual regression testing |
@@ -1032,7 +1034,7 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | ~~Data Viz~~ | ~~Delivered — 19 chart components + Cesium geospatial layers~~ |
 | ~~Advanced Forms~~ | ~~Delivered — DatePicker, TimePicker, ColorPicker, TagInput, ComboBox, ScheduleConfig~~ |
 | ~~Layout~~ | ~~Delivered — SplitView (resizable panels), GridLayout, VirtualizedList, FloatingPanel; Masonry grid still open~~ |
-| ~~Geospatial~~ | ~~Delivered — `cesium/` (49) + `maps/MapView` + `ElevationProfile` + `GlobeLoader`~~ |
+| ~~Geospatial~~ | ~~Delivered — `cesium/` (50) + `maps/MapView` + `ElevationProfile` + `GlobeLoader`~~ |
 
 ---
 

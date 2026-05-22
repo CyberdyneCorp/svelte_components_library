@@ -29,7 +29,7 @@
 
 ## 1. Context
 
-We want to be able to build node-graph editors (n8n / Blender shader editor / ComfyUI style) on top of `@cyberdyne/svelte-ui-core`. The driver is the **Parametric Insurance Editor** reference: a Svelte 5 application that wires Sentinel data sources → indices → conditions → payouts on a pannable / zoomable canvas with a draggable node palette and a tabbed inspector.
+We want to be able to build node-graph editors (n8n / Blender shader editor / ComfyUI style) on top of `@cyberdynecorp/svelte-ui-core`. The driver is the **Parametric Insurance Editor** reference: a Svelte 5 application that wires Sentinel data sources → indices → conditions → payouts on a pannable / zoomable canvas with a draggable node palette and a tabbed inspector.
 
 The reference is lean (~40 KB of runtime code across 8 components, driven by a single `$state` store plus a node-template registry). Most of the supporting chrome (toolbars, search, tabs, form inputs, toasts) is already covered by the existing library. The gap is a small set of **flow-editor primitives** that don't yet exist.
 
@@ -291,12 +291,14 @@ type FlowCanvasControlsProps = {
 
 The roadmap is "done" when, in Storybook:
 
-- [ ] `flow/Examples/ParametricEditor` reproduces the reference's 3-node DAG with palette + inspector + minimap + status bar.
-- [ ] User can: drag a palette item onto canvas → see a new node; drag a node by its header; drag from an `out` port to a compatible `in` port to create an edge; click an edge to delete it; pan with middle-click or empty-canvas-drag; zoom with `Ctrl/⌘ + wheel`; press `/` to focus filter; press `Delete` to remove selected node.
-- [ ] Validation: only compatible port types can connect; an `in` port accepts at most one source.
-- [ ] All 8 new components have isolated stories + Vitest test files.
-- [ ] No regressions in existing `GraphViewer` / `MindMap` / `Kanban` stories.
-- [ ] `pnpm build` produces the new exports in `@cyberdyne/svelte-ui-core/dist/`.
+- [x] `flow/Examples/ParametricEditor` reproduces the reference's 3-node DAG with palette + inspector + minimap + status bar.
+- [x] User can: drag a palette item onto canvas → see a new node; drag a node by its header; drag from an `out` port to a compatible `in` port to create an edge; click an edge to delete it; pan with middle-click or empty-canvas-drag; zoom with `Ctrl/⌘ + wheel`; press `/` to focus filter; press `Delete` to remove selected node.
+- [x] Validation: only compatible port types can connect; an `in` port accepts at most one source.
+- [x] All 8 new components have isolated stories + Vitest test files.
+- [x] No regressions in existing `GraphViewer` / `MindMap` / `Kanban` stories.
+- [x] `pnpm build` produces the new exports in `@cyberdynecorp/svelte-ui-core/dist/`.
+
+> **Status (delivered):** All 8 `flow/` components shipped under `packages/ui/core/src/lib/flow/` — `NodeEditor`, `FlowNode`, `FlowPort`, `FlowEdge`, `NodePalette`, `NodeInspector`, `FlowMinimap`, `FlowCanvasControls` — each with a story + Vitest test, plus the `ParametricEditor` example and helpers (`edgePath`, `portPos`, `DEFAULT_PORT_COLORS`).
 
 ---
 

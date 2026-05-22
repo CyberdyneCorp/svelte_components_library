@@ -693,7 +693,7 @@ The roadmap is "done" when, in Storybook:
 - [x] One end-to-end Playwright test loads `cesium/Examples/FullGlobe` and waits for `data-cesium-ready="true"` — guards against regressions to the viewer lifecycle, asset hosting, and context wiring.
 - [ ] Consumer migration guide for `geo_dashboard` showing how to replace `GlobeView` + `*Layer` files with library imports (proves the API is sufficient). *(Deferred — the FullGlobe example demonstrates the equivalent composition; a line-by-line migration guide is a follow-up.)*
 
-> **Status (all 8 build milestones A–H complete):** 45 components shipped under `packages/ui/core/src/lib/cesium/` — 1 viewer host, 3 imagery/terrain, 4 tilesets/contours, 8 vector, 2 raster-timeline, 22 live-entity, 4 particle/flow, 6 chrome — plus shared utilities (`viewerContext`, `sampler`, `reconcile`, `glyphs`, `gibs`) and the `FullGlobe` example. The viewer host attribute is `data-cesium-ready` (not `data-globe-ready` as originally drafted).
+> **Status (all 8 build milestones A–H complete):** 50 components shipped under `packages/ui/core/src/lib/cesium/` — 3 engine (viewer host + imagery + terrain), 5 tilesets/models/contours (incl. `ModelsLayer` glTF), 8 vector, 2 raster-timeline, 22 live-entity, 4 particle/flow, 6 chrome — plus shared utilities (`viewerContext`, `sampler`, `reconcile`, `glyphs`, `gibs`) and the `FullGlobe` example. The viewer host attribute is `data-cesium-ready` (not `data-globe-ready` as originally drafted). Post-roadmap (v0.6.0): entity/billboard layers gained a uniform `opacity` prop and tracked-entity layers gained `labelMode` (`alwaysShowLabels` is now a deprecated alias).
 
 ---
 

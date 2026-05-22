@@ -215,7 +215,7 @@ The keystone is `<CesiumGlobe>`, which creates the `Cesium.Viewer` and publishes
   <Terrain provider={{ kind: "world" }} />
   <OsmBuildingsLayer />
   <MarkersLayer {markers} draggable onmove={(id, ll) => updateMarker(id, ll)} />
-  <AircraftLayer {aircraft} alwaysShowLabels />
+  <AircraftLayer {aircraft} labelMode="all" />
   <CesiumControls home={{ lng: 0, lat: 20, heightM: 2e7 }} />
   <CesiumMinimap />
 </CesiumGlobe>
@@ -277,7 +277,7 @@ The convenience layers (`AircraftLayer`, `EarthquakesLayer`, …) bake in opinio
 
 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '1.5rem', fontSize: '0.85rem' }}>
   <div><strong>Engine</strong> — CesiumGlobe, Terrain, ImageryLayer, useCesiumViewer, createTerrainSampler, createScreenPicker</div>
-  <div><strong>3D / Tilesets</strong> — Cesium3DTiles, OsmBuildingsLayer, GooglePhotorealisticTiles, ElevationContours</div>
+  <div><strong>3D / Tilesets</strong> — Cesium3DTiles, OsmBuildingsLayer, GooglePhotorealisticTiles, ModelsLayer, ElevationContours</div>
   <div><strong>Vector</strong> — GeoJsonLayer, KmlLayer, CzmlLayer, MarkersLayer, PolygonsLayer, PolylinesLayer, LabelsLayer, PolygonHeatmapsLayer</div>
   <div><strong>Raster timelines</strong> — WeatherTileLayer, NasaGibsLayer</div>
   <div><strong>Live entities</strong> — TrackedEntitiesLayer, Aircraft, Vessels, Satellites, Earthquakes, Wildfires, Volcanoes, Airports, Towers, CellSites, Webcams, PowerPlants, AirQuality, TideGauges, Gdacs, Tsunami, Cyclones, Aurora, SubmarineCables, Farms, Coverage, UserLocation</div>
