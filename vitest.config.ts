@@ -17,13 +17,11 @@ export default defineConfig({
     conditions: ["browser"],
   },
   test: {
-    // Cesium fires async resource loads (imagery/terrain/data sources) that
-    // reject after a story's smoke test finishes and the viewer is torn
-    // down. In headless CI these surface as unhandled rejections (empty
-    // stacks) and fail the run even though every story renders. They're
-    // teardown noise, not test failures. The flag is checked against the
-    // root config when unhandled errors are aggregated across projects, so
-    // it must live here rather than on the storybook project.
+    // Belt-and-suspenders: Cesium can fire async resource loads that reject
+    // after a story's smoke test finishes and the viewer is torn down. The
+    // WebGL-null setup below keeps the globe off the live path in tests, but
+    // keep this so any residual teardown rejection can't fail the run. Must
+    // live on the root config — vitest treats it as a non-project option.
     dangerouslyIgnoreUnhandledErrors: true,
     coverage: {
       include: ["packages/ui/core/src/lib/**/*.{svelte,ts}"],
@@ -64,12 +62,15 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
-          // Cesium stories mount a WebGL globe. Headless CI has no GPU, so
-          // give it software WebGL (SwiftShader) — otherwise the Cesium
-          // Viewer fails to construct and the globe-mounting stories hang.
-          // Software rendering is slower than a real GPU, hence the raised
-          // timeout.
-          testTimeout: 30000,
+          // Cesium stories mount a WebGL globe. A headless CI browser has no
+          // real GPU and reports the "supports WebGL, but initialization
+          // failed" zombie state: `new Cesium.Viewer()` constructs without
+          // throwing, so CesiumGlobe flips `ready` true and renders its layer
+          // children against a half-dead context, which hangs the story past
+          // the timeout. The setup file forces WebGL to be cleanly absent so
+          // construction throws into CesiumGlobe's try/catch error overlay
+          // (children stay gated behind `ready`) — deterministic and fast.
+          setupFiles: ["./vitest.storybook-setup.ts"],
           browser: {
             enabled: true,
             headless: true,
@@ -77,15 +78,6 @@ export default defineConfig({
             instances: [
               {
                 browser: "chromium",
-                launch: {
-                  args: [
-                    "--use-gl=angle",
-                    "--use-angle=swiftshader",
-                    "--enable-unsafe-swiftshader",
-                    "--ignore-gpu-blocklist",
-                    "--enable-webgl",
-                  ],
-                },
               },
             ],
           },
