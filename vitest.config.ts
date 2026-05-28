@@ -56,6 +56,12 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
+          // Cesium stories mount a WebGL globe. Headless CI has no GPU, so
+          // give it software WebGL (SwiftShader) — otherwise the Cesium
+          // Viewer fails to construct and the globe-mounting stories hang.
+          // Software rendering is slower than a real GPU, hence the raised
+          // timeout.
+          testTimeout: 30000,
           browser: {
             enabled: true,
             headless: true,
@@ -63,6 +69,15 @@ export default defineConfig({
             instances: [
               {
                 browser: "chromium",
+                launch: {
+                  args: [
+                    "--use-gl=angle",
+                    "--use-angle=swiftshader",
+                    "--enable-unsafe-swiftshader",
+                    "--ignore-gpu-blocklist",
+                    "--enable-webgl",
+                  ],
+                },
               },
             ],
           },
