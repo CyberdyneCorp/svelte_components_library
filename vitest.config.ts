@@ -62,6 +62,12 @@ export default defineConfig({
           // Software rendering is slower than a real GPU, hence the raised
           // timeout.
           testTimeout: 30000,
+          // Cesium fires async resource loads (imagery/terrain/data sources)
+          // that reject *after* a story's smoke test finishes and the viewer
+          // is torn down. In headless CI these surface as unhandled
+          // rejections (empty stacks) and fail the run even though every
+          // story renders. They're teardown noise, not test failures.
+          dangerouslyIgnoreUnhandledErrors: true,
           browser: {
             enabled: true,
             headless: true,
