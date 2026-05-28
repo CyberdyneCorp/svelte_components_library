@@ -1,4 +1,4 @@
-<script module>
+<script module lang="ts">
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import NodeEditor from "./NodeEditor.svelte";
   import type { FlowEdgeSpec, FlowNodeSpec } from "../types.js";
