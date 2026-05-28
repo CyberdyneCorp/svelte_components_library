@@ -311,6 +311,12 @@ export type {
 // Retro (CyberdyneOS desktop aesthetic)
 export { RetroWindow } from "./retro/RetroWindow/index.js";
 export { StartMenu, type StartMenuItem } from "./retro/StartMenu/index.js";
+export {
+  LauncherMenu,
+  type LauncherMenuEntry,
+  type LauncherMenuSection,
+  type LauncherMenuAccountContext,
+} from "./retro/LauncherMenu/index.js";
 export { Taskbar, type TaskbarItem } from "./retro/Taskbar/index.js";
 export { DesktopIcon } from "./retro/DesktopIcon/index.js";
 export { DesktopGrid } from "./retro/DesktopGrid/index.js";
