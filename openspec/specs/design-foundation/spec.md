@@ -3,12 +3,10 @@
 ## Purpose
 
 The `@cyberdynecorp/svelte-ui-foundation` package provides the design system's tokens: colors, typography, spacing, radius, and animations. It follows a three-layer CSS custom-property architecture (primitives -> semantic -> component) so that all components consume tokens rather than literal values, and theming is achieved entirely at the token layer. The system is dark-first with an opt-in light theme. A TypeScript token object mirrors a subset of the CSS tokens for programmatic use.
-
 ## Requirements
-
 ### Requirement: Three-layer token architecture
 
-The system SHALL define color tokens in three layers within a single `:root` block: Layer 1 primitives (raw hex values named `--primitive-{family}-{step}`), Layer 2 semantic tokens (named `--color-{category}-{role}`, each resolving to a `var(--primitive-*)` or `rgba()`), and Layer 3 component tokens (named `--{component}-{property}`, each resolving to a Layer 2 `var(--color-*)` token, except the two enumerated `--btn-danger-*` tokens that reference primitives directly). (src: packages/ui/foundation/src/lib/styles/colors.css:1-176)
+The system SHALL define color tokens in three layers within a single `:root` block: Layer 1 primitives (raw hex values named `--primitive-{family}-{step}`), Layer 2 semantic tokens (named `--color-{category}-{role}`, each resolving to a `var(--primitive-*)` or `rgba()`), and Layer 3 component tokens (named `--{component}-{property}`, each resolving to a Layer 2 `var(--color-*)` token, except the theme-invariant `--video-*` tokens, which are literal values because media surfaces stay black in every theme). (src: packages/ui/foundation/src/lib/styles/colors.css)
 
 #### Scenario: Semantic token resolves to a primitive
 
@@ -83,3 +81,20 @@ The system SHALL export from `tokens.ts` the token objects `breakpoints`, `grid`
 
 - **WHEN** the `colors` object is imported from `tokens.ts`
 - **THEN** the system SHALL expose primitive families (neonGreen, cyan, violet, red, amber, grey) and SHALL NOT expose semantic `--color-*` or component tokens
+
+### Requirement: Complete token surface for core
+
+The system SHALL define, in both the default (dark) and `[data-theme="light"]` blocks, every token in a foundation-owned namespace that `@cyberdynecorp/svelte-ui-core` references. The namespaces are the prefixes foundation itself defines: `--color-`, `--primitive-`, `--shadow-`, `--font-`, `--space-`, `--radius-`, `--transition-`, `--btn-`, `--input-`, `--card-`, `--table-`, `--nav-` and `--video-`. This includes the action tint tokens `--color-action-{brand,secondary}-{bg,border}`, the danger action family `--color-action-danger-{default,hover,active,text}`, the decorative accents `--color-accent-{green,cyan,violet}`, `--color-syntax-number`, `--shadow-glow-red`, and `--nav-height`. `--btn-danger-*` SHALL alias `--color-action-danger-*`. (src: packages/ui/foundation/src/lib/styles/colors.css; packages/ui/core/src/lib/token-coverage.test.ts)
+
+#### Scenario: Undefined token is rejected
+
+- **GIVEN** a core component that references `var(--color-surface-base)`, which foundation does not define
+- **WHEN** the unit test suite runs
+- **THEN** `token-coverage.test.ts` SHALL fail and name the token and the file that references it
+
+#### Scenario: Danger action token themed in light mode
+
+- **GIVEN** an element inside `[data-theme="light"]`
+- **WHEN** `--color-action-danger-default` is resolved
+- **THEN** the system SHALL resolve it to `var(--primitive-red-30)`, with `--color-action-danger-text` resolving to `#ffffff`
+

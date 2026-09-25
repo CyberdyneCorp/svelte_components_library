@@ -3,9 +3,7 @@
 ## Purpose
 
 The `@cyberdynecorp/svelte-ui-core` package provides the general-purpose UI component families (primitives, forms, feedback, navigation, data display, layout, overlay, auth, chat, crypto, ml, graph, maps, editor). All components are authored in Svelte 5 runes mode, follow a uniform folder/authoring convention, consume design tokens for all styling, and apply consistent accessibility patterns. This spec captures the shared conventions plus representative component contracts.
-
 ## Requirements
-
 ### Requirement: Svelte 5 runes authoring convention
 
 The system SHALL author every component in Svelte 5 runes mode (`<svelte:options runes={true} />`), declaring props via `$props()`, local state via `$state()`, two-way bindable props via `$bindable()`, derived values via `$derived`/`$derived.by`, and slotted content via Svelte `Snippet` + `{@render children()}`. Each component SHALL live in its own directory containing `Component.svelte`, an `index.ts` re-export, a `Component.stories.svelte`, and a `Component.test.ts`. (src: packages/ui/core/src/lib/primitives/Button/Button.svelte:1,4,6-40; packages/ui/core/src/lib/forms/TextInput/TextInput.svelte:1,5; packages/ui/core/src/lib/primitives/Button/index.ts:1)
@@ -95,3 +93,71 @@ The system SHALL provide a `LoginPage` with a `mode` prop `"credentials" | "wall
 - **GIVEN** a `WalletConnect` with a connection started for one wallet
 - **WHEN** the user views the other options
 - **THEN** the system SHALL disable the other wallet buttons and show a spinner on the active one
+
+### Requirement: Labelable navigation landmarks
+
+The system SHALL let consumers name the `<nav>` landmark rendered by `Sidebar` and `BottomNav` through an optional `ariaLabel` prop. `Sidebar` SHALL render no `aria-label` when the prop is omitted. `BottomNav` SHALL default to `"Bottom navigation"`. Pages with several navigation regions can then give each landmark a distinct, translated name. (src: packages/ui/core/src/lib/navigation/Sidebar/Sidebar.svelte; packages/ui/core/src/lib/navigation/BottomNav/BottomNav.svelte)
+
+#### Scenario: Custom landmark name
+
+- **GIVEN** `<Sidebar ariaLabel="Main navigation" />`
+- **WHEN** it renders
+- **THEN** the system SHALL expose a navigation landmark named "Main navigation"
+
+#### Scenario: Translated bottom navigation
+
+- **GIVEN** `<BottomNav ariaLabel="Navegação inferior" />`
+- **WHEN** it renders
+- **THEN** the navigation landmark SHALL be named "Navegação inferior" instead of the English default
+
+### Requirement: MoneyInput contract
+
+The system SHALL provide a `MoneyInput` form component. It SHALL:
+
+- Take a bindable `value` of type `string | null`, where `null` means empty. When set, the value SHALL always be a canonical decimal string with exactly the currency's minor-unit fraction digits (`"1234.56"`, `"-5.00"`, `"1500"` for JPY). The component SHALL never convert an amount to a JS `number`.
+- Take a required ISO 4217 `currency`, plus optional `locale`, decimal-string `min`/`max`, `label`, `error`, `hint`, `name`, `disabled`, `required`, `id`, `allowNegative` (default `false`) and `onchange(value)`.
+- Derive minor units from `Intl.NumberFormat(locale, { style: "currency", currency }).resolvedOptions().maximumFractionDigits`.
+- Render a `type="text"` input with `inputmode="decimal"`.
+- Format with Intl currency style while unfocused, and show the plain number with the locale's decimal mark while focused.
+- Clamp to `min`/`max` on blur.
+- When `name` is set, render a hidden input carrying the canonical value.
+
+(src: packages/ui/core/src/lib/forms/MoneyInput/MoneyInput.svelte; packages/ui/core/src/lib/forms/MoneyInput/money.ts)
+
+#### Scenario: Round-trip precision
+
+- **GIVEN** a `MoneyInput` with `currency="USD"`
+- **WHEN** the user types `12345678901234.56` and the field blurs
+- **THEN** the system SHALL emit the value `"12345678901234.56"` exactly
+- **AND** the field SHALL display `$12,345,678,901,234.56`
+
+#### Scenario: Separator parsing
+
+- **GIVEN** a currency with 2 minor units
+- **WHEN** the user types `1.234,56`, `1,234.56`, `12,5` or `1,234`
+- **THEN** the system SHALL treat the last `.` or `,` as the decimal separator only when at most 2 digits follow it, and SHALL drop every other separator as grouping
+- **AND** it SHALL emit `"1234.56"`, `"1234.56"`, `"12.50"` and `"1234.00"` respectively
+
+#### Scenario: Blur formatting
+
+- **GIVEN** a `MoneyInput` with `currency="EUR"`, `locale="de-DE"` and `value="1234.56"`
+- **WHEN** the field is unfocused
+- **THEN** it SHALL display `1.234,56 €`
+- **WHEN** the field receives focus
+- **THEN** it SHALL display the editable text `1234,56`
+
+#### Scenario: Minor-unit limit
+
+- **GIVEN** a `MoneyInput` with `currency="JPY"` (0 minor units)
+- **WHEN** the user types `1.500`
+- **THEN** the system SHALL treat the separator as grouping and emit `"1500"`
+- **AND** characters other than digits, `.`, `,` and (only with `allowNegative`) a leading `-` SHALL be removed from the field while typing
+
+#### Scenario: Accessible error
+
+- **GIVEN** a `MoneyInput` with a `label`, a `hint` and an `error`
+- **WHEN** it renders
+- **THEN** the label SHALL be tied to the input via `for`/`id`
+- **AND** the input SHALL set `aria-invalid="true"` and an `aria-describedby` that references both the hint id and the error id
+- **AND** the error text SHALL be rendered with `role="alert"`
+
