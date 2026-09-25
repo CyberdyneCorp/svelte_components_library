@@ -27,6 +27,19 @@ export { DateRangePicker } from "./forms/DateRangePicker/index.js";
 export { MultiSelect } from "./forms/MultiSelect/index.js";
 export { TagInput } from "./forms/TagInput/index.js";
 export { NumberInput } from "./forms/NumberInput/index.js";
+export {
+  MoneyInput,
+  clampMoney,
+  compareMoney,
+  currencyMinorUnits,
+  formatMoney,
+  fromMinorUnits,
+  parseMoneyInput,
+  sanitizeMoneyTyping,
+  toEditableMoney,
+  toMinorUnits,
+  type FormatMoneyOptions,
+} from "./forms/MoneyInput/index.js";
 export { ComboBox } from "./forms/ComboBox/index.js";
 export { RangeSlider } from "./forms/RangeSlider/index.js";
 export { CodeEditor } from "./forms/CodeEditor/index.js";
