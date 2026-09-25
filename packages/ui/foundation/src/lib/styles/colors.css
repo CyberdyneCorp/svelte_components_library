@@ -98,18 +98,36 @@
   --color-action-brand-hover: var(--primitive-green-20);
   --color-action-brand-active: var(--primitive-green-30);
   --color-action-brand-text: var(--primitive-grey-5);
+  --color-action-brand-bg: rgba(0, 255, 65, 0.12);
+  --color-action-brand-border: rgba(0, 255, 65, 0.4);
 
   /* Actions — Secondary (Cyan) */
   --color-action-secondary-default: var(--primitive-cyan-10);
   --color-action-secondary-hover: var(--primitive-cyan-20);
   --color-action-secondary-active: var(--primitive-cyan-30);
   --color-action-secondary-text: var(--primitive-grey-5);
+  --color-action-secondary-bg: rgba(0, 212, 255, 0.12);
+  --color-action-secondary-border: rgba(0, 212, 255, 0.4);
 
   /* Actions — Tertiary (Violet) */
   --color-action-tertiary-default: var(--primitive-violet-10);
   --color-action-tertiary-hover: var(--primitive-violet-20);
   --color-action-tertiary-active: var(--primitive-violet-30);
   --color-action-tertiary-text: var(--primitive-grey-110);
+
+  /* Actions — Danger (Red) */
+  --color-action-danger-default: var(--primitive-red-10);
+  --color-action-danger-hover: var(--primitive-red-20);
+  --color-action-danger-active: var(--primitive-red-30);
+  --color-action-danger-text: var(--primitive-grey-110);
+
+  /* Accents — decorative, non-semantic (depth markers, tags) */
+  --color-accent-green: var(--primitive-green-10);
+  --color-accent-cyan: var(--primitive-cyan-10);
+  --color-accent-violet: var(--primitive-violet-10);
+
+  /* Syntax highlighting */
+  --color-syntax-number: var(--primitive-violet-10);
 
   /* State */
   --color-state-success: var(--primitive-green-10);
@@ -128,6 +146,7 @@
   --shadow-glow-green: 0 0 12px rgba(0, 255, 65, 0.3);
   --shadow-glow-cyan: 0 0 12px rgba(0, 212, 255, 0.3);
   --shadow-glow-violet: 0 0 12px rgba(168, 85, 247, 0.3);
+  --shadow-glow-red: 0 0 12px rgba(255, 68, 68, 0.3);
 
   /* ── Layer 3: Component Tokens ── */
 
@@ -140,9 +159,9 @@
   --btn-secondary-bg-hover: var(--color-surface-hover);
   --btn-secondary-text: var(--color-text-primary);
   --btn-secondary-border: var(--color-border-default);
-  --btn-danger-bg: var(--color-state-error);
-  --btn-danger-bg-hover: var(--primitive-red-20);
-  --btn-danger-text: var(--primitive-grey-110);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
   --btn-ghost-text: var(--color-text-secondary);
   --btn-ghost-text-hover: var(--color-text-primary);
   --btn-ghost-bg-hover: var(--color-surface-hover);
@@ -174,6 +193,12 @@
   --nav-item-active: var(--color-surface-active);
   --nav-item-text: var(--color-text-secondary);
   --nav-item-text-active: var(--color-action-brand-default);
+  --nav-height: 56px;
+
+  /* Video — media surfaces stay black in every theme */
+  --video-bg: #000;
+  --video-scrim: rgba(0, 0, 0, 0.85);
+  --video-control-text: #fff;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -219,16 +244,31 @@
   --color-action-brand-hover: var(--primitive-green-50);
   --color-action-brand-active: var(--primitive-green-60);
   --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: rgba(0, 179, 45, 0.1);
+  --color-action-brand-border: rgba(0, 179, 45, 0.4);
 
   --color-action-secondary-default: var(--primitive-cyan-40);
   --color-action-secondary-hover: var(--primitive-cyan-50);
   --color-action-secondary-active: var(--primitive-cyan-60);
   --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: rgba(0, 149, 179, 0.1);
+  --color-action-secondary-border: rgba(0, 149, 179, 0.4);
 
   --color-action-tertiary-default: var(--primitive-violet-20);
   --color-action-tertiary-hover: var(--primitive-violet-30);
   --color-action-tertiary-active: var(--primitive-violet-40);
   --color-action-tertiary-text: #ffffff;
+
+  --color-action-danger-default: var(--primitive-red-30);
+  --color-action-danger-hover: var(--primitive-red-40);
+  --color-action-danger-active: var(--primitive-red-50);
+  --color-action-danger-text: #ffffff;
+
+  --color-accent-green: var(--primitive-green-50);
+  --color-accent-cyan: var(--primitive-cyan-40);
+  --color-accent-violet: var(--primitive-violet-20);
+
+  --color-syntax-number: var(--primitive-violet-30);
 
   /* State — darker variants for light background */
   --color-state-success: var(--primitive-green-50);
@@ -247,6 +287,7 @@
   --shadow-glow-green: 0 0 8px rgba(0, 179, 45, 0.2);
   --shadow-glow-cyan: 0 0 8px rgba(0, 149, 179, 0.2);
   --shadow-glow-violet: 0 0 8px rgba(126, 34, 206, 0.2);
+  --shadow-glow-red: 0 0 8px rgba(204, 46, 46, 0.2);
 
   /* ── Layer 3: Component Tokens (light overrides) ── */
 
@@ -259,9 +300,9 @@
   --btn-secondary-bg-hover: #f0f0f5;
   --btn-secondary-text: var(--color-text-primary);
   --btn-secondary-border: var(--color-border-default);
-  --btn-danger-bg: var(--color-state-error);
-  --btn-danger-bg-hover: var(--primitive-red-40);
-  --btn-danger-text: #ffffff;
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
   --btn-ghost-text: var(--color-text-secondary);
   --btn-ghost-text-hover: var(--color-text-primary);
   --btn-ghost-bg-hover: var(--color-surface-hover);

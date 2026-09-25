@@ -79,7 +79,7 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     background: var(--color-surface-raised);
     color: var(--color-action-brand-default);
     flex-shrink: 0;

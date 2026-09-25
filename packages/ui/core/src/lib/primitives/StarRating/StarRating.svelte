@@ -168,7 +168,7 @@
   }
 
   .cy-star-rating__label {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: var(--font-weight-medium);
     color: var(--color-text-primary);

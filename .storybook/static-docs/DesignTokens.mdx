@@ -56,7 +56,16 @@ Layer 3: Component      →  Scoped to components (button bg, input border)
 --color-state-warning   /* Amber */
 --color-state-error     /* Red */
 --color-state-info      /* Cyan */
+
+/* Actions */
+--color-action-{brand,secondary,tertiary,danger}-{default,hover,active,text}
+--color-action-{brand,secondary}-{bg,border}   /* Subtle tint + outline */
+
+/* Accents (decorative, non-semantic) */
+--color-accent-green / -cyan / -violet
 ```
+
+Every foundation-namespaced token a core component references must be defined here. `token-coverage.test.ts` fails the test suite on an undefined `var(--color-…)`, `var(--font-…)`, and so on.
 
 ## Typography
 
@@ -118,6 +127,7 @@ Based on a 4px grid:
 | `--shadow-glow-green` | Brand glow effect |
 | `--shadow-glow-cyan` | Focus/data glow |
 | `--shadow-glow-violet` | Research accent glow |
+| `--shadow-glow-red` | Error focus glow |
 
 ## Animations
 

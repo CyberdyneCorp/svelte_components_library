@@ -143,7 +143,7 @@
   .cy-tx-confirm__overlay {
     position: fixed;
     inset: 0;
-    background: var(--color-overlay, rgba(0, 0, 0, 0.6));
+    background: var(--color-bg-overlay);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -166,7 +166,7 @@
   .cy-tx-confirm__icon {
     width: 56px;
     height: 56px;
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -328,7 +328,7 @@
 
   .cy-tx-confirm__btn--confirm {
     background: var(--color-action-brand-default);
-    color: var(--color-text-on-brand);
+    color: var(--color-action-brand-text);
   }
 
   .cy-tx-confirm__btn--confirm:hover {

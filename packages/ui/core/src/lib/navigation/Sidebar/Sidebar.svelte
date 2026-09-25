@@ -15,10 +15,13 @@
     items = [],
     activeId = "",
     collapsed = false,
+    /** Accessible name for the `<nav>` landmark; required when a page has more than one nav. */
+    ariaLabel,
   }: {
     items?: SidebarItem[];
     activeId?: string;
     collapsed?: boolean;
+    ariaLabel?: string;
   } = $props();
 
   let expandedIds = $state<Set<string>>(new Set());
@@ -43,7 +46,7 @@
   }
 </script>
 
-<nav class="cy-sidebar" class:cy-sidebar--collapsed={collapsed}>
+<nav class="cy-sidebar" class:cy-sidebar--collapsed={collapsed} aria-label={ariaLabel}>
   <ul class="cy-sidebar__list">
     {#each items as item}
       <li class="cy-sidebar__item">

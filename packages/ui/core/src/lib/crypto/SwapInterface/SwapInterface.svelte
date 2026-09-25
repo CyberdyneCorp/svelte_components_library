@@ -261,7 +261,7 @@
     align-self: center;
     width: 36px;
     height: 36px;
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     border: 1px solid var(--color-border-default);
     background: var(--color-surface-default);
     color: var(--color-text-secondary);
@@ -317,7 +317,7 @@
     border: none;
     border-radius: var(--radius-md, 8px);
     background: var(--color-action-brand-default);
-    color: var(--color-text-on-brand);
+    color: var(--color-action-brand-text);
     font-size: 1rem;
     font-weight: var(--font-weight-bold, 700);
     cursor: pointer;
@@ -343,7 +343,7 @@
     height: 16px;
     border: 2px solid transparent;
     border-top-color: currentColor;
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     animation: cy-swap-spin 0.6s linear infinite;
   }
 

@@ -217,7 +217,7 @@
     justify-content: center;
     flex-shrink: 0;
     width: 20px;
-    color: var(--color-text-muted);
+    color: var(--color-text-tertiary);
     cursor: grab;
     transition: color var(--transition-default);
   }

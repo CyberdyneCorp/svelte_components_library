@@ -178,7 +178,7 @@
 
 <style>
   .cy-navbar {
-    background: var(--nav-bg, var(--color-surface-base));
+    background: var(--nav-bg);
     border-bottom: 1px solid var(--color-border-subtle);
     font-family: var(--font-body);
     z-index: 1000;
@@ -296,7 +296,7 @@
     top: 100%;
     left: 0;
     min-width: 240px;
-    background: var(--color-surface-raised, var(--color-surface-base));
+    background: var(--color-surface-raised, var(--color-surface-default));
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
     padding: var(--space-2);
@@ -362,7 +362,7 @@
       top: 56px;
       left: 0;
       right: 0;
-      background: var(--nav-bg, var(--color-surface-base));
+      background: var(--nav-bg);
       border-bottom: 1px solid var(--color-border-subtle);
       flex-direction: column;
       align-items: stretch;

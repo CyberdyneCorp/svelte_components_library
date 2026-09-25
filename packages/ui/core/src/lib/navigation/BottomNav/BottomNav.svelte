@@ -12,10 +12,13 @@
     items = [],
     activeId = $bindable(""),
     onchange,
+    /** Accessible name for the `<nav>` landmark; pass a translated string for non-English UIs. */
+    ariaLabel = "Bottom navigation",
   }: {
     items?: BottomNavItem[];
     activeId?: string;
     onchange?: (id: string) => void;
+    ariaLabel?: string;
   } = $props();
 
   function selectItem(id: string) {
@@ -24,7 +27,7 @@
   }
 </script>
 
-<nav class="cy-bottomnav" aria-label="Bottom navigation">
+<nav class="cy-bottomnav" aria-label={ariaLabel}>
   {#each items as item}
     <button
       class="cy-bottomnav__item"
@@ -54,7 +57,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--color-surface-base);
+    background: var(--color-surface-default);
     border-top: 1px solid var(--color-border-subtle);
     font-family: var(--font-body);
     padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -107,8 +110,8 @@
     min-width: 16px;
     height: 16px;
     padding: 0 4px;
-    background: var(--color-status-error, var(--color-action-danger-default));
-    color: var(--color-text-on-emphasis, var(--color-text-primary));
+    background: var(--color-action-danger-default);
+    color: var(--color-action-danger-text);
     font-size: 0.625rem;
     font-weight: var(--font-weight-bold, 700);
     border-radius: 999px;

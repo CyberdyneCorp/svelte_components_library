@@ -51,7 +51,7 @@
 
   .cy-welcome__title {
     margin: 0;
-    font-family: var(--font-heading, var(--font-body));
+    font-family: var(--font-display);
     font-size: 1.75rem;
     font-weight: 600;
     color: var(--color-text-primary);

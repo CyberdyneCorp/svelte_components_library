@@ -38,7 +38,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: var(--nav-height, 56px);
+    height: var(--nav-height);
     padding: 0 var(--space-4);
     background: var(--color-bg-primary);
     border-bottom: 1px solid var(--color-border-subtle);
@@ -58,7 +58,7 @@
 
   .cy-header__title {
     margin: 0;
-    font-family: var(--font-heading, var(--font-body));
+    font-family: var(--font-display);
     font-size: 1rem;
     font-weight: 600;
     color: var(--color-text-primary);

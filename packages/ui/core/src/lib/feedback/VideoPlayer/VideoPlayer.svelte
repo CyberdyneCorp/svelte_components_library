@@ -341,7 +341,7 @@
 <style>
   .cy-video {
     position: relative;
-    background: var(--color-surface-inset, #000);
+    background: var(--video-bg);
     border-radius: var(--radius-md, 8px);
     overflow: hidden;
     display: flex;
@@ -381,7 +381,7 @@
     height: 48px;
     border: 4px solid var(--color-border-default);
     border-top-color: var(--color-action-brand-default);
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     animation: cy-video-spin 0.8s linear infinite;
   }
 
@@ -398,7 +398,7 @@
     justify-content: center;
     background: transparent;
     border: none;
-    color: var(--color-text-on-brand);
+    color: var(--video-control-text);
     cursor: pointer;
     z-index: 3;
     opacity: 0.85;
@@ -438,7 +438,7 @@
     left: 0;
     right: 0;
     height: 120px;
-    background: linear-gradient(transparent, var(--color-surface-inset, rgba(0, 0, 0, 0.85)));
+    background: linear-gradient(transparent, var(--video-scrim));
     pointer-events: none;
   }
 
@@ -511,7 +511,7 @@
     border: none;
     border-radius: var(--radius-sm, 4px);
     background: transparent;
-    color: var(--color-text-on-brand);
+    color: var(--video-control-text);
     cursor: pointer;
     transition: background var(--transition-default, 0.15s ease);
   }
@@ -531,7 +531,7 @@
   .cy-video__time {
     font-family: var(--font-mono, monospace);
     font-size: 0.75rem;
-    color: var(--color-text-on-brand);
+    color: var(--video-control-text);
     white-space: nowrap;
     user-select: none;
   }
@@ -558,8 +558,8 @@
     -webkit-appearance: none;
     width: 12px;
     height: 12px;
-    border-radius: var(--radius-full, 50%);
-    background: var(--color-text-on-brand);
+    border-radius: var(--radius-pill);
+    background: var(--video-control-text);
     cursor: pointer;
   }
 
@@ -567,8 +567,8 @@
     width: 12px;
     height: 12px;
     border: none;
-    border-radius: var(--radius-full, 50%);
-    background: var(--color-text-on-brand);
+    border-radius: var(--radius-pill);
+    background: var(--video-control-text);
     cursor: pointer;
   }
 

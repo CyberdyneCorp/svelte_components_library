@@ -36,4 +36,14 @@ describe("Sidebar", () => {
     const { container } = render(Sidebar, { props: { items, collapsed: true } });
     expect(container.querySelector(".cy-sidebar--collapsed")).toBeInTheDocument();
   });
+
+  it("leaves the nav unlabelled by default", () => {
+    render(Sidebar, { props: { items } });
+    expect(screen.getByRole("navigation")).not.toHaveAttribute("aria-label");
+  });
+
+  it("labels the nav landmark with ariaLabel", () => {
+    render(Sidebar, { props: { items, ariaLabel: "Main navigation" } });
+    expect(screen.getByRole("navigation", { name: "Main navigation" })).toBeInTheDocument();
+  });
 });

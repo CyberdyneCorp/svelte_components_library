@@ -41,7 +41,7 @@
   {#snippet children(args)}
     <NavBar {...args}>
       {#snippet actions()}
-        <button style="padding: 6px 16px; background: var(--color-action-brand-default, #00ff88); color: var(--color-surface-base, #000); border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.875rem;">
+        <button style="padding: 6px 16px; background: var(--color-action-brand-default, #00ff88); color: var(--color-surface-default, #000); border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.875rem;">
           Connect Wallet
         </button>
       {/snippet}

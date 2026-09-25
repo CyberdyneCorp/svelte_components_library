@@ -163,10 +163,10 @@
     text-align: left;
   }
   .cy-cesium-baselayer__option:hover {
-    background: var(--color-action-secondary-bg, rgba(0, 212, 255, 0.12));
+    background: var(--color-action-secondary-bg);
   }
   .cy-cesium-baselayer__option--active {
-    background: var(--color-action-brand-bg, rgba(0, 255, 65, 0.12));
+    background: var(--color-action-brand-bg);
     color: var(--color-action-brand-default, #00ff41);
   }
 </style>

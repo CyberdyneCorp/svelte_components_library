@@ -328,7 +328,7 @@
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 0.8125rem;
     font-weight: var(--font-weight-medium);
     color: var(--color-text-secondary);
@@ -342,20 +342,20 @@
 
   .cy-filter-bar__chip:hover {
     background: var(--color-surface-hover);
-    border-color: var(--color-border-emphasis);
+    border-color: var(--color-border-strong);
     color: var(--color-text-primary);
   }
 
   .cy-filter-bar__chip--active {
     background: var(--color-action-brand-default);
     border-color: var(--color-action-brand-default);
-    color: var(--color-text-on-brand);
+    color: var(--color-action-brand-text);
   }
 
   .cy-filter-bar__chip--active:hover {
     background: var(--color-action-brand-hover);
     border-color: var(--color-action-brand-hover);
-    color: var(--color-text-on-brand);
+    color: var(--color-action-brand-text);
   }
 
   .cy-filter-bar__chip-label {
@@ -363,7 +363,7 @@
   }
 
   .cy-filter-bar__chip-value {
-    font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-regular);
   }
 
   .cy-filter-bar__chip-remove {
@@ -376,7 +376,7 @@
     margin: 0;
     background: none;
     border: none;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pill);
     color: currentColor;
     cursor: pointer;
     opacity: 0.7;
@@ -412,7 +412,7 @@
     gap: var(--space-2);
     width: 100%;
     padding: var(--space-2) var(--space-3);
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 0.8125rem;
     color: var(--color-text-primary);
     background: none;
@@ -452,7 +452,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 0.75rem;
     color: var(--color-text-secondary);
   }
@@ -480,21 +480,21 @@
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-sm);
     color: var(--color-text-primary);
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 0.8125rem;
   }
 
   .cy-filter-bar__text-input input::placeholder {
-    color: var(--color-text-muted);
+    color: var(--color-text-tertiary);
   }
 
   .cy-filter-bar__apply-btn {
     padding: var(--space-2) var(--space-3);
     background: var(--color-action-brand-default);
-    color: var(--color-text-on-brand);
+    color: var(--color-action-brand-text);
     border: none;
     border-radius: var(--radius-sm);
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 0.75rem;
     font-weight: var(--font-weight-medium);
     cursor: pointer;
@@ -510,7 +510,7 @@
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 0.8125rem;
     font-weight: var(--font-weight-medium);
     color: var(--color-state-error);
@@ -535,9 +535,9 @@
     padding: 0 var(--space-1);
     font-size: 0.6875rem;
     font-family: var(--font-mono);
-    background: var(--color-state-error);
-    color: var(--color-text-on-brand);
-    border-radius: var(--radius-full);
+    background: var(--color-action-danger-default);
+    color: var(--color-action-danger-text);
+    border-radius: var(--radius-pill);
   }
 
   /* Compact mode */
