@@ -219,6 +219,9 @@ pnpm build
 # Lint & type check
 pnpm check
 
+# Verify the core tarball ships no tests/stories (after pnpm build)
+pnpm check:package
+
 # Format
 pnpm format
 ```
