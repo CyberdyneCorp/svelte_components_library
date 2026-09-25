@@ -41,3 +41,5 @@
 <Story name="Collapsed" args={{ collapsed: true, activeId: "dashboard", items: defaultSidebarItems }} />
 
 <Story name="WithSubItems" args={{ activeId: "train", items: subItemsSidebarItems }} />
+
+<Story name="Labelled" args={{ ariaLabel: "Main navigation", activeId: "dashboard", items: defaultSidebarItems }} />

@@ -51,7 +51,7 @@
   .cy-network-badge__dot {
     width: 8px;
     height: 8px;
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     background: var(--color-text-tertiary);
     flex-shrink: 0;
   }

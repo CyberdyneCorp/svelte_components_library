@@ -154,7 +154,7 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     padding: 2px 8px;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pill);
     white-space: nowrap;
     flex-shrink: 0;
   }

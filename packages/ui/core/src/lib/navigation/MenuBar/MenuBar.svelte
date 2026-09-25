@@ -176,7 +176,7 @@
   .cy-menubar {
     display: flex;
     align-items: center;
-    background: var(--color-surface-base);
+    background: var(--color-surface-default);
     border-bottom: 1px solid var(--color-border-subtle);
     font-family: var(--font-body);
     padding: 0 var(--space-2);
@@ -210,7 +210,7 @@
     top: 100%;
     left: 0;
     min-width: 220px;
-    background: var(--color-surface-raised, var(--color-surface-base));
+    background: var(--color-surface-raised, var(--color-surface-default));
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     padding: var(--space-1);
@@ -280,7 +280,7 @@
     left: 100%;
     top: 0;
     min-width: 200px;
-    background: var(--color-surface-raised, var(--color-surface-base));
+    background: var(--color-surface-raised, var(--color-surface-default));
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     padding: var(--space-1);

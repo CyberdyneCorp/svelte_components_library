@@ -29,7 +29,7 @@
     p === "Critical" ? "var(--color-state-error)" :
     p === "High" ? "var(--color-state-warning)" :
     p === "Medium" ? "var(--color-state-info)" :
-    "var(--color-text-muted)";
+    "var(--color-text-tertiary)";
 </script>
 
 <Story name="Default">

@@ -64,7 +64,7 @@
 
 <style>
   .cy-chart {
-    background: var(--color-surface-elevated);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
     overflow: hidden;

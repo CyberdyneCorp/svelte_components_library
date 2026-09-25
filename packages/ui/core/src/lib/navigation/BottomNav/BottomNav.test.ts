@@ -38,4 +38,9 @@ describe("BottomNav", () => {
     await fireEvent.click(screen.getByText("Search"));
     expect(onchange).toHaveBeenCalledWith("search");
   });
+
+  it("uses ariaLabel to name the nav landmark", () => {
+    render(BottomNav, { props: { items, ariaLabel: "Navegação inferior" } });
+    expect(screen.getByRole("navigation", { name: "Navegação inferior" })).toBeInTheDocument();
+  });
 });

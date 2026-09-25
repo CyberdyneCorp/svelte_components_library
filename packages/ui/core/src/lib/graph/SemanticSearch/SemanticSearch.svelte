@@ -222,7 +222,7 @@
   .cy-semantic-search__source {
     font-size: 0.6875rem;
     color: var(--color-text-tertiary);
-    font-family: var(--font-caption, var(--font-body));
+    font-family: var(--font-body);
     font-style: italic;
   }
 

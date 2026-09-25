@@ -163,7 +163,7 @@
   .cy-token-selector__overlay {
     position: fixed;
     inset: 0;
-    background: var(--color-overlay, rgba(0, 0, 0, 0.6));
+    background: var(--color-bg-overlay);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -310,7 +310,7 @@
   .cy-token-selector__item-icon {
     width: 36px;
     height: 36px;
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     background: var(--color-surface-raised);
     border: 1px solid var(--color-border-default);
     display: flex;
@@ -361,7 +361,7 @@
   .cy-token-selector__empty-icon {
     width: 48px;
     height: 48px;
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     background: var(--color-surface-raised);
     display: flex;
     align-items: center;

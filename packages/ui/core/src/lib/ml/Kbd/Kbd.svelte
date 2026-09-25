@@ -33,7 +33,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-surface-elevated);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border-default);
     border-bottom-width: 3px;
     border-bottom-color: var(--color-border-subtle);

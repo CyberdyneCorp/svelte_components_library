@@ -376,12 +376,12 @@
 
   .cy-rte__btn--active {
     background: var(--color-action-brand-default);
-    color: var(--color-text-on-brand);
+    color: var(--color-action-brand-text);
   }
 
   .cy-rte__btn--active:hover {
     background: var(--color-action-brand-hover);
-    color: var(--color-text-on-brand);
+    color: var(--color-action-brand-text);
   }
 
   .cy-rte__btn--wide {

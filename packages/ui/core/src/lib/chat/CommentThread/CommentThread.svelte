@@ -71,9 +71,9 @@
   }
 
   const depthColors: Record<number, string> = {
-    1: "var(--color-state-success-default, var(--color-accent-green, #22c55e))",
-    2: "var(--color-state-info-default, var(--color-accent-cyan, #06b6d4))",
-    3: "var(--color-state-purple-default, var(--color-accent-violet, #8b5cf6))",
+    1: "var(--color-accent-green)",
+    2: "var(--color-accent-cyan)",
+    3: "var(--color-accent-violet)",
   };
 
   function getBorderColor(depth: number): string {
@@ -282,7 +282,7 @@
     gap: 4px;
     padding: 2px 8px;
     font-size: 0.75rem;
-    border-radius: var(--radius-full, 9999px);
+    border-radius: var(--radius-pill);
     border: 1px solid var(--color-border-default);
     background: var(--color-surface-default);
     color: var(--color-text-secondary);
@@ -356,7 +356,7 @@
     border-radius: var(--radius-md, 6px);
     border: none;
     background: var(--color-action-brand-default);
-    color: var(--color-text-on-brand);
+    color: var(--color-action-brand-text);
     cursor: pointer;
     transition: opacity 0.15s ease;
   }

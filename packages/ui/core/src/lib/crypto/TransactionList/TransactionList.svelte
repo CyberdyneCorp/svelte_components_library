@@ -124,7 +124,7 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     flex-shrink: 0;
     font-size: 0.875rem;
     margin-top: 2px;

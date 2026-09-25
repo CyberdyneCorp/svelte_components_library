@@ -136,7 +136,7 @@
   .cy-staking__token-icon {
     width: 40px;
     height: 40px;
-    border-radius: var(--radius-full, 50%);
+    border-radius: var(--radius-pill);
     background: var(--color-surface-raised);
     border: 1px solid var(--color-border-default);
     display: flex;
@@ -294,7 +294,7 @@
 
   .cy-staking__btn--brand {
     background: var(--color-action-brand-default);
-    color: var(--color-text-on-brand);
+    color: var(--color-action-brand-text);
   }
 
   .cy-staking__btn--brand:hover {

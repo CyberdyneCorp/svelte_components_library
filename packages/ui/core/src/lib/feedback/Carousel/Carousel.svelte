@@ -276,7 +276,7 @@
     justify-content: center;
     background: var(--color-surface-raised);
     border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pill);
     color: var(--color-text-secondary);
     cursor: pointer;
     transition: all var(--transition-default);
@@ -313,7 +313,7 @@
   .cy-car__dot {
     width: 8px;
     height: 8px;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pill);
     background: var(--color-border-subtle);
     border: none;
     cursor: pointer;
