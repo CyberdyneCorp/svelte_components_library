@@ -1,5 +1,11 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.8.1
+
+### Patch Changes
+
+- f4543f3: Stop publishing compiled tests, stories and `_testdata`. The package drops from 2920 to 1603 files, with no runtime changes.
+
 ## 0.8.0
 
 ### Minor Changes
