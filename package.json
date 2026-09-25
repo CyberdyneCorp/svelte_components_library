@@ -15,6 +15,7 @@
     "test:story": "vitest --project=storybook",
     "test:e2e": "playwright test",
     "check": "pnpm lint && pnpm -r svelte-check",
+    "check:package": "node scripts/check-package-contents.mjs",
     "lint": "eslint packages/",
     "format": "prettier --write .",
     "changeset": "changeset",

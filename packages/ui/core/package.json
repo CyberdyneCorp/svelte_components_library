@@ -11,7 +11,10 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/**/*.stories.*",
+    "!dist/_testdata"
   ],
   "scripts": {
     "build": "svelte-package",
