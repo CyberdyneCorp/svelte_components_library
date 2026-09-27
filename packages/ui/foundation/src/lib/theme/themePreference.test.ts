@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createThemePreference,
@@ -7,6 +10,10 @@ import {
 } from "./index.js";
 
 const KEY = "app.theme";
+const DESIGN_TOKENS_DOC = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "../../../../../../.storybook/static-docs/DesignTokens.mdx",
+);
 const themes = { light: "calm", dark: "calm-dark" } as const;
 
 interface FakeQuery {
@@ -253,12 +260,14 @@ describe("themeInitScript", () => {
   });
 
   it("matches the app.html snippet documented in DesignTokens.mdx", () => {
-    expect(themeInitScript({ storageKey: "app.theme", themes })).toBe(
+    const script = themeInitScript({ storageKey: "app.theme", themes });
+    expect(script).toBe(
       '(function(){var k="app.theme",l="calm",d="calm-dark",p=null;' +
         "try{if(k)p=localStorage.getItem(k)}catch(e){}" +
         'if(p!==l&&p!==d){try{p=matchMedia("(prefers-color-scheme: dark)").matches?d:l}catch(e){p=l}}' +
         "document.documentElement.dataset.theme=p})();",
     );
+    expect(readFileSync(DESIGN_TOKENS_DOC, "utf8")).toContain(script);
   });
 
   it("is a single self-contained expression", () => {
