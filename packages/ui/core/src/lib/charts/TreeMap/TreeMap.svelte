@@ -5,6 +5,9 @@
 </script>
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+
   type Rect = { x: number; y: number; w: number; h: number; node: TreeNode; color: string; depth: number };
 
   let {
@@ -13,12 +16,20 @@
     height = "300px",
     showLabels = true,
     showValues = true,
+    title,
+    description,
+    hideTitle = false,
+    showDataToggle = true,
   }: {
     data?: TreeNode[];
     width?: string;
     height?: string;
     showLabels?: boolean;
     showValues?: boolean;
+    title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
   } = $props();
 
   const defaultColors = [
@@ -95,6 +106,12 @@
     return total > 0 ? ((value / total) * 100).toFixed(1) + "%" : "0%";
   }
 
+  // Top-level nodes only, matching what the map draws.
+  let tableData = $derived<ChartTableData>({
+    columns: ["Label", "Value", "Share"],
+    rows: data.map((n) => [n.label, n.value, percentage(n.value)]),
+  });
+
   function onRectMouseMove(e: MouseEvent, rect: Rect) {
     hoveredRect = rect;
     if (containerEl) {
@@ -135,17 +152,19 @@
   }
 </script>
 
+<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Tree map" data={tableData}>
+{#snippet children(a11y)}
 <div
   class="cy-treemap"
   style="width: {width}; height: {height};"
   use:measureContainer
 >
   <svg
+    {...a11y}
     viewBox="0 0 {containerW} {containerH}"
     class="cy-treemap__svg"
     preserveAspectRatio="none"
     role="img"
-    aria-label="Tree map"
   >
     {#each rects as rect, i}
       <rect
@@ -192,6 +211,8 @@
     </div>
   {/if}
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-treemap {

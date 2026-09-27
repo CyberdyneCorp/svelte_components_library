@@ -1,6 +1,11 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+  import ChartLegend from "../ChartLegend/ChartLegend.svelte";
+  import { markerPath, seriesStyle } from "../ChartLegend/markers.js";
+
   type DataPoint = { x: number; y: number; label?: string; color?: string; size?: number };
   type Series = { name: string; data: DataPoint[]; color?: string };
 
@@ -18,6 +23,10 @@
     showTrendLine = false,
     onPointClick,
     class: className = "",
+    title,
+    description,
+    hideTitle = false,
+    showDataToggle = true,
   }: {
     series?: Series[];
     width?: string;
@@ -32,6 +41,10 @@
     showTrendLine?: boolean;
     onPointClick?: (point: DataPoint, seriesName: string) => void;
     class?: string;
+    title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
   } = $props();
 
   const defaultColors = ["#00ff41", "#00d4ff", "#a855f7", "#ffb800", "#ff5555", "#50fa7b"];
@@ -106,6 +119,19 @@
     };
   }
 
+  let hasPointLabels = $derived(allPoints.some((p) => p.label));
+
+  let tableData = $derived<ChartTableData>({
+    columns: ["Series", xLabel || "x", yLabel || "y", ...(hasPointLabels ? ["Label"] : [])],
+    rows: series.flatMap((s) =>
+      s.data.map((p) => [s.name, p.x, p.y, ...(hasPointLabels ? [p.label ?? ""] : [])]),
+    ),
+  });
+
+  let legendItems = $derived(
+    series.map((s, i) => ({ label: s.name, color: getColor(s, i), marker: seriesStyle(i).marker })),
+  );
+
   // Tooltip state
   let hoveredPoint: { point: DataPoint; seriesIdx: number; x: number; y: number } | null = $state(null);
 
@@ -130,24 +156,19 @@
   }
 </script>
 
+<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Scatter chart" data={tableData}>
+{#snippet children(a11y)}
 <div class="cy-scatter-chart {className}" style="width: {width}; height: {height};">
   {#if showLegend && series.length > 1}
-    <div class="cy-scatter-chart__legend">
-      {#each series as s, i}
-        <div class="cy-scatter-chart__legend-item">
-          <span class="cy-scatter-chart__legend-dot" style="background: {getColor(s, i)}"></span>
-          <span class="cy-scatter-chart__legend-name">{s.name}</span>
-        </div>
-      {/each}
-    </div>
+    <ChartLegend items={legendItems} blockClass="cy-scatter-chart" />
   {/if}
 
   <svg
+    {...a11y}
     viewBox="0 0 {viewW} {viewH}"
     preserveAspectRatio="xMidYMid meet"
     class="cy-scatter-chart__svg"
     role="img"
-    aria-label="Scatter chart"
   >
     <!-- Grid -->
     {#if showGrid}
@@ -214,11 +235,11 @@
 
     <!-- Data points -->
     {#each series as s, si}
+      {@const marker = seriesStyle(si).marker}
       {#each s.data as point, _pi}
-        <circle
-          cx={scaleX(point.x)}
-          cy={scaleY(point.y)}
-          r={point.size || pointSize}
+        <path
+          d={markerPath(marker, scaleX(point.x), scaleY(point.y), (point.size || pointSize) * 2)}
+          data-marker={marker}
           fill={point.color || getColor(s, si)}
           class="cy-scatter-chart__point"
           class:cy-scatter-chart__point--animated={animate}
@@ -248,6 +269,8 @@
     </div>
   {/if}
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-scatter-chart {
@@ -287,12 +310,14 @@
   .cy-scatter-chart__point {
     opacity: 0.8;
     cursor: pointer;
-    transition: opacity 150ms ease, r 150ms ease;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: opacity 150ms ease, transform 150ms ease;
   }
 
   .cy-scatter-chart__point:hover {
     opacity: 1;
-    r: 8;
+    transform: scale(1.5);
   }
 
   .cy-scatter-chart__point--animated {
@@ -302,28 +327,6 @@
   @keyframes cy-scatter-fade {
     from { opacity: 0; transform: scale(0); }
     to { opacity: 0.8; transform: scale(1); }
-  }
-
-  .cy-scatter-chart__legend {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    padding: 6px 0;
-    flex-wrap: wrap;
-  }
-
-  .cy-scatter-chart__legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-  }
-
-  .cy-scatter-chart__legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
   }
 
   .cy-scatter-chart__tooltip {

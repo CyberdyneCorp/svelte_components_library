@@ -181,6 +181,25 @@ export { ScatterChart } from "./charts/ScatterChart/index.js";
 export { VennDiagram } from "./charts/VennDiagram/index.js";
 export { WordCloud } from "./charts/WordCloud/index.js";
 export { ElevationProfile } from "./charts/ElevationProfile/index.js";
+export {
+  ChartFrame,
+  categoryTable,
+  seriesTable,
+  type ChartA11yAttributes,
+  type ChartTableCell,
+  type ChartTableData,
+} from "./charts/ChartFrame/index.js";
+export {
+  ChartLegend,
+  CHART_DASH_PATTERNS,
+  CHART_MARKER_SHAPES,
+  markerClipPath,
+  markerPath,
+  seriesStyle,
+  type ChartLegendItem,
+  type ChartMarkerShape,
+  type ChartSeriesStyle,
+} from "./charts/ChartLegend/index.js";
 
 // Editor
 export { BlockEditor } from "./editor/BlockEditor/index.js";

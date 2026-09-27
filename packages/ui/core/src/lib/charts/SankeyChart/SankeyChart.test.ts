@@ -1,4 +1,4 @@
-import { render, fireEvent } from "@testing-library/svelte";
+import { render, fireEvent, screen } from "@testing-library/svelte";
 import { describe, it, expect, vi } from "vitest";
 import SankeyChart from "./SankeyChart.svelte";
 
@@ -209,5 +209,36 @@ describe("SankeyChart", () => {
     // Should not crash; link should be skipped
     const paths = document.querySelectorAll(".cy-sankey-chart__link");
     expect(paths.length).toBe(0);
+  });
+});
+
+describe("SankeyChart accessibility", () => {
+  const nodes = [{ id: "salary", label: "Salary" }, { id: "rent" }];
+  const links = [{ source: "salary", target: "rent", value: 1200 }];
+
+  it("keeps the default accessible name without a title", () => {
+    render(SankeyChart, { props: { nodes, links } });
+    expect(screen.getByRole("img", { name: "Sankey diagram" })).toBeInTheDocument();
+  });
+
+  it("wires title and description to the SVG", () => {
+    render(SankeyChart, { props: { nodes, links, title: "Money flow", description: "Where salary goes" } });
+    expect(screen.getByRole("img", { name: "Money flow" })).toHaveAccessibleDescription("Where salary goes");
+  });
+
+  it("derives a source/target/value table, using labels with id fallback", () => {
+    render(SankeyChart, { props: { nodes, links } });
+    const rows = [...document.querySelectorAll("table tr")].map((r) => [...r.children].map((c) => c.textContent));
+    expect(rows).toEqual([
+      ["Source", "Target", "Value"],
+      ["Salary", "rent", "1200"],
+    ]);
+  });
+
+  it("toggles the table with an aria-expanded button", async () => {
+    render(SankeyChart, { props: { nodes, links } });
+    const button = screen.getByRole("button", { name: "Show data" });
+    await fireEvent.click(button);
+    expect(button).toHaveAttribute("aria-expanded", "true");
   });
 });

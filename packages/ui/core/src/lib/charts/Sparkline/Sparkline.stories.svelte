@@ -6,6 +6,10 @@
     title: "Charts/Sparkline",
     component: Sparkline,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const uptrendData = [42, 45, 43, 48, 52, 50, 55, 58, 62, 65];
@@ -24,15 +28,15 @@
 
 <Story name="WithArea" args={{ data: areaData, showArea: true, width: 160, height: 40 }} />
 
-<Story name="InTable">
+<Story name="InTable" asChild>
   <div style="font-family: var(--font-body); color: var(--color-text-primary);">
     <table style="border-collapse: collapse; width: 100%; max-width: 500px;">
       <thead>
         <tr style="border-bottom: 1px solid var(--color-border-subtle);">
-          <th style="text-align: left; padding: 8px; font-size: 0.75rem; color: var(--color-text-tertiary);">Token</th>
-          <th style="text-align: right; padding: 8px; font-size: 0.75rem; color: var(--color-text-tertiary);">Price</th>
-          <th style="text-align: right; padding: 8px; font-size: 0.75rem; color: var(--color-text-tertiary);">24h</th>
-          <th style="text-align: center; padding: 8px; font-size: 0.75rem; color: var(--color-text-tertiary);">7d Chart</th>
+          <th style="text-align: left; padding: 8px; font-size: 0.75rem; color: var(--color-text-secondary);">Token</th>
+          <th style="text-align: right; padding: 8px; font-size: 0.75rem; color: var(--color-text-secondary);">Price</th>
+          <th style="text-align: right; padding: 8px; font-size: 0.75rem; color: var(--color-text-secondary);">24h</th>
+          <th style="text-align: center; padding: 8px; font-size: 0.75rem; color: var(--color-text-secondary);">7d Chart</th>
         </tr>
       </thead>
       <tbody>
@@ -51,7 +55,7 @@
   </div>
 </Story>
 
-<Story name="ClampedWithLabel">
+<Story name="ClampedWithLabel" asChild>
   {@const ndvi = Array.from({ length: 24 }, (_, i) => ({ ts: i, value: 0.45 + Math.sin(i / 3) * 0.18 }))}
   <div style="display:flex; flex-direction:column; gap:1rem; max-width:200px;">
     <Sparkline samples={ndvi} min={0} max={1} label="NDVI" fill="gradient" color="#22c55e" />
@@ -60,7 +64,7 @@
   </div>
 </Story>
 
-<Story name="FillModes">
+<Story name="FillModes" asChild>
   {@const series = [4, 8, 5, 12, 9, 14, 11, 17]}
   <div style="display:flex; gap:1.5rem; align-items:center;">
     <Sparkline data={series} fill="none" label="none" />
@@ -68,3 +72,14 @@
     <Sparkline data={series} fill="gradient" label="gradient" />
   </div>
 </Story>
+
+<Story
+  name="Accessible"
+  args={{
+    data: uptrendData,
+    label: "ETH 7d",
+    title: "ETH price, last 7 days",
+    description: "Up from 42 to 65.",
+    showDataToggle: true,
+  }}
+/>

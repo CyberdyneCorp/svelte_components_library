@@ -1,6 +1,9 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+
   type SankeyNode = { id: string; label?: string; color?: string };
   type SankeyLink = { source: string; target: string; value: number; color?: string };
 
@@ -17,6 +20,10 @@
     onNodeClick,
     onLinkClick,
     class: className = "",
+    title,
+    description,
+    hideTitle = false,
+    showDataToggle = true,
   }: {
     nodes?: SankeyNode[];
     links?: SankeyLink[];
@@ -30,6 +37,10 @@
     onNodeClick?: (node: SankeyNode) => void;
     onLinkClick?: (link: SankeyLink) => void;
     class?: string;
+    title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
   } = $props();
 
   const defaultColors = ["#00ff41", "#00d4ff", "#a855f7", "#ffb800", "#ff5555", "#50fa7b", "#ff79c6", "#8be9fd"];
@@ -186,6 +197,16 @@
     return `M${sx},${sy} C${midX},${sy} ${midX},${ty} ${tx},${ty}`;
   }
 
+  function nodeLabel(id: string): string {
+    const node = nodes.find((n) => n.id === id);
+    return node?.label || id;
+  }
+
+  let tableData = $derived<ChartTableData>({
+    columns: ["Source", "Target", "Value"],
+    rows: links.map((l) => [nodeLabel(l.source), nodeLabel(l.target), l.value]),
+  });
+
   // Tooltip state
   let tooltip: { text: string; x: number; y: number } | null = $state(null);
 
@@ -216,13 +237,15 @@
   }
 </script>
 
+<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Sankey diagram" data={tableData}>
+{#snippet children(a11y)}
 <div class="cy-sankey-chart {className}" style="width: {width}; height: {height};">
   <svg
+    {...a11y}
     viewBox="0 0 {viewW} {viewH}"
     preserveAspectRatio="xMidYMid meet"
     class="cy-sankey-chart__svg"
     role="img"
-    aria-label="Sankey diagram"
   >
     <!-- Links -->
     {#each layout.links as link}
@@ -275,6 +298,8 @@
     </div>
   {/if}
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-sankey-chart {

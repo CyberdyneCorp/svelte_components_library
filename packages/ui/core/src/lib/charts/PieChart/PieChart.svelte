@@ -1,6 +1,11 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+  import ChartLegend from "../ChartLegend/ChartLegend.svelte";
+  import { markerPath, seriesStyle } from "../ChartLegend/markers.js";
+
   type PieData = { label: string; value: number; color?: string };
 
   let {
@@ -11,6 +16,10 @@
     showLegend = true,
     showValues = true,
     animate = true,
+    title,
+    description,
+    hideTitle = false,
+    showDataToggle = true,
   }: {
     data?: PieData[];
     size?: number;
@@ -19,6 +28,10 @@
     showLegend?: boolean;
     showValues?: boolean;
     animate?: boolean;
+    title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
   } = $props();
 
   const defaultColors = [
@@ -119,6 +132,31 @@
     return `translate(${dx}, ${dy})`;
   }
 
+  // Slices narrower than this get no in-slice marker (it would not fit).
+  const MIN_MARKER_SWEEP = 0.3;
+
+  function sliceMarker(slice: ArcSlice): string {
+    const mid = (slice.startAngle + slice.endAngle) / 2;
+    const r = innerR > 0 ? (outerR + innerR) / 2 : outerR * 0.62;
+    const markerSize = Math.min(12, outerR * 0.16);
+    const shape = seriesStyle(slice.index).marker;
+    return markerPath(shape, cx + r * Math.cos(mid), cy + r * Math.sin(mid), markerSize);
+  }
+
+  let tableData = $derived<ChartTableData>({
+    columns: ["Label", "Value", "Share"],
+    rows: data.map((d) => [d.label, d.value, percentage(d.value)]),
+  });
+
+  let legendItems = $derived(
+    data.map((d, i) => ({
+      label: d.label,
+      color: getColor(d, i),
+      marker: seriesStyle(i).marker,
+      detail: showValues ? percentage(d.value) : undefined,
+    })),
+  );
+
   function onSliceMouseMove(e: MouseEvent) {
     const container = (e.currentTarget as SVGPathElement).closest(".cy-pie-chart");
     if (!container) return;
@@ -127,14 +165,16 @@
   }
 </script>
 
+<ChartFrame {title} {description} {hideTitle} {showDataToggle} inline fallbackLabel="Pie chart" data={tableData}>
+{#snippet children(a11y)}
 <div class="cy-pie-chart" style="width: {size}px;">
   <svg
+    {...a11y}
     viewBox="0 0 {size} {size}"
     class="cy-pie-chart__svg"
     width={size}
     height={size}
     role="img"
-    aria-label="Pie chart"
   >
     {#each slices as slice}
       <path
@@ -149,6 +189,16 @@
         onmousemove={onSliceMouseMove}
       />
     {/each}
+    {#each slices as slice (slice.index)}
+      {#if slice.endAngle - slice.startAngle >= MIN_MARKER_SWEEP}
+        <path
+          d={sliceMarker(slice)}
+          transform={sliceTransform(slice, hoveredIndex === slice.index)}
+          class="cy-pie-chart__marker"
+          data-marker={seriesStyle(slice.index).marker}
+        />
+      {/if}
+    {/each}
   </svg>
 
   {#if hoveredIndex !== null && data[hoveredIndex]}
@@ -160,19 +210,11 @@
   {/if}
 
   {#if showLegend}
-    <div class="cy-pie-chart__legend">
-      {#each data as d, i}
-        <div class="cy-pie-chart__legend-item">
-          <span class="cy-pie-chart__legend-dot" style="background: {getColor(d, i)};"></span>
-          <span class="cy-pie-chart__legend-label">{d.label}</span>
-          {#if showValues}
-            <span class="cy-pie-chart__legend-pct">{percentage(d.value)}</span>
-          {/if}
-        </div>
-      {/each}
-    </div>
+    <ChartLegend items={legendItems} blockClass="cy-pie-chart" />
   {/if}
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-pie-chart {
@@ -235,36 +277,9 @@
     font-family: var(--font-mono);
   }
 
-  .cy-pie-chart__legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-4);
-    justify-content: center;
-    padding-top: var(--space-3);
-  }
-
-  .cy-pie-chart__legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-  }
-
-  .cy-pie-chart__legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .cy-pie-chart__legend-label {
-    font-family: var(--font-body);
-    color: var(--color-text-secondary);
-  }
-
-  .cy-pie-chart__legend-pct {
-    font-family: var(--font-mono);
-    color: var(--color-text-tertiary);
+  .cy-pie-chart__marker {
+    fill: var(--color-surface-default);
+    pointer-events: none;
+    transition: transform 150ms ease;
   }
 </style>

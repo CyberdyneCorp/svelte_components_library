@@ -6,6 +6,10 @@
     title: "Charts/TreeMap",
     component: TreeMap,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const portfolioData = [
@@ -30,3 +34,13 @@
 <Story name="Portfolio" args={{ data: portfolioData, height: "320px" }} />
 
 <Story name="Simple" args={{ data: simpleData, height: "240px" }} />
+
+<Story
+  name="Accessible"
+  args={{
+    data: portfolioData,
+    height: "320px",
+    title: "Portfolio by asset",
+    description: "ETH and BTC make up over 60% of holdings.",
+  }}
+/>

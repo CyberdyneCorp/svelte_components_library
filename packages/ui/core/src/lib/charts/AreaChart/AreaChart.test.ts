@@ -1,6 +1,9 @@
-import { render, screen, fireEvent } from "@testing-library/svelte";
+import { render, within, fireEvent, screen } from "@testing-library/svelte";
 import { describe, it, expect, vi } from "vitest";
 import AreaChart from "./AreaChart.svelte";
+
+// The data-table fallback repeats every label, so scope text queries.
+const legend = () => document.querySelector(".cy-area-chart__legend") as HTMLElement;
 
 describe("AreaChart", () => {
   const series = [
@@ -29,7 +32,7 @@ describe("AreaChart", () => {
 
   it("shows legend when showLegend is true", () => {
     render(AreaChart, { props: { series, showLegend: true } });
-    expect(screen.getByText("Revenue")).toBeInTheDocument();
+    expect(within(legend()).getByText("Revenue")).toBeInTheDocument();
   });
 
   it("renders grid lines when showGrid is true", () => {
@@ -198,5 +201,52 @@ describe("AreaChart", () => {
     // Both should have non-empty 'd' attributes
     expect(areas[0].getAttribute("d")).toBeTruthy();
     expect(areas[1].getAttribute("d")).toBeTruthy();
+  });
+});
+
+describe("AreaChart accessibility", () => {
+  const twoSeries = [
+    { name: "Savings", data: [{ x: 1, y: 5 }, { x: 2, y: 7 }] },
+    { name: "Investments", data: [{ x: 1, y: 3 }, { x: 2, y: 4 }] },
+  ];
+
+  it("wires title and description to the SVG", () => {
+    render(AreaChart, { props: { series: twoSeries, title: "Net worth", description: "Two buckets" } });
+    expect(screen.getByRole("img", { name: "Net worth" })).toHaveAccessibleDescription("Two buckets");
+  });
+
+  it("keeps the default accessible name without a title", () => {
+    render(AreaChart, { props: { series: twoSeries } });
+    expect(screen.getByRole("img", { name: "Area chart" })).toBeInTheDocument();
+  });
+
+  it("lists raw, unstacked values in the data table", () => {
+    render(AreaChart, { props: { series: twoSeries, stacked: true } });
+    const rows = [...document.querySelectorAll("table tr")].map((r) => [...r.children].map((c) => c.textContent));
+    expect(rows).toEqual([
+      ["x", "Savings", "Investments"],
+      ["1", "5", "3"],
+      ["2", "7", "4"],
+    ]);
+  });
+
+  it("toggles the table with an aria-expanded button", async () => {
+    render(AreaChart, { props: { series: twoSeries } });
+    const button = screen.getByRole("button", { name: "Show data" });
+    await fireEvent.click(button);
+    expect(button).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("gives each series a distinct marker shape and dash pattern", () => {
+    render(AreaChart, { props: { series: twoSeries } });
+    const lines = [...document.querySelectorAll(".cy-area-chart__line")];
+    expect(new Set(lines.map((l) => l.getAttribute("stroke-dasharray"))).size).toBe(2);
+    const marks = [...document.querySelectorAll(".cy-area-chart__marker")];
+    expect(new Set(marks.map((m) => m.getAttribute("data-marker")))).toEqual(new Set(["circle", "square"]));
+  });
+
+  it("can hide point markers", () => {
+    render(AreaChart, { props: { series: twoSeries, showMarkers: false } });
+    expect(document.querySelector(".cy-area-chart__marker")).not.toBeInTheDocument();
   });
 });

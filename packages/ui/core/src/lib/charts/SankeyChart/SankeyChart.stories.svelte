@@ -6,6 +6,10 @@
     title: "Charts/SankeyChart",
     component: SankeyChart,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const trafficFlow = {
@@ -96,3 +100,12 @@
 <Story name="TokenFlow" args={{ ...tokenFlow }} />
 
 <Story name="NoValues" args={{ ...trafficFlow, showValues: false }} />
+
+<Story
+  name="Accessible"
+  args={{
+    ...pipeline,
+    title: "ML data pipeline",
+    description: "10,000 cleaned records feed training, validation and test; 2,500 are discarded.",
+  }}
+/>

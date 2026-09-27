@@ -6,6 +6,10 @@
     title: "Charts/PieChart",
     component: PieChart,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const defaultData = [
@@ -27,3 +31,13 @@
 <Story name="Donut" args={{ data: defaultData, donut: true }} />
 
 <Story name="Small" args={{ data: smallData, size: 120, donut: true, donutWidth: 24 }} />
+
+<Story
+  name="Accessible"
+  args={{
+    data: defaultData,
+    donut: true,
+    title: "Portfolio allocation",
+    description: "ETH is the largest holding at 40%.",
+  }}
+/>

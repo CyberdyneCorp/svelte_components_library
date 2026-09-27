@@ -1,6 +1,9 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+
   type Threshold = { value: number; color: string };
 
   let {
@@ -12,6 +15,13 @@
     size = 160,
     thresholds = [],
     showValue = true,
+    /** Accessible name; falls back to `label`, then "Gauge". */
+    title,
+    description,
+    /** Titles are visually hidden by default: the gauge draws its own label. */
+    hideTitle = true,
+    /** The data table stays screen-reader-only unless this is enabled. */
+    showDataToggle = false,
   }: {
     value?: number;
     min?: number;
@@ -21,6 +31,10 @@
     size?: number;
     thresholds?: Threshold[];
     showValue?: boolean;
+    title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
   } = $props();
 
   const defaultThresholds: Threshold[] = [
@@ -75,10 +89,25 @@
   function formatValue(v: number): string {
     return Number.isInteger(v) ? v.toString() : v.toFixed(1);
   }
+
+  let tableData = $derived<ChartTableData>({
+    columns: ["Measure", "Value", "Minimum", "Maximum"],
+    rows: [[label || "Value", `${formatValue(clampedValue)}${unit}`, formatValue(min), formatValue(max)]],
+  });
 </script>
 
+<ChartFrame
+  {title}
+  {description}
+  {hideTitle}
+  {showDataToggle}
+  inline
+  fallbackLabel={label || "Gauge"}
+  data={tableData}
+>
+{#snippet children(a11y)}
 <div class="cy-gauge" style="width: {size}px;">
-  <svg viewBox="0 0 {size} {size}" class="cy-gauge__svg" width={size} height={size}>
+  <svg {...a11y} role="img" viewBox="0 0 {size} {size}" class="cy-gauge__svg" width={size} height={size}>
     <!-- Background track -->
     <path
       d={trackPath}
@@ -124,6 +153,8 @@
     {/if}
   </svg>
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-gauge {

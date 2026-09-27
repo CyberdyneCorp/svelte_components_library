@@ -1,6 +1,11 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import { seriesTable } from "../ChartFrame/chartTable.js";
+  import ChartLegend from "../ChartLegend/ChartLegend.svelte";
+  import { markerPath, seriesStyle } from "../ChartLegend/markers.js";
+
   type DataPoint = { x: number; y: number };
   type Series = { name: string; data: DataPoint[]; color?: string };
 
@@ -14,6 +19,11 @@
     xLabel = "",
     yLabel = "",
     animate = true,
+    showMarkers = true,
+    title,
+    description,
+    hideTitle = false,
+    showDataToggle = true,
   }: {
     series?: Series[];
     width?: string;
@@ -24,6 +34,12 @@
     xLabel?: string;
     yLabel?: string;
     animate?: boolean;
+    /** Draw a per-series shape at every data point (matches the legend marker). */
+    showMarkers?: boolean;
+    title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
   } = $props();
 
   const defaultColors = ["#00ff41", "#00d4ff", "#bf5af2", "#ffb800"];
@@ -73,6 +89,11 @@
     return s.color || defaultColors[i % defaultColors.length];
   }
 
+  let tableData = $derived(seriesTable(series, xLabel || "x"));
+  let legendItems = $derived(
+    series.map((s, i) => ({ label: s.name, color: getColor(s, i), ...seriesStyle(i) })),
+  );
+
   function onMouseMove(e: MouseEvent) {
     const svg = (e.currentTarget as SVGSVGElement);
     const rect = svg.getBoundingClientRect();
@@ -102,15 +123,17 @@
   }
 </script>
 
+<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Line chart" data={tableData}>
+{#snippet children(a11y)}
 <div class="cy-line-chart" style="width: {width}; height: {height};">
   <svg
+    {...a11y}
     viewBox="0 0 {viewW} {viewH}"
     preserveAspectRatio="xMidYMid meet"
     class="cy-line-chart__svg"
     onmousemove={onMouseMove}
     onmouseleave={onMouseLeave}
     role="img"
-    aria-label="Line chart"
   >
     {#if showGrid}
       {#each yTicks as tick}
@@ -151,14 +174,28 @@
 
     <!-- Series lines -->
     {#each series as s, i}
+      {@const style = seriesStyle(i)}
       <path
         d={pathForSeries(s)}
         fill="none"
         stroke={getColor(s, i)}
         stroke-width="2"
+        stroke-dasharray={style.dash || undefined}
         class="cy-line-chart__line"
-        class:cy-line-chart__line--animated={animate}
+        class:cy-line-chart__line--animated={animate && !style.dash}
+        class:cy-line-chart__line--fade={animate && !!style.dash}
       />
+      {#if showMarkers}
+        {#each s.data as p, pi (pi)}
+          <path
+            d={markerPath(style.marker, scaleX(p.x), scaleY(p.y), 7)}
+            fill={getColor(s, i)}
+            class="cy-line-chart__marker"
+            class:cy-line-chart__marker--fade={animate}
+            data-marker={style.marker}
+          />
+        {/each}
+      {/if}
     {/each}
 
     <!-- Hover crosshair -->
@@ -200,16 +237,11 @@
   {/if}
 
   {#if showLegend && series.length > 0}
-    <div class="cy-line-chart__legend">
-      {#each series as s, i}
-        <div class="cy-line-chart__legend-item">
-          <span class="cy-line-chart__legend-dot" style="background: {getColor(s, i)}"></span>
-          <span>{s.name}</span>
-        </div>
-      {/each}
-    </div>
+    <ChartLegend items={legendItems} showLine blockClass="cy-line-chart" />
   {/if}
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-line-chart {
@@ -306,25 +338,13 @@
     color: var(--color-text-primary);
   }
 
-  .cy-line-chart__legend {
-    display: flex;
-    gap: var(--space-4);
-    justify-content: center;
-    padding-top: var(--space-2);
+  .cy-line-chart__line--fade,
+  .cy-line-chart__marker--fade {
+    opacity: 0;
+    animation: cy-line-fade 0.8s ease forwards;
   }
 
-  .cy-line-chart__legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-  }
-
-  .cy-line-chart__legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
+  @keyframes cy-line-fade {
+    to { opacity: 1; }
   }
 </style>

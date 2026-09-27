@@ -6,6 +6,10 @@
     title: "Charts/BarChart",
     component: BarChart,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const defaultData = [
@@ -38,3 +42,12 @@
 <Story name="Horizontal" args={{ horizontal: true, data: horizontalData, barColor: "#00d4ff" }} />
 
 <Story name="Colored" args={{ data: coloredData }} />
+
+<Story
+  name="Accessible"
+  args={{
+    data: coloredData,
+    title: "Accuracy by split",
+    description: "Out-of-distribution accuracy trails the other splits by over 20 points.",
+  }}
+/>
