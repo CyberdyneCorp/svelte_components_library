@@ -95,6 +95,8 @@ export { SortableList } from "./data/SortableList/index.js";
 export { OrgChart } from "./data/OrgChart/index.js";
 export { WeatherCard } from "./data/WeatherCard/index.js";
 export { CurrencyDisplay } from "./data/CurrencyDisplay/index.js";
+export { KpiCard, type KpiSentiment, type KpiTrend, type KpiTrendLabels } from "./data/KpiCard/index.js";
+export { BudgetBar, type BudgetMessages, type BudgetState, type BudgetStateLabels } from "./data/BudgetBar/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
