@@ -4,7 +4,6 @@ import LineChart from "./LineChart.svelte";
 
 // The data-table fallback repeats every label, so scope text queries.
 const legend = () => document.querySelector(".cy-line-chart__legend") as HTMLElement;
-// The data-table fallback repeats every label, so scope text queries.
 const plot = () => document.querySelector(".cy-line-chart svg") as HTMLElement;
 
 describe("LineChart", () => {
