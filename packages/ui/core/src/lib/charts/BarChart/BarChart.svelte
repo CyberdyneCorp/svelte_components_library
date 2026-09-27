@@ -1,6 +1,9 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import { categoryTable } from "../ChartFrame/chartTable.js";
+
   type BarData = { label: string; value: number; color?: string };
 
   let {
@@ -12,6 +15,10 @@
     showGrid = true,
     animate = true,
     barColor = "#00ff41",
+    title,
+    description,
+    hideTitle = false,
+    showDataToggle = true,
   }: {
     data?: BarData[];
     width?: string;
@@ -21,6 +28,10 @@
     showGrid?: boolean;
     animate?: boolean;
     barColor?: string;
+    title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
   } = $props();
 
   const viewW = 600;
@@ -49,15 +60,18 @@
   }
 
   let ticks = $derived(gridTicks(maxVal, 4));
+  let tableData = $derived(categoryTable(data));
 </script>
 
+<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Bar chart" data={tableData}>
+{#snippet children(a11y)}
 <div class="cy-bar-chart" style="width: {width}; height: {height};">
   <svg
+    {...a11y}
     viewBox="0 0 {viewW} {viewH}"
     preserveAspectRatio="xMidYMid meet"
     class="cy-bar-chart__svg"
     role="img"
-    aria-label="Bar chart"
   >
     {#if showGrid}
       {#each ticks as tick}
@@ -180,6 +194,8 @@
     {/each}
   </svg>
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-bar-chart {

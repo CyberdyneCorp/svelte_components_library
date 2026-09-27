@@ -1,6 +1,9 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+
   type Sample = { ts: number; value: number };
 
   let {
@@ -31,6 +34,13 @@
     label,
     /** Custom formatter for the last value shown in the legend. */
     formatValue,
+    /** Accessible name; falls back to `label`, then "Sparkline". */
+    title,
+    description,
+    /** Titles are visually hidden by default: a sparkline is an inline glyph. */
+    hideTitle = true,
+    /** The data table stays screen-reader-only unless this is enabled. */
+    showDataToggle = false,
   }: {
     data?: number[];
     samples?: Sample[];
@@ -45,6 +55,10 @@
     max?: number;
     label?: string;
     formatValue?: (value: number) => string;
+    title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
   } = $props();
 
   const strokeColor = $derived(color || "var(--color-action-brand-default)");
@@ -110,12 +124,28 @@
           : lastValue.toFixed(3),
   );
 
+  let tableData = $derived<ChartTableData>(
+    samples && samples.length > 0
+      ? { columns: ["Time", label || "Value"], rows: samples.map((s) => [s.ts, s.value]) }
+      : { columns: ["Point", label || "Value"], rows: data.map((v, i) => [i + 1, v]) },
+  );
+
   // Unique gradient id so multiple sparklines on the same page don't collide.
   const gradientId = $derived(
     `cy-sparkline-grad-${Math.random().toString(36).slice(2, 9)}`,
   );
 </script>
 
+<ChartFrame
+  {title}
+  {description}
+  {hideTitle}
+  {showDataToggle}
+  inline
+  fallbackLabel={label || "Sparkline"}
+  data={tableData}
+>
+{#snippet children(a11y)}
 <div class="cy-sparkline-wrap">
   {#if label}
     <div class="cy-sparkline__legend">
@@ -124,6 +154,8 @@
     </div>
   {/if}
   <svg
+    {...a11y}
+    role="img"
     {width}
     {height}
     viewBox="0 0 {width} {height}"
@@ -171,6 +203,8 @@
     {/if}
   </svg>
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-sparkline-wrap {
@@ -190,7 +224,8 @@
     font-family: var(--font-mono, monospace);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-text-tertiary);
+    /* secondary, not tertiary: tertiary fails WCAG AA contrast at 11px */
+    color: var(--color-text-secondary);
   }
   .cy-sparkline__last {
     font-family: var(--font-mono, monospace);

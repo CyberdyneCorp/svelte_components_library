@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **246 components** across 18 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **247 components** across 18 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdynecorp/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdynecorp/svelte-ui-core` | 246 UI components across 18 categories |
+| `@cyberdynecorp/svelte-ui-core` | 247 UI components across 18 categories |
 
 ## Installation
 
@@ -67,6 +67,22 @@ Import the foundation styles in your root layout:
 {@render children()}
 ```
 
+Optional calm theme preset (`data-theme="calm"` / `"calm-dark"`) and light/dark/system
+preference with a no-flash init script:
+
+```svelte
+<script>
+  import "@cyberdynecorp/svelte-ui-foundation/styles";
+  import "@cyberdynecorp/svelte-ui-foundation/themes/calm.css";
+  import { ThemeToggle } from "@cyberdynecorp/svelte-ui-core";
+</script>
+
+<ThemeToggle includeSystem themes={{ light: "calm", dark: "calm-dark" }} persistKey="app.theme" />
+```
+
+`createThemePreference` and `themeInitScript` live in `@cyberdynecorp/svelte-ui-foundation/theme`;
+see `Overview/Design Tokens` → Themes in Storybook for the `app.html` snippet.
+
 Use components:
 
 ```svelte
@@ -84,7 +100,7 @@ Use components:
 </Card>
 ```
 
-## Components (244)
+## Components (247)
 
 ### Primitives (14)
 `Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle` · `StarRating`
@@ -98,8 +114,8 @@ Use components:
 ### Navigation (10)
 `Tabs` · `Breadcrumb` · `Sidebar` · `Header` · `MenuItem` · `BreadcrumbOverflow` · `NavBar` · `MegaMenu` · `MenuBar` · `BottomNav`
 
-### Data Display (19)
-`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList` · `OrgChart` · `WeatherCard` · `KpiCard` (KPI tile with trend + delta) · `BudgetBar` (money budget meter)
+### Data Display (20)
+`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList` · `OrgChart` · `WeatherCard` · `CurrencyDisplay` (locale money amounts, masked mode) · `KpiCard` (KPI tile with trend + delta) · `BudgetBar` (money budget meter)
 
 ### Layout (9)
 `Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` · `SplitView` · `GridLayout` · `PageShell` · `FloatingPanel` (draggable + resizable window)
@@ -122,8 +138,10 @@ Use components:
 ### Graph & Search (2)
 `GraphViewer` (force-directed network graph with community detection, zoom/pan, search) · `SemanticSearch` (vector search results with relevance scores)
 
-### Charts (19)
-`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart` · `PieChart` · `Sparkline` · `Gauge` · `TreeMap` · `GanttChart` · `ActivityHeatmap` · `CumulativeFlow` (CFD) · `AgingWIP` · `BurndownChart` · `VelocityChart` · `SankeyChart` · `ScatterChart` · `VennDiagram` · `WordCloud` · `ElevationProfile` (terrain cross-section + Fresnel overlay)
+### Charts (21)
+`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart` · `PieChart` · `Sparkline` · `Gauge` · `TreeMap` · `GanttChart` · `ActivityHeatmap` · `CumulativeFlow` (CFD) · `AgingWIP` · `BurndownChart` · `VelocityChart` · `SankeyChart` · `ScatterChart` · `VennDiagram` · `WordCloud` · `ElevationProfile` (terrain cross-section + Fresnel overlay) · `ChartFrame` (accessible figure: title/description + data-table fallback with "Show data" toggle) · `ChartLegend` (shape and dash markers, readable in grayscale)
+
+`LineChart`, `AreaChart`, `BarChart`, `PieChart`, `Sparkline`, `SankeyChart`, `ScatterChart`, `TreeMap` and `Gauge` accept `title` / `description`, render a screen-reader data table, and mark series with shapes as well as colour.
 
 ### Editor (6)
 `BlockEditor` (Notion-style blocks with slash menu) · `MarkdownEditor` (with Mermaid diagram support) · `MarkdownPreview` · `MarkdownToolbar` · `MindMap` · `RichTextEditor` (WYSIWYG)
@@ -248,8 +266,10 @@ pnpm release            # Build & publish
 │       ├── foundation/      Design tokens & global styles
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
-│       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
-│       └── core/            UI components (246 components)
+│       │       ├── styles/  CSS (colors, typography, spacing, radius, animations)
+│       │       ├── themes/  Optional theme presets (calm.css)
+│       │       └── theme/   Theme preference helper + pre-paint init script
+│       └── core/            UI components (247 components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
 │               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ScheduleConfig, ...

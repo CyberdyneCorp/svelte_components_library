@@ -1,0 +1,275 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Calm theme preset
+   Quiet sage / sand / mist / stone palette for products that need
+   a trustworthy look (finance, health).
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/calm.css";
+   then set <html data-theme="calm"> or <html data-theme="calm-dark">.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Guarded by src/lib/themes/calm.test.ts (completeness, WCAG AA
+   contrast, motion).
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Shared by calm and calm-dark ── */
+[data-theme="calm"],
+[data-theme="calm-dark"] {
+  /* Typography — Inter everywhere (Space Grotesk reads "tech") */
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* Radius — soft surfaces: cards 16px, inputs 10px */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-pill: 999px;
+
+  /* Motion — ≤ 200ms, decelerating curves, no spring overshoot */
+  --transition-fast: 120ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-default: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 200ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-spring: 180ms ease-out;
+
+  /* ── Layer 3: Component tokens (resolve against each theme's Layer 2) ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-default);
+  --input-bg-hover: var(--color-surface-raised);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-subtle);
+  --card-hover-border: var(--color-border-default);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-raised);
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-raised);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 64px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   calm — light
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="calm"] {
+  color-scheme: light;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — sand */
+  --color-bg-primary: #f7f5f0;
+  --color-bg-secondary: #efece4;
+  --color-bg-tertiary: #e9e5db;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(43, 47, 44, 0.35);
+
+  /* Surfaces */
+  --color-surface-default: #ffffff;
+  --color-surface-raised: #fbfaf7;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #efece4;
+  --color-surface-active: #e6e2d8;
+
+  /* Text — stone */
+  --color-text-primary: #2b2f2c;
+  --color-text-secondary: #5a615b;
+  --color-text-tertiary: #646a65;
+  --color-text-disabled: #9a9f99;
+  --color-text-inverse: #f7f5f0;
+  --color-text-link: #3f6178;
+  --color-text-code: #3f5747;
+
+  /* Borders */
+  --color-border-default: #dad5ca;
+  --color-border-subtle: #e2ded4;
+  --color-border-strong: #7e847d;
+  --color-border-focus: #3f6178;
+  --color-border-brand: #4f6b58;
+
+  /* Actions — Brand (sage) */
+  --color-action-brand-default: #4f6b58;
+  --color-action-brand-hover: #3f5747;
+  --color-action-brand-active: #334839;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #e6efe7;
+  --color-action-brand-border: rgba(79, 107, 88, 0.4);
+
+  /* Actions — Secondary (mist) */
+  --color-action-secondary-default: #3f6178;
+  --color-action-secondary-hover: #334f63;
+  --color-action-secondary-active: #2a4152;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #e3ecf2;
+  --color-action-secondary-border: rgba(63, 97, 120, 0.4);
+
+  /* Actions — Tertiary (stone) */
+  --color-action-tertiary-default: #5a615b;
+  --color-action-tertiary-hover: #4a504b;
+  --color-action-tertiary-active: #3c413d;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger (clay) */
+  --color-action-danger-default: #a2463b;
+  --color-action-danger-hover: #8a3a30;
+  --color-action-danger-active: #74302a;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — decorative, remapped away from neon */
+  --color-accent-green: #4f6b58;
+  --color-accent-cyan: #3f6178;
+  --color-accent-violet: #6b5b7a;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #8a5a1f;
+
+  /* State — moss / ochre / clay / mist */
+  --color-state-success: #3d6b4a;
+  --color-state-success-bg: #e6efe7;
+  --color-state-warning: #8a5a1f;
+  --color-state-warning-bg: #f6ecdd;
+  --color-state-error: #a2463b;
+  --color-state-error-bg: #f6e4e1;
+  --color-state-info: #3f6178;
+  --color-state-info-bg: #e3ecf2;
+
+  /* Shadows — soft, no glow */
+  --shadow-sm: 0 1px 2px rgba(43, 47, 44, 0.06);
+  --shadow-md: 0 4px 12px rgba(43, 47, 44, 0.08);
+  --shadow-lg: 0 12px 32px rgba(43, 47, 44, 0.1);
+  --shadow-glow-green: 0 0 0 3px rgba(79, 107, 88, 0.18);
+  --shadow-glow-cyan: 0 0 0 3px rgba(63, 97, 120, 0.18);
+  --shadow-glow-violet: 0 0 0 3px rgba(107, 91, 122, 0.18);
+  --shadow-glow-red: 0 0 0 3px rgba(162, 70, 59, 0.18);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   calm-dark
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="calm-dark"] {
+  color-scheme: dark;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds */
+  --color-bg-primary: #161a18;
+  --color-bg-secondary: #1e2320;
+  --color-bg-tertiary: #262c28;
+  --color-bg-elevated: #1e2320;
+  --color-bg-overlay: rgba(0, 0, 0, 0.5);
+
+  /* Surfaces */
+  --color-surface-default: #1e2320;
+  --color-surface-raised: #232925;
+  --color-surface-overlay: #262c28;
+  --color-surface-hover: #2c332e;
+  --color-surface-active: #333b35;
+
+  /* Text */
+  --color-text-primary: #e8e6e0;
+  --color-text-secondary: #b4b8b1;
+  --color-text-tertiary: #969b94;
+  --color-text-disabled: #6b706a;
+  --color-text-inverse: #161a18;
+  --color-text-link: #98b9cf;
+  --color-text-code: #9db8a4;
+
+  /* Borders */
+  --color-border-default: #3a423c;
+  --color-border-subtle: #2c332e;
+  --color-border-strong: #7a817b;
+  --color-border-focus: #98b9cf;
+  --color-border-brand: #9db8a4;
+
+  /* Actions — Brand (sage) */
+  --color-action-brand-default: #9db8a4;
+  --color-action-brand-hover: #b2c9b8;
+  --color-action-brand-active: #c4d6c8;
+  --color-action-brand-text: #161a18;
+  --color-action-brand-bg: #1f2e24;
+  --color-action-brand-border: rgba(157, 184, 164, 0.4);
+
+  /* Actions — Secondary (mist) */
+  --color-action-secondary-default: #98b9cf;
+  --color-action-secondary-hover: #aec8da;
+  --color-action-secondary-active: #c0d5e3;
+  --color-action-secondary-text: #161a18;
+  --color-action-secondary-bg: #1c2830;
+  --color-action-secondary-border: rgba(152, 185, 207, 0.4);
+
+  /* Actions — Tertiary (stone) */
+  --color-action-tertiary-default: #b4b8b1;
+  --color-action-tertiary-hover: #c6c9c3;
+  --color-action-tertiary-active: #d4d6d1;
+  --color-action-tertiary-text: #161a18;
+
+  /* Actions — Danger (clay) */
+  --color-action-danger-default: #e79a8f;
+  --color-action-danger-hover: #edb0a7;
+  --color-action-danger-active: #f2c3bc;
+  --color-action-danger-text: #161a18;
+
+  /* Accents */
+  --color-accent-green: #9db8a4;
+  --color-accent-cyan: #98b9cf;
+  --color-accent-violet: #b7a6c6;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #e0b26e;
+
+  /* State */
+  --color-state-success: #8fc19c;
+  --color-state-success-bg: #1f2e24;
+  --color-state-warning: #e0b26e;
+  --color-state-warning-bg: #2e2618;
+  --color-state-error: #e79a8f;
+  --color-state-error-bg: #33201d;
+  --color-state-info: #98b9cf;
+  --color-state-info-bg: #1c2830;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow-green: 0 0 0 3px rgba(157, 184, 164, 0.2);
+  --shadow-glow-cyan: 0 0 0 3px rgba(152, 185, 207, 0.2);
+  --shadow-glow-violet: 0 0 0 3px rgba(183, 166, 198, 0.2);
+  --shadow-glow-red: 0 0 0 3px rgba(231, 154, 143, 0.2);
+}

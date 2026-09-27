@@ -31,6 +31,12 @@ const config: StorybookConfig = {
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
+      // Subpath exports first: alias entries match in order, and the bare
+      // package alias below would otherwise swallow "…/theme".
+      "@cyberdynecorp/svelte-ui-foundation/theme": path.resolve(
+        __dirname,
+        "../packages/ui/foundation/src/lib/theme/index.ts",
+      ),
       "@cyberdynecorp/svelte-ui-core": path.resolve(
         __dirname,
         "../packages/ui/core/src/lib/index.ts",

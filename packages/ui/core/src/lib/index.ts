@@ -94,6 +94,7 @@ export { FilterBar } from "./data/FilterBar/index.js";
 export { SortableList } from "./data/SortableList/index.js";
 export { OrgChart } from "./data/OrgChart/index.js";
 export { WeatherCard } from "./data/WeatherCard/index.js";
+export { CurrencyDisplay } from "./data/CurrencyDisplay/index.js";
 export { KpiCard, type KpiSentiment, type KpiTrend, type KpiTrendLabels } from "./data/KpiCard/index.js";
 export { BudgetBar, type BudgetMessages, type BudgetState, type BudgetStateLabels } from "./data/BudgetBar/index.js";
 
@@ -183,6 +184,25 @@ export { ScatterChart } from "./charts/ScatterChart/index.js";
 export { VennDiagram } from "./charts/VennDiagram/index.js";
 export { WordCloud } from "./charts/WordCloud/index.js";
 export { ElevationProfile } from "./charts/ElevationProfile/index.js";
+export {
+  ChartFrame,
+  categoryTable,
+  seriesTable,
+  type ChartA11yAttributes,
+  type ChartTableCell,
+  type ChartTableData,
+} from "./charts/ChartFrame/index.js";
+export {
+  ChartLegend,
+  CHART_DASH_PATTERNS,
+  CHART_MARKER_SHAPES,
+  markerClipPath,
+  markerPath,
+  seriesStyle,
+  type ChartLegendItem,
+  type ChartMarkerShape,
+  type ChartSeriesStyle,
+} from "./charts/ChartLegend/index.js";
 
 // Editor
 export { BlockEditor } from "./editor/BlockEditor/index.js";

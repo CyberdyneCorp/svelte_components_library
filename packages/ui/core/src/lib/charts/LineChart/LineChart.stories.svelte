@@ -6,6 +6,10 @@
     title: "Charts/LineChart",
     component: LineChart,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const singleSeries = [
@@ -68,3 +72,14 @@
 <Story name="MultiSeries" args={{ series: multiSeries, xLabel: "Epoch", yLabel: "Loss" }} />
 
 <Story name="WithLabels" args={{ series: accuracySeries, xLabel: "Training Samples (k)", yLabel: "Accuracy" }} />
+
+<Story
+  name="Accessible"
+  args={{
+    series: multiSeries,
+    xLabel: "Epoch",
+    yLabel: "Loss",
+    title: "Validation loss by model",
+    description: "All three models converge; Claude reaches the lowest loss by epoch 7.",
+  }}
+/>
