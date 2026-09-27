@@ -44,7 +44,8 @@
     children: Snippet<[ChartA11yAttributes]>;
   } = $props();
 
-  const uid = $props.id();
+  // Random suffix (library convention): the props id rune needs Svelte 5.20+, above the peer range.
+  const uid = `cy-chart-${Math.random().toString(36).slice(2, 9)}`;
   const titleId = `${uid}-title`;
   const descriptionId = `${uid}-description`;
   const tableId = `${uid}-table`;

@@ -53,6 +53,13 @@ describe("ChartLegend", () => {
     expect(screen.getByText("40%")).toHaveClass("cy-pie-chart__legend-value");
   });
 
+  it("re-clips a marker when its shape changes", async () => {
+    const { rerender } = render(ChartLegend, { props: { items: [{ label: "A", color: "red", marker: "square" }] } });
+    await rerender({ items: [{ label: "A", color: "red", marker: "diamond" }] });
+    const marker = document.querySelector(".cy-chart-legend__marker") as HTMLElement;
+    expect(marker.style.getPropertyValue("clip-path")).toBe(markerClipPath("diamond"));
+  });
+
   it("falls back to a circle when no marker is given", () => {
     render(ChartLegend, { props: { items: [{ label: "Only", color: "red" }] } });
     expect(document.querySelector("li")).toHaveAttribute("data-marker", "circle");

@@ -22,10 +22,11 @@
 
   // Set imperatively: some CSS parsers (e.g. jsdom) drop a whole style
   // attribute that contains a polygon() value, taking the colour with it.
-  function clipTo(shape: ChartMarkerShape) {
-    return (node: HTMLElement) => {
-      node.style.setProperty("clip-path", markerClipPath(shape));
-    };
+  // A `use:` action: attachments need Svelte 5.29+, above the peer range.
+  function clipTo(node: HTMLElement, shape: ChartMarkerShape) {
+    const apply = (next: ChartMarkerShape) => node.style.setProperty("clip-path", markerClipPath(next));
+    apply(shape);
+    return { update: apply };
   }
 
   function hook(element: string): string {
@@ -44,7 +45,7 @@
       <span
         class="cy-chart-legend__marker {hook('legend-dot')}"
         style:background={item.color}
-        {@attach clipTo(item.marker ?? "circle")}
+        use:clipTo={item.marker ?? "circle"}
         aria-hidden="true"
       ></span>
       <span class="cy-chart-legend__label {hook('legend-label')}">{item.label}</span>
