@@ -94,6 +94,7 @@ export { FilterBar } from "./data/FilterBar/index.js";
 export { SortableList } from "./data/SortableList/index.js";
 export { OrgChart } from "./data/OrgChart/index.js";
 export { WeatherCard } from "./data/WeatherCard/index.js";
+export { CurrencyDisplay } from "./data/CurrencyDisplay/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
