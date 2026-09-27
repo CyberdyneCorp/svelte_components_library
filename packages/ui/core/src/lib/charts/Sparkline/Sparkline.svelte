@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import ChartFrame from "../ChartFrame/ChartFrame.svelte";
-  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+  import { columnHeaders, type ChartLabels, type ChartTableData } from "../ChartFrame/chartTable.js";
 
   type Sample = { ts: number; value: number };
 
@@ -41,6 +41,7 @@
     hideTitle = true,
     /** The data table stays screen-reader-only unless this is enabled. */
     showDataToggle = false,
+    labels = {},
   }: {
     data?: number[];
     samples?: Sample[];
@@ -59,6 +60,8 @@
     description?: string;
     hideTitle?: boolean;
     showDataToggle?: boolean;
+    /** Localized strings; each key falls back to English. */
+    labels?: ChartLabels<"time" | "point" | "value">;
   } = $props();
 
   const strokeColor = $derived(color || "var(--color-action-brand-default)");
@@ -124,10 +127,14 @@
           : lastValue.toFixed(3),
   );
 
+  let headers = $derived(
+    columnHeaders({ time: "Time", point: "Point", value: label || "Value" }, labels.columns),
+  );
+
   let tableData = $derived<ChartTableData>(
     samples && samples.length > 0
-      ? { columns: ["Time", label || "Value"], rows: samples.map((s) => [s.ts, s.value]) }
-      : { columns: ["Point", label || "Value"], rows: data.map((v, i) => [i + 1, v]) },
+      ? { columns: [headers[0], headers[2]], rows: samples.map((s) => [s.ts, s.value]) }
+      : { columns: [headers[1], headers[2]], rows: data.map((v, i) => [i + 1, v]) },
   );
 
   // Unique gradient id so multiple sparklines on the same page don't collide.
@@ -142,7 +149,10 @@
   {hideTitle}
   {showDataToggle}
   inline
-  fallbackLabel={label || "Sparkline"}
+  fallbackLabel={label || labels.chart || "Sparkline"}
+  tableCaption={labels.tableCaption}
+  showDataLabel={labels.showData}
+  hideDataLabel={labels.hideData}
   data={tableData}
 >
 {#snippet children(a11y)}

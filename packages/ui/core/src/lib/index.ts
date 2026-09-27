@@ -187,8 +187,10 @@ export { ElevationProfile } from "./charts/ElevationProfile/index.js";
 export {
   ChartFrame,
   categoryTable,
+  columnHeaders,
   seriesTable,
   type ChartA11yAttributes,
+  type ChartLabels,
   type ChartTableCell,
   type ChartTableData,
 } from "./charts/ChartFrame/index.js";

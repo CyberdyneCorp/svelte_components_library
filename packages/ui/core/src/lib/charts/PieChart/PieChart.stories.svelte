@@ -41,3 +41,19 @@
     description: "ETH is the largest holding at 40%.",
   }}
 />
+
+<Story
+  name="Localized"
+  args={{
+    data: defaultData,
+    donut: true,
+    labels: {
+      chart: "Gráfico de pizza",
+      columns: { label: "Categoria", value: "Valor", share: "Parcela" },
+      tableCaption: "Dados por categoria",
+      showData: "Mostrar dados",
+      hideData: "Ocultar dados",
+      legend: "Legenda",
+    },
+  }}
+/>

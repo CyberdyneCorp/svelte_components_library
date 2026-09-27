@@ -83,3 +83,20 @@
     description: "All three models converge; Claude reaches the lowest loss by epoch 7.",
   }}
 />
+
+<Story
+  name="Localized"
+  args={{
+    series: multiSeries,
+    xLabel: "Época",
+    yLabel: "Perda",
+    title: "Perda de validação por modelo",
+    labels: {
+      columns: { x: "Época" },
+      tableCaption: "Dados de perda por época",
+      showData: "Mostrar dados",
+      hideData: "Ocultar dados",
+      legend: "Legenda",
+    },
+  }}
+/>

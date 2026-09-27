@@ -7,6 +7,34 @@ export type ChartTableData = {
   rows: ChartTableCell[][];
 };
 
+/**
+ * Overridable user-visible and assistive strings of a chart. Every key is
+ * optional and falls back to the English default, so apps can localize a
+ * chart (e.g. pt-BR) without forking it.
+ */
+export type ChartLabels<Column extends string = string> = {
+  /** Accessible name when no `title` is set (e.g. "Line chart"). */
+  chart?: string;
+  /** Data-table column headers, keyed per chart. */
+  columns?: Partial<Record<Column, string>>;
+  /** Table caption; defaults to "<title or chart name> data". */
+  tableCaption?: string;
+  /** Text of the toggle that reveals the data table. */
+  showData?: string;
+  /** Text of the toggle that hides the data table. */
+  hideData?: string;
+  /** Accessible name of the legend list. */
+  legend?: string;
+};
+
+/** Column headers in `defaults` order, each replaced by its override when given. */
+export function columnHeaders<Column extends string>(
+  defaults: Record<Column, string>,
+  overrides: Partial<Record<Column, string>> = {},
+): string[] {
+  return (Object.keys(defaults) as Column[]).map((key) => overrides[key] ?? defaults[key]);
+}
+
 /** Attributes a chart spreads onto its `<svg role="img">`. */
 export type ChartA11yAttributes = {
   "aria-label"?: string;

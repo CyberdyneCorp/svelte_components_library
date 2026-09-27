@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import ChartFrame from "../ChartFrame/ChartFrame.svelte";
-  import { seriesTable } from "../ChartFrame/chartTable.js";
+  import { columnHeaders, seriesTable, type ChartLabels } from "../ChartFrame/chartTable.js";
   import ChartLegend from "../ChartLegend/ChartLegend.svelte";
   import { markerPath, seriesStyle } from "../ChartLegend/markers.js";
 
@@ -24,6 +24,7 @@
     description,
     hideTitle = false,
     showDataToggle = true,
+    labels = {},
   }: {
     series?: Series[];
     width?: string;
@@ -40,6 +41,8 @@
     description?: string;
     hideTitle?: boolean;
     showDataToggle?: boolean;
+    /** Localized strings; each key falls back to English. */
+    labels?: ChartLabels<"x">;
   } = $props();
 
   const defaultColors = ["#00ff41", "#00d4ff", "#bf5af2", "#ffb800"];
@@ -89,7 +92,7 @@
     return s.color || defaultColors[i % defaultColors.length];
   }
 
-  let tableData = $derived(seriesTable(series, xLabel || "x"));
+  let tableData = $derived(seriesTable(series, columnHeaders({ x: xLabel || "x" }, labels.columns)[0]));
   let legendItems = $derived(
     series.map((s, i) => ({ label: s.name, color: getColor(s, i), ...seriesStyle(i) })),
   );
@@ -123,7 +126,17 @@
   }
 </script>
 
-<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Line chart" data={tableData}>
+<ChartFrame
+  {title}
+  {description}
+  {hideTitle}
+  {showDataToggle}
+  fallbackLabel={labels.chart ?? "Line chart"}
+  tableCaption={labels.tableCaption}
+  showDataLabel={labels.showData}
+  hideDataLabel={labels.hideData}
+  data={tableData}
+>
 {#snippet children(a11y)}
 <div class="cy-line-chart" style="width: {width}; height: {height};">
   <svg
@@ -237,7 +250,7 @@
   {/if}
 
   {#if showLegend && series.length > 0}
-    <ChartLegend items={legendItems} showLine blockClass="cy-line-chart" />
+    <ChartLegend items={legendItems} ariaLabel={labels.legend} showLine blockClass="cy-line-chart" />
   {/if}
 </div>
 {/snippet}

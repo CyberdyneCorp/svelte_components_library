@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import ChartFrame from "../ChartFrame/ChartFrame.svelte";
-  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+  import { columnHeaders, type ChartLabels, type ChartTableData } from "../ChartFrame/chartTable.js";
 
   type SankeyNode = { id: string; label?: string; color?: string };
   type SankeyLink = { source: string; target: string; value: number; color?: string };
@@ -24,6 +24,7 @@
     description,
     hideTitle = false,
     showDataToggle = true,
+    labels = {},
   }: {
     nodes?: SankeyNode[];
     links?: SankeyLink[];
@@ -41,6 +42,8 @@
     description?: string;
     hideTitle?: boolean;
     showDataToggle?: boolean;
+    /** Localized strings; each key falls back to English. */
+    labels?: ChartLabels<"source" | "target" | "value">;
   } = $props();
 
   const defaultColors = ["#00ff41", "#00d4ff", "#a855f7", "#ffb800", "#ff5555", "#50fa7b", "#ff79c6", "#8be9fd"];
@@ -203,7 +206,7 @@
   }
 
   let tableData = $derived<ChartTableData>({
-    columns: ["Source", "Target", "Value"],
+    columns: columnHeaders({ source: "Source", target: "Target", value: "Value" }, labels.columns),
     rows: links.map((l) => [nodeLabel(l.source), nodeLabel(l.target), l.value]),
   });
 
@@ -237,7 +240,17 @@
   }
 </script>
 
-<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Sankey diagram" data={tableData}>
+<ChartFrame
+  {title}
+  {description}
+  {hideTitle}
+  {showDataToggle}
+  fallbackLabel={labels.chart ?? "Sankey diagram"}
+  tableCaption={labels.tableCaption}
+  showDataLabel={labels.showData}
+  hideDataLabel={labels.hideData}
+  data={tableData}
+>
 {#snippet children(a11y)}
 <div class="cy-sankey-chart {className}" style="width: {width}; height: {height};">
   <svg

@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import ChartFrame from "../ChartFrame/ChartFrame.svelte";
-  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+  import { columnHeaders, type ChartLabels, type ChartTableData } from "../ChartFrame/chartTable.js";
 
   type Rect = { x: number; y: number; w: number; h: number; node: TreeNode; color: string; depth: number };
 
@@ -20,6 +20,7 @@
     description,
     hideTitle = false,
     showDataToggle = true,
+    labels = {},
   }: {
     data?: TreeNode[];
     width?: string;
@@ -30,6 +31,8 @@
     description?: string;
     hideTitle?: boolean;
     showDataToggle?: boolean;
+    /** Localized strings; each key falls back to English. */
+    labels?: ChartLabels<"label" | "value" | "share">;
   } = $props();
 
   const defaultColors = [
@@ -108,7 +111,7 @@
 
   // Top-level nodes only, matching what the map draws.
   let tableData = $derived<ChartTableData>({
-    columns: ["Label", "Value", "Share"],
+    columns: columnHeaders({ label: "Label", value: "Value", share: "Share" }, labels.columns),
     rows: data.map((n) => [n.label, n.value, percentage(n.value)]),
   });
 
@@ -152,7 +155,17 @@
   }
 </script>
 
-<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Tree map" data={tableData}>
+<ChartFrame
+  {title}
+  {description}
+  {hideTitle}
+  {showDataToggle}
+  fallbackLabel={labels.chart ?? "Tree map"}
+  tableCaption={labels.tableCaption}
+  showDataLabel={labels.showData}
+  hideDataLabel={labels.hideData}
+  data={tableData}
+>
 {#snippet children(a11y)}
 <div
   class="cy-treemap"
