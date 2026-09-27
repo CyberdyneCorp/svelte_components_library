@@ -15,7 +15,7 @@
     size = 160,
     thresholds = [],
     showValue = true,
-    /** Accessible name; falls back to `label`, then "Gauge". */
+    /** Accessible name; falls back to "<label or Gauge>: <value><unit>". */
     title,
     description,
     /** Titles are visually hidden by default: the gauge draws its own label. */
@@ -90,19 +90,26 @@
     return Number.isInteger(v) ? v.toString() : v.toFixed(1);
   }
 
+  let valueText = $derived(`${formatValue(clampedValue)}${unit}`);
+
+  // role="img" hides the SVG's own value text, so the value goes into the
+  // accessible name (no title) or the default description (with a title).
+  let a11yName = $derived(`${label || "Gauge"}: ${valueText}`);
+  let a11yDescription = $derived(description ?? (title ? valueText : undefined));
+
   let tableData = $derived<ChartTableData>({
     columns: ["Measure", "Value", "Minimum", "Maximum"],
-    rows: [[label || "Value", `${formatValue(clampedValue)}${unit}`, formatValue(min), formatValue(max)]],
+    rows: [[label || "Value", valueText, formatValue(min), formatValue(max)]],
   });
 </script>
 
 <ChartFrame
   {title}
-  {description}
+  description={a11yDescription}
   {hideTitle}
   {showDataToggle}
   inline
-  fallbackLabel={label || "Gauge"}
+  fallbackLabel={a11yName}
   data={tableData}
 >
 {#snippet children(a11y)}

@@ -376,7 +376,7 @@ Charts render inside `ChartFrame`. Give every chart a `title` (its accessible na
 ```
 
 - The SVG is exposed as `role="img"`. It is named by the title and described by the description. Without a title it falls back to a generic name such as "Line chart". Use `hideTitle` when the page already shows a heading.
-- Every chart also renders a real `<table>` of its data, built from its data props. The table is visually hidden but always read by screen readers. A **Show data** button (`aria-expanded`, `aria-controls`) reveals it for keyboard and sighted users. Pass `showDataToggle={false}` to keep only the screen-reader table. `Sparkline` and `Gauge` default to that.
+- Every chart also renders a real `<table>` of its data, built from its data props. The table is visually hidden but always read by screen readers. A **Show data** button (`aria-expanded`, `aria-controls`) reveals it for keyboard and sighted users. Pass `showDataToggle={false}` to keep only the screen-reader table. `Sparkline` and `Gauge` default to that. Without a `title`, a `Gauge` is named by its label and current value (e.g. "CPU: 72%").
 - Series never rely on colour alone. `ChartLegend` gives each series a distinct shape (circle, square, triangle, diamond, …) and dash pattern, and the plot uses the same shape and dash. Use `seriesStyle(i)` and `markerPath()` to match them in a custom chart.
 - For a custom chart, wrap your SVG in `ChartFrame` and spread the attributes it hands you:
 

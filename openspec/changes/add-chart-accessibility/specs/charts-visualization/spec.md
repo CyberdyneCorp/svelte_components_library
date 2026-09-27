@@ -75,7 +75,7 @@ Charts SHALL use the same encoding in their plot marks:
 - `Sparkline`: `Point` (1-based index) or `Time` (sample `ts`), then `label` or `Value`.
 - `Gauge`: `Measure`, `Value` (clamped, with unit), `Minimum`, `Maximum`.
 
-`Sparkline` and `Gauge` SHALL default to `hideTitle = true` and `showDataToggle = false`, use `label` as the fallback accessible name, and render no legend. The Storybook stories of every chart listed here, and of `ChartFrame` and `ChartLegend`, SHALL set `parameters.a11y.test` to `"error"`, so any axe violation fails the Storybook test project.
+`Sparkline` and `Gauge` SHALL default to `hideTitle = true` and `showDataToggle = false` and render no legend. `Sparkline` SHALL use `label` as the fallback accessible name. `Gauge` SHALL use `"<label or Gauge>: <value><unit>"` (clamped value) as the fallback accessible name and, when it has a `title` but no `description`, SHALL use the value text as its accessible description, because `role="img"` hides the value drawn inside the SVG. The Storybook stories of every chart listed here, and of `ChartFrame` and `ChartLegend`, SHALL set `parameters.a11y.test` to `"error"`, so any axe violation fails the Storybook test project.
 
 (src: packages/ui/core/src/lib/charts/*/*.svelte; packages/ui/core/src/lib/charts/*/*.stories.svelte)
 
@@ -90,6 +90,12 @@ Charts SHALL use the same encoding in their plot marks:
 - **GIVEN** a `Sparkline` with `label="Balance"` inside a table cell
 - **WHEN** it renders
 - **THEN** its SVG SHALL be named "Balance", no "Show data" button or legend SHALL be rendered, and a visually hidden table SHALL list the points
+
+#### Scenario: Gauge exposes its value
+
+- **GIVEN** a `Gauge` with `label="Budget used"`, `value=40` and `unit="%"` and no `title`
+- **WHEN** it renders
+- **THEN** its SVG SHALL be named "Budget used: 40%"
 
 #### Scenario: Axe gate
 

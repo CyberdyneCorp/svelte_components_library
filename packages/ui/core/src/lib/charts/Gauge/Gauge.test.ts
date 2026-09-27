@@ -38,14 +38,19 @@ describe("Gauge", () => {
 });
 
 describe("Gauge accessibility", () => {
-  it("is an image named by its label", () => {
-    render(Gauge, { props: { value: 40, label: "Budget used" } });
-    expect(screen.getByRole("img", { name: "Budget used" })).toBeInTheDocument();
+  it("is an image named by its label and current value", () => {
+    render(Gauge, { props: { value: 40, label: "Budget used", unit: "%" } });
+    expect(screen.getByRole("img", { name: "Budget used: 40%" })).toBeInTheDocument();
   });
 
   it("falls back to 'Gauge' without label or title", () => {
     render(Gauge, { props: { value: 40 } });
-    expect(screen.getByRole("img", { name: "Gauge" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Gauge: 40" })).toBeInTheDocument();
+  });
+
+  it("describes a titled gauge by its value when no description is given", () => {
+    render(Gauge, { props: { value: 250, max: 200, unit: "%", title: "CPU load" } });
+    expect(screen.getByRole("img", { name: "CPU load" })).toHaveAccessibleDescription("200%");
   });
 
   it("prefers a visually hidden title and wires the description", () => {
