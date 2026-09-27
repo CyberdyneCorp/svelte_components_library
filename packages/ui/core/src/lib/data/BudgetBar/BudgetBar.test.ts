@@ -105,6 +105,11 @@ describe("BudgetBar", () => {
     expect(container.querySelector(".cy-budget")).toHaveClass("cy-budget--approaching");
   });
 
+  it("never shows a rounded amount that disagrees with the state", () => {
+    render(BudgetBar, { props: { ...eur, spent: "1000.009", limit: "1000" } });
+    expect(meter()).toHaveAttribute("aria-valuetext", "€1,000.00 of €1,000.00, approaching limit");
+  });
+
   it("lets ariaLabel override the meter name", () => {
     render(BudgetBar, { props: { ...eur, spent: "1", limit: "10", ariaLabel: "Groceries budget" } });
     expect(screen.getByRole("meter", { name: "Groceries budget" })).toBeInTheDocument();

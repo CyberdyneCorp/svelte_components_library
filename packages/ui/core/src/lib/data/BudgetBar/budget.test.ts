@@ -5,9 +5,16 @@ const thresholds = [0.8, 1] as const;
 
 describe("budget helpers", () => {
   it("parses valid amounts and falls back to zero for invalid ones", () => {
-    expect(toBudgetAmount(" 820.5 ", 2)).toEqual({ value: "820.5", minor: BigInt(82050) });
+    expect(toBudgetAmount(" 820.5 ", 2)).toEqual({ value: "820.50", minor: BigInt(82050) });
     expect(toBudgetAmount("abc", 2)).toEqual({ value: "0", minor: BigInt(0) });
     expect(toBudgetAmount(undefined, 2)).toEqual({ value: "0", minor: BigInt(0) });
+  });
+
+  it("keeps the displayed value consistent with the truncated minor units", () => {
+    // Regression: the raw "999.999" used to be displayed (and rounded by Intl to 1,000.00)
+    // while the state and overage used the truncated 999.99.
+    expect(toBudgetAmount("999.999", 2)).toEqual({ value: "999.99", minor: BigInt(99999) });
+    expect(toBudgetAmount("1000.009", 2).value).toBe("1000.00");
   });
 
   it("never divides by a zero or negative limit", () => {
@@ -45,6 +52,10 @@ describe("budget helpers", () => {
     expect(m.spentPercent).toBeCloseTo(70);
     expect(m.committedPercent).toBeCloseTo(30);
     expect(m.state).toBe("ok");
+  });
+
+  it("treats an empty committed string as no committed amount", () => {
+    expect(computeBudget({ spent: "10", limit: "100", committed: "" }, 2, thresholds).committed).toBeNull();
   });
 
   it("treats limit 0 with spending as exceeded and without spending as ok", () => {

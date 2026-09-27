@@ -31,7 +31,10 @@ export const DEFAULT_BUDGET_MESSAGES: BudgetMessages = {
 };
 
 export interface BudgetAmount {
-  /** Canonical decimal string safe to format ("0" when the input is invalid). */
+  /**
+   * Canonical decimal string rebuilt from `minor`, so the displayed amount is
+   * exactly the one used for the state and overage ("0" when invalid).
+   */
   value: string;
   minor: bigint;
 }
@@ -54,9 +57,9 @@ const ZERO = BigInt(0);
 
 /** Parses a decimal string, falling back to zero when it is not a valid amount. */
 export function toBudgetAmount(value: string | null | undefined, minorUnits: number): BudgetAmount {
-  const text = (value ?? "").trim();
   try {
-    return { value: text, minor: toMinorUnits(text, minorUnits) };
+    const minor = toMinorUnits(value ?? "", minorUnits);
+    return { value: fromMinorUnits(minor, minorUnits), minor };
   } catch {
     return { value: "0", minor: ZERO };
   }
@@ -91,7 +94,7 @@ export function computeBudget(
 ): BudgetMetrics {
   const spent = toBudgetAmount(input.spent, minorUnits);
   const limit = toBudgetAmount(input.limit, minorUnits);
-  const committed = input.committed == null ? null : toBudgetAmount(input.committed, minorUnits);
+  const committed = input.committed?.trim() ? toBudgetAmount(input.committed, minorUnits) : null;
   const ratio = budgetRatio(spent.minor, limit.minor);
   const spentPercent = toPercent(ratio);
   const committedRatio = committed ? budgetRatio(committed.minor, limit.minor) : 0;

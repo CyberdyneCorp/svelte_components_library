@@ -45,7 +45,7 @@ The system SHALL provide a neutral `KpiCard` data-display component, exported fr
 The system SHALL provide a `BudgetBar` data-display component, exported from the package root. It SHALL:
 
 - Take `spent`, `limit` and an optional `committed` as decimal strings, a required ISO 4217 `currency`, an optional `locale`, `thresholds` (default `[0.8, 1]`), a required `label`, plus `stateLabels`, `messages` and `ariaLabel` for i18n and naming.
-- Treat an invalid amount as `"0"`. Compute the overage with BigInt minor units. Use `Number()` only to derive the spent/limit ratio, and format every displayed amount with `formatMoney`.
+- Treat an invalid amount as `"0"` and an empty `committed` as absent. Truncate every amount to the currency's minor units, and display that same canonical amount, so the shown values always agree with the state and overage. Compute the overage with BigInt minor units. Use `Number()` only to derive the spent/limit ratio, and format every displayed amount with `formatMoney`.
 - Never divide by a zero or negative limit. With such a limit, any positive spending SHALL be `exceeded`, and no spending SHALL be `ok`.
 - Derive the state from the ratio: `approaching` when the ratio is at or above `thresholds[0]`, `exceeded` when it is strictly above `thresholds[1]`, and `ok` otherwise.
 - Distinguish the states by visible text and a distinct `aria-hidden` icon, as well as colour (`--color-state-success`, `--color-state-warning`, `--color-state-error`).
@@ -75,6 +75,12 @@ The system SHALL provide a `BudgetBar` data-display component, exported from the
 - **GIVEN** a `BudgetBar` with `spent="25"` and `limit="0"`
 - **WHEN** it renders
 - **THEN** no division by zero SHALL occur, the state SHALL be `exceeded` and no text SHALL contain `NaN`
+
+#### Scenario: Sub-minor-unit precision
+
+- **GIVEN** a `BudgetBar` with `spent="1000.009"` and `limit="1000"` in EUR
+- **WHEN** it renders
+- **THEN** `aria-valuetext` SHALL be `€1,000.00 of €1,000.00, approaching limit` (no rounded-up `€1,000.01` beside a non-exceeded state)
 
 #### Scenario: Committed amount
 
