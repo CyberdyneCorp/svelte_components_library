@@ -144,3 +144,96 @@ Available keyframe animations:
 - `cy-scale-in` — Modal/dialog entrance
 - `cy-glow-pulse` — Pulsing green glow (status indicators)
 - `cy-spinner` — Loading rotation
+
+## Themes
+
+The default `:root` palette is the neon dark theme; `data-theme="light"` remaps it for light
+surfaces. Every theme redefines Layer 2 (semantic) and Layer 3 (component) tokens only —
+primitives never change — so components pick up a theme with no prop changes.
+
+### Calm preset
+
+`@cyberdynecorp/svelte-ui-foundation/themes/calm.css` is an optional preset for products that
+need a quiet, trustworthy look (finance, health). It ships two themes:
+
+| Theme | Selector | Palette |
+|-------|----------|---------|
+| Calm | `[data-theme="calm"]` | sand backgrounds, stone text, sage brand, mist info/focus |
+| Calm dark | `[data-theme="calm-dark"]` | deep stone backgrounds with the same hues lifted for dark |
+
+Load it **after** the foundation styles, then set the attribute on `<html>` (or any subtree):
+
+```svelte
+<script>
+  import "@cyberdynecorp/svelte-ui-foundation/styles";
+  import "@cyberdynecorp/svelte-ui-foundation/themes/calm.css";
+</script>
+```
+
+What the preset guarantees (enforced by `themes/calm.test.ts`):
+
+- **Complete** — every Layer 2 and Layer 3 token of the default theme has a calm value (the
+  theme-invariant `--video-*` tokens excepted), so no neon default can leak through. Adding a new
+  semantic token without a calm value fails the build.
+- **WCAG AA** — every declared text/background pairing is ≥ 4.5:1 and every meaningful UI
+  pairing (focus rings, input and strong borders, accents) is ≥ 3:1, in both themes.
+- **Calm motion** — `--transition-fast` 120ms, `--transition-default` 180ms and
+  `--transition-slow` 200ms on `cubic-bezier(0.2, 0, 0, 1)`; `--transition-spring` is a plain
+  180ms `ease-out` (no overshoot).
+- **Quieter type and shape** — `--font-display` is Inter; radii are softer (cards 16px,
+  inputs 10px); `--nav-height` is 64px; shadows are soft with no glow.
+
+Pick the preset from the Storybook toolbar (Theme → Calm / Calm dark) to preview any component,
+or see `Design Tokens/Themes`.
+
+### Theme preference (light / dark / system)
+
+`@cyberdynecorp/svelte-ui-foundation/theme` is a framework-agnostic, SSR-safe helper that
+resolves `system | <light> | <dark>`, applies it to `document.documentElement.dataset.theme`,
+persists the choice to `localStorage` and, under `system`, follows
+`prefers-color-scheme: dark` live. Storage failures (private mode, blocked site data) never
+throw; they fall back to `system`.
+
+```ts
+import { createThemePreference } from "@cyberdynecorp/svelte-ui-foundation/theme";
+
+const theme = createThemePreference({
+  storageKey: "app.theme",
+  themes: { light: "calm", dark: "calm-dark" },
+});
+
+theme.get(); // "system" | "calm" | "calm-dark" (stored preference)
+theme.resolved(); // "calm" | "calm-dark" (applied theme)
+theme.set("calm-dark");
+const unsubscribe = theme.subscribe(({ preference, resolved }) => {}); // store contract
+theme.destroy(); // stop following the OS
+```
+
+To avoid a flash of the wrong theme, set `data-theme` before first paint with the matching inline
+script. Generate it once (same options as the helper) and paste it into `src/app.html`:
+
+```ts
+import { themeInitScript } from "@cyberdynecorp/svelte-ui-foundation/theme";
+
+themeInitScript({ storageKey: "app.theme", themes: { light: "calm", dark: "calm-dark" } });
+```
+
+```html
+<!-- src/app.html -->
+<head>
+  <script>
+    (function(){var k="app.theme",l="calm",d="calm-dark",p=null;try{if(k)p=localStorage.getItem(k)}catch(e){}if(p!==l&&p!==d){try{p=matchMedia("(prefers-color-scheme: dark)").matches?d:l}catch(e){p=l}}document.documentElement.dataset.theme=p})();
+  </script>
+  %sveltekit.head%
+</head>
+```
+
+A strict Content-Security-Policy needs a nonce or hash for this inline script.
+
+`ThemeToggle` wraps the helper. It keeps its two-state light/dark switch by default; pass
+`includeSystem` for a light / dark / system radio group and `themes` to map the modes to preset
+names:
+
+```svelte
+<ThemeToggle includeSystem themes={{ light: "calm", dark: "calm-dark" }} persistKey="app.theme" />
+```

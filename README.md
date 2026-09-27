@@ -67,6 +67,22 @@ Import the foundation styles in your root layout:
 {@render children()}
 ```
 
+Optional calm theme preset (`data-theme="calm"` / `"calm-dark"`) and light/dark/system
+preference with a no-flash init script:
+
+```svelte
+<script>
+  import "@cyberdynecorp/svelte-ui-foundation/styles";
+  import "@cyberdynecorp/svelte-ui-foundation/themes/calm.css";
+  import { ThemeToggle } from "@cyberdynecorp/svelte-ui-core";
+</script>
+
+<ThemeToggle includeSystem themes={{ light: "calm", dark: "calm-dark" }} persistKey="app.theme" />
+```
+
+`createThemePreference` and `themeInitScript` live in `@cyberdynecorp/svelte-ui-foundation/theme`;
+see `Overview/Design Tokens` → Themes in Storybook for the `app.html` snippet.
+
 Use components:
 
 ```svelte
@@ -248,7 +264,9 @@ pnpm release            # Build & publish
 │       ├── foundation/      Design tokens & global styles
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
-│       │       └── styles/  CSS (colors, typography, spacing, radius, animations)
+│       │       ├── styles/  CSS (colors, typography, spacing, radius, animations)
+│       │       ├── themes/  Optional theme presets (calm.css)
+│       │       └── theme/   Theme preference helper + pre-paint init script
 │       └── core/            UI components (244 components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
