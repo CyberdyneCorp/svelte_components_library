@@ -1,5 +1,27 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.9.0
+
+### Minor Changes
+
+- 69abae9: Make charts accessible (#18). New `ChartFrame` component: a `<figure>` with an optional title and description wired to the chart SVG (`aria-labelledby` / `aria-describedby`), plus a data-table fallback. The table is visually hidden, stays available to screen readers, and a "Show data" toggle (`aria-expanded`) reveals it. New `ChartLegend` component with shape markers, and `seriesStyle` / `markerPath` helpers, so series stay distinguishable in grayscale.
+
+  `LineChart`, `AreaChart`, `BarChart`, `PieChart`, `Sparkline`, `SankeyChart`, `ScatterChart`, `TreeMap` and `Gauge` take optional `title`, `description`, `hideTitle` and `showDataToggle` props. Each derives its table from its existing data. Line and area series after the first are now dashed and show per-point shape markers (turn these off with `showMarkers={false}`). Pie slices and scatter points carry their series shape. `Sparkline` and `Gauge` keep a screen-reader-only table with no toggle by default. An untitled `Gauge` is named by its label and value (e.g. "CPU: 72%"). The `Sparkline` label now uses the secondary text colour, since the tertiary colour failed WCAG AA contrast. Existing props are unchanged. Storybook axe checks now fail on violations for these charts.
+
+- fe9b2c2: Add `CurrencyDisplay` (`data/CurrencyDisplay`): a neutral, locale-aware money amount display. It formats decimal-string amounts through `formatMoney` without float conversion, uses tabular numerals, marks negatives with a sign or a screen-reader label (never colour alone, optional `tone="signed"`), supports a width-preserving `masked` mode that exposes only `maskedLabel` to assistive technology, and renders an em dash with a single console warning for invalid input.
+- 480e597: Add a calm theme preset and light/dark/system theme preference.
+  - foundation: new optional `@cyberdynecorp/svelte-ui-foundation/themes/calm.css` defining `[data-theme="calm"]` and `[data-theme="calm-dark"]`. Every Layer 2 and Layer 3 token is redefined (except `--video-*`), contrast is WCAG AA, motion stays at or under 200ms with no spring, and the display font is Inter.
+  - foundation: new `@cyberdynecorp/svelte-ui-foundation/theme` with `createThemePreference({ storageKey, themes })` and `themeInitScript(options)`. The helper follows `prefers-color-scheme` live under `system`, persists the choice to `localStorage` (storage failures fall back to `system`) and is SSR-safe. `themeInitScript` returns a pre-paint script for `app.html`.
+  - foundation: test files are no longer published.
+  - core: `ThemeToggle` gains an opt-in `includeSystem` light / dark / system radio group and a `themes` mapping (e.g. `{ light: "calm", dark: "calm-dark" }`), plus bindable `preference`, `ariaLabel` and `onpreferencechange`. The two-state switch remains the default and existing props are unchanged. Until the user picks a theme, the two-state switch now follows OS changes live.
+
+- 08975d4: Add `KpiCard` and `BudgetBar`. `KpiCard` is a neutral KPI tile. It conveys trend with an icon plus hidden text, colours by sentiment independently of direction, can render as a link, and has a sparkline snippet. `BudgetBar` is a money budget meter with ok, approaching and exceeded states, a stacked committed amount, overage text, float-free formatting via `formatMoney`, and i18n labels.
+
+### Patch Changes
+
+- Updated dependencies [480e597]
+  - @cyberdynecorp/svelte-ui-foundation@0.4.0
+
 ## 0.8.1
 
 ### Patch Changes
