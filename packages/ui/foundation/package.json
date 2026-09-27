@@ -21,7 +21,8 @@
     }
   },
   "files": [
-    "src/lib",
+    "src/lib/**/*.css",
+    "src/lib/**/*.ts",
     "!src/lib/**/*.test.ts"
   ],
   "peerDependencies": {
