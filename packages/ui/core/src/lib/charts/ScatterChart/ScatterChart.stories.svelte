@@ -6,6 +6,10 @@
     title: "Charts/ScatterChart",
     component: ScatterChart,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const modelComparison = [
@@ -85,3 +89,14 @@
 <Story name="Clusters" args={{ series: clusters, xLabel: "Feature 1", yLabel: "Feature 2", pointSize: 4, showLegend: true }} />
 
 <Story name="NoGrid" args={{ series: modelComparison, xLabel: "Parameters", yLabel: "Score", showGrid: false }} />
+
+<Story
+  name="Accessible"
+  args={{
+    series: clusters,
+    xLabel: "Feature 1",
+    yLabel: "Feature 2",
+    title: "Customer clusters",
+    description: "Three clusters separate cleanly along feature 1.",
+  }}
+/>

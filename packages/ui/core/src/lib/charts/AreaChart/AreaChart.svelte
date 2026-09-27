@@ -1,6 +1,11 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import { seriesTable } from "../ChartFrame/chartTable.js";
+  import ChartLegend from "../ChartLegend/ChartLegend.svelte";
+  import { markerPath, seriesStyle } from "../ChartLegend/markers.js";
+
   type DataPoint = { x: number; y: number };
   type Series = { name: string; data: DataPoint[]; color?: string };
 
@@ -12,6 +17,11 @@
     showGrid = true,
     showLegend = true,
     showTooltip = true,
+    showMarkers = true,
+    title,
+    description,
+    hideTitle = false,
+    showDataToggle = true,
   }: {
     series?: Series[];
     stacked?: boolean;
@@ -20,6 +30,12 @@
     showGrid?: boolean;
     showLegend?: boolean;
     showTooltip?: boolean;
+    /** Draw a per-series shape at every data point (matches the legend marker). */
+    showMarkers?: boolean;
+    title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
   } = $props();
 
   const defaultColors = ["#00ff41", "#00d4ff", "#bf5af2", "#ffb800"];
@@ -115,6 +131,12 @@
     return Number.isInteger(n) ? n.toString() : n.toFixed(2);
   }
 
+  // The table lists the raw (unstacked) values.
+  let tableData = $derived(seriesTable(series));
+  let legendItems = $derived(
+    series.map((s, i) => ({ label: s.name, color: getColor(s, i), ...seriesStyle(i) })),
+  );
+
   function onMouseMove(e: MouseEvent) {
     const svg = e.currentTarget as SVGSVGElement;
     const rect = svg.getBoundingClientRect();
@@ -138,15 +160,17 @@
   }
 </script>
 
+<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Area chart" data={tableData}>
+{#snippet children(a11y)}
 <div class="cy-area-chart" style="width: {width}; height: {height};">
   <svg
+    {...a11y}
     viewBox="0 0 {viewW} {viewH}"
     preserveAspectRatio="xMidYMid meet"
     class="cy-area-chart__svg"
     onmousemove={onMouseMove}
     onmouseleave={onMouseLeave}
     role="img"
-    aria-label="Area chart"
   >
     <defs>
       {#each displaySeries as s, i}
@@ -180,6 +204,7 @@
     {#each [...displaySeries].reverse() as s, ri}
       {@const i = displaySeries.length - 1 - ri}
       {@const baseData = stacked && i > 0 ? displaySeries[i - 1].data : undefined}
+      {@const style = seriesStyle(i)}
       <path
         d={areaPath(s.data, baseData)}
         fill="url(#area-grad-{i})"
@@ -190,8 +215,19 @@
         fill="none"
         stroke={getColor(s, i)}
         stroke-width="2"
+        stroke-dasharray={style.dash || undefined}
         class="cy-area-chart__line"
       />
+      {#if showMarkers}
+        {#each s.data as p, pi (pi)}
+          <path
+            d={markerPath(style.marker, scaleX(p.x), scaleY(p.y), 7)}
+            fill={getColor(s, i)}
+            class="cy-area-chart__marker"
+            data-marker={style.marker}
+          />
+        {/each}
+      {/if}
     {/each}
 
     {#if showTooltip && hoverX !== null}
@@ -225,16 +261,11 @@
   {/if}
 
   {#if showLegend && series.length > 0}
-    <div class="cy-area-chart__legend">
-      {#each series as s, i}
-        <div class="cy-area-chart__legend-item">
-          <span class="cy-area-chart__legend-dot" style="background: {getColor(s, i)}"></span>
-          <span>{s.name}</span>
-        </div>
-      {/each}
-    </div>
+    <ChartLegend items={legendItems} showLine blockClass="cy-area-chart" />
   {/if}
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-area-chart {
@@ -317,27 +348,5 @@
   .cy-area-chart__tooltip-val {
     font-family: var(--font-mono);
     color: var(--color-text-primary);
-  }
-
-  .cy-area-chart__legend {
-    display: flex;
-    gap: var(--space-4);
-    justify-content: center;
-    padding-top: var(--space-2);
-  }
-
-  .cy-area-chart__legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-  }
-
-  .cy-area-chart__legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
   }
 </style>

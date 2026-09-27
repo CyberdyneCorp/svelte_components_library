@@ -6,6 +6,10 @@
     title: "Charts/AreaChart",
     component: AreaChart,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const singleSeries = [
@@ -68,3 +72,12 @@
 <Story name="Stacked" args={{ stacked: true, series: stackedSeries }} />
 
 <Story name="MultiSeries" args={{ series: multiSeries }} />
+
+<Story
+  name="Accessible"
+  args={{
+    series: singleSeries,
+    title: "Portfolio value",
+    description: "Portfolio value grew from 10,000 to 16,500 over twelve months.",
+  }}
+/>
