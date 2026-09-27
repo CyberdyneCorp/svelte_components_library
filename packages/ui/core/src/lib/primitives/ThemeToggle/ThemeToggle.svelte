@@ -278,7 +278,10 @@
   .cy-theme-toggle__option--active {
     background: var(--color-surface-default);
     color: var(--color-action-brand-default);
-    box-shadow: var(--shadow-sm);
+    /* Selected state is also shown by a ≥3:1 outline, not by colour alone. */
+    box-shadow:
+      inset 0 0 0 1px var(--color-border-strong),
+      var(--shadow-sm);
   }
 
   .cy-theme-toggle__option:has(.cy-theme-toggle__input:focus-visible) {
