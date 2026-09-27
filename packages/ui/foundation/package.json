@@ -10,13 +10,19 @@
       "default": "./src/lib/index.ts"
     },
     "./styles": "./src/lib/styles/index.css",
+    "./themes/calm.css": "./src/lib/themes/calm.css",
     "./tokens": {
       "types": "./src/lib/tokens/tokens.ts",
       "default": "./src/lib/tokens/tokens.ts"
+    },
+    "./theme": {
+      "types": "./src/lib/theme/index.ts",
+      "default": "./src/lib/theme/index.ts"
     }
   },
   "files": [
-    "src/lib"
+    "src/lib",
+    "!src/lib/**/*.test.ts"
   ],
   "peerDependencies": {
     "svelte": "^5.0.0"

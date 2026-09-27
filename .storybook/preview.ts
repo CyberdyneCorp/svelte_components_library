@@ -1,16 +1,27 @@
 import type { Preview } from "@storybook/svelte-vite";
 import "../packages/ui/foundation/src/lib/styles/index.css";
+import "../packages/ui/foundation/src/lib/themes/calm.css";
+
+/** Page background / text per toolbar theme (body sits outside the story root). */
+const PAGE_COLORS: Record<string, [string, string]> = {
+  dark: ["#0a0a0f", "#f0f0ff"],
+  light: ["#f8f8fc", "#12121a"],
+  calm: ["#f7f5f0", "#2b2f2c"],
+  "calm-dark": ["#161a18", "#e8e6e0"],
+};
 
 const preview: Preview = {
   globalTypes: {
     theme: {
-      description: "Light / Dark mode",
+      description: "Theme (default dark / light / calm presets)",
       toolbar: {
         title: "Theme",
         icon: "mirror",
         items: [
           { value: "dark", title: "Dark", icon: "moon" },
           { value: "light", title: "Light", icon: "sun" },
+          { value: "calm", title: "Calm", icon: "circle" },
+          { value: "calm-dark", title: "Calm dark", icon: "circlehollow" },
         ],
         dynamicTitle: true,
       },
@@ -44,8 +55,9 @@ const preview: Preview = {
 
       if (typeof document !== "undefined") {
         document.documentElement.setAttribute("data-theme", theme);
-        document.body.style.backgroundColor = theme === "light" ? "#f8f8fc" : "#0a0a0f";
-        document.body.style.color = theme === "light" ? "#12121a" : "#f0f0ff";
+        const [background, color] = PAGE_COLORS[theme] ?? PAGE_COLORS.dark;
+        document.body.style.backgroundColor = background;
+        document.body.style.color = color;
       }
 
       return Story(context.args);
