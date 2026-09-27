@@ -4,7 +4,6 @@
   import type { FormatMoneyOptions } from "../../forms/MoneyInput/money.js";
   import {
     INVALID_AMOUNT_TEXT,
-    isNegativeAmount,
     maskGlyphs,
     maskSizer,
     tryFormatAmount,
@@ -40,8 +39,8 @@
   let formatted = $derived(
     tryFormatAmount(amount, { currency, locale, signDisplay, currencyDisplay }),
   );
-  let negative = $derived(formatted !== null && isNegativeAmount(amount));
-  let positive = $derived(formatted !== null && !negative && /[1-9]/.test(amount));
+  let negative = $derived(formatted?.sign === -1);
+  let positive = $derived(formatted?.sign === 1);
   let showNegativeLabel = $derived(negative && signDisplay === "never");
   let colored = $derived(tone === "signed" && !masked);
 
@@ -71,13 +70,15 @@
     <span class="cy-currency__value">{INVALID_AMOUNT_TEXT}</span>
   {:else if masked}
     <span class="cy-currency__sr">{maskedLabel}</span>
-    <span class="cy-currency__sizer" aria-hidden="true">{maskSizer(formatted)}</span>
-    <span class="cy-currency__mask" aria-hidden="true">{maskGlyphs(formatted)}</span>
+    <span class="cy-currency__sizer" aria-hidden="true"
+      >{maskSizer(formatted.text, formatted.zeroDigit)}</span
+    >
+    <span class="cy-currency__mask" aria-hidden="true">{maskGlyphs(formatted.text)}</span>
   {:else}
     {#if showNegativeLabel}
       <span class="cy-currency__sr">{negativeLabel} </span>
     {/if}
-    <span class="cy-currency__value">{formatted}</span>
+    <span class="cy-currency__value">{formatted.text}</span>
   {/if}
 </span>
 

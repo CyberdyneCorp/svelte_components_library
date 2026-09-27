@@ -1,6 +1,6 @@
 ## 1. Component
 
-- [x] 1.1 Add pure helpers (`isValidAmount`, `isNegativeAmount`, `tryFormatAmount`, `maskSizer`, `maskGlyphs`) reusing `formatMoney`
+- [x] 1.1 Add pure helpers (`isValidAmount`, `displayedSign`, `tryFormatAmount`, `maskSizer`, `maskGlyphs`) reusing `formatMoney`
 - [x] 1.2 Build `CurrencyDisplay.svelte` with `amount`, `currency`, `locale`, `signDisplay`, `currencyDisplay`, `tone`, `masked`, `maskedLabel`, `negativeLabel`
 - [x] 1.3 Tabular numerals; negative label for `signDisplay="never"`; `tone="signed"` colouring via state tokens
 - [x] 1.4 Width-preserving mask that exposes only `maskedLabel` to assistive technology

@@ -1,7 +1,7 @@
 import { render } from "@testing-library/svelte";
 import { afterEach, describe, it, expect, vi } from "vitest";
 import CurrencyDisplay from "./CurrencyDisplay.svelte";
-import { isNegativeAmount, isValidAmount, maskGlyphs, maskSizer } from "./currencyDisplay.js";
+import { displayedSign, isValidAmount, maskGlyphs, maskSizer } from "./currencyDisplay.js";
 
 /** Intl uses (narrow) no-break spaces; compare with plain spaces. */
 function text(el: Element | null | undefined): string {
@@ -123,6 +123,28 @@ describe("CurrencyDisplay negatives", () => {
     expect(zero.container.querySelector(".cy-currency__sr")).toBeNull();
   });
 
+  it.each(["-0.00", "-0.001"])("renders %s (displayed as zero) without a minus sign", (amount) => {
+    const { container } = render(CurrencyDisplay, {
+      props: { amount, currency: "USD", locale: "en-US", tone: "signed" },
+    });
+    expect(value(container)).toBe("$0.00");
+    expect(root(container).className).not.toMatch(/--positive|--negative/);
+  });
+
+  it("does not label or colour an amount that rounds to zero with signDisplay=never", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: {
+        amount: "-0.001",
+        currency: "USD",
+        locale: "en-US",
+        signDisplay: "never",
+        tone: "signed",
+      },
+    });
+    expect(container.querySelector(".cy-currency__sr")).toBeNull();
+    expect(root(container).classList.contains("cy-currency--negative")).toBe(false);
+  });
+
   it("keeps neutral colour by default", () => {
     const { container } = render(CurrencyDisplay, {
       props: { amount: "-1", currency: "USD", locale: "en-US" },
@@ -167,6 +189,15 @@ describe("CurrencyDisplay masked", () => {
     expect(text(sizer)).toBe("-$0,000.00");
     expect(sizer.getAttribute("aria-hidden")).toBe("true");
     expect(container.querySelector(".cy-currency__mask")?.getAttribute("aria-hidden")).toBe("true");
+  });
+
+  it("keeps native digits out of the DOM (ar-EG)", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: { amount: "-1234.56", currency: "EGP", locale: "ar-EG", masked: true },
+    });
+    expect(container.textContent).not.toMatch(/[1-9١-٩]/u);
+    expect(text(container.querySelector(".cy-currency__sizer"))).toMatch(/٠٬٠٠٠٫٠٠/u);
+    expect(text(container.querySelector(".cy-currency__mask"))).toBe("••••••");
   });
 
   it("uses a custom masked label", () => {
@@ -223,15 +254,23 @@ describe("currencyDisplay helpers", () => {
     expect(isValidAmount(12 as unknown)).toBe(false);
   });
 
-  it("detects negatives, ignoring negative zero", () => {
-    expect(isNegativeAmount("-0.01")).toBe(true);
-    expect(isNegativeAmount("-0.00")).toBe(false);
-    expect(isNegativeAmount("5")).toBe(false);
+  it("detects the displayed sign, treating values that round to zero as zero", () => {
+    const usd = { currency: "USD", locale: "en-US" };
+    expect(displayedSign("-0.01", usd)).toBe(-1);
+    expect(displayedSign("-0.00", usd)).toBe(0);
+    expect(displayedSign("-0.001", usd)).toBe(0);
+    expect(displayedSign("-0.4", { currency: "JPY", locale: "en-US" })).toBe(0);
+    expect(displayedSign("5", usd)).toBe(1);
   });
 
   it("builds mask sizer and glyphs", () => {
     expect(maskSizer("$1,234.56")).toBe("$0,000.00");
     expect(maskGlyphs("$1,234.56")).toBe("••••••");
     expect(maskGlyphs("$1")).toBe("••••");
+  });
+
+  it("masks native digits too", () => {
+    expect(maskSizer("١٬٢٣٤٫٥٠", "٠")).toBe("٠٬٠٠٠٫٠٠");
+    expect(maskGlyphs("१,२३४.५०")).toBe("••••••");
   });
 });
