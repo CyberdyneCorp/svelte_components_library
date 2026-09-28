@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import ChartFrame from "../ChartFrame/ChartFrame.svelte";
-  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+  import { columnHeaders, type ChartLabels, type ChartTableData } from "../ChartFrame/chartTable.js";
   import ChartLegend from "../ChartLegend/ChartLegend.svelte";
   import { markerPath, seriesStyle } from "../ChartLegend/markers.js";
 
@@ -20,6 +20,7 @@
     description,
     hideTitle = false,
     showDataToggle = true,
+    labels = {},
   }: {
     data?: PieData[];
     size?: number;
@@ -32,6 +33,8 @@
     description?: string;
     hideTitle?: boolean;
     showDataToggle?: boolean;
+    /** Localized strings; each key falls back to English. */
+    labels?: ChartLabels<"label" | "value" | "share">;
   } = $props();
 
   const defaultColors = [
@@ -144,7 +147,7 @@
   }
 
   let tableData = $derived<ChartTableData>({
-    columns: ["Label", "Value", "Share"],
+    columns: columnHeaders({ label: "Label", value: "Value", share: "Share" }, labels.columns),
     rows: data.map((d) => [d.label, d.value, percentage(d.value)]),
   });
 
@@ -165,7 +168,18 @@
   }
 </script>
 
-<ChartFrame {title} {description} {hideTitle} {showDataToggle} inline fallbackLabel="Pie chart" data={tableData}>
+<ChartFrame
+  {title}
+  {description}
+  {hideTitle}
+  {showDataToggle}
+  inline
+  fallbackLabel={labels.chart ?? "Pie chart"}
+  tableCaption={labels.tableCaption}
+  showDataLabel={labels.showData}
+  hideDataLabel={labels.hideData}
+  data={tableData}
+>
 {#snippet children(a11y)}
 <div class="cy-pie-chart" style="width: {size}px;">
   <svg
@@ -210,7 +224,7 @@
   {/if}
 
   {#if showLegend}
-    <ChartLegend items={legendItems} blockClass="cy-pie-chart" />
+    <ChartLegend items={legendItems} ariaLabel={labels.legend} blockClass="cy-pie-chart" />
   {/if}
 </div>
 {/snippet}

@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import ChartFrame from "../ChartFrame/ChartFrame.svelte";
-  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+  import { columnHeaders, type ChartLabels, type ChartTableData } from "../ChartFrame/chartTable.js";
 
   type Threshold = { value: number; color: string };
 
@@ -22,6 +22,7 @@
     hideTitle = true,
     /** The data table stays screen-reader-only unless this is enabled. */
     showDataToggle = false,
+    labels = {},
   }: {
     value?: number;
     min?: number;
@@ -35,6 +36,8 @@
     description?: string;
     hideTitle?: boolean;
     showDataToggle?: boolean;
+    /** Localized strings; each key falls back to English. */
+    labels?: ChartLabels<"measure" | "value" | "minimum" | "maximum">;
   } = $props();
 
   const defaultThresholds: Threshold[] = [
@@ -94,12 +97,15 @@
 
   // role="img" hides the SVG's own value text, so the value goes into the
   // accessible name (no title) or the default description (with a title).
-  let a11yName = $derived(`${label || "Gauge"}: ${valueText}`);
+  let a11yName = $derived(`${label || labels.chart || "Gauge"}: ${valueText}`);
   let a11yDescription = $derived(description ?? (title ? valueText : undefined));
 
   let tableData = $derived<ChartTableData>({
-    columns: ["Measure", "Value", "Minimum", "Maximum"],
-    rows: [[label || "Value", valueText, formatValue(min), formatValue(max)]],
+    columns: columnHeaders(
+      { measure: "Measure", value: "Value", minimum: "Minimum", maximum: "Maximum" },
+      labels.columns,
+    ),
+    rows: [[label || labels.columns?.value || "Value", valueText, formatValue(min), formatValue(max)]],
   });
 </script>
 
@@ -110,6 +116,9 @@
   {showDataToggle}
   inline
   fallbackLabel={a11yName}
+  tableCaption={labels.tableCaption}
+  showDataLabel={labels.showData}
+  hideDataLabel={labels.hideData}
   data={tableData}
 >
 {#snippet children(a11y)}

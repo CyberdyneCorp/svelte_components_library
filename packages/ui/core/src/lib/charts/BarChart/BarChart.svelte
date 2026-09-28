@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import ChartFrame from "../ChartFrame/ChartFrame.svelte";
-  import { categoryTable } from "../ChartFrame/chartTable.js";
+  import { categoryTable, columnHeaders, type ChartLabels } from "../ChartFrame/chartTable.js";
 
   type BarData = { label: string; value: number; color?: string };
 
@@ -19,6 +19,7 @@
     description,
     hideTitle = false,
     showDataToggle = true,
+    labels = {},
   }: {
     data?: BarData[];
     width?: string;
@@ -32,6 +33,8 @@
     description?: string;
     hideTitle?: boolean;
     showDataToggle?: boolean;
+    /** Localized strings; each key falls back to English. */
+    labels?: ChartLabels<"label" | "value">;
   } = $props();
 
   const viewW = 600;
@@ -60,10 +63,22 @@
   }
 
   let ticks = $derived(gridTicks(maxVal, 4));
-  let tableData = $derived(categoryTable(data));
+  let tableData = $derived(
+    categoryTable(data, ...columnHeaders({ label: "Label", value: "Value" }, labels.columns)),
+  );
 </script>
 
-<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Bar chart" data={tableData}>
+<ChartFrame
+  {title}
+  {description}
+  {hideTitle}
+  {showDataToggle}
+  fallbackLabel={labels.chart ?? "Bar chart"}
+  tableCaption={labels.tableCaption}
+  showDataLabel={labels.showData}
+  hideDataLabel={labels.hideData}
+  data={tableData}
+>
 {#snippet children(a11y)}
 <div class="cy-bar-chart" style="width: {width}; height: {height};">
   <svg

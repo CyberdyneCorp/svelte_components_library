@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import ChartFrame from "../ChartFrame/ChartFrame.svelte";
-  import type { ChartTableData } from "../ChartFrame/chartTable.js";
+  import { columnHeaders, type ChartLabels, type ChartTableData } from "../ChartFrame/chartTable.js";
   import ChartLegend from "../ChartLegend/ChartLegend.svelte";
   import { markerPath, seriesStyle } from "../ChartLegend/markers.js";
 
@@ -27,6 +27,7 @@
     description,
     hideTitle = false,
     showDataToggle = true,
+    labels = {},
   }: {
     series?: Series[];
     width?: string;
@@ -45,6 +46,8 @@
     description?: string;
     hideTitle?: boolean;
     showDataToggle?: boolean;
+    /** Localized strings; each key falls back to English. */
+    labels?: ChartLabels<"series" | "x" | "y" | "label">;
   } = $props();
 
   const defaultColors = ["#00ff41", "#00d4ff", "#a855f7", "#ffb800", "#ff5555", "#50fa7b"];
@@ -122,7 +125,10 @@
   let hasPointLabels = $derived(allPoints.some((p) => p.label));
 
   let tableData = $derived<ChartTableData>({
-    columns: ["Series", xLabel || "x", yLabel || "y", ...(hasPointLabels ? ["Label"] : [])],
+    columns: columnHeaders(
+      { series: "Series", x: xLabel || "x", y: yLabel || "y", label: "Label" },
+      labels.columns,
+    ).slice(0, hasPointLabels ? 4 : 3),
     rows: series.flatMap((s) =>
       s.data.map((p) => [s.name, p.x, p.y, ...(hasPointLabels ? [p.label ?? ""] : [])]),
     ),
@@ -156,11 +162,21 @@
   }
 </script>
 
-<ChartFrame {title} {description} {hideTitle} {showDataToggle} fallbackLabel="Scatter chart" data={tableData}>
+<ChartFrame
+  {title}
+  {description}
+  {hideTitle}
+  {showDataToggle}
+  fallbackLabel={labels.chart ?? "Scatter chart"}
+  tableCaption={labels.tableCaption}
+  showDataLabel={labels.showData}
+  hideDataLabel={labels.hideData}
+  data={tableData}
+>
 {#snippet children(a11y)}
 <div class="cy-scatter-chart {className}" style="width: {width}; height: {height};">
   {#if showLegend && series.length > 1}
-    <ChartLegend items={legendItems} blockClass="cy-scatter-chart" />
+    <ChartLegend items={legendItems} ariaLabel={labels.legend} blockClass="cy-scatter-chart" />
   {/if}
 
   <svg

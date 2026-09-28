@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { categoryTable, seriesTable } from "./chartTable.js";
+import { categoryTable, columnHeaders, seriesTable } from "./chartTable.js";
 
 describe("seriesTable", () => {
   it("merges series on x, sorts ascending and leaves gaps empty", () => {
@@ -33,5 +33,15 @@ describe("categoryTable", () => {
 
   it("accepts custom headers", () => {
     expect(categoryTable([], "Account", "Balance").columns).toEqual(["Account", "Balance"]);
+  });
+});
+
+describe("columnHeaders", () => {
+  it("keeps the defaults' order and English values without overrides", () => {
+    expect(columnHeaders({ label: "Label", value: "Value", share: "Share" })).toEqual(["Label", "Value", "Share"]);
+  });
+
+  it("replaces only the overridden keys", () => {
+    expect(columnHeaders({ label: "Label", value: "Value" }, { value: "Valor" })).toEqual(["Label", "Valor"]);
   });
 });
