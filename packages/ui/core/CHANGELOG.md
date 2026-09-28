@@ -1,5 +1,12 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.10.1
+
+### Patch Changes
+
+- Updated dependencies [1113b7b]
+  - @cyberdynecorp/svelte-ui-foundation@0.5.1
+
 ## 0.10.0
 
 ### Minor Changes
