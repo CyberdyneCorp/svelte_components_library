@@ -18,10 +18,10 @@
 
 ## 3. Presets
 
-- [ ] 3.1 Add `themes/styles/` with minimal, flat, material, swiss, organic, maximalism, y2k, glass, neumorphism, skeuomorphism, brutalism, bento, clay, memphis, vaporwave, art-deco, editorial
-- [ ] 3.2 Preset guard test (WCAG AA on the calm pairing list, no primitives/video, foundation namespaces only)
-- [ ] 3.3 `./themes/styles/*.css` export; Storybook toolbar entries and a `Design Tokens/Styles` gallery
-- [ ] 3.4 Document the style → theme mapping (neon = default, light, corporate = calm, retro = retro family)
+- [x] 3.1 Add `themes/<name>.css` presets: minimal, flat, material, swiss, organic, maximalism, y2k, glass, neumorphism, skeuomorphism, brutalism, bento, clay, memphis, vaporwave, art-deco, editorial
+- [x] 3.2 Preset guard test `themes/presets.test.ts` (generalizes calm.test.ts: completeness, WCAG AA on the calm pairing list, no primitives/video, foundation tokens only, motion)
+- [x] 3.3 `./themes/<name>.css` exports; Storybook toolbar entries and a Style Switcher / Style Gallery in `Design Tokens/Themes`
+- [x] 3.4 Document the style → theme mapping (neon = default, light, corporate = calm, retro = retro family) in `DesignTokens.mdx` and `README.md`
 
 ## 4. Release
 

@@ -1,0 +1,197 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Swiss theme preset
+   Swiss / International Typographic Style: strict grid, bold grotesk
+   type, black / white / signal red, square corners.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/swiss.css";
+   then set <html data-theme="swiss">.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Contrast meets WCAG AA for the same text/surface/action pairings
+   guarded for calm (4.5:1 text, 3:1 UI); motion stays ≤ 200ms with
+   no overshoot (reduced-motion is handled by animations.css).
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="swiss"] {
+  color-scheme: light;
+
+  /* Typography — neo-grotesk (Helvetica lineage), Inter as the hosted fallback */
+  --font-display: "Helvetica Neue", Helvetica, "Inter", Arial, sans-serif;
+  --font-body: "Helvetica Neue", Helvetica, "Inter", Arial, sans-serif;
+  --font-decorative: var(--font-display);
+  --heading-transform: none;
+
+  /* Radius — square corners everywhere, pills included */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-pill: 0;
+
+  /* Motion — ≤ 200ms, no spring overshoot */
+  --transition-fast: 80ms linear;
+  --transition-default: 120ms ease-out;
+  --transition-slow: 160ms ease-out;
+  --transition-spring: 120ms ease-out;
+
+  /* Border shape — black rules; strong rules are 3px */
+  --border-width: 1px;
+  --border-width-strong: 3px;
+  --border-style: solid;
+
+  /* ── Layer 2: Style tokens — Swiss is flat print, so all no-ops ── */
+  --color-accent-1: var(--color-accent-4);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+  --gradient-surface: none;
+  --gradient-brand: none;
+  --gradient-accent: none;
+  --gradient-backdrop: none;
+  --texture-surface: none;
+  --pattern-backdrop: none;
+  --surface-blur: none;
+  --shadow-offset: 0 0 0 0 transparent;
+  --shadow-raised: 0 0 0 0 transparent;
+  --shadow-pressed: 0 0 0 0 transparent;
+  --shadow-inset: 0 0 0 0 transparent;
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-default);
+  --input-bg-hover: var(--color-surface-raised);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-default);
+  --card-hover-border: var(--color-border-strong);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-raised);
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-raised);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 56px;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — white */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f2f2f2;
+  --color-bg-tertiary: #e6e6e6;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(0, 0, 0, 0.6);
+
+  /* Surfaces */
+  --color-surface-default: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #f0f0f0;
+  --color-surface-active: #e0e0e0;
+
+  /* Text — black */
+  --color-text-primary: #000000;
+  --color-text-secondary: #262626;
+  --color-text-tertiary: #4d4d4d;
+  --color-text-disabled: #9e9e9e;
+  --color-text-inverse: #ffffff;
+  --color-text-link: #c8001e;
+  --color-text-code: #262626;
+
+  /* Borders — black rules */
+  --color-border-default: #bdbdbd;
+  --color-border-subtle: #e0e0e0;
+  --color-border-strong: #000000;
+  --color-border-focus: #c8001e;
+  --color-border-brand: #c8001e;
+
+  /* Actions — Brand — signal red */
+  --color-action-brand-default: #d0021b;
+  --color-action-brand-hover: #a80016;
+  --color-action-brand-active: #8a0012;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #fde8ea;
+  --color-action-brand-border: rgba(208, 2, 27, 0.4);
+
+  /* Actions — Secondary — black */
+  --color-action-secondary-default: #000000;
+  --color-action-secondary-hover: #262626;
+  --color-action-secondary-active: #404040;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #f0f0f0;
+  --color-action-secondary-border: rgba(0, 0, 0, 0.4);
+
+  /* Actions — Tertiary */
+  --color-action-tertiary-default: #4d4d4d;
+  --color-action-tertiary-hover: #333333;
+  --color-action-tertiary-active: #1a1a1a;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger */
+  --color-action-danger-default: #a30015;
+  --color-action-danger-hover: #85000f;
+  --color-action-danger-active: #6b000c;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — red / black / greys */
+  --color-accent-green: #595959;
+  --color-accent-cyan: #000000;
+  --color-accent-violet: #8c8c8c;
+  --color-accent-4: #d0021b;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #c8001e;
+
+  /* State */
+  --color-state-success: #1a7f37;
+  --color-state-success-bg: #e8f5ec;
+  --color-state-warning: #8f5b00;
+  --color-state-warning-bg: #fbf1dc;
+  --color-state-error: #c8001e;
+  --color-state-error-bg: #fde8ea;
+  --color-state-info: #0050b3;
+  --color-state-info-bg: #e6effa;
+
+  /* Shadows — none; hierarchy comes from rules and type weight */
+  --shadow-sm: 0 0 0 0 transparent;
+  --shadow-md: 0 0 0 0 transparent;
+  --shadow-lg: 0 0 0 0 transparent;
+  --shadow-glow-green: 0 0 0 2px rgba(0, 0, 0, 0.35);
+  --shadow-glow-cyan: 0 0 0 2px rgba(0, 0, 0, 0.35);
+  --shadow-glow-violet: 0 0 0 2px rgba(0, 0, 0, 0.35);
+  --shadow-glow-red: 0 0 0 2px rgba(208, 2, 27, 0.35);
+}

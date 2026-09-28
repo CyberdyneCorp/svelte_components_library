@@ -77,6 +77,13 @@ describe("design-style tokens", () => {
     }
   });
 
+  it("declares every themed style token in :root and the light theme", () => {
+    for (const name of [...Object.keys(COLOR_STYLE_DEFAULTS), ...ACCENTS]) {
+      expect(rootDecls.has(name), `:root ${name}`).toBe(true);
+      expect(lightDecls.has(name), `light ${name}`).toBe(true);
+    }
+  });
+
   it("keeps the no-op defaults in the light theme", () => {
     for (const [name, value] of Object.entries(COLOR_STYLE_DEFAULTS)) {
       expect(lightDecls.get(name), name).toBe(value);

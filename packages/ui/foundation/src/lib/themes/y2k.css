@@ -1,0 +1,229 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Y2K theme preset
+   Millennium chrome: brushed-silver surfaces with a metallic sheen,
+   iridescent pearl backdrop sprinkled with sparkles, glossy
+   electric-blue → violet → hot-pink bubble buttons and blobby
+   pill-round corners.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/y2k.css";
+   then set <html data-theme="y2k">.
+   Optional font: load "Orbitron" (decorative titles) from Google
+   Fonts; falls back to Space Grotesk (already loaded by the
+   foundation) and system-ui.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Motion stays ≤ 200ms with no overshoot; the foundation's global
+   prefers-reduced-motion rule (animations.css) collapses it further.
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="y2k"] {
+  color-scheme: light;
+
+  /* Typography — techno display, clean body */
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-decorative: "Orbitron", "Space Grotesk", system-ui, sans-serif;
+  --heading-transform: none;
+
+  /* Radius — blobby, bubble-round */
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.875rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;
+  --radius-xl: 2.5rem;
+  --radius-pill: 999px;
+
+  /* Motion — quick and bouncy-feeling without overshoot */
+  --transition-fast: 110ms ease-out;
+  --transition-default: 160ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 200ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-spring: 180ms cubic-bezier(0.3, 0, 0, 1);
+
+  /* Border shape */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-style: solid;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — pearl silver */
+  --color-bg-primary: #eef0f7;
+  --color-bg-secondary: #e3e6f0;
+  --color-bg-tertiary: #d9dde9;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(27, 29, 58, 0.35);
+
+  /* Surfaces — chrome */
+  --color-surface-default: #f8f9fd;
+  --color-surface-raised: #ffffff;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #e6e9f4;
+  --color-surface-active: #dadff0;
+
+  /* Text — midnight ink */
+  --color-text-primary: #1b1d3a;
+  --color-text-secondary: #3d4170;
+  --color-text-tertiary: #4f5380;
+  --color-text-disabled: #9a9db8;
+  --color-text-inverse: #f8f9fd;
+  --color-text-link: #2f3fd9;
+  --color-text-code: #8a1fb8;
+
+  /* Borders — chrome edges */
+  --color-border-default: #c3c8dc;
+  --color-border-subtle: #d6dae8;
+  --color-border-strong: #6b7196;
+  --color-border-focus: #2f3fd9;
+  --color-border-brand: #2f3fd9;
+
+  /* Actions — Brand (electric blue) */
+  --color-action-brand-default: #2f3fd9;
+  --color-action-brand-hover: #2533b8;
+  --color-action-brand-active: #1c2896;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #e4e7ff;
+  --color-action-brand-border: rgba(47, 63, 217, 0.4);
+
+  /* Actions — Secondary (hot pink) */
+  --color-action-secondary-default: #c0187a;
+  --color-action-secondary-hover: #a31267;
+  --color-action-secondary-active: #860e55;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #fde4f2;
+  --color-action-secondary-border: rgba(192, 24, 122, 0.4);
+
+  /* Actions — Tertiary (gunmetal chrome) */
+  --color-action-tertiary-default: #4a5070;
+  --color-action-tertiary-hover: #3d425e;
+  --color-action-tertiary-active: #31354c;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger */
+  --color-action-danger-default: #c4122f;
+  --color-action-danger-hover: #a30f27;
+  --color-action-danger-active: #850c20;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — candy-bright but legible on silver */
+  --color-accent-green: #11774a;
+  --color-accent-cyan: #0a70a0;
+  --color-accent-violet: #7a2fd6;
+  --color-accent-4: #b05600;
+  --color-accent-1: #c0187a;
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+
+  /* Syntax highlighting */
+  --color-syntax-number: #9a4200;
+
+  /* State */
+  --color-state-success: #11703f;
+  --color-state-success-bg: #dcf5e8;
+  --color-state-warning: #8f4a00;
+  --color-state-warning-bg: #fff0d6;
+  --color-state-error: #b8102c;
+  --color-state-error-bg: #ffe3e8;
+  --color-state-info: #2f3fd9;
+  --color-state-info-bg: #e4e7ff;
+
+  /* Shadows — cool, with neon-ish glows */
+  --shadow-sm: 0 1px 2px rgba(40, 50, 110, 0.12);
+  --shadow-md: 0 6px 16px rgba(40, 50, 110, 0.14);
+  --shadow-lg: 0 16px 40px rgba(40, 50, 110, 0.18);
+  --shadow-glow-green: 0 0 0 3px rgba(17, 119, 74, 0.22), 0 0 16px rgba(46, 230, 150, 0.35);
+  --shadow-glow-cyan: 0 0 0 3px rgba(47, 63, 217, 0.25), 0 0 16px rgba(80, 200, 255, 0.4);
+  --shadow-glow-violet: 0 0 0 3px rgba(122, 47, 214, 0.22), 0 0 16px rgba(190, 120, 255, 0.4);
+  --shadow-glow-red: 0 0 0 3px rgba(196, 18, 47, 0.22), 0 0 16px rgba(255, 90, 130, 0.35);
+
+  /* ── Layer 2: Style tokens ── */
+
+  /* Chrome sheen: bright top highlight, horizon band, soft reflection */
+  --gradient-surface: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(222, 227, 240, 0.4) 48%,
+    rgba(255, 255, 255, 0) 52%,
+    rgba(205, 212, 232, 0.3) 100%
+  );
+  /* Glossy bubble: top gloss over an electric-blue → violet → pink body */
+  --gradient-brand:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.08) 48%,
+      rgba(255, 255, 255, 0) 50%
+    ),
+    linear-gradient(135deg, #2533b8 0%, #6a1fc4 55%, #a31267 100%);
+  /* Iridescent foil */
+  --gradient-accent: linear-gradient(120deg, #ffd6f5 0%, #d6e4ff 35%, #d6fff4 65%, #f5e6ff 100%);
+  --gradient-backdrop: linear-gradient(
+      135deg,
+      rgba(255, 214, 245, 0.55) 0%,
+      rgba(214, 228, 255, 0.55) 40%,
+      rgba(214, 255, 244, 0.45) 70%,
+      rgba(245, 230, 255, 0.55) 100%
+    )
+    fixed;
+  --texture-surface: none;
+  /* Four-point sparkles */
+  --pattern-backdrop: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cpath d='M20 8l2 8 8 2-8 2-2 8-2-8-8-2 8-2z' fill='%23ffffff' fill-opacity='0.8'/%3E%3Cpath d='M70 56l1.3 5.2 5.2 1.3-5.2 1.3L70 69l-1.3-5.2-5.2-1.3 5.2-1.3z' fill='%23b8c4ff' fill-opacity='0.7'/%3E%3C/svg%3E")
+    0 0 / 96px 96px repeat;
+  --surface-blur: none;
+  --shadow-offset: 0 0 0 0 transparent;
+  --shadow-raised:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -2px 4px rgba(90, 100, 150, 0.16),
+    0 6px 16px rgba(47, 63, 217, 0.16);
+  --shadow-pressed: inset 0 3px 8px rgba(40, 50, 110, 0.3);
+  --shadow-inset: inset 0 2px 4px rgba(40, 50, 110, 0.14);
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-raised);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-raised);
+  --input-bg-hover: var(--color-surface-default);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-default);
+  --card-hover-border: var(--color-border-brand);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-hover);
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-raised);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 64px;
+}

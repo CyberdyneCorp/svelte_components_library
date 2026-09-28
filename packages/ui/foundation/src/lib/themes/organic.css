@@ -1,0 +1,202 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Organic theme preset
+   Organic / natural: earthy clay, moss and bark on warm paper,
+   generous asymmetric radii, subtle paper grain and a soft serif
+   display face.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/organic.css";
+   then set <html data-theme="organic">.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Contrast meets WCAG AA for the same text/surface/action pairings
+   guarded for calm (4.5:1 text, 3:1 UI); motion stays ≤ 200ms with
+   no overshoot (reduced-motion is handled by animations.css).
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="organic"] {
+  color-scheme: light;
+
+  /* Typography — Fraunces display over Source Sans 3 body */
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-decorative: var(--font-display);
+  --heading-transform: none;
+
+  /* Radius — very round; lg / xl are asymmetric pebble shapes (only used as a full border-radius value) */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.625rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.75rem 1rem 2rem 1.25rem;
+  --radius-xl: 2.25rem 1.25rem 2.5rem 1.5rem;
+  --radius-pill: 999px;
+
+  /* Motion — ≤ 200ms, no spring overshoot */
+  --transition-fast: 140ms ease-out;
+  --transition-default: 180ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-slow: 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-spring: 200ms ease-out;
+
+  /* Border shape — soft solid lines */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-style: solid;
+
+  /* ── Layer 2: Style tokens — paper grain on surfaces, warm light on the backdrop ── */
+  --color-accent-1: var(--color-accent-green);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+  --gradient-surface: none;
+  --gradient-brand: none;
+  --gradient-accent: none;
+  --gradient-backdrop:
+    radial-gradient(120% 80% at 0% 0%, rgba(156, 74, 42, 0.07), transparent 60%),
+    radial-gradient(100% 70% at 100% 100%, rgba(78, 107, 53, 0.07), transparent 60%);
+  --texture-surface: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18 0 0 0 0 0.15 0 0 0 0 0.11 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")
+    0 0 / 160px 160px repeat;
+  --pattern-backdrop: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18 0 0 0 0 0.15 0 0 0 0 0.11 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")
+    0 0 / 160px 160px repeat;
+  --surface-blur: none;
+  --shadow-offset: 0 0 0 0 transparent;
+  --shadow-raised: 0 2px 8px rgba(46, 38, 28, 0.06);
+  --shadow-pressed: 0 1px 2px rgba(46, 38, 28, 0.08);
+  --shadow-inset: 0 0 0 0 transparent;
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-default);
+  --input-bg-hover: var(--color-surface-raised);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-subtle);
+  --card-hover-border: var(--color-border-default);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-raised);
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-raised);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 64px;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — warm paper */
+  --color-bg-primary: #f4efe4;
+  --color-bg-secondary: #ece5d6;
+  --color-bg-tertiary: #e3dac7;
+  --color-bg-elevated: #fbf8f1;
+  --color-bg-overlay: rgba(46, 38, 28, 0.4);
+
+  /* Surfaces */
+  --color-surface-default: #fbf8f1;
+  --color-surface-raised: #f8f4ea;
+  --color-surface-overlay: #fbf8f1;
+  --color-surface-hover: #ede6d6;
+  --color-surface-active: #e3dac7;
+
+  /* Text — bark */
+  --color-text-primary: #2e261c;
+  --color-text-secondary: #56493a;
+  --color-text-tertiary: #625443;
+  --color-text-disabled: #a89c88;
+  --color-text-inverse: #f4efe4;
+  --color-text-link: #843d22;
+  --color-text-code: #46552a;
+
+  /* Borders */
+  --color-border-default: #d8ccb5;
+  --color-border-subtle: #e4dac6;
+  --color-border-strong: #86765e;
+  --color-border-focus: #4e6b35;
+  --color-border-brand: #9c4a2a;
+
+  /* Actions — Brand — terracotta */
+  --color-action-brand-default: #9c4a2a;
+  --color-action-brand-hover: #843d22;
+  --color-action-brand-active: #6c321c;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #f3e1d6;
+  --color-action-brand-border: rgba(156, 74, 42, 0.4);
+
+  /* Actions — Secondary — moss */
+  --color-action-secondary-default: #4e6b35;
+  --color-action-secondary-hover: #3f582b;
+  --color-action-secondary-active: #334722;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #e4ebd9;
+  --color-action-secondary-border: rgba(78, 107, 53, 0.4);
+
+  /* Actions — Tertiary — bark */
+  --color-action-tertiary-default: #6b5a45;
+  --color-action-tertiary-hover: #594a39;
+  --color-action-tertiary-active: #473b2d;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger — rust */
+  --color-action-danger-default: #a3342a;
+  --color-action-danger-hover: #892b23;
+  --color-action-danger-active: #70231c;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — moss / teal / heather / ochre */
+  --color-accent-green: #4e6b35;
+  --color-accent-cyan: #3c6a6a;
+  --color-accent-violet: #7a5a78;
+  --color-accent-4: #8a5a1f;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #7d5118;
+
+  /* State */
+  --color-state-success: #41633a;
+  --color-state-success-bg: #e4ebd9;
+  --color-state-warning: #7d5118;
+  --color-state-warning-bg: #f4e6cf;
+  --color-state-error: #a3342a;
+  --color-state-error-bg: #f5dfda;
+  --color-state-info: #3a5e70;
+  --color-state-info-bg: #dfe8ec;
+
+  /* Shadows — warm and diffuse */
+  --shadow-sm: 0 1px 2px rgba(46, 38, 28, 0.08);
+  --shadow-md: 0 4px 14px rgba(46, 38, 28, 0.1);
+  --shadow-lg: 0 14px 36px rgba(46, 38, 28, 0.12);
+  --shadow-glow-green: 0 0 0 3px rgba(78, 107, 53, 0.22);
+  --shadow-glow-cyan: 0 0 0 3px rgba(60, 106, 106, 0.22);
+  --shadow-glow-violet: 0 0 0 3px rgba(122, 90, 120, 0.22);
+  --shadow-glow-red: 0 0 0 3px rgba(163, 52, 42, 0.22);
+}

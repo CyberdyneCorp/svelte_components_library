@@ -1,0 +1,208 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Memphis theme preset
+   Playful 80s Memphis Group look: clashing pastels on cream,
+   confetti squiggle / triangle / dot backdrop, thick black
+   outlines and hard offset shadows.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/memphis.css";
+   then set <html data-theme="memphis">.
+
+   Fonts: "Rubik" and "Bungee" are Google Fonts families; load them
+   yourself (or not) — every stack falls back to system fonts.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Pastels only ever sit behind dark ink; every text / surface /
+   action pair meets WCAG AA. Motion stays ≤ 200ms with no overshoot
+   (the global prefers-reduced-motion rule still applies).
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="memphis"] {
+  color-scheme: light;
+
+  /* Typography — rounded geometric sans, chunky display for titles */
+  --font-display: "Rubik", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Rubik", system-ui, sans-serif;
+  --font-decorative: "Bungee", "Rubik", "Arial Black", system-ui, sans-serif;
+  --heading-transform: none;
+
+  /* Radius — mostly blocky, a little bounce on large shapes */
+  --radius-xs: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-pill: 999px;
+
+  /* Motion — snappy, ≤ 200ms, no spring overshoot */
+  --transition-fast: 100ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-default: 150ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 200ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-spring: 160ms ease-out;
+
+  /* Border shape — thick ink outlines */
+  --border-width: 3px;
+  --border-width-strong: 4px;
+  --border-style: solid;
+
+  /* ── Layer 2: Style tokens ── */
+  --color-accent-1: var(--color-action-brand-default);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+  --gradient-surface: none;
+  --gradient-brand: none;
+  --gradient-accent: linear-gradient(
+    90deg,
+    #ff9ecd 0 25%,
+    #ffe66d 25% 50%,
+    #6fd6c9 50% 75%,
+    #b8a4ff 75% 100%
+  );
+  --gradient-backdrop: none;
+  --texture-surface: none;
+  --pattern-backdrop: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke-width='4' stroke-linecap='round' opacity='0.55'%3E%3Cpath d='M10 30 q10 -12 20 0 t20 0 t20 0' stroke='%23ff9ecd'/%3E%3Cpath d='M100 120 l14 -24 l14 24 z' stroke='%236fd6c9'/%3E%3Cpath d='M90 40 l20 20 M110 40 l-20 20' stroke='%23b8a4ff'/%3E%3C/g%3E%3Cg opacity='0.55'%3E%3Ccircle cx='30' cy='115' r='7' fill='%23ffe66d'/%3E%3Ccircle cx='140' cy='20' r='3' fill='%231a1a1a'/%3E%3Ccircle cx='60' cy='145' r='3' fill='%231a1a1a'/%3E%3C/g%3E%3C/svg%3E")
+    0 0 / 160px 160px repeat;
+  --surface-blur: none;
+  --shadow-offset: 4px 4px 0 0 #1a1a1a;
+  --shadow-raised: 3px 3px 0 0 #1a1a1a;
+  --shadow-pressed: 1px 1px 0 0 #1a1a1a;
+  --shadow-inset: inset 2px 2px 0 0 rgba(26, 26, 26, 0.12);
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — cream paper, pastel tints */
+  --color-bg-primary: #fff6e5;
+  --color-bg-secondary: #ffeccc;
+  --color-bg-tertiary: #ffe0ea;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(26, 26, 26, 0.4);
+
+  /* Surfaces */
+  --color-surface-default: #ffffff;
+  --color-surface-raised: #fffdf7;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #fff1b8;
+  --color-surface-active: #d9f5f0;
+
+  /* Text — ink */
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #3d3d3d;
+  --color-text-tertiary: #555555;
+  --color-text-disabled: #9a9a9a;
+  --color-text-inverse: #fff6e5;
+  --color-text-link: #1f4fd1;
+  --color-text-code: #7a1fa8;
+
+  /* Borders — everything is outlined in ink */
+  --color-border-default: #1a1a1a;
+  --color-border-subtle: #4a4a4a;
+  --color-border-strong: #1a1a1a;
+  --color-border-focus: #1f4fd1;
+  --color-border-brand: #c2185b;
+
+  /* Actions — Brand (hot magenta) */
+  --color-action-brand-default: #c2185b;
+  --color-action-brand-hover: #a3134b;
+  --color-action-brand-active: #880e3f;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #ffe0ea;
+  --color-action-brand-border: rgba(194, 24, 91, 0.5);
+
+  /* Actions — Secondary (cobalt) */
+  --color-action-secondary-default: #1f4fd1;
+  --color-action-secondary-hover: #1a41ad;
+  --color-action-secondary-active: #15348a;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #dce6ff;
+  --color-action-secondary-border: rgba(31, 79, 209, 0.5);
+
+  /* Actions — Tertiary (ink) */
+  --color-action-tertiary-default: #3d3d3d;
+  --color-action-tertiary-hover: #2b2b2b;
+  --color-action-tertiary-active: #1a1a1a;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger */
+  --color-action-danger-default: #c62828;
+  --color-action-danger-hover: #a31f1f;
+  --color-action-danger-active: #861818;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — saturated counterparts of the pastels (UI-legible) */
+  --color-accent-green: #0f7a5c;
+  --color-accent-cyan: #0e7490;
+  --color-accent-violet: #7b2cbf;
+  --color-accent-4: #b45309;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #a14a00;
+
+  /* State */
+  --color-state-success: #1e7a3c;
+  --color-state-success-bg: #d9f5e3;
+  --color-state-warning: #8a5300;
+  --color-state-warning-bg: #fff1b8;
+  --color-state-error: #c62828;
+  --color-state-error-bg: #ffe0e0;
+  --color-state-info: #1f4fd1;
+  --color-state-info-bg: #dce6ff;
+
+  /* Shadows — hard offset, no blur; pastel focus rings */
+  --shadow-sm: 2px 2px 0 0 #1a1a1a;
+  --shadow-md: 4px 4px 0 0 #1a1a1a;
+  --shadow-lg: 6px 6px 0 0 #1a1a1a;
+  --shadow-glow-green: 0 0 0 3px #6fd6c9;
+  --shadow-glow-cyan: 0 0 0 3px #7aa2ff;
+  --shadow-glow-violet: 0 0 0 3px #b8a4ff;
+  --shadow-glow-red: 0 0 0 3px #ff9e9e;
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-default);
+  --input-bg-hover: var(--color-surface-raised);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-strong);
+  --card-hover-border: var(--color-action-brand-default);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-hover);
+  --table-border: var(--color-border-default);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-raised);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 64px;
+}

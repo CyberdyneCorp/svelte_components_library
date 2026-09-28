@@ -61,6 +61,12 @@ describe("design token coverage", () => {
     expect(namespaces).toContain("space");
   });
 
+  it("includes the design-style namespaces", () => {
+    for (const ns of ["gradient", "texture", "pattern", "surface", "border", "heading"]) {
+      expect(namespaces, ns).toContain(ns);
+    }
+  });
+
   it("every foundation-namespaced var() in core is defined by foundation", () => {
     expect(undefinedReferences()).toEqual([]);
   });

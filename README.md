@@ -83,6 +83,44 @@ preference with a no-flash init script:
 `createThemePreference` and `themeInitScript` live in `@cyberdynecorp/svelte-ui-foundation/theme`;
 see `Overview/Design Tokens` → Themes in Storybook for the `app.html` snippet.
 
+Design-style presets — CSS-only themes, one file each, activated with `data-theme`:
+
+```svelte
+<script>
+  import "@cyberdynecorp/svelte-ui-foundation/styles";
+  import "@cyberdynecorp/svelte-ui-foundation/themes/glass.css";
+</script>
+
+<div data-theme="glass">…</div>
+```
+
+| Style | Theme (`data-theme`) | Import |
+|-------|----------------------|--------|
+| Cyberpunk / neon | default (no attribute) | `styles` |
+| Light | `light` | `styles` |
+| Corporate / calm | `calm`, `calm-dark` | `themes/calm.css` |
+| Retro / pixel / CRT | — (use the `retro/` components) | — |
+| Minimal | `minimal` | `themes/minimal.css` |
+| Flat | `flat` | `themes/flat.css` |
+| Material | `material` | `themes/material.css` |
+| Swiss | `swiss` | `themes/swiss.css` |
+| Organic | `organic` | `themes/organic.css` |
+| Maximalism | `maximalism` | `themes/maximalism.css` |
+| Y2K | `y2k` | `themes/y2k.css` |
+| Glassmorphism | `glass` | `themes/glass.css` |
+| Neumorphism | `neumorphism` | `themes/neumorphism.css` |
+| Skeuomorphism | `skeuomorphism` | `themes/skeuomorphism.css` |
+| Neo-brutalism | `brutalism` | `themes/brutalism.css` |
+| Bento | `bento` | `themes/bento.css` |
+| Claymorphism | `clay` | `themes/clay.css` |
+| Memphis | `memphis` | `themes/memphis.css` |
+| Vaporwave | `vaporwave` | `themes/vaporwave.css` |
+| Art Deco | `art-deco` | `themes/art-deco.css` |
+| Editorial | `editorial` | `themes/editorial.css` |
+
+Every preset defines all semantic/component tokens and passes WCAG AA on the same pairings as
+calm. Presets name their web fonts but do not load them; see each file's header.
+
 Use components:
 
 ```svelte
@@ -267,7 +305,7 @@ pnpm release            # Build & publish
 │       │   └── src/lib/
 │       │       ├── tokens/  TypeScript token definitions
 │       │       ├── styles/  CSS (colors, typography, spacing, radius, animations)
-│       │       ├── themes/  Optional theme presets (calm.css)
+│       │       ├── themes/  Optional theme presets (calm + 17 design styles)
 │       │       └── theme/   Theme preference helper + pre-paint init script
 │       └── core/            UI components (247 components)
 │           └── src/lib/

@@ -46,13 +46,15 @@ Value rules:
 
 ### Requirement: Design-style preset pack
 
-The system SHALL ship optional design-style presets as CSS files at `packages/ui/foundation/src/lib/themes/styles/<name>.css`. Each preset SHALL define `[data-theme="<name>"]`, and it MAY also define `[data-theme="<name>-dark"]`. The presets are: `minimal`, `flat`, `material`, `swiss`, `organic`, `maximalism`, `y2k`, `glass`, `neumorphism`, `skeuomorphism`, `brutalism`, `bento`, `clay`, `memphis`, `vaporwave`, `art-deco` and `editorial`.
+The system SHALL ship optional design-style presets as CSS files at `packages/ui/foundation/src/lib/themes/<name>.css`, next to `calm.css`. Each preset SHALL define `[data-theme="<name>"]` and set `color-scheme`, and it MAY also define `[data-theme="<name>-dark"]`. The presets are: `minimal`, `flat`, `material`, `swiss`, `organic`, `maximalism`, `y2k`, `glass`, `neumorphism`, `skeuomorphism`, `brutalism`, `bento`, `clay`, `memphis`, `vaporwave`, `art-deco` and `editorial`.
 
 A preset SHALL:
 
 - be built only from foundation tokens;
+- define every Layer 2 and Layer 3 token of the default `:root` block (except `--video-*`) and every design-style token;
 - not redefine any `--primitive-*` or `--video-*` token;
-- keep the calm pairing list at WCAG AA (at least 4.5:1 for text and 3:1 for UI).
+- keep the calm pairing list at WCAG AA (at least 4.5:1 for text and 3:1 for UI);
+- keep every `--transition-*` at 200ms or less with a non-overshooting timing function.
 
 The styles below SHALL be documented as covered by existing themes, not by new presets:
 
@@ -63,11 +65,11 @@ The styles below SHALL be documented as covered by existing themes, not by new p
 | Corporate | `calm` / `calm-dark` |
 | Retro | the `retro/` component family |
 
-(src: packages/ui/foundation/src/lib/themes/styles/; .storybook/static-docs/DesignTokens.mdx)
+(src: packages/ui/foundation/src/lib/themes/; packages/ui/foundation/src/lib/themes/presets.test.ts; .storybook/static-docs/DesignTokens.mdx; README.md)
 
 #### Scenario: Preset activation
 
-- **GIVEN** the foundation styles and `themes/styles/brutalism.css` are loaded
+- **GIVEN** the foundation styles and `themes/brutalism.css` are loaded
 - **WHEN** `<html data-theme="brutalism">` is set
 - **THEN** core components SHALL render with the preset's border, shadow and colour tokens, with no prop changes
 

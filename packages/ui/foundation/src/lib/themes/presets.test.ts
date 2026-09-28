@@ -1,22 +1,46 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, it, expect } from "vitest";
 
 /**
- * Guards for the calm theme preset (themes/calm.css):
+ * Guards for every theme preset in themes/*.css (calm and the design-style
+ * presets):
  * - completeness: every Layer 2 + Layer 3 token of the default :root block
- *   (all but primitives and the theme-invariant --video-*) has a calm value;
+ *   (all but primitives and the theme-invariant --video-*) and every
+ *   shape/type style token has a preset value;
+ * - scope: presets only set tokens foundation defines, never primitives or
+ *   --video-*;
  * - contrast: every declared pairing meets WCAG AA (4.5:1 text, 3:1 UI);
  * - motion: every --transition-* is ≤ 200ms and never overshoots.
  */
 
 const here = dirname(fileURLToPath(import.meta.url));
-const colorsCss = readFileSync(join(here, "../styles/colors.css"), "utf8");
-const calmCss = readFileSync(join(here, "calm.css"), "utf8");
+const readStyle = (name: string) => readFileSync(join(here, "../styles", name), "utf8");
+const colorsCss = readStyle("colors.css");
 
-const THEMES = ["calm", "calm-dark"] as const;
-type ThemeName = (typeof THEMES)[number];
+/** Preset file → the data-theme ids it defines. */
+const PRESETS: Record<string, string[]> = {
+  calm: ["calm", "calm-dark"],
+  minimal: ["minimal"],
+  flat: ["flat"],
+  material: ["material"],
+  swiss: ["swiss"],
+  organic: ["organic"],
+  maximalism: ["maximalism"],
+  y2k: ["y2k"],
+  glass: ["glass"],
+  neumorphism: ["neumorphism"],
+  skeuomorphism: ["skeuomorphism"],
+  brutalism: ["brutalism"],
+  bento: ["bento"],
+  clay: ["clay"],
+  memphis: ["memphis"],
+  vaporwave: ["vaporwave"],
+  "art-deco": ["art-deco"],
+  editorial: ["editorial"],
+};
+
 type Decls = Map<string, string>;
 
 function stripComments(css: string): string {
@@ -25,7 +49,8 @@ function stripComments(css: string): string {
 
 function rules(css: string): { selectors: string[]; body: string }[] {
   return [...stripComments(css).matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, sel, body]) => ({
-    selectors: sel.split(",").map((s) => s.trim()),
+    // Drop any preceding at-statement (e.g. an `@import …;` before the first rule).
+    selectors: (sel.split(";").at(-1) ?? "").split(",").map((s) => s.trim()),
     body,
   }));
 }
@@ -47,14 +72,33 @@ function declarationsFor(css: string, selector: string): Decls {
   return merged;
 }
 
-const themeDecls: Record<ThemeName, Decls> = {
-  calm: declarationsFor(calmCss, '[data-theme="calm"]'),
-  "calm-dark": declarationsFor(calmCss, '[data-theme="calm-dark"]'),
-};
+const presetCss = Object.fromEntries(
+  Object.keys(PRESETS).map((file) => [file, readFileSync(join(here, `${file}.css`), "utf8")]),
+);
+const THEMES = Object.entries(PRESETS).flatMap(([file, ids]) => ids.map((id) => ({ file, id })));
+const themeDecls: Record<string, Decls> = Object.fromEntries(
+  THEMES.map(({ file, id }) => [id, declarationsFor(presetCss[file], `[data-theme="${id}"]`)]),
+);
 
 /** Layer 2 + Layer 3 names of the default theme. */
 const themedTokens = [...declarationsFor(colorsCss, ":root").keys()].filter(
   (name) => !name.startsWith("--primitive-") && !name.startsWith("--video-"),
+);
+
+/** Shape and type style tokens (radius.css / typography.css) every preset sets. */
+const SHAPE_TYPE_TOKENS = [
+  "--border-width",
+  "--border-width-strong",
+  "--border-style",
+  "--font-decorative",
+  "--heading-transform",
+];
+
+/** Every custom property foundation defines on :root. */
+const foundationTokens = new Set(
+  ["colors.css", "radius.css", "typography.css", "spacing.css", "animations.css"].flatMap(
+    (name) => [...declarationsFor(readStyle(name), ":root").keys()],
+  ),
 );
 
 /** Follow var() chains within one theme until a literal value is reached. */
@@ -222,7 +266,7 @@ const PAIRINGS: Pairing[] = [
   ),
 ];
 
-function contrastFailures(theme: ThemeName): string[] {
+function contrastFailures(theme: string): string[] {
   const decls = themeDecls[theme];
   return PAIRINGS.flatMap(({ fg, bg, kind }) => {
     const ratio = contrast(resolve(decls, fg), resolve(decls, bg));
@@ -248,18 +292,45 @@ function isMonotonicEasing(value: string): boolean {
   return [y1, y2].every((y) => y >= 0 && y <= 1);
 }
 
-describe("calm theme preset", () => {
+describe("theme presets", () => {
   it("derives the default Layer 2 + 3 token list from colors.css", () => {
     expect(themedTokens).toContain("--color-bg-primary");
     expect(themedTokens).toContain("--nav-height");
     expect(themedTokens).toContain("--color-action-danger-text");
+    expect(themedTokens).toContain("--gradient-brand");
     expect(themedTokens.some((t) => t.startsWith("--video-"))).toBe(false);
   });
 
-  describe.each(THEMES)("%s", (theme) => {
+  it("covers every preset file in themes/", () => {
+    const files = readdirSync(here)
+      .filter((name) => name.endsWith(".css"))
+      .map((name) => name.replace(/\.css$/, ""));
+    expect(files.sort()).toEqual(Object.keys(PRESETS).sort());
+  });
+
+  it("exports every preset file from the package", () => {
+    const pkg = JSON.parse(readFileSync(join(here, "../../../package.json"), "utf8")) as {
+      exports: Record<string, unknown>;
+    };
+    for (const file of Object.keys(PRESETS)) {
+      expect(pkg.exports[`./themes/${file}.css`], file).toBe(`./src/lib/themes/${file}.css`);
+    }
+  });
+
+  describe.each(THEMES)("$id", ({ id: theme }) => {
     it("defines every Layer 2 and Layer 3 token of the default theme", () => {
       const missing = themedTokens.filter((token) => !themeDecls[theme].has(token));
       expect(missing).toEqual([]);
+    });
+
+    it("defines every shape and type style token", () => {
+      const missing = SHAPE_TYPE_TOKENS.filter((token) => !themeDecls[theme].has(token));
+      expect(missing).toEqual([]);
+    });
+
+    it("only sets tokens foundation defines", () => {
+      const unknown = [...themeDecls[theme].keys()].filter((name) => !foundationTokens.has(name));
+      expect(unknown).toEqual([]);
     });
 
     it("does not redefine primitives or the theme-invariant video tokens", () => {
@@ -289,13 +360,22 @@ describe("calm theme preset", () => {
       }
     });
 
-    it("uses Inter as the display font", () => {
-      expect(themeDecls[theme].get("--font-display")).toMatch(/^"Inter"/);
+    it("declares its color-scheme", () => {
+      const file = THEMES.find((t) => t.id === theme)?.file ?? "";
+      const body = rules(presetCss[file])
+        .filter((r) => r.selectors.includes(`[data-theme="${theme}"]`))
+        .map((r) => r.body)
+        .join(";");
+      expect(body).toMatch(/color-scheme\s*:\s*(light|dark)\s*;/);
     });
   });
 
+  it.each(["calm", "calm-dark"])("%s uses Inter as the display font", (theme) => {
+    expect(themeDecls[theme].get("--font-display")).toMatch(/^"Inter"/);
+  });
+
   describe("guards", () => {
-    it("fails completeness when a semantic token has no calm value", () => {
+    it("fails completeness when a semantic token has no preset value", () => {
       const partial = new Map(themeDecls.calm);
       partial.delete("--color-action-danger-hover");
       expect(themedTokens.filter((t) => !partial.has(t))).toEqual(["--color-action-danger-hover"]);

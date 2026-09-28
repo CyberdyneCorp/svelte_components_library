@@ -33,11 +33,11 @@ _None._
 
 - `design-foundation`: adds the design-style token contract and the design-style preset pack; widens the core token-surface namespaces.
 - `core-components`: components expose the design-style tokens.
-- `packaging-and-tooling`: adds the `./themes/styles/*.css` subpath export for the presets.
+- `packaging-and-tooling`: adds a `./themes/<name>.css` subpath export for each preset.
 
 ## Impact
 
-- `packages/ui/foundation`: new tokens in `styles/colors.css` (both blocks), `styles/radius.css` and `styles/typography.css`. `calm.css` declares them. `base.css` paints `body` with the backdrop layers. New `styles/style-tokens.test.ts`. Later: `themes/styles/*.css` and an export entry. Minor bump.
+- `packages/ui/foundation`: new tokens in `styles/colors.css` (both blocks), `styles/radius.css` and `styles/typography.css`. `calm.css` declares them. `base.css` paints `body` with the backdrop layers. New `styles/style-tokens.test.ts`. `themes/<name>.css` presets with export entries; `themes/calm.test.ts` generalized into `themes/presets.test.ts`. Minor bump.
 - `packages/ui/core`: component `<style>` blocks reference the new tokens. With the default values nothing renders differently. Minor bump.
 - Brand, outline and danger Buttons now keep their hover glow while `:active`. Before, a press with the pointer over the button already showed that glow; the only difference is a keyboard press without hover.
 - `.storybook/static-docs/DesignTokens.mdx` gains a Design-style tokens section.

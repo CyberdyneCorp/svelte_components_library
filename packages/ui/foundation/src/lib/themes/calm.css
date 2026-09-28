@@ -11,7 +11,7 @@
    Every Layer 2 (semantic) and Layer 3 (component) token of the
    default :root block is redefined, except the theme-invariant
    --video-* tokens. Layer 1 primitives are never touched.
-   Guarded by src/lib/themes/calm.test.ts (completeness, WCAG AA
+   Guarded by src/lib/themes/presets.test.ts (completeness, WCAG AA
    contrast, motion).
    ══════════════════════════════════════════════════════════════ */
 

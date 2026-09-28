@@ -1,0 +1,204 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Art Deco theme preset
+   1920s Deco: lacquer black and brushed gold, symmetric double
+   rule borders with an outer hairline frame, metallic gold
+   buttons, a faint fan-scale backdrop and an elegant roman serif.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/art-deco.css";
+   then set <html data-theme="art-deco">.
+
+   Fonts: "Cinzel", "Poiret One" and "Josefin Sans" are Google Fonts
+   families; load them yourself (or not) — every stack falls back to
+   system fonts.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Every text / surface / action pair meets WCAG AA; the metallic
+   brand gradient keeps ≥ 4.5:1 against the button text at every
+   stop. Motion stays ≤ 200ms with no overshoot (the global
+   prefers-reduced-motion rule still applies).
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="art-deco"] {
+  color-scheme: dark;
+
+  /* Typography — roman capitals for display, geometric sans body */
+  --font-display: "Cinzel", "Didot", "Bodoni 72", Georgia, serif;
+  --font-body: "Josefin Sans", "Futura", "Century Gothic", system-ui, sans-serif;
+  --font-decorative: "Poiret One", "Cinzel", "Didot", Georgia, serif;
+  --heading-transform: uppercase;
+
+  /* Radius — sharp, architectural */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-pill: 999px;
+
+  /* Motion — measured and smooth, ≤ 200ms, no overshoot */
+  --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-default: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 200ms ease-in-out;
+
+  /* Border shape — symmetric double rules (1px line / 1px gap / 1px line) */
+  --border-width: 3px;
+  --border-width-strong: 6px;
+  --border-style: double;
+
+  /* ── Layer 2: Style tokens ── */
+  --color-accent-1: var(--color-action-brand-default);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+  --gradient-surface: linear-gradient(180deg, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
+  --gradient-brand: linear-gradient(180deg, #ebd184 0%, #d4af37 50%, #b8963e 100%);
+  --gradient-accent: linear-gradient(90deg, transparent 0%, #d4af37 50%, transparent 100%);
+  --gradient-backdrop: radial-gradient(ellipse at 50% 0%, #1a1710 0%, #0b0b0c 60%);
+  --texture-surface: none;
+  --pattern-backdrop: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24' viewBox='0 0 48 24'%3E%3Cg fill='none' stroke='%23d4af37' stroke-width='1' opacity='0.09'%3E%3Cpath d='M0 24a24 24 0 0 1 48 0M8 24a16 16 0 0 1 32 0M16 24a8 8 0 0 1 16 0'/%3E%3Cpath d='M-24 12a24 24 0 0 1 48 0M24 12a24 24 0 0 1 48 0'/%3E%3C/g%3E%3C/svg%3E")
+    0 0 / 48px 24px repeat;
+  --surface-blur: none;
+  --shadow-offset: 0 0 0 3px #0b0b0c, 0 0 0 4px rgba(212, 175, 55, 0.35);
+  --shadow-raised: 0 0 0 1px #0b0b0c, 0 0 0 2px rgba(212, 175, 55, 0.4);
+  --shadow-pressed: inset 0 0 0 1px rgba(212, 175, 55, 0.5);
+  --shadow-inset: inset 0 1px 0 rgba(212, 175, 55, 0.15);
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — lacquer black */
+  --color-bg-primary: #0b0b0c;
+  --color-bg-secondary: #121214;
+  --color-bg-tertiary: #1a1a1d;
+  --color-bg-elevated: #141416;
+  --color-bg-overlay: rgba(0, 0, 0, 0.65);
+
+  /* Surfaces */
+  --color-surface-default: #141416;
+  --color-surface-raised: #18181b;
+  --color-surface-overlay: #1c1c20;
+  --color-surface-hover: #202025;
+  --color-surface-active: #28282e;
+
+  /* Text — ivory and champagne */
+  --color-text-primary: #f4ecd8;
+  --color-text-secondary: #d8cba6;
+  --color-text-tertiary: #b3a57f;
+  --color-text-disabled: #6f6752;
+  --color-text-inverse: #0b0b0c;
+  --color-text-link: #e6c35c;
+  --color-text-code: #e9d59a;
+
+  /* Borders — gold rules */
+  --color-border-default: #6b5a2e;
+  --color-border-subtle: #3e3520;
+  --color-border-strong: #b8963e;
+  --color-border-focus: #f0d27a;
+  --color-border-brand: #d4af37;
+
+  /* Actions — Brand (gold) */
+  --color-action-brand-default: #d4af37;
+  --color-action-brand-hover: #e0c05a;
+  --color-action-brand-active: #ebd184;
+  --color-action-brand-text: #0b0b0c;
+  --color-action-brand-bg: #2a2412;
+  --color-action-brand-border: rgba(212, 175, 55, 0.45);
+
+  /* Actions — Secondary (jade) */
+  --color-action-secondary-default: #5fc9b0;
+  --color-action-secondary-hover: #7dd6c1;
+  --color-action-secondary-active: #9de2d1;
+  --color-action-secondary-text: #0b0b0c;
+  --color-action-secondary-bg: #10251f;
+  --color-action-secondary-border: rgba(95, 201, 176, 0.45);
+
+  /* Actions — Tertiary (champagne) */
+  --color-action-tertiary-default: #d8cba6;
+  --color-action-tertiary-hover: #e4d9bb;
+  --color-action-tertiary-active: #efe7d0;
+  --color-action-tertiary-text: #0b0b0c;
+
+  /* Actions — Danger (lacquer red) */
+  --color-action-danger-default: #e8756a;
+  --color-action-danger-hover: #ee9187;
+  --color-action-danger-active: #f3aca4;
+  --color-action-danger-text: #0b0b0c;
+
+  /* Accents — jewel tones */
+  --color-accent-green: #5fc9b0;
+  --color-accent-cyan: #7fb8d6;
+  --color-accent-violet: #b89ad6;
+  --color-accent-4: #e8a15a;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #e8a15a;
+
+  /* State */
+  --color-state-success: #7fcf9c;
+  --color-state-success-bg: #13241a;
+  --color-state-warning: #e6c35c;
+  --color-state-warning-bg: #2a2412;
+  --color-state-error: #e8756a;
+  --color-state-error-bg: #2e1614;
+  --color-state-info: #7fb8d6;
+  --color-state-info-bg: #122230;
+
+  /* Shadows — deep drop; focus rings are framed double lines */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow-green: 0 0 0 2px #0b0b0c, 0 0 0 3px rgba(212, 175, 55, 0.7);
+  --shadow-glow-cyan: 0 0 0 2px #0b0b0c, 0 0 0 3px #f0d27a;
+  --shadow-glow-violet: 0 0 0 2px #0b0b0c, 0 0 0 3px rgba(184, 154, 214, 0.7);
+  --shadow-glow-red: 0 0 0 2px #0b0b0c, 0 0 0 3px #e8756a;
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-bg-secondary);
+  --input-bg-hover: var(--color-surface-default);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-default);
+  --card-hover-border: var(--color-border-brand);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-tertiary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-raised);
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: var(--color-bg-secondary);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 64px;
+}

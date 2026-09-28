@@ -1,0 +1,197 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Minimal theme preset
+   Minimalism: generous whitespace, near-monochrome ink on white,
+   hairline borders and no shadows; colour is reserved for state.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/minimal.css";
+   then set <html data-theme="minimal">.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Contrast meets WCAG AA for the same text/surface/action pairings
+   guarded for calm (4.5:1 text, 3:1 UI); motion stays ≤ 200ms with
+   no overshoot (reduced-motion is handled by animations.css).
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="minimal"] {
+  color-scheme: light;
+
+  /* Typography — Inter, one family, hierarchy through weight and size */
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-decorative: var(--font-display);
+  --heading-transform: none;
+
+  /* Radius — barely-there rounding */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-pill: 999px;
+
+  /* Motion — ≤ 200ms, no spring overshoot */
+  --transition-fast: 120ms ease-out;
+  --transition-default: 160ms ease-out;
+  --transition-slow: 200ms ease-out;
+  --transition-spring: 160ms ease-out;
+
+  /* Border shape — hairlines; strong stays 2px for focus visibility */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-style: solid;
+
+  /* ── Layer 2: Style tokens — minimal is flat and quiet, so all no-ops ── */
+  --color-accent-1: var(--color-accent-green);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+  --gradient-surface: none;
+  --gradient-brand: none;
+  --gradient-accent: none;
+  --gradient-backdrop: none;
+  --texture-surface: none;
+  --pattern-backdrop: none;
+  --surface-blur: none;
+  --shadow-offset: 0 0 0 0 transparent;
+  --shadow-raised: 0 0 0 0 transparent;
+  --shadow-pressed: 0 0 0 0 transparent;
+  --shadow-inset: 0 0 0 0 transparent;
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-default);
+  --input-bg-hover: var(--color-surface-raised);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-subtle);
+  --card-hover-border: var(--color-border-default);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-raised);
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-raised);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-text-primary);
+  --nav-height: 64px;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — paper white */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #fafafa;
+  --color-bg-tertiary: #f3f3f3;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(17, 17, 17, 0.3);
+
+  /* Surfaces */
+  --color-surface-default: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #f5f5f5;
+  --color-surface-active: #ececec;
+
+  /* Text — ink */
+  --color-text-primary: #111111;
+  --color-text-secondary: #4f4f4f;
+  --color-text-tertiary: #666666;
+  --color-text-disabled: #a3a3a3;
+  --color-text-inverse: #ffffff;
+  --color-text-link: #111111;
+  --color-text-code: #3d3d3d;
+
+  /* Borders */
+  --color-border-default: #e5e5e5;
+  --color-border-subtle: #efefef;
+  --color-border-strong: #8a8a8a;
+  --color-border-focus: #111111;
+  --color-border-brand: #111111;
+
+  /* Actions — Brand — ink */
+  --color-action-brand-default: #111111;
+  --color-action-brand-hover: #333333;
+  --color-action-brand-active: #000000;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #f2f2f2;
+  --color-action-brand-border: rgba(17, 17, 17, 0.3);
+
+  /* Actions — Secondary — graphite */
+  --color-action-secondary-default: #404040;
+  --color-action-secondary-hover: #2e2e2e;
+  --color-action-secondary-active: #1f1f1f;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #f2f2f2;
+  --color-action-secondary-border: rgba(64, 64, 64, 0.3);
+
+  /* Actions — Tertiary — grey */
+  --color-action-tertiary-default: #6b6b6b;
+  --color-action-tertiary-hover: #5a5a5a;
+  --color-action-tertiary-active: #4a4a4a;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger */
+  --color-action-danger-default: #b42318;
+  --color-action-danger-hover: #962017;
+  --color-action-danger-active: #7a1a13;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — greyscale ramp */
+  --color-accent-green: #2b2b2b;
+  --color-accent-cyan: #555555;
+  --color-accent-violet: #6e6e6e;
+  --color-accent-4: #878787;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #555555;
+
+  /* State */
+  --color-state-success: #1d7034;
+  --color-state-success-bg: #eef6f0;
+  --color-state-warning: #855400;
+  --color-state-warning-bg: #fbf3e3;
+  --color-state-error: #b42318;
+  --color-state-error-bg: #fcebea;
+  --color-state-info: #1f4f99;
+  --color-state-info-bg: #edf2fa;
+
+  /* Shadows — none; separation comes from whitespace and hairlines */
+  --shadow-sm: 0 0 0 0 transparent;
+  --shadow-md: 0 0 0 0 transparent;
+  --shadow-lg: 0 0 0 0 transparent;
+  --shadow-glow-green: 0 0 0 2px rgba(17, 17, 17, 0.16);
+  --shadow-glow-cyan: 0 0 0 2px rgba(17, 17, 17, 0.16);
+  --shadow-glow-violet: 0 0 0 2px rgba(17, 17, 17, 0.16);
+  --shadow-glow-red: 0 0 0 2px rgba(180, 35, 24, 0.2);
+}

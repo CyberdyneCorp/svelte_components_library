@@ -67,7 +67,7 @@ Roles:
 
 ### Presets
 
-Each preset lives in `packages/ui/foundation/src/lib/themes/styles/<name>.css`. It defines `[data-theme="<name>"]`, plus `[data-theme="<name>-dark"]` where the style has a natural dark variant. It builds on the default Layer 2/3 tokens and overrides only what the style needs. A shared guard test checks every preset for:
+Each preset lives in `packages/ui/foundation/src/lib/themes/<name>.css`, next to `calm.css`. It defines `[data-theme="<name>"]`, plus `[data-theme="<name>-dark"]` where the style has a natural dark variant. It builds on the default Layer 2/3 tokens and overrides only what the style needs. A shared guard test checks every preset for:
 - WCAG AA on the calm pairing list;
 - no redefined primitives or `--video-*`;
 - only foundation-namespace tokens.
