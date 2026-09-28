@@ -45,19 +45,13 @@
   }: Props = $props();
 
   // Track per-group open state internally so consumers don't need to pipe it
-  // through their own state. A plain record keeps reactivity simple and
-  // avoids a long-lived mutable Set.
+  // through their own state. Only user toggles are stored; untouched groups
+  // fall back to their `defaultOpen`, so no effect has to seed the record
+  // (seeding it from an effect that also reads it loops forever).
   let openState = $state<Record<string, boolean>>({});
-  $effect(() => {
-    const next: Record<string, boolean> = {};
-    for (const g of groups) {
-      next[g.id] = openState[g.id] ?? (g.defaultOpen ?? true);
-    }
-    openState = next;
-  });
 
   function isOpen(id: string): boolean {
-    return openState[id] ?? true;
+    return openState[id] ?? groups.find((g) => g.id === id)?.defaultOpen ?? true;
   }
 
   function toggleGroup(id: string): void {
