@@ -1,5 +1,15 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.11.0
+
+### Minor Changes
+
+- 4dcdd24: Charts can now be localized. Every `ChartFrame` chart (Line, Area, Bar, Pie, Scatter, TreeMap, Sankey, Sparkline, Gauge) takes an optional, per-chart typed `labels` prop covering the accessible name, the data-table column headers and caption, the "Show data"/"Hide data" toggle, and the legend name. `ChartLabels` and `columnHeaders` are also exported. Without `labels`, the English defaults are unchanged.
+
+### Patch Changes
+
+- fedab9b: CesiumLayerControl: fix an infinite effect loop (`effect_update_depth_exceeded`) whenever `groups` were passed. Group open state now falls back to each group's `defaultOpen` instead of being seeded by an effect.
+
 ## 0.10.1
 
 ### Patch Changes
