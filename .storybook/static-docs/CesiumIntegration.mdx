@@ -90,6 +90,8 @@ Set `window.CESIUM_BASE_URL` **before** the first `Viewer` is constructed. In Sv
 {@render children()}
 ```
 
+`"/cesium"` assumes the app is served from the domain root. If it lives under a subpath (GitHub Pages project sites, SvelteKit `paths.base`), prefix it — e.g. `` `${base}/cesium` `` with `base` from `$app/paths` — otherwise every Worker, texture and `widgets.css` 404s and the globe stops with "An error occurred while rendering".
+
 `<CesiumGlobe>` logs a one-time dev warning if `CESIUM_BASE_URL` is missing, because the failure mode otherwise is silent: Cesium 404s on its Workers and falls back to a slow single-threaded path.
 
 Optionally pass `CESIUM_BASE_URL` to Vite's `define` if a dependency reads it at build time:
@@ -186,7 +188,7 @@ The library's own Storybook serves the copied assets via a static dir. The relev
 
 - `scripts/copy-cesium.mjs` copies into `.storybook/public/cesium/`
 - `.storybook/main.ts` adds `staticDirs: ["./public"]`
-- `.storybook/preview-head.html` sets `window.CESIUM_BASE_URL = "/cesium"` and links `widgets.css`
+- `.storybook/preview-head.html` sets `window.CESIUM_BASE_URL` to `cesium/` resolved against `document.baseURI` and links `cesium/Widgets/widgets.css` relatively, so the same build works on `localhost:6006` and under the GitHub Pages subpath `/svelte_components_library/`
 - root `package.json` runs the copy in `predev` / `prebuild-storybook`
 
 If you fork the repo and the Cesium stories render a black box, run `node scripts/copy-cesium.mjs` once and restart Storybook.
