@@ -1,0 +1,215 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Vaporwave theme preset
+   Synthwave night: deep purple, hot-pink → cyan gradients, neon
+   glow, a laser grid behind the page and faint CRT scanlines on
+   surfaces.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/vaporwave.css";
+   then set <html data-theme="vaporwave">.
+
+   Fonts: "Orbitron" and "Monoton" are Google Fonts families; load
+   them yourself (or not) — every stack falls back to system fonts.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Gradient / grid / scanline layers are low-alpha over the solid
+   surface colours, which carry the WCAG AA guarantees. Motion stays
+   ≤ 200ms with no overshoot (the global prefers-reduced-motion rule
+   still applies).
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="vaporwave"] {
+  color-scheme: dark;
+
+  /* Typography — wide techno display, neon marquee for decoration */
+  --font-display: "Orbitron", "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-decorative: "Monoton", "Orbitron", system-ui, sans-serif;
+  --heading-transform: uppercase;
+
+  /* Radius — crisp, slightly softened */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-pill: 999px;
+
+  /* Motion — ≤ 200ms, decelerating, no overshoot */
+  --transition-fast: 120ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-default: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 200ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-spring: 180ms ease-out;
+
+  /* Border shape */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-style: solid;
+
+  /* ── Layer 2: Style tokens ── */
+  --color-accent-1: var(--color-action-brand-default);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+  --gradient-surface: linear-gradient(
+    180deg,
+    rgba(255, 113, 206, 0.06) 0%,
+    rgba(1, 205, 254, 0.03) 100%
+  );
+  --gradient-brand: linear-gradient(135deg, #ff71ce 0%, #b967ff 100%);
+  /* The brand gradient is opaque, so hover / active carry their own (brighter) stops. */
+  --gradient-brand-hover: linear-gradient(135deg, #ff8ad6 0%, #c683ff 100%);
+  --gradient-brand-active: linear-gradient(135deg, #ffa3de 0%, #d29dff 100%);
+  --gradient-accent: linear-gradient(90deg, #ff71ce 0%, #b967ff 50%, #01cdfe 100%);
+  --gradient-backdrop: linear-gradient(180deg, #1b0a33 0%, #240d42 60%, #2e0f4a 100%);
+  --texture-surface: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.025) 0 1px,
+    transparent 1px 3px
+  );
+  --pattern-backdrop:
+    linear-gradient(rgba(255, 113, 206, 0.1) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(1, 205, 254, 0.08) 1px, transparent 1px) 0 0 / 48px 48px;
+  --surface-blur: blur(10px) saturate(140%);
+  --shadow-offset: 0 0 0 1px rgba(255, 113, 206, 0.25), 0 0 18px rgba(255, 113, 206, 0.2);
+  --shadow-raised: 0 0 14px rgba(1, 205, 254, 0.3);
+  --shadow-pressed: inset 0 0 10px rgba(255, 113, 206, 0.35);
+  --shadow-inset: inset 0 0 0 1px rgba(1, 205, 254, 0.2);
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — midnight purple */
+  --color-bg-primary: #1b0a33;
+  --color-bg-secondary: #22103f;
+  --color-bg-tertiary: #2c1650;
+  --color-bg-elevated: #26124a;
+  --color-bg-overlay: rgba(10, 2, 24, 0.6);
+
+  /* Surfaces */
+  --color-surface-default: #241044;
+  --color-surface-raised: #2a1450;
+  --color-surface-overlay: #2f1858;
+  --color-surface-hover: #36205f;
+  --color-surface-active: #3f2670;
+
+  /* Text */
+  --color-text-primary: #fbeaff;
+  --color-text-secondary: #d9c2f0;
+  --color-text-tertiary: #b9a0d6;
+  --color-text-disabled: #7c6699;
+  --color-text-inverse: #1b0a33;
+  --color-text-link: #5ee7ff;
+  --color-text-code: #ff9de2;
+
+  /* Borders */
+  --color-border-default: #4a2e78;
+  --color-border-subtle: #3a2362;
+  --color-border-strong: #9a7cc4;
+  --color-border-focus: #5ee7ff;
+  --color-border-brand: #ff71ce;
+
+  /* Actions — Brand (hot pink) */
+  --color-action-brand-default: #ff71ce;
+  --color-action-brand-hover: #ff8fd8;
+  --color-action-brand-active: #ffade3;
+  --color-action-brand-text: #1b0a33;
+  --color-action-brand-bg: #3a1245;
+  --color-action-brand-border: rgba(255, 113, 206, 0.45);
+
+  /* Actions — Secondary (electric cyan) */
+  --color-action-secondary-default: #01cdfe;
+  --color-action-secondary-hover: #4fdcff;
+  --color-action-secondary-active: #86e8ff;
+  --color-action-secondary-text: #1b0a33;
+  --color-action-secondary-bg: #0d2b4a;
+  --color-action-secondary-border: rgba(1, 205, 254, 0.45);
+
+  /* Actions — Tertiary (violet) */
+  --color-action-tertiary-default: #b967ff;
+  --color-action-tertiary-hover: #c888ff;
+  --color-action-tertiary-active: #d6a6ff;
+  --color-action-tertiary-text: #1b0a33;
+
+  /* Actions — Danger */
+  --color-action-danger-default: #ff6b8b;
+  --color-action-danger-hover: #ff8aa3;
+  --color-action-danger-active: #ffa8bb;
+  --color-action-danger-text: #1b0a33;
+
+  /* Accents — neon */
+  --color-accent-green: #05ffa1;
+  --color-accent-cyan: #01cdfe;
+  --color-accent-violet: #b967ff;
+  --color-accent-4: #fffb96;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #fffb96;
+
+  /* State */
+  --color-state-success: #05ffa1;
+  --color-state-success-bg: #0f2e2a;
+  --color-state-warning: #fffb96;
+  --color-state-warning-bg: #2e2a1a;
+  --color-state-error: #ff6b8b;
+  --color-state-error-bg: #3a1230;
+  --color-state-info: #5ee7ff;
+  --color-state-info-bg: #0d2b4a;
+
+  /* Shadows — deep drop + neon glow */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(10, 2, 24, 0.5);
+  --shadow-lg: 0 12px 40px rgba(10, 2, 24, 0.6), 0 0 24px rgba(255, 113, 206, 0.15);
+  --shadow-glow-green: 0 0 12px rgba(5, 255, 161, 0.55);
+  --shadow-glow-cyan: 0 0 0 2px rgba(1, 205, 254, 0.5), 0 0 14px rgba(1, 205, 254, 0.55);
+  --shadow-glow-violet: 0 0 12px rgba(185, 103, 255, 0.6);
+  --shadow-glow-red: 0 0 0 2px rgba(255, 107, 139, 0.5), 0 0 14px rgba(255, 107, 139, 0.55);
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-bg-secondary);
+  --input-bg-hover: var(--color-surface-default);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-default);
+  --card-hover-border: var(--color-border-brand);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-tertiary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-raised);
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: var(--color-bg-secondary);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 64px;
+}

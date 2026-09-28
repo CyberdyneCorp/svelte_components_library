@@ -1,0 +1,213 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Maximalism theme preset
+   More is more: magenta, cobalt, emerald and tangerine clashing on
+   warm cream; stripes, dots and squiggles layered on the backdrop;
+   chunky borders, stacked hard offset shadows and a fat serif
+   display face set in capitals.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/maximalism.css";
+   then set <html data-theme="maximalism">.
+   Optional font: load "Abril Fatface" from Google Fonts; falls back
+   to Playfair Display, Georgia and the system serif.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Motion stays ≤ 200ms with no overshoot; the foundation's global
+   prefers-reduced-motion rule (animations.css) collapses it further.
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="maximalism"] {
+  color-scheme: light;
+
+  /* Typography — fat display serif, loud capitals */
+  --font-display: "Abril Fatface", "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-decorative: var(--font-display);
+  --heading-transform: uppercase;
+
+  /* Radius — deliberately mixed: sharp small parts, bulbous panels */
+  --radius-xs: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2.5rem;
+  --radius-pill: 999px;
+
+  /* Motion — snappy, no overshoot */
+  --transition-fast: 100ms ease-out;
+  --transition-default: 160ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 200ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-spring: 180ms ease-out;
+
+  /* Border shape — chunky */
+  --border-width: 2px;
+  --border-width-strong: 3px;
+  --border-style: solid;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — warm cream */
+  --color-bg-primary: #fff3dc;
+  --color-bg-secondary: #ffe8c2;
+  --color-bg-tertiary: #ffdca6;
+  --color-bg-elevated: #fffaf0;
+  --color-bg-overlay: rgba(26, 11, 46, 0.45);
+
+  /* Surfaces */
+  --color-surface-default: #fffaf0;
+  --color-surface-raised: #ffffff;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #ffecc9;
+  --color-surface-active: #ffdfa8;
+
+  /* Text — deep aubergine */
+  --color-text-primary: #1a0b2e;
+  --color-text-secondary: #3f1f5c;
+  --color-text-tertiary: #5a2d6e;
+  --color-text-disabled: #a88fa6;
+  --color-text-inverse: #fff3dc;
+  --color-text-link: #b0005c;
+  --color-text-code: #00607a;
+
+  /* Borders — ink, not grey */
+  --color-border-default: #3f1f5c;
+  --color-border-subtle: #d9a8c8;
+  --color-border-strong: #1a0b2e;
+  --color-border-focus: #1d3fd6;
+  --color-border-brand: #c2006b;
+
+  /* Actions — Brand (magenta) */
+  --color-action-brand-default: #c2006b;
+  --color-action-brand-hover: #9e0057;
+  --color-action-brand-active: #7a0043;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #ffe0ef;
+  --color-action-brand-border: rgba(194, 0, 107, 0.5);
+
+  /* Actions — Secondary (cobalt) */
+  --color-action-secondary-default: #1d3fd6;
+  --color-action-secondary-hover: #1631ad;
+  --color-action-secondary-active: #10258a;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #e2e8ff;
+  --color-action-secondary-border: rgba(29, 63, 214, 0.5);
+
+  /* Actions — Tertiary (teal) */
+  --color-action-tertiary-default: #00707a;
+  --color-action-tertiary-hover: #005a63;
+  --color-action-tertiary-active: #00464d;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger (lacquer red) */
+  --color-action-danger-default: #c41a1a;
+  --color-action-danger-hover: #a11414;
+  --color-action-danger-active: #7f0f0f;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — clashing on purpose */
+  --color-accent-green: #00805a;
+  --color-accent-cyan: #0070a8;
+  --color-accent-violet: #7b1fd1;
+  --color-accent-4: #c24e00;
+  --color-accent-1: #d4006f;
+  --color-accent-2: #1d3fd6;
+  --color-accent-3: #00806b;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #b34700;
+
+  /* State */
+  --color-state-success: #1d6b2e;
+  --color-state-success-bg: #dff5e0;
+  --color-state-warning: #8f4a00;
+  --color-state-warning-bg: #ffe9c7;
+  --color-state-error: #b3141e;
+  --color-state-error-bg: #ffe0e0;
+  --color-state-info: #1d3fd6;
+  --color-state-info-bg: #e2e8ff;
+
+  /* Shadows — hard, graphic, no blur */
+  --shadow-sm: 2px 2px 0 0 #1a0b2e;
+  --shadow-md: 4px 4px 0 0 #1a0b2e;
+  --shadow-lg: 8px 8px 0 0 #1a0b2e;
+  --shadow-glow-green: 0 0 0 3px #00c2a8;
+  --shadow-glow-cyan: 0 0 0 3px #ffb800;
+  --shadow-glow-violet: 0 0 0 3px #b56bff;
+  --shadow-glow-red: 0 0 0 3px #ff4f4f;
+
+  /* ── Layer 2: Style tokens ── */
+  --gradient-surface: none;
+  --gradient-brand: linear-gradient(120deg, #c2006b 0%, #7b1fd1 50%, #1d3fd6 100%);
+  /* The brand gradient is opaque, so hover / active carry their own (deeper) stops. */
+  --gradient-brand-hover: linear-gradient(120deg, #a8005d 0%, #6a18b8 50%, #1834bb 100%);
+  --gradient-brand-active: linear-gradient(120deg, #8f004f 0%, #5a139e 50%, #142ca0 100%);
+  --gradient-accent: linear-gradient(90deg, #ff4fa3 0%, #ffb800 50%, #00c2a8 100%);
+  --gradient-backdrop:
+    radial-gradient(circle at 92% 4%, rgba(255, 184, 0, 0.35), transparent 38%),
+    radial-gradient(circle at 4% 96%, rgba(0, 194, 168, 0.28), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(255, 79, 163, 0.12), transparent 60%);
+  /* Polka dots on panels */
+  --texture-surface: radial-gradient(rgba(194, 0, 107, 0.08) 1.5px, transparent 1.6px) 0 0 / 14px
+    14px;
+  /* Squiggles over diagonal stripes */
+  --pattern-backdrop:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='40'%3E%3Cpath d='M0 20q10-12 20 0t20 0 20 0 20 0' fill='none' stroke='%23d4006f' stroke-opacity='0.14' stroke-width='3'/%3E%3C/svg%3E")
+      0 0 / 80px 40px repeat,
+    repeating-linear-gradient(45deg, rgba(29, 63, 214, 0.05) 0 12px, transparent 12px 24px);
+  --surface-blur: none;
+  /* Stacked offsets: ink, then magenta */
+  --shadow-offset: 5px 5px 0 0 #1a0b2e;
+  --shadow-raised: 10px 10px 0 0 #d4006f;
+  --shadow-pressed: 2px 2px 0 0 #1a0b2e;
+  --shadow-inset: inset 3px 3px 0 0 rgba(26, 11, 46, 0.12);
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-raised);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-raised);
+  --input-bg-hover: var(--color-surface-default);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards — inked outline, magenta on hover */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-default);
+  --card-hover-border: var(--color-border-brand);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-hover);
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-default);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 64px;
+}

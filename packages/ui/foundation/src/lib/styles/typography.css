@@ -13,6 +13,12 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+
+  /* Decorative type — titles, brand marks (Art Deco, Y2K, Editorial…).
+     Themes that change --font-display on a subtree must redeclare
+     --font-decorative there too, since var() resolves where declared. */
+  --font-decorative: var(--font-display);
+  --heading-transform: none;
 }
 
 .cy-type-display-1 {

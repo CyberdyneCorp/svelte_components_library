@@ -1,0 +1,225 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Skeuomorphism theme preset
+   Material surfaces: linen paper, oxblood leather, brushed navy
+   metal. Bevelled edges, soft top-lit gradients, paper grain.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/skeuomorphism.css";
+   then set <html data-theme="skeuomorphism">.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Light by nature (paper), so there is no dark variant.
+   Motion stays ≤ 200ms without overshoot; prefers-reduced-motion
+   is honoured by the global rule in styles/animations.css.
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="skeuomorphism"] {
+  color-scheme: light;
+
+  /* Typography — bookish serif headings, classic UI sans body */
+  --font-display: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --font-body: "Lucida Grande", "Helvetica Neue", Helvetica, system-ui, sans-serif;
+  --font-decorative: var(--font-display);
+  --heading-transform: none;
+
+  /* Radius — machined, modest corners */
+  --radius-xs: 0.1875rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-pill: 999px;
+
+  /* Motion — physical but quick, decelerating, no overshoot */
+  --transition-fast: 120ms ease-out;
+  --transition-default: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 200ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-spring: 180ms ease-out;
+
+  /* Border shape — stitched-edge feel comes from colour, not width */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-style: solid;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — linen */
+  --color-bg-primary: #e9e2d3;
+  --color-bg-secondary: #e1d8c5;
+  --color-bg-tertiary: #d8cdb6;
+  --color-bg-elevated: #f6f1e6;
+  --color-bg-overlay: rgba(40, 28, 16, 0.45);
+
+  /* Surfaces — paper sheets */
+  --color-surface-default: #f4eee2;
+  --color-surface-raised: #f9f5ec;
+  --color-surface-overlay: #fbf8f1;
+  --color-surface-hover: #e8dfcd;
+  --color-surface-active: #ddd2bc;
+
+  /* Text — ink */
+  --color-text-primary: #2e2419;
+  --color-text-secondary: #4f4235;
+  --color-text-tertiary: #5c4e40;
+  --color-text-disabled: #9c8f7d;
+  --color-text-inverse: #f4eee2;
+  --color-text-link: #1f4f7a;
+  --color-text-code: #6b3a1f;
+
+  /* Borders */
+  --color-border-default: #c9bca3;
+  --color-border-subtle: #d8cdb7;
+  --color-border-strong: #7d6c56;
+  --color-border-focus: #1f4f7a;
+  --color-border-brand: #7a3b1e;
+
+  /* Actions — Brand (oxblood leather) */
+  --color-action-brand-default: #7a3b1e;
+  --color-action-brand-hover: #66301a;
+  --color-action-brand-active: #532714;
+  --color-action-brand-text: #fff8ec;
+  --color-action-brand-bg: #f1e0d2;
+  --color-action-brand-border: rgba(122, 59, 30, 0.4);
+
+  /* Actions — Secondary (navy metal) */
+  --color-action-secondary-default: #1f4f7a;
+  --color-action-secondary-hover: #1a4266;
+  --color-action-secondary-active: #153653;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #dee7ef;
+  --color-action-secondary-border: rgba(31, 79, 122, 0.4);
+
+  /* Actions — Tertiary (walnut) */
+  --color-action-tertiary-default: #5a4d40;
+  --color-action-tertiary-hover: #4a3f34;
+  --color-action-tertiary-active: #3c332a;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger (sealing wax) */
+  --color-action-danger-default: #9e2b25;
+  --color-action-danger-hover: #86241f;
+  --color-action-danger-active: #6f1d19;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — pigment inks */
+  --color-accent-green: #3f6b3a;
+  --color-accent-cyan: #1f5f73;
+  --color-accent-violet: #6a3f73;
+  --color-accent-4: #8a5a12;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #804e10;
+
+  /* State */
+  --color-state-success: #33632e;
+  --color-state-success-bg: #e2ecd9;
+  --color-state-warning: #7a4f0f;
+  --color-state-warning-bg: #f3e6cc;
+  --color-state-error: #9e2b25;
+  --color-state-error-bg: #f5dfd9;
+  --color-state-info: #1f4f7a;
+  --color-state-info-bg: #dee7ef;
+
+  /* Shadows — top-lit, warm, physically plausible */
+  --shadow-sm: 0 1px 2px rgba(46, 36, 25, 0.2);
+  --shadow-md: 0 2px 4px rgba(46, 36, 25, 0.16), 0 6px 14px rgba(46, 36, 25, 0.14);
+  --shadow-lg: 0 4px 8px rgba(46, 36, 25, 0.18), 0 16px 36px rgba(46, 36, 25, 0.22);
+  --shadow-glow-green: 0 0 0 3px rgba(122, 59, 30, 0.25);
+  --shadow-glow-cyan: 0 0 0 3px rgba(31, 79, 122, 0.3);
+  --shadow-glow-violet: 0 0 0 3px rgba(106, 63, 115, 0.25);
+  --shadow-glow-red: 0 0 0 3px rgba(158, 43, 37, 0.28);
+
+  /* ── Layer 2: Style tokens — materials, bevels, lighting ── */
+  --color-accent-1: var(--color-accent-green);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+  /* Top-lit sheen over every surface */
+  --gradient-surface: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 45%,
+    rgba(46, 36, 25, 0.04) 100%
+  );
+  /* Glossy leather button: kept light enough for AA on the brand colour */
+  --gradient-brand: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.16) 100%
+  );
+  /* Translucent sheen: the hover / active button colour shows through it. */
+  --gradient-brand-hover: var(--gradient-brand);
+  --gradient-brand-active: var(--gradient-brand);
+  --gradient-accent: linear-gradient(180deg, #a86a2a 0%, #7a3b1e 100%);
+  --gradient-backdrop: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  /* Paper grain (tiny SVG noise) */
+  --texture-surface: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.22 0 0 0 0 0.12 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+    0 0 / 160px 160px repeat;
+  /* Linen weave behind the page */
+  --pattern-backdrop:
+    repeating-linear-gradient(45deg, rgba(80, 60, 40, 0.035) 0 2px, rgba(80, 60, 40, 0) 2px 4px),
+    repeating-linear-gradient(-45deg, rgba(80, 60, 40, 0.035) 0 2px, rgba(80, 60, 40, 0) 2px 4px);
+  --surface-blur: none;
+  --shadow-offset: 0 0 0 0 transparent;
+  /* Bevel: highlight on the top edge, contact shadow beneath */
+  --shadow-raised:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75), inset 0 -1px 0 rgba(46, 36, 25, 0.12),
+    0 1px 2px rgba(46, 36, 25, 0.25), 0 2px 6px rgba(46, 36, 25, 0.12);
+  --shadow-pressed: inset 0 2px 4px rgba(46, 36, 25, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.4);
+  /* Debossed input well */
+  --shadow-inset: inset 0 1px 3px rgba(46, 36, 25, 0.22), 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-raised);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-raised);
+  --input-bg-hover: var(--color-surface-overlay);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-default);
+  --card-hover-border: var(--color-border-strong);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-raised);
+  --table-border: var(--color-border-default);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-raised);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-default);
+  --nav-height: 60px;
+}

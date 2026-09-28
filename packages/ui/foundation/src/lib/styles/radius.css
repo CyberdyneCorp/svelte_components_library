@@ -5,4 +5,9 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   --radius-pill: 999px;
+
+  /* Border shape — design-style presets (Brutalism, Memphis, Swiss…) */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-style: solid;
 }

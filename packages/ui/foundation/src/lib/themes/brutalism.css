@@ -1,0 +1,201 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Neo-brutalism theme preset
+   Thick black outlines, hard offset shadows, loud flat colour
+   (electric blue, magenta, signal yellow) on cream, grotesk
+   headings in caps and mono details.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/brutalism.css";
+   then set <html data-theme="brutalism">.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Light by nature (black ink on paper), so there is no dark variant.
+   Motion is short and linear; prefers-reduced-motion is honoured
+   by the global rule in styles/animations.css.
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="brutalism"] {
+  color-scheme: light;
+
+  /* Typography — heavy grotesk display, grotesk body, mono accents */
+  --font-display: "Archivo Black", "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Space Grotesk", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-decorative: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --heading-transform: uppercase;
+
+  /* Radius — near-square blocks */
+  --radius-xs: 0;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.375rem;
+  --radius-xl: 0.5rem;
+  --radius-pill: 999px;
+
+  /* Motion — snappy, linear, no easing theatrics */
+  --transition-fast: 80ms linear;
+  --transition-default: 120ms linear;
+  --transition-slow: 160ms linear;
+  --transition-spring: 120ms linear;
+
+  /* Border shape — thick black outlines */
+  --border-width: 3px;
+  --border-width-strong: 4px;
+  --border-style: solid;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — cream paper */
+  --color-bg-primary: #fff4e0;
+  --color-bg-secondary: #ffe9c2;
+  --color-bg-tertiary: #ffdf9e;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(0, 0, 0, 0.6);
+
+  /* Surfaces — white blocks, signal-yellow hover */
+  --color-surface-default: #ffffff;
+  --color-surface-raised: #fffaf0;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #ffe066;
+  --color-surface-active: #ffd23f;
+
+  /* Text — pure black ink */
+  --color-text-primary: #000000;
+  --color-text-secondary: #1f1f1f;
+  --color-text-tertiary: #3d3d3d;
+  --color-text-disabled: #8a8a8a;
+  --color-text-inverse: #ffffff;
+  --color-text-link: #1d3fd6;
+  --color-text-code: #a1005a;
+
+  /* Borders — everything is outlined in black */
+  --color-border-default: #000000;
+  --color-border-subtle: #000000;
+  --color-border-strong: #000000;
+  --color-border-focus: #1d3fd6;
+  --color-border-brand: #000000;
+
+  /* Actions — Brand (electric blue) */
+  --color-action-brand-default: #1d3fd6;
+  --color-action-brand-hover: #1631a8;
+  --color-action-brand-active: #0f2380;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #dce3ff;
+  --color-action-brand-border: #000000;
+
+  /* Actions — Secondary (magenta) */
+  --color-action-secondary-default: #c7006a;
+  --color-action-secondary-hover: #a3005a;
+  --color-action-secondary-active: #800047;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #ffe0ef;
+  --color-action-secondary-border: #000000;
+
+  /* Actions — Tertiary (black) */
+  --color-action-tertiary-default: #000000;
+  --color-action-tertiary-hover: #1f1f1f;
+  --color-action-tertiary-active: #333333;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger (signal red) */
+  --color-action-danger-default: #d10000;
+  --color-action-danger-hover: #a80000;
+  --color-action-danger-active: #800000;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — loud flat colours */
+  --color-accent-green: #00803a;
+  --color-accent-cyan: #007c99;
+  --color-accent-violet: #7a2bd6;
+  --color-accent-4: #d14900;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #a34000;
+
+  /* State */
+  --color-state-success: #006b2d;
+  --color-state-success-bg: #c9f7d5;
+  --color-state-warning: #7a4200;
+  --color-state-warning-bg: #ffe066;
+  --color-state-error: #c00000;
+  --color-state-error-bg: #ffd6d6;
+  --color-state-info: #1d3fd6;
+  --color-state-info-bg: #dce3ff;
+
+  /* Shadows — hard, zero-blur offsets */
+  --shadow-sm: 2px 2px 0 0 #000000;
+  --shadow-md: 4px 4px 0 0 #000000;
+  --shadow-lg: 8px 8px 0 0 #000000;
+  --shadow-glow-green: 0 0 0 3px #ffe066;
+  --shadow-glow-cyan: 0 0 0 3px #1d3fd6;
+  --shadow-glow-violet: 0 0 0 3px #7a2bd6;
+  --shadow-glow-red: 0 0 0 3px #d10000;
+
+  /* ── Layer 2: Style tokens — flat colour, hard shadows, dot grid ── */
+  --color-accent-1: #1d3fd6;
+  --color-accent-2: #c7006a;
+  --color-accent-3: var(--color-accent-green);
+  --gradient-surface: none;
+  --gradient-brand: none;
+  --gradient-brand-hover: none;
+  --gradient-brand-active: none;
+  --gradient-accent: none;
+  --gradient-backdrop: none;
+  --texture-surface: none;
+  --pattern-backdrop: radial-gradient(rgba(0, 0, 0, 0.14) 1px, rgba(0, 0, 0, 0) 1.5px) 0 0 / 18px
+    18px repeat;
+  --surface-blur: none;
+  --shadow-offset: 4px 4px 0 0 #000000;
+  --shadow-raised: 0 0 0 0 transparent;
+  --shadow-pressed: 1px 1px 0 0 #000000;
+  --shadow-inset: 0 0 0 0 transparent;
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-primary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-default);
+  --input-bg-hover: var(--color-surface-raised);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-primary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-default);
+  --card-hover-border: var(--color-border-strong);
+
+  /* Tables */
+  --table-header-bg: var(--color-surface-hover);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-bg-secondary);
+  --table-border: var(--color-border-default);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-default);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-primary);
+  --nav-item-text-active: var(--color-action-brand-default);
+  --nav-height: 64px;
+}

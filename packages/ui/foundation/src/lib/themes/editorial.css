@@ -1,0 +1,206 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Editorial theme preset
+   Magazine / newspaper look: off-white paper with a faint grain,
+   ink-black type, high-contrast serif headings, hairline rules and
+   thick section rules, a single masthead red. Flat — no drop
+   shadows, no gradients.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/editorial.css";
+   then set <html data-theme="editorial">.
+
+   Fonts: "Playfair Display" and "Source Serif 4" are Google Fonts
+   families; load them yourself (or not) — every stack falls back
+   to system serifs.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Every text / surface / action pair meets WCAG AA. Motion stays
+   ≤ 200ms with no overshoot (the global prefers-reduced-motion
+   rule still applies).
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="editorial"] {
+  color-scheme: light;
+
+  /* Typography — high-contrast display serif, bookish text serif */
+  --font-display: "Playfair Display", "Didot", "Bodoni 72", Georgia, serif;
+  --font-body: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
+  --font-decorative: "Playfair Display", "Didot", Georgia, serif;
+  --heading-transform: none;
+
+  /* Radius — print is square */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0.125rem;
+  --radius-lg: 0.125rem;
+  --radius-xl: 0.25rem;
+  --radius-pill: 999px;
+
+  /* Motion — quiet, ≤ 200ms, no overshoot */
+  --transition-fast: 120ms ease-out;
+  --transition-default: 160ms ease-out;
+  --transition-slow: 200ms ease-out;
+  --transition-spring: 160ms ease-out;
+
+  /* Border shape — hairline rules, heavy section rules */
+  --border-width: 1px;
+  --border-width-strong: 3px;
+  --border-style: solid;
+
+  /* ── Layer 2: Style tokens ── */
+  --color-accent-1: var(--color-action-brand-default);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-green);
+  --gradient-surface: none;
+  --gradient-brand: none;
+  --gradient-brand-hover: none;
+  --gradient-brand-active: none;
+  --gradient-accent: none;
+  --gradient-backdrop: none;
+  --texture-surface: none;
+  --pattern-backdrop: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.09 0 0 0 0 0.07 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+    0 0 / 160px 160px repeat;
+  --surface-blur: none;
+  --shadow-offset: 0 0 0 0 transparent;
+  --shadow-raised: 0 1px 0 0 #1b1a17;
+  --shadow-pressed: 0 0 0 0 transparent;
+  --shadow-inset: 0 0 0 0 transparent;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — newsprint paper */
+  --color-bg-primary: #faf7f0;
+  --color-bg-secondary: #f3eee3;
+  --color-bg-tertiary: #ebe4d5;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(27, 26, 23, 0.4);
+
+  /* Surfaces */
+  --color-surface-default: #fffdf8;
+  --color-surface-raised: #fcf9f2;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #f3eee3;
+  --color-surface-active: #e9e2d2;
+
+  /* Text — ink */
+  --color-text-primary: #1b1a17;
+  --color-text-secondary: #45423b;
+  --color-text-tertiary: #5e5a51;
+  --color-text-disabled: #a09a8d;
+  --color-text-inverse: #faf7f0;
+  --color-text-link: #8f1d1d;
+  --color-text-code: #3b3a6b;
+
+  /* Borders — rules */
+  --color-border-default: #cfc7b6;
+  --color-border-subtle: #e2dccf;
+  --color-border-strong: #1b1a17;
+  --color-border-focus: #1f4f8f;
+  --color-border-brand: #9e1b1b;
+
+  /* Actions — Brand (masthead red) */
+  --color-action-brand-default: #9e1b1b;
+  --color-action-brand-hover: #821616;
+  --color-action-brand-active: #6a1212;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #f7e6e3;
+  --color-action-brand-border: rgba(158, 27, 27, 0.4);
+
+  /* Actions — Secondary (ink) */
+  --color-action-secondary-default: #1b1a17;
+  --color-action-secondary-hover: #33312c;
+  --color-action-secondary-active: #45423b;
+  --color-action-secondary-text: #faf7f0;
+  --color-action-secondary-bg: #ebe4d5;
+  --color-action-secondary-border: rgba(27, 26, 23, 0.4);
+
+  /* Actions — Tertiary (graphite) */
+  --color-action-tertiary-default: #5e5a51;
+  --color-action-tertiary-hover: #4b4841;
+  --color-action-tertiary-active: #3a3832;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger */
+  --color-action-danger-default: #b3261e;
+  --color-action-danger-hover: #93201a;
+  --color-action-danger-active: #781a15;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — muted print inks */
+  --color-accent-green: #2f6b3f;
+  --color-accent-cyan: #1f5f7a;
+  --color-accent-violet: #5b3f8f;
+  --color-accent-4: #8a5a1f;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #8a5a1f;
+
+  /* State */
+  --color-state-success: #2f6b3f;
+  --color-state-success-bg: #e6efe4;
+  --color-state-warning: #7a5212;
+  --color-state-warning-bg: #f6ecd6;
+  --color-state-error: #b3261e;
+  --color-state-error-bg: #f7e3e0;
+  --color-state-info: #1f4f8f;
+  --color-state-info-bg: #e3eaf4;
+
+  /* Shadows — nearly flat; paper on paper */
+  --shadow-sm: 0 1px 0 rgba(27, 26, 23, 0.08);
+  --shadow-md: 0 2px 6px rgba(27, 26, 23, 0.08);
+  --shadow-lg: 0 10px 30px rgba(27, 26, 23, 0.1);
+  --shadow-glow-green: 0 0 0 3px rgba(47, 107, 63, 0.2);
+  --shadow-glow-cyan: 0 0 0 3px rgba(31, 79, 143, 0.25);
+  --shadow-glow-violet: 0 0 0 3px rgba(91, 63, 143, 0.2);
+  --shadow-glow-red: 0 0 0 3px rgba(179, 38, 30, 0.2);
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-default);
+  --input-bg-hover: var(--color-surface-raised);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-default);
+  --card-hover-border: var(--color-border-strong);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-primary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-raised);
+  --table-border: var(--color-border-default);
+
+  /* Navigation */
+  --nav-bg: var(--color-bg-primary);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-default);
+  --nav-height: 64px;
+}

@@ -1,0 +1,203 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Neumorphism theme preset
+   Monochrome soft-UI: every surface shares the page colour and is
+   shaped only by twin light/dark shadows — extruded when raised,
+   debossed (inset) when pressed or editable. One muted slate-indigo
+   accent carries actions.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/neumorphism.css";
+   then set <html data-theme="neumorphism">.
+   Optional font: load "Nunito" from Google Fonts; falls back to
+   Inter (already loaded by the foundation) and system-ui.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Motion stays ≤ 200ms with no overshoot; the foundation's global
+   prefers-reduced-motion rule (animations.css) collapses it further.
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="neumorphism"] {
+  color-scheme: light;
+
+  /* Typography — rounded, friendly sans */
+  --font-display: "Nunito", "Inter", system-ui, sans-serif;
+  --font-body: "Nunito", "Inter", system-ui, sans-serif;
+  --font-decorative: var(--font-display);
+  --heading-transform: none;
+
+  /* Radius — pillowy */
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-pill: 999px;
+
+  /* Motion — soft press, no overshoot */
+  --transition-fast: 120ms ease-out;
+  --transition-default: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 200ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-spring: 180ms ease-out;
+
+  /* Border shape — shadows do the shaping; borders stay hairline */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-style: solid;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — one cool grey for everything */
+  --color-bg-primary: #e0e5ec;
+  --color-bg-secondary: #dce1e9;
+  --color-bg-tertiary: #d5dbe4;
+  --color-bg-elevated: #e3e8ef;
+  --color-bg-overlay: rgba(45, 52, 64, 0.3);
+
+  /* Surfaces — same tone as the page, shaped by shadow */
+  --color-surface-default: #e0e5ec;
+  --color-surface-raised: #e3e8ef;
+  --color-surface-overlay: #e6eaf0;
+  --color-surface-hover: #d9dfe7;
+  --color-surface-active: #d1d8e1;
+
+  /* Text — slate */
+  --color-text-primary: #2d3440;
+  --color-text-secondary: #464f5d;
+  --color-text-tertiary: #535c6a;
+  --color-text-disabled: #9aa2ae;
+  --color-text-inverse: #e0e5ec;
+  --color-text-link: #3a4a8c;
+  --color-text-code: #3d4a66;
+
+  /* Borders — near-invisible hairlines; strong only where UI needs it */
+  --color-border-default: #d0d6df;
+  --color-border-subtle: #d8dde5;
+  --color-border-strong: #7a8292;
+  --color-border-focus: #3a4a8c;
+  --color-border-brand: #4a5a9c;
+
+  /* Actions — Brand (slate indigo) */
+  --color-action-brand-default: #4a5a9c;
+  --color-action-brand-hover: #3e4d88;
+  --color-action-brand-active: #334074;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #d6dbeb;
+  --color-action-brand-border: rgba(74, 90, 156, 0.4);
+
+  /* Actions — Secondary (slate) */
+  --color-action-secondary-default: #4b5566;
+  --color-action-secondary-hover: #3f4857;
+  --color-action-secondary-active: #343c49;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #d5dae3;
+  --color-action-secondary-border: rgba(75, 85, 102, 0.4);
+
+  /* Actions — Tertiary (graphite) */
+  --color-action-tertiary-default: #5a6272;
+  --color-action-tertiary-hover: #4c5362;
+  --color-action-tertiary-active: #3f4552;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger (muted brick) */
+  --color-action-danger-default: #a13a3a;
+  --color-action-danger-hover: #8a3131;
+  --color-action-danger-active: #742929;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — desaturated so the monochrome mood holds */
+  --color-accent-green: #3f6e58;
+  --color-accent-cyan: #3a6478;
+  --color-accent-violet: #5f5496;
+  --color-accent-4: #7f5a24;
+  --color-accent-1: var(--color-accent-green);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+
+  /* Syntax highlighting */
+  --color-syntax-number: #7a4f1a;
+
+  /* State */
+  --color-state-success: #33654c;
+  --color-state-success-bg: #d3e0dc;
+  --color-state-warning: #74501c;
+  --color-state-warning-bg: #e6ddd0;
+  --color-state-error: #9a3636;
+  --color-state-error-bg: #e8d6d8;
+  --color-state-info: #3a5a78;
+  --color-state-info-bg: #d3dde8;
+
+  /* Shadows — twin light/dark soft shadows */
+  --shadow-sm: 3px 3px 6px #b8bec7, -3px -3px 6px #ffffff;
+  --shadow-md: 6px 6px 12px #b8bec7, -6px -6px 12px #ffffff;
+  --shadow-lg: 12px 12px 24px #b3b9c3, -12px -12px 24px #ffffff;
+  --shadow-glow-green: 0 0 0 3px rgba(63, 110, 88, 0.25);
+  --shadow-glow-cyan: 0 0 0 3px rgba(58, 74, 140, 0.3);
+  --shadow-glow-violet: 0 0 0 3px rgba(95, 84, 150, 0.25);
+  --shadow-glow-red: 0 0 0 3px rgba(161, 58, 58, 0.25);
+
+  /* ── Layer 2: Style tokens ── */
+  --gradient-surface: linear-gradient(145deg, rgba(255, 255, 255, 0.35), rgba(163, 177, 198, 0.12));
+  --gradient-brand: linear-gradient(145deg, #5263a8, #3e4d88);
+  /* Hover deepens the dome; active inverts it so the key reads as pressed. */
+  --gradient-brand-hover: linear-gradient(145deg, #4a5b9e, #37457c);
+  --gradient-brand-active: linear-gradient(145deg, #3e4d88, #5263a8);
+  --gradient-accent: linear-gradient(145deg, #e6ebf1, #d1d8e1);
+  --gradient-backdrop: none;
+  --texture-surface: none;
+  --pattern-backdrop: none;
+  --surface-blur: none;
+  --shadow-offset: 0 0 0 0 transparent;
+  --shadow-raised: 6px 6px 12px #b8bec7, -6px -6px 12px #ffffff;
+  --shadow-pressed: inset 4px 4px 8px #b8bec7, inset -4px -4px 8px #ffffff;
+  --shadow-inset: inset 2px 2px 5px #b8bec7, inset -3px -3px 7px #ffffff;
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-default);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs — debossed wells */
+  --input-bg: var(--color-surface-default);
+  --input-bg-hover: var(--color-surface-raised);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards — borderless, extruded by --shadow-raised */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-subtle);
+  --card-hover-border: var(--color-border-default);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-hover);
+  --table-border: var(--color-border-default);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-default);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 64px;
+}

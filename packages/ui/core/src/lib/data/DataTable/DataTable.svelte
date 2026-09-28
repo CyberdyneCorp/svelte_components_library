@@ -318,8 +318,8 @@
 
 <style>
   .cy-datatable {
-    background: var(--color-surface-default);
-    border: 1px solid var(--color-border-default);
+    background: var(--texture-surface), var(--gradient-surface), var(--color-surface-default);
+    border: var(--border-width) var(--border-style) var(--color-border-default);
     border-radius: 12px;
     overflow: hidden;
     font-family: var(--font-body, "Inter", system-ui, sans-serif);
@@ -332,7 +332,7 @@
     color: var(--color-action-brand-default);
     font-size: 0.8rem;
     font-weight: 600;
-    border-bottom: 1px solid var(--color-border-default);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-default);
   }
 
   .cy-datatable__wrapper {
@@ -358,13 +358,13 @@
   .cy-datatable__th {
     text-align: left;
     padding: 12px 16px;
-    background: var(--color-bg-primary);
+    background: var(--gradient-surface), var(--color-bg-primary);
     color: var(--color-text-secondary);
     font-weight: 600;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--color-border-default);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-default);
     white-space: nowrap;
     position: relative;
   }
@@ -407,7 +407,7 @@
   .cy-datatable__td {
     padding: 10px 16px;
     color: var(--color-text-primary);
-    border-bottom: 1px solid var(--color-border-default);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-default);
   }
 
   .cy-datatable__row {
@@ -492,7 +492,7 @@
     padding: 16px 16px 16px 60px;
     color: var(--color-text-secondary);
     font-size: 0.8rem;
-    border-bottom: 1px solid var(--color-border-default);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-default);
     line-height: 1.5;
   }
 
@@ -544,7 +544,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    border-top: 1px solid var(--color-border-default);
+    border-top: var(--border-width) var(--border-style) var(--color-border-default);
     background: var(--color-bg-primary);
   }
 
@@ -567,7 +567,7 @@
     height: 32px;
     padding: 0 8px;
     background: transparent;
-    border: 1px solid var(--color-border-default);
+    border: var(--border-width) var(--border-style) var(--color-border-default);
     border-radius: 6px;
     color: var(--color-text-secondary);
     font-size: 0.8rem;

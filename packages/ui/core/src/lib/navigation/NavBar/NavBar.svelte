@@ -178,8 +178,8 @@
 
 <style>
   .cy-navbar {
-    background: var(--nav-bg);
-    border-bottom: 1px solid var(--color-border-subtle);
+    background: var(--texture-surface), var(--gradient-surface), var(--nav-bg);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
     font-family: var(--font-body);
     z-index: 1000;
     width: 100%;
@@ -265,7 +265,7 @@
     font-weight: var(--font-weight-medium);
     background: none;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-bottom: var(--border-width-strong) var(--border-style) transparent;
     cursor: pointer;
     font-family: var(--font-body);
     transition: all var(--transition-fast);
@@ -297,7 +297,7 @@
     left: 0;
     min-width: 240px;
     background: var(--color-surface-raised, var(--color-surface-default));
-    border: 1px solid var(--color-border-subtle);
+    border: var(--border-width) var(--border-style) var(--color-border-subtle);
     border-radius: var(--radius-lg);
     padding: var(--space-2);
     margin-top: var(--space-1);
@@ -363,7 +363,7 @@
       left: 0;
       right: 0;
       background: var(--nav-bg);
-      border-bottom: 1px solid var(--color-border-subtle);
+      border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
       flex-direction: column;
       align-items: stretch;
       margin-left: 0;

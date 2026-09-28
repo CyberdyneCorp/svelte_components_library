@@ -1,0 +1,219 @@
+/* ══════════════════════════════════════════════════════════════
+   CYBERDYNE DESIGN SYSTEM — Claymorphism theme preset
+   Puffy pastel surfaces: lavender tray, pink/sky ambient blobs,
+   very large radii, and paired inner + outer soft shadows that
+   make every surface look inflated.
+
+   Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
+     import "@cyberdynecorp/svelte-ui-foundation/styles";
+     import "@cyberdynecorp/svelte-ui-foundation/themes/clay.css";
+   then set <html data-theme="clay">.
+
+   Every Layer 2 (semantic) and Layer 3 (component) token of the
+   default :root block is redefined, except the theme-invariant
+   --video-* tokens. Layer 1 primitives are never touched.
+   Light by nature (pastels), so there is no dark variant.
+   Motion stays ≤ 200ms without overshoot; prefers-reduced-motion
+   is honoured by the global rule in styles/animations.css.
+   ══════════════════════════════════════════════════════════════ */
+
+[data-theme="clay"] {
+  color-scheme: light;
+
+  /* Typography — rounded, friendly sans */
+  --font-display: "Nunito", ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-body: "Nunito", ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-decorative: "Fredoka", "Nunito", ui-rounded, system-ui, sans-serif;
+  --heading-transform: none;
+
+  /* Radius — big, pillowy corners */
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;
+  --radius-xl: 2.5rem;
+  --radius-pill: 999px;
+
+  /* Motion — soft squish, decelerating, no overshoot */
+  --transition-fast: 120ms cubic-bezier(0.3, 0, 0, 1);
+  --transition-default: 180ms cubic-bezier(0.3, 0, 0, 1);
+  --transition-slow: 200ms cubic-bezier(0.3, 0, 0, 1);
+  --transition-spring: 200ms ease-out;
+
+  /* Border shape — shadows do the shaping, borders stay thin */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-style: solid;
+
+  /* ── Layer 2: Semantic ── */
+
+  /* Backgrounds — lavender */
+  --color-bg-primary: #f3eefc;
+  --color-bg-secondary: #ebe4fa;
+  --color-bg-tertiary: #e3daf7;
+  --color-bg-elevated: #fdfbff;
+  --color-bg-overlay: rgba(46, 32, 77, 0.35);
+
+  /* Surfaces */
+  --color-surface-default: #fbf8ff;
+  --color-surface-raised: #fefcff;
+  --color-surface-overlay: #ffffff;
+  --color-surface-hover: #efe8fb;
+  --color-surface-active: #e6dcf8;
+
+  /* Text — deep plum */
+  --color-text-primary: #2e2344;
+  --color-text-secondary: #52476a;
+  --color-text-tertiary: #5d5374;
+  --color-text-disabled: #a79fb8;
+  --color-text-inverse: #fbf8ff;
+  --color-text-link: #4b3fb8;
+  --color-text-code: #8a2f6b;
+
+  /* Borders */
+  --color-border-default: #e0d6f2;
+  --color-border-subtle: #ebe3f8;
+  --color-border-strong: #857aa0;
+  --color-border-focus: #4b3fb8;
+  --color-border-brand: #6647d1;
+
+  /* Actions — Brand (grape) */
+  --color-action-brand-default: #6647d1;
+  --color-action-brand-hover: #5638b8;
+  --color-action-brand-active: #472d9a;
+  --color-action-brand-text: #ffffff;
+  --color-action-brand-bg: #ebe5fd;
+  --color-action-brand-border: rgba(102, 71, 209, 0.35);
+
+  /* Actions — Secondary (berry) */
+  --color-action-secondary-default: #b0306f;
+  --color-action-secondary-hover: #962760;
+  --color-action-secondary-active: #7d1f50;
+  --color-action-secondary-text: #ffffff;
+  --color-action-secondary-bg: #fbe3ef;
+  --color-action-secondary-border: rgba(176, 48, 111, 0.35);
+
+  /* Actions — Tertiary (plum grey) */
+  --color-action-tertiary-default: #5c5470;
+  --color-action-tertiary-hover: #4b4460;
+  --color-action-tertiary-active: #3d374f;
+  --color-action-tertiary-text: #ffffff;
+
+  /* Actions — Danger */
+  --color-action-danger-default: #b8323a;
+  --color-action-danger-hover: #9c2a31;
+  --color-action-danger-active: #822329;
+  --color-action-danger-text: #ffffff;
+
+  /* Accents — candy mid-tones (pastels alone fail 3:1) */
+  --color-accent-green: #2f8062;
+  --color-accent-cyan: #247a93;
+  --color-accent-violet: #7b4fd6;
+  --color-accent-4: #b0601a;
+
+  /* Syntax highlighting */
+  --color-syntax-number: #9c5514;
+
+  /* State */
+  --color-state-success: #2a7253;
+  --color-state-success-bg: #def5ea;
+  --color-state-warning: #85540f;
+  --color-state-warning-bg: #fcefd8;
+  --color-state-error: #b8323a;
+  --color-state-error-bg: #fde4e6;
+  --color-state-info: #3d5fc0;
+  --color-state-info-bg: #e4ebfc;
+
+  /* Shadows — tinted, diffuse */
+  --shadow-sm: 0 2px 6px rgba(102, 71, 209, 0.1);
+  --shadow-md: 0 8px 20px rgba(102, 71, 209, 0.14);
+  --shadow-lg: 0 18px 40px rgba(102, 71, 209, 0.18);
+  --shadow-glow-green: 0 0 0 4px rgba(102, 71, 209, 0.22);
+  --shadow-glow-cyan: 0 0 0 4px rgba(75, 63, 184, 0.25);
+  --shadow-glow-violet: 0 0 0 4px rgba(123, 79, 214, 0.22);
+  --shadow-glow-red: 0 0 0 4px rgba(184, 50, 58, 0.22);
+
+  /* ── Layer 2: Style tokens — inflated clay ── */
+  --color-accent-1: var(--color-accent-violet);
+  --color-accent-2: #b0306f;
+  --color-accent-3: var(--color-accent-cyan);
+  /* Soft top-left sheen on surfaces */
+  --gradient-surface: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  /* Kept faint so white text stays ≥ 4.5:1 on the brand colour */
+  --gradient-brand: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 55%
+  );
+  /* Translucent sheen: the hover / active button colour shows through it. */
+  --gradient-brand-hover: var(--gradient-brand);
+  --gradient-brand-active: var(--gradient-brand);
+  --gradient-accent: linear-gradient(135deg, #7b4fd6 0%, #b0306f 100%);
+  /* Pastel ambient blobs behind the page */
+  --gradient-backdrop:
+    radial-gradient(circle at 12% 8%, rgba(255, 214, 236, 0.65) 0%, rgba(255, 214, 236, 0) 45%),
+    radial-gradient(circle at 88% 92%, rgba(200, 232, 255, 0.65) 0%, rgba(200, 232, 255, 0) 45%);
+  --texture-surface: none;
+  --pattern-backdrop: none;
+  --surface-blur: none;
+  --shadow-offset: 0 0 0 0 transparent;
+  /* Puff: inner highlight + inner tint + outer drop */
+  --shadow-raised:
+    inset 4px 4px 10px rgba(255, 255, 255, 0.9), inset -4px -4px 10px rgba(102, 71, 209, 0.1),
+    0 10px 24px rgba(102, 71, 209, 0.16);
+  --shadow-pressed:
+    inset 4px 4px 10px rgba(102, 71, 209, 0.18), inset -3px -3px 8px rgba(255, 255, 255, 0.8);
+  --shadow-inset:
+    inset 2px 2px 6px rgba(102, 71, 209, 0.12), inset -2px -2px 6px rgba(255, 255, 255, 0.9);
+
+  /* ── Layer 3: Component tokens ── */
+
+  /* Buttons */
+  --btn-brand-bg: var(--color-action-brand-default);
+  --btn-brand-bg-hover: var(--color-action-brand-hover);
+  --btn-brand-bg-active: var(--color-action-brand-active);
+  --btn-brand-text: var(--color-action-brand-text);
+  --btn-secondary-bg: var(--color-surface-raised);
+  --btn-secondary-bg-hover: var(--color-surface-hover);
+  --btn-secondary-text: var(--color-text-primary);
+  --btn-secondary-border: var(--color-border-strong);
+  --btn-danger-bg: var(--color-action-danger-default);
+  --btn-danger-bg-hover: var(--color-action-danger-hover);
+  --btn-danger-text: var(--color-action-danger-text);
+  --btn-ghost-text: var(--color-text-secondary);
+  --btn-ghost-text-hover: var(--color-text-primary);
+  --btn-ghost-bg-hover: var(--color-surface-hover);
+
+  /* Inputs */
+  --input-bg: var(--color-surface-default);
+  --input-bg-hover: var(--color-surface-raised);
+  --input-border: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-border-error: var(--color-state-error);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+  --input-label: var(--color-text-secondary);
+
+  /* Cards */
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-subtle);
+  --card-hover-border: var(--color-border-default);
+
+  /* Tables */
+  --table-header-bg: var(--color-bg-secondary);
+  --table-row-bg: var(--color-surface-default);
+  --table-row-hover: var(--color-surface-raised);
+  --table-border: var(--color-border-subtle);
+
+  /* Navigation */
+  --nav-bg: var(--color-surface-raised);
+  --nav-item-hover: var(--color-surface-hover);
+  --nav-item-active: var(--color-surface-active);
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-text-active: var(--color-action-brand-hover);
+  --nav-height: 64px;
+}

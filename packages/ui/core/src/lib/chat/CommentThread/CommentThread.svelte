@@ -71,13 +71,15 @@
   }
 
   const depthColors: Record<number, string> = {
-    1: "var(--color-accent-green)",
-    2: "var(--color-accent-cyan)",
-    3: "var(--color-accent-violet)",
+    1: "var(--color-accent-1)",
+    2: "var(--color-accent-2)",
+    3: "var(--color-accent-3)",
+    4: "var(--color-accent-4)",
   };
 
+  /** Depth 1-3 use accents 1-3; depth 4 and deeper use accent 4. */
   function getBorderColor(depth: number): string {
-    return depthColors[depth] || depthColors[3];
+    return depthColors[Math.min(depth, 4)];
   }
 </script>
 

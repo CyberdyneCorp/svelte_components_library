@@ -85,8 +85,9 @@
     line-height: 1.5;
     color: var(--input-text);
     background: var(--input-bg);
-    border: 1px solid var(--input-border);
+    border: var(--border-width) var(--border-style) var(--input-border);
     border-radius: var(--radius-md);
+    box-shadow: var(--shadow-inset);
     padding: var(--space-2) var(--space-3);
     width: 100%;
     outline: none;
@@ -104,7 +105,7 @@
 
   .cy-textarea__field:focus {
     border-color: var(--input-border-focus);
-    box-shadow: var(--shadow-glow-cyan);
+    box-shadow: var(--shadow-inset), var(--shadow-glow-cyan);
   }
 
   .cy-textarea--error .cy-textarea__field {
@@ -113,7 +114,7 @@
 
   .cy-textarea--error .cy-textarea__field:focus {
     border-color: var(--input-border-error);
-    box-shadow: var(--shadow-glow-red);
+    box-shadow: var(--shadow-inset), var(--shadow-glow-red);
   }
 
   .cy-textarea__field:disabled {

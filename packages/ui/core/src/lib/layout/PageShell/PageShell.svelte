@@ -73,7 +73,7 @@
     grid-template-areas:
       "main"
       "main";
-    background: var(--color-bg-primary);
+    background: var(--pattern-backdrop), var(--gradient-backdrop), var(--color-bg-primary);
   }
 
   .cy-ps--with-header {
@@ -114,15 +114,15 @@
     display: flex;
     align-items: center;
     padding: 0 var(--space-4);
-    background: var(--color-bg-secondary);
-    border-bottom: 1px solid var(--color-border-subtle);
+    background: var(--texture-surface), var(--gradient-surface), var(--color-bg-secondary);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
     z-index: 10;
   }
 
   .cy-ps__sidebar {
     grid-area: sidebar;
-    background: var(--nav-bg);
-    border-right: 1px solid var(--color-border-subtle);
+    background: var(--texture-surface), var(--gradient-surface), var(--nav-bg);
+    border-right: var(--border-width) var(--border-style) var(--color-border-subtle);
     overflow-y: auto;
     overflow-x: hidden;
     transition: width var(--transition-default);
@@ -147,7 +147,7 @@
     align-items: center;
     padding: var(--space-3) var(--space-4);
     background: var(--color-bg-secondary);
-    border-top: 1px solid var(--color-border-subtle);
+    border-top: var(--border-width) var(--border-style) var(--color-border-subtle);
   }
 
   @media (max-width: 768px) {

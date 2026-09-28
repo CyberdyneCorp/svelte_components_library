@@ -107,10 +107,12 @@
   }
 
   .cy-dialog {
-    background: var(--color-surface-default);
-    border: 1px solid var(--color-border-default);
+    background: var(--texture-surface), var(--gradient-surface), var(--color-surface-default);
+    border: var(--border-width) var(--border-style) var(--color-border-default);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-offset), var(--shadow-lg);
+    backdrop-filter: var(--surface-blur);
+    -webkit-backdrop-filter: var(--surface-blur);
     width: 100%;
     max-width: 480px;
     margin: var(--space-4);
@@ -119,11 +121,12 @@
 
   .cy-dialog__header {
     padding: var(--space-4) var(--space-5);
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
   }
 
   .cy-dialog__title {
-    font-family: var(--font-display);
+    font-family: var(--font-decorative);
+    text-transform: var(--heading-transform);
     font-size: 1.125rem;
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
@@ -143,7 +146,7 @@
     justify-content: flex-end;
     gap: var(--space-3);
     padding: var(--space-3) var(--space-5);
-    border-top: 1px solid var(--color-border-subtle);
+    border-top: var(--border-width) var(--border-style) var(--color-border-subtle);
   }
 
   .cy-dialog__btn {
@@ -157,7 +160,7 @@
     font-weight: var(--font-weight-medium);
     cursor: pointer;
     transition: all var(--transition-default);
-    border: 1px solid transparent;
+    border: var(--border-width) var(--border-style) transparent;
   }
 
   .cy-dialog__btn--cancel {

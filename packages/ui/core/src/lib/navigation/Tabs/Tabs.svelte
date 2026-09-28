@@ -53,7 +53,7 @@
   .cy-tabs {
     display: flex;
     gap: 0;
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
     font-family: var(--font-body);
   }
 
@@ -62,7 +62,7 @@
     padding: var(--space-3) var(--space-4);
     background: transparent;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-bottom: var(--border-width-strong) var(--border-style) transparent;
     color: var(--color-text-tertiary);
     font-family: var(--font-body);
     font-size: 0.875rem;
@@ -80,6 +80,20 @@
   .cy-tabs__tab--active {
     color: var(--color-action-brand-default);
     border-bottom-color: var(--color-action-brand-default);
+  }
+
+  /* Decorative --gradient-accent strip sitting on the brand underline. It never
+     paints under the label (the gradient is not contrast-checked against text),
+     and the brand underline beneath carries the active-state contrast. */
+  .cy-tabs__tab--active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--border-width-strong);
+    background: var(--gradient-accent);
+    pointer-events: none;
   }
 
   .cy-tabs__tab--active:hover {

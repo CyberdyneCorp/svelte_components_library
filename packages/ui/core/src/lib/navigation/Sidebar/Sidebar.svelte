@@ -109,8 +109,8 @@
 <style>
   .cy-sidebar {
     width: 260px;
-    background: var(--nav-bg);
-    border-right: 1px solid var(--color-border-subtle);
+    background: var(--texture-surface), var(--gradient-surface), var(--nav-bg);
+    border-right: var(--border-width) var(--border-style) var(--color-border-subtle);
     padding: var(--space-2) 0;
     font-family: var(--font-body);
     transition: width var(--transition-default);
