@@ -1,5 +1,18 @@
 # @cyberdynecorp/svelte-ui-foundation
 
+## 0.5.0
+
+### Minor Changes
+
+- 90e2653: Add design-style tokens so theme presets can reach gradients, textures, glass blur, style shadows, border shape and decorative type.
+  - foundation: new tokens with no-op defaults: `--gradient-{surface,brand,brand-hover,brand-active,accent,backdrop}`, `--texture-surface`, `--pattern-backdrop`, `--surface-blur`, `--shadow-{offset,raised,pressed,inset}`, `--border-width`, `--border-width-strong`, `--border-style`, `--font-decorative`, `--heading-transform`, `--color-accent-1..4`. The default, light and calm themes render unchanged. `body` paints the backdrop layers.
+  - core: Button, Badge, Card, TextInput, Textarea, Select, Modal, Dialog, Drawer, Popover, Tabs, NavBar, Header, Sidebar, BottomNav, Table, DataTable, PageHeader, PageShell, AppLayout and CommentThread consume the new tokens.
+
+- 90e2653: Add 17 design-style theme presets, each an optional CSS file activated with `data-theme="<id>"`: `minimal`, `flat`, `material`, `swiss`, `organic`, `maximalism`, `y2k`, `glass`, `neumorphism`, `skeuomorphism`, `brutalism`, `bento`, `clay`, `memphis`, `vaporwave`, `art-deco` and `editorial`.
+  - Import with `@cyberdynecorp/svelte-ui-foundation/themes/<id>.css` after the foundation styles.
+  - Every preset defines all Layer 2/3 and design-style tokens, never touches primitives or `--video-*`, meets WCAG AA on the calm pairing list and keeps motion at 200ms or less. `themes/presets.test.ts` (generalized from `calm.test.ts`) guards calm and every new preset.
+  - Presets name their web fonts (see each file's header) but do not load them; system fallbacks apply otherwise.
+
 ## 0.4.0
 
 ### Minor Changes
