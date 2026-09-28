@@ -3,6 +3,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { useCesiumViewer } from "../viewerContext.js";
+  import { applyGeodesicToPolarPolygons } from "./polarPolygons.js";
 
   type DataSource = import("cesium").GeoJsonDataSource;
   type Entity = import("cesium").Entity;
@@ -82,6 +83,7 @@
         return;
       }
 
+      applyGeodesicToPolarPolygons(Cesium, source.entities.values);
       await viewer.dataSources.add(source);
       source.show = visible;
       if (onfeature) {
