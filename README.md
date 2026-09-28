@@ -94,6 +94,36 @@ Design-style presets — CSS-only themes, one file each, activated with `data-th
 <div data-theme="glass">…</div>
 ```
 
+```mermaid
+mindmap
+  root((Design styles))
+    Clean and functional
+      Minimal
+      Flat
+      Material
+      Swiss
+      Bento
+      Editorial
+      Light
+      Corporate calm
+    Depth and material
+      Glassmorphism
+      Neumorphism
+      Claymorphism
+      Skeuomorphism
+    Expressive
+      Maximalism
+      Memphis
+      Neo-brutalism
+      Art Deco
+      Organic
+    Retro and nostalgia
+      Cyberpunk neon default
+      Retro pixel CRT components
+      Y2K
+      Vaporwave
+```
+
 | Style | Theme (`data-theme`) | Import |
 |-------|----------------------|--------|
 | Cyberpunk / neon | default (no attribute) | `styles` |
