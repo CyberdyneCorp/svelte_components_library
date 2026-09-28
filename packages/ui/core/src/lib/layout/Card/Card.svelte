@@ -33,9 +33,12 @@
 
 <style>
   .cy-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    background: var(--texture-surface), var(--gradient-surface), var(--card-bg);
+    border: var(--border-width) var(--border-style) var(--card-border);
     border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-offset), var(--shadow-raised);
+    backdrop-filter: var(--surface-blur);
+    -webkit-backdrop-filter: var(--surface-blur);
     transition: all var(--transition-default);
   }
 
@@ -52,12 +55,12 @@
   }
 
   .cy-card--default {
-    background: var(--card-bg);
+    background: var(--texture-surface), var(--gradient-surface), var(--card-bg);
   }
 
   .cy-card--elevated {
-    background: var(--color-surface-raised);
-    box-shadow: var(--shadow-md);
+    background: var(--texture-surface), var(--gradient-surface), var(--color-surface-raised);
+    box-shadow: var(--shadow-offset), var(--shadow-md);
   }
 
   .cy-card--outlined {
@@ -71,7 +74,7 @@
 
   .cy-card--hoverable:hover {
     border-color: var(--card-hover-border);
-    box-shadow: var(--shadow-glow-green);
+    box-shadow: var(--shadow-offset), var(--shadow-glow-green);
     transform: translateY(-2px);
   }
 </style>

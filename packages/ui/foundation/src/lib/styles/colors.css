@@ -148,6 +148,39 @@
   --shadow-glow-violet: 0 0 12px rgba(168, 85, 247, 0.3);
   --shadow-glow-red: 0 0 12px rgba(255, 68, 68, 0.3);
 
+  /* ── Layer 2: Style tokens (design-style presets) ──
+     Defaults are no-ops so the theme renders exactly as without them.
+     Background tokens are non-final background layers
+     (<image> [<position> / <size>] [<repeat>] [<attachment>], comma-separated);
+     components append the surface colour as the final layer.
+     Shadow tokens use a transparent zero shadow so they can be combined
+     in a box-shadow list with other shadows. */
+
+  /* Multi-accent palette (Memphis, Bento, Maximalism, Vaporwave…) */
+  --color-accent-1: var(--color-accent-green);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+  --color-accent-4: var(--primitive-amber-10);
+
+  /* Gradients */
+  --gradient-surface: none;
+  --gradient-brand: none;
+  --gradient-accent: none;
+  --gradient-backdrop: none;
+
+  /* Texture / pattern layers */
+  --texture-surface: none;
+  --pattern-backdrop: none;
+
+  /* Glass — backdrop-filter value for surfaces */
+  --surface-blur: none;
+
+  /* Style shadows */
+  --shadow-offset: 0 0 0 0 transparent;
+  --shadow-raised: 0 0 0 0 transparent;
+  --shadow-pressed: 0 0 0 0 transparent;
+  --shadow-inset: 0 0 0 0 transparent;
+
   /* ── Layer 3: Component Tokens ── */
 
   /* Buttons */
@@ -288,6 +321,33 @@
   --shadow-glow-cyan: 0 0 8px rgba(0, 149, 179, 0.2);
   --shadow-glow-violet: 0 0 8px rgba(126, 34, 206, 0.2);
   --shadow-glow-red: 0 0 8px rgba(204, 46, 46, 0.2);
+
+  /* ── Layer 2: Style tokens (light overrides; defaults stay no-ops) ── */
+
+  /* Multi-accent palette (Memphis, Bento, Maximalism, Vaporwave…) */
+  --color-accent-1: var(--color-accent-green);
+  --color-accent-2: var(--color-accent-cyan);
+  --color-accent-3: var(--color-accent-violet);
+  --color-accent-4: var(--primitive-amber-40);
+
+  /* Gradients */
+  --gradient-surface: none;
+  --gradient-brand: none;
+  --gradient-accent: none;
+  --gradient-backdrop: none;
+
+  /* Texture / pattern layers */
+  --texture-surface: none;
+  --pattern-backdrop: none;
+
+  /* Glass — backdrop-filter value for surfaces */
+  --surface-blur: none;
+
+  /* Style shadows */
+  --shadow-offset: 0 0 0 0 transparent;
+  --shadow-raised: 0 0 0 0 transparent;
+  --shadow-pressed: 0 0 0 0 transparent;
+  --shadow-inset: 0 0 0 0 transparent;
 
   /* ── Layer 3: Component Tokens (light overrides) ── */
 

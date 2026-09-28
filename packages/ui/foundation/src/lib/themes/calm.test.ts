@@ -208,7 +208,15 @@ const PAIRINGS: Pairing[] = [
   ...cross(["--color-border-strong", "--btn-secondary-border"], uiSurfaces, "ui"),
   ...cross(["--color-border-brand"], uiSurfaces, "ui"),
   ...cross(
-    ["--color-accent-green", "--color-accent-cyan", "--color-accent-violet"],
+    [
+      "--color-accent-green",
+      "--color-accent-cyan",
+      "--color-accent-violet",
+      "--color-accent-1",
+      "--color-accent-2",
+      "--color-accent-3",
+      "--color-accent-4",
+    ],
     uiSurfaces,
     "ui",
   ),

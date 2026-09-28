@@ -102,7 +102,7 @@
 <style>
   .cy-table-wrapper {
     overflow-x: auto;
-    border: 1px solid var(--table-border);
+    border: var(--border-width) var(--border-style) var(--table-border);
     border-radius: var(--radius-md);
   }
 
@@ -116,20 +116,20 @@
   .cy-table__th {
     text-align: left;
     padding: var(--space-3) var(--space-4);
-    background: var(--table-header-bg);
+    background: var(--gradient-surface), var(--table-header-bg);
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-semibold);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--table-border);
+    border-bottom: var(--border-width) var(--border-style) var(--table-border);
     white-space: nowrap;
   }
 
   .cy-table__td {
     padding: var(--space-3) var(--space-4);
     color: var(--color-text-primary);
-    border-bottom: 1px solid var(--table-border);
+    border-bottom: var(--border-width) var(--border-style) var(--table-border);
   }
 
   .cy-table__row {

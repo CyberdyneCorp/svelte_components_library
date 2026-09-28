@@ -71,9 +71,9 @@
   }
 
   const depthColors: Record<number, string> = {
-    1: "var(--color-accent-green)",
-    2: "var(--color-accent-cyan)",
-    3: "var(--color-accent-violet)",
+    1: "var(--color-accent-1)",
+    2: "var(--color-accent-2)",
+    3: "var(--color-accent-3)",
   };
 
   function getBorderColor(depth: number): string {

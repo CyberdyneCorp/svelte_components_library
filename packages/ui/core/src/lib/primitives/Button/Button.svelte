@@ -81,8 +81,9 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    border: 1px solid transparent;
+    border: var(--border-width) var(--border-style) transparent;
     border-radius: var(--radius-md);
+    box-shadow: var(--shadow-offset), var(--shadow-raised);
     font-family: var(--font-body);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
@@ -126,36 +127,38 @@
 
   /* Brand */
   .cy-btn--brand {
-    background: var(--btn-brand-bg);
+    background: var(--gradient-brand), var(--btn-brand-bg);
     color: var(--btn-brand-text);
     border-color: var(--btn-brand-bg);
   }
 
   .cy-btn--brand:hover:not(:disabled) {
-    background: var(--btn-brand-bg-hover);
+    background: var(--gradient-brand), var(--btn-brand-bg-hover);
     border-color: var(--btn-brand-bg-hover);
-    box-shadow: var(--shadow-glow-green);
+    box-shadow: var(--shadow-offset), var(--shadow-glow-green);
   }
 
   .cy-btn--brand:active:not(:disabled) {
-    background: var(--btn-brand-bg-active);
+    background: var(--gradient-brand), var(--btn-brand-bg-active);
     border-color: var(--btn-brand-bg-active);
+    box-shadow: var(--shadow-pressed), var(--shadow-glow-green);
   }
 
   /* Secondary */
   .cy-btn--secondary {
-    background: var(--btn-secondary-bg);
+    background: var(--texture-surface), var(--gradient-surface), var(--btn-secondary-bg);
     color: var(--btn-secondary-text);
     border-color: var(--btn-secondary-border);
   }
 
   .cy-btn--secondary:hover:not(:disabled) {
-    background: var(--btn-secondary-bg-hover);
+    background: var(--texture-surface), var(--gradient-surface), var(--btn-secondary-bg-hover);
     border-color: var(--color-border-strong);
   }
 
   .cy-btn--secondary:active:not(:disabled) {
     background: var(--color-surface-active);
+    box-shadow: var(--shadow-pressed);
   }
 
   /* Outline */
@@ -167,11 +170,12 @@
 
   .cy-btn--outline:hover:not(:disabled) {
     background: var(--color-surface-hover);
-    box-shadow: var(--shadow-glow-green);
+    box-shadow: var(--shadow-offset), var(--shadow-glow-green);
   }
 
   .cy-btn--outline:active:not(:disabled) {
     background: var(--color-surface-active);
+    box-shadow: var(--shadow-pressed), var(--shadow-glow-green);
   }
 
   /* Ghost */
@@ -188,6 +192,7 @@
 
   .cy-btn--ghost:active:not(:disabled) {
     background: var(--color-surface-active);
+    box-shadow: var(--shadow-pressed);
   }
 
   /* Danger */
@@ -200,12 +205,13 @@
   .cy-btn--danger:hover:not(:disabled) {
     background: var(--btn-danger-bg-hover);
     border-color: var(--btn-danger-bg-hover);
-    box-shadow: var(--shadow-glow-green);
+    box-shadow: var(--shadow-offset), var(--shadow-glow-green);
   }
 
   .cy-btn--danger:active:not(:disabled) {
     background: var(--primitive-red-30);
     border-color: var(--primitive-red-30);
+    box-shadow: var(--shadow-pressed), var(--shadow-glow-green);
   }
 
   /* Loading spinner */

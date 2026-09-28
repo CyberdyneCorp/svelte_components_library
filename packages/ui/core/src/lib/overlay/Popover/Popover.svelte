@@ -109,10 +109,12 @@
   }
 
   .cy-popover__body {
-    background: var(--color-surface-raised);
-    border: 1px solid var(--color-border-default);
+    background: var(--texture-surface), var(--gradient-surface), var(--color-surface-raised);
+    border: var(--border-width) var(--border-style) var(--color-border-default);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg), var(--shadow-glow-cyan);
+    box-shadow: var(--shadow-offset), var(--shadow-lg), var(--shadow-glow-cyan);
+    backdrop-filter: var(--surface-blur);
+    -webkit-backdrop-filter: var(--surface-blur);
     padding: var(--space-4);
     min-width: 200px;
     font-family: var(--font-body);
@@ -125,7 +127,7 @@
     width: 10px;
     height: 10px;
     background: var(--color-surface-raised);
-    border: 1px solid var(--color-border-default);
+    border: var(--border-width) var(--border-style) var(--color-border-default);
     transform: rotate(45deg);
   }
 

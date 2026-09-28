@@ -145,6 +145,59 @@ Available keyframe animations:
 - `cy-glow-pulse` — Pulsing green glow (status indicators)
 - `cy-spinner` — Loading rotation
 
+## Design-style tokens
+
+Style tokens let a theme reach the parts of a component that colour alone cannot: gradients,
+textures, glass blur, hard or soft shadows, border weight and decorative type. Their defaults are
+no-ops, so the default, light and calm themes render exactly as before; a design-style preset
+(Glass, Brutalism, Neumorphism…) is pure CSS that overrides them on a `[data-theme]` selector.
+
+| Token | Default | Consumed by |
+|-------|---------|-------------|
+| `--gradient-surface` | `none` | Card, Modal, Dialog, Drawer, Popover, NavBar, Header, Sidebar, BottomNav, DataTable, secondary Button, Table/DataTable headers, PageShell/AppLayout header and sidebar |
+| `--gradient-brand` | `none` | brand Button |
+| `--gradient-accent` | `none` | active Tab |
+| `--gradient-backdrop` | `none` | `body`, PageShell, AppLayout |
+| `--texture-surface` | `none` | same surfaces as `--gradient-surface` (except table headers) |
+| `--pattern-backdrop` | `none` | `body`, PageShell, AppLayout |
+| `--surface-blur` | `none` | Card, Modal, Dialog, Drawer, Popover, NavBar, Header, BottomNav (`backdrop-filter`) |
+| `--shadow-offset` | `0 0 0 0 transparent` | Button, Card, Modal, Dialog, Drawer, Popover |
+| `--shadow-raised` | `0 0 0 0 transparent` | Button and Card at rest |
+| `--shadow-pressed` | `0 0 0 0 transparent` | Button `:active` |
+| `--shadow-inset` | `0 0 0 0 transparent` | TextInput, Textarea, Select |
+| `--border-width` | `1px` | borders of the components above plus Badge, Tabs, Table |
+| `--border-width-strong` | `2px` | Tabs / NavBar active indicator |
+| `--border-style` | `solid` | every border that uses `--border-width` |
+| `--font-decorative` | `var(--font-display)` | Modal, Dialog, Drawer, Header and PageHeader titles |
+| `--heading-transform` | `none` | the same titles (`text-transform`) |
+| `--color-accent-1..4` | green, cyan, violet, amber accents | CommentThread depth markers (1–3); free for presets |
+
+Background tokens are one or more **non-final background layers** — an image with optional
+`position / size`, repeat and attachment, but no colour — because components append the surface
+colour as the last layer (`background: var(--texture-surface), var(--gradient-surface),
+var(--card-bg)`). Shadow tokens default to a transparent zero shadow so they can sit in a
+`box-shadow` list next to the existing elevation and glow shadows.
+
+```css
+[data-theme="glass"] {
+  --card-bg: rgba(255, 255, 255, 0.12);
+  --surface-blur: blur(16px) saturate(140%);
+  --pattern-backdrop: radial-gradient(circle at 20% 20%, #7f5af0 0, transparent 40%) fixed;
+}
+
+[data-theme="brutalism"] {
+  --border-width: 3px;
+  --border-width-strong: 4px;
+  --shadow-offset: 6px 6px 0 0 #000;
+  --radius-md: 0;
+  --radius-lg: 0;
+}
+```
+
+A theme that changes `--font-display` on a subtree must redeclare
+`--font-decorative: var(--font-display)` there too, because `var()` resolves where a token is
+declared.
+
 ## Themes
 
 The default `:root` palette is the neon dark theme; `data-theme="light"` remaps it for light

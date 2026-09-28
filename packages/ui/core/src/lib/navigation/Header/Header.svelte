@@ -40,8 +40,10 @@
     justify-content: space-between;
     height: var(--nav-height);
     padding: 0 var(--space-4);
-    background: var(--color-bg-primary);
-    border-bottom: 1px solid var(--color-border-subtle);
+    background: var(--texture-surface), var(--gradient-surface), var(--color-bg-primary);
+    backdrop-filter: var(--surface-blur);
+    -webkit-backdrop-filter: var(--surface-blur);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
     flex-shrink: 0;
   }
 
@@ -58,7 +60,8 @@
 
   .cy-header__title {
     margin: 0;
-    font-family: var(--font-display);
+    font-family: var(--font-decorative);
+    text-transform: var(--heading-transform);
     font-size: 1rem;
     font-weight: 600;
     color: var(--color-text-primary);

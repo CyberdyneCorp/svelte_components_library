@@ -30,7 +30,7 @@
     font-weight: var(--font-weight-medium);
     letter-spacing: 0.02em;
     white-space: nowrap;
-    border: 1px solid transparent;
+    border: var(--border-width) var(--border-style) transparent;
     transition: all var(--transition-default);
   }
 

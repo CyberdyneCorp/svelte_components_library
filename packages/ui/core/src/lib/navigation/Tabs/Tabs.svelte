@@ -53,7 +53,7 @@
   .cy-tabs {
     display: flex;
     gap: 0;
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
     font-family: var(--font-body);
   }
 
@@ -62,7 +62,7 @@
     padding: var(--space-3) var(--space-4);
     background: transparent;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-bottom: var(--border-width-strong) var(--border-style) transparent;
     color: var(--color-text-tertiary);
     font-family: var(--font-body);
     font-size: 0.875rem;
@@ -78,6 +78,7 @@
   }
 
   .cy-tabs__tab--active {
+    background: var(--gradient-accent), transparent;
     color: var(--color-action-brand-default);
     border-bottom-color: var(--color-action-brand-default);
   }

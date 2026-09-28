@@ -35,7 +35,7 @@
     justify-content: space-between;
     gap: var(--space-4);
     padding-bottom: var(--space-5);
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
     margin-bottom: var(--space-5);
   }
 
@@ -45,7 +45,8 @@
   }
 
   .cy-page-header__title {
-    font-family: var(--font-display);
+    font-family: var(--font-decorative);
+    text-transform: var(--heading-transform);
     font-size: 1.5rem;
     font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);

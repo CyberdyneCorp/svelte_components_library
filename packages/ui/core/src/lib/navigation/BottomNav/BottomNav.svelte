@@ -57,8 +57,10 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--color-surface-default);
-    border-top: 1px solid var(--color-border-subtle);
+    background: var(--texture-surface), var(--gradient-surface), var(--color-surface-default);
+    backdrop-filter: var(--surface-blur);
+    -webkit-backdrop-filter: var(--surface-blur);
+    border-top: var(--border-width) var(--border-style) var(--color-border-subtle);
     font-family: var(--font-body);
     padding-bottom: env(safe-area-inset-bottom, 0px);
     z-index: 1000;

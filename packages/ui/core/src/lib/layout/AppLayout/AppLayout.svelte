@@ -46,14 +46,14 @@
   .cy-app-layout {
     display: flex;
     min-height: 100vh;
-    background: var(--color-bg-primary);
+    background: var(--pattern-backdrop), var(--gradient-backdrop), var(--color-bg-primary);
   }
 
   .cy-app-layout__sidebar {
     width: var(--sidebar-width);
     flex-shrink: 0;
-    background: var(--nav-bg);
-    border-right: 1px solid var(--color-border-subtle);
+    background: var(--texture-surface), var(--gradient-surface), var(--nav-bg);
+    border-right: var(--border-width) var(--border-style) var(--color-border-subtle);
     overflow-y: auto;
   }
 
@@ -66,8 +66,8 @@
 
   .cy-app-layout__header {
     flex-shrink: 0;
-    border-bottom: 1px solid var(--color-border-subtle);
-    background: var(--color-bg-secondary);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
+    background: var(--texture-surface), var(--gradient-surface), var(--color-bg-secondary);
     padding: var(--space-3) var(--space-6);
   }
 

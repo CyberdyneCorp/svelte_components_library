@@ -21,7 +21,7 @@ body {
   font-size: 1rem;
   line-height: 1.5;
   color: var(--color-text-primary);
-  background-color: var(--color-bg-primary);
+  background: var(--pattern-backdrop), var(--gradient-backdrop), var(--color-bg-primary);
 }
 
 a {
