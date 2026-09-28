@@ -139,6 +139,8 @@
   --color-accent-3: var(--color-accent-green);
   --gradient-surface: none;
   --gradient-brand: none;
+  --gradient-brand-hover: none;
+  --gradient-brand-active: none;
   --gradient-accent: none;
   --gradient-backdrop: none;
   --texture-surface: none;

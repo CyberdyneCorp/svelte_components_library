@@ -145,6 +145,8 @@
     rgba(255, 255, 255, 0) 100%
   );
   --gradient-brand: none;
+  --gradient-brand-hover: none;
+  --gradient-brand-active: none;
   --gradient-accent: linear-gradient(135deg, #3b4fd8 0%, #7c3aed 100%);
   --gradient-backdrop: none;
   --texture-surface: none;

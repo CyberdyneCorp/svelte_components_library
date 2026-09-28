@@ -214,6 +214,32 @@ describe("CommentThread", () => {
     expect(screen.getByText("Bob")).toBeInTheDocument();
   });
 
+  it("marks depths 1-3 with accents 1-3 and depth 4+ with accent 4", () => {
+    type Node = {
+      id: string;
+      author: string;
+      content: string;
+      timestamp: string;
+      replies?: Node[];
+    };
+    const chain = (level: number): Node => ({
+      id: String(level),
+      author: `U${level}`,
+      content: `L${level}`,
+      timestamp: new Date().toISOString(),
+      replies: level < 5 ? [chain(level + 1)] : [],
+    });
+    render(CommentThread, { props: { comments: [chain(0)], maxDepth: 6 } });
+    const accentAt = (level: number) =>
+      screen.getByText(`L${level}`).closest(".cy-comment-thread__comment")?.getAttribute("style");
+    expect(accentAt(0) ?? "").toBe("");
+    expect(accentAt(1)).toContain("var(--color-accent-1)");
+    expect(accentAt(2)).toContain("var(--color-accent-2)");
+    expect(accentAt(3)).toContain("var(--color-accent-3)");
+    expect(accentAt(4)).toContain("var(--color-accent-4)");
+    expect(accentAt(5)).toContain("var(--color-accent-4)");
+  });
+
   it("shows 'View more replies' when depth exceeds maxDepth", () => {
     const deep = [
       {

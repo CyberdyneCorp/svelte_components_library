@@ -43,7 +43,7 @@
     { id: "organic", label: "Organic", note: "earth tones, grain, soft shapes" },
     { id: "maximalism", label: "Maximalism", note: "loud colour, hard shadows" },
     { id: "y2k", label: "Y2K", note: "chrome sheen, glossy bubbles" },
-    { id: "glass", label: "Glass", note: "frosted panels over an aurora" },
+    { id: "glass", label: "Glass", note: "tinted glass panels over an aurora" },
     { id: "neumorphism", label: "Neumorphism", note: "soft extruded shadows" },
     { id: "skeuomorphism", label: "Skeuomorphism", note: "leather, paper, bevels" },
     { id: "brutalism", label: "Brutalism", note: "thick black borders, offsets" },
@@ -310,15 +310,13 @@
     color: var(--color-text-secondary);
   }
 
-  /* Mirrors Card: surface layers, blur, offset/raised shadows, border shape. */
+  /* Mirrors Card: surface layers, offset/raised shadows, border shape. */
   .style-card {
     padding: var(--space-4);
     border-radius: var(--radius-lg);
     background: var(--texture-surface), var(--gradient-surface), var(--card-bg);
     border: var(--border-width) var(--border-style) var(--card-border);
     box-shadow: var(--shadow-offset), var(--shadow-raised);
-    backdrop-filter: var(--surface-blur);
-    -webkit-backdrop-filter: var(--surface-blur);
   }
 
   .style-card-title {

@@ -36,6 +36,8 @@ const NO_SHADOW = "0 0 0 0 transparent";
 const COLOR_STYLE_DEFAULTS: Record<string, string> = {
   "--gradient-surface": "none",
   "--gradient-brand": "none",
+  "--gradient-brand-hover": "none",
+  "--gradient-brand-active": "none",
   "--gradient-accent": "none",
   "--gradient-backdrop": "none",
   "--texture-surface": "none",

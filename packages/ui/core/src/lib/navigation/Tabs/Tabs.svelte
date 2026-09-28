@@ -78,9 +78,22 @@
   }
 
   .cy-tabs__tab--active {
-    background: var(--gradient-accent), transparent;
     color: var(--color-action-brand-default);
     border-bottom-color: var(--color-action-brand-default);
+  }
+
+  /* Decorative --gradient-accent strip sitting on the brand underline. It never
+     paints under the label (the gradient is not contrast-checked against text),
+     and the brand underline beneath carries the active-state contrast. */
+  .cy-tabs__tab--active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--border-width-strong);
+    background: var(--gradient-accent);
+    pointer-events: none;
   }
 
   .cy-tabs__tab--active:hover {

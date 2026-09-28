@@ -6,7 +6,7 @@ The system SHALL define design-style tokens whose default values are no-ops. Wit
 
 The following tokens SHALL be declared in both the `:root` and `[data-theme="light"]` blocks of `colors.css`:
 
-- **Gradients:** `--gradient-surface`, `--gradient-brand`, `--gradient-accent` and `--gradient-backdrop`, each defaulting to `none`.
+- **Gradients:** `--gradient-surface`, `--gradient-brand`, `--gradient-brand-hover`, `--gradient-brand-active`, `--gradient-accent` and `--gradient-backdrop`, each defaulting to `none`. `--gradient-brand-hover` and `--gradient-brand-active` replace `--gradient-brand` on the brand Button's hover and pressed states.
 - **Layers:** `--texture-surface` and `--pattern-backdrop`, each defaulting to `none`.
 - **Glass:** `--surface-blur`, a `backdrop-filter` value defaulting to `none`.
 - **Style shadows:** `--shadow-offset`, `--shadow-raised`, `--shadow-pressed` and `--shadow-inset`, each defaulting to `0 0 0 0 transparent`.
@@ -54,6 +54,8 @@ A preset SHALL:
 - define every Layer 2 and Layer 3 token of the default `:root` block (except `--video-*`) and every design-style token;
 - not redefine any `--primitive-*` or `--video-*` token;
 - keep the calm pairing list at WCAG AA (at least 4.5:1 for text and 3:1 for UI);
+- keep `--btn-brand-text` at 4.5:1 or more against every opaque `#rrggbb` stop of `--gradient-brand`, `--gradient-brand-hover` and `--gradient-brand-active`;
+- when a layer of `--gradient-brand` is fully opaque, set `--gradient-brand-hover` and `--gradient-brand-active` to values distinct from it and from each other, so the brand Button keeps a visible hover and pressed colour change;
 - keep every `--transition-*` at 200ms or less with a non-overshooting timing function.
 
 The styles below SHALL be documented as covered by existing themes, not by new presets:
@@ -77,6 +79,18 @@ The styles below SHALL be documented as covered by existing themes, not by new p
 
 - **WHEN** the preset guard test resolves the calm pairing list for every preset theme
 - **THEN** every pairing SHALL meet WCAG AA
+
+#### Scenario: Label on an opaque brand gradient
+
+- **GIVEN** a preset whose `--gradient-brand-hover` has an opaque stop at 3:1 against `--btn-brand-text`
+- **WHEN** the preset guard test runs
+- **THEN** it SHALL fail and name the gradient token and the stop
+
+#### Scenario: Opaque brand gradient without state variants
+
+- **GIVEN** a preset with an opaque `--gradient-brand` and `--gradient-brand-hover: var(--gradient-brand)`
+- **WHEN** the preset guard test runs
+- **THEN** it SHALL fail, because the hover colour would be hidden
 
 ## MODIFIED Requirements
 

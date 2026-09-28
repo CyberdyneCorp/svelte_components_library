@@ -133,13 +133,13 @@
   }
 
   .cy-btn--brand:hover:not(:disabled) {
-    background: var(--gradient-brand), var(--btn-brand-bg-hover);
+    background: var(--gradient-brand-hover), var(--btn-brand-bg-hover);
     border-color: var(--btn-brand-bg-hover);
-    box-shadow: var(--shadow-offset), var(--shadow-glow-green);
+    box-shadow: var(--shadow-offset), var(--shadow-raised), var(--shadow-glow-green);
   }
 
   .cy-btn--brand:active:not(:disabled) {
-    background: var(--gradient-brand), var(--btn-brand-bg-active);
+    background: var(--gradient-brand-active), var(--btn-brand-bg-active);
     border-color: var(--btn-brand-bg-active);
     box-shadow: var(--shadow-pressed), var(--shadow-glow-green);
   }
@@ -170,7 +170,7 @@
 
   .cy-btn--outline:hover:not(:disabled) {
     background: var(--color-surface-hover);
-    box-shadow: var(--shadow-offset), var(--shadow-glow-green);
+    box-shadow: var(--shadow-offset), var(--shadow-raised), var(--shadow-glow-green);
   }
 
   .cy-btn--outline:active:not(:disabled) {
@@ -205,7 +205,7 @@
   .cy-btn--danger:hover:not(:disabled) {
     background: var(--btn-danger-bg-hover);
     border-color: var(--btn-danger-bg-hover);
-    box-shadow: var(--shadow-offset), var(--shadow-glow-green);
+    box-shadow: var(--shadow-offset), var(--shadow-raised), var(--shadow-glow-green);
   }
 
   .cy-btn--danger:active:not(:disabled) {

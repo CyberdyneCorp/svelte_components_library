@@ -94,8 +94,6 @@
     background: var(--texture-surface), var(--gradient-surface), var(--color-surface-default);
     border: var(--border-width) var(--border-style) var(--color-border-default);
     box-shadow: var(--shadow-offset), var(--shadow-lg);
-    backdrop-filter: var(--surface-blur);
-    -webkit-backdrop-filter: var(--surface-blur);
     max-width: 100vw;
   }
 

@@ -59,6 +59,9 @@
     rgba(1, 205, 254, 0.03) 100%
   );
   --gradient-brand: linear-gradient(135deg, #ff71ce 0%, #b967ff 100%);
+  /* The brand gradient is opaque, so hover / active carry their own (brighter) stops. */
+  --gradient-brand-hover: linear-gradient(135deg, #ff8ad6 0%, #c683ff 100%);
+  --gradient-brand-active: linear-gradient(135deg, #ffa3de 0%, #d29dff 100%);
   --gradient-accent: linear-gradient(90deg, #ff71ce 0%, #b967ff 50%, #01cdfe 100%);
   --gradient-backdrop: linear-gradient(180deg, #1b0a33 0%, #240d42 60%, #2e0f4a 100%);
   --texture-surface: repeating-linear-gradient(

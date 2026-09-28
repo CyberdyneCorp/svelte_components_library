@@ -155,14 +155,16 @@ no-ops, so the default, light and calm themes render exactly as before; a design
 | Token | Default | Consumed by |
 |-------|---------|-------------|
 | `--gradient-surface` | `none` | Card, Modal, Dialog, Drawer, Popover, NavBar, Header, Sidebar, BottomNav, DataTable, secondary Button, Table/DataTable headers, PageShell/AppLayout header and sidebar |
-| `--gradient-brand` | `none` | brand Button |
-| `--gradient-accent` | `none` | active Tab |
+| `--gradient-brand` | `none` | brand Button at rest (under the label) |
+| `--gradient-brand-hover` | `none` | brand Button `:hover` (replaces `--gradient-brand`) |
+| `--gradient-brand-active` | `none` | brand Button `:active` (replaces `--gradient-brand`) |
+| `--gradient-accent` | `none` | active Tab indicator strip (never under text) |
 | `--gradient-backdrop` | `none` | `body`, PageShell, AppLayout |
 | `--texture-surface` | `none` | same surfaces as `--gradient-surface` (except table headers) |
 | `--pattern-backdrop` | `none` | `body`, PageShell, AppLayout |
-| `--surface-blur` | `none` | Card, Modal, Dialog, Drawer, Popover, NavBar, Header, BottomNav (`backdrop-filter`) |
+| `--surface-blur` | `none` | Modal, Dialog, Popover panels (`backdrop-filter`) |
 | `--shadow-offset` | `0 0 0 0 transparent` | Button, Card, Modal, Dialog, Drawer, Popover |
-| `--shadow-raised` | `0 0 0 0 transparent` | Button and Card at rest |
+| `--shadow-raised` | `0 0 0 0 transparent` | Button and Card, at rest and on hover |
 | `--shadow-pressed` | `0 0 0 0 transparent` | Button `:active` |
 | `--shadow-inset` | `0 0 0 0 transparent` | TextInput, Textarea, Select |
 | `--border-width` | `1px` | borders of the components above plus Badge, Tabs, Table |
@@ -170,7 +172,7 @@ no-ops, so the default, light and calm themes render exactly as before; a design
 | `--border-style` | `solid` | every border that uses `--border-width` |
 | `--font-decorative` | `var(--font-display)` | Modal, Dialog, Drawer, Header and PageHeader titles |
 | `--heading-transform` | `none` | the same titles (`text-transform`) |
-| `--color-accent-1..4` | green, cyan, violet, amber accents | CommentThread depth markers (1–3); free for presets |
+| `--color-accent-1..4` | green, cyan, violet, amber accents | CommentThread depth markers (depth 1–3, then accent 4 for depth 4+) |
 
 Background tokens are one or more **non-final background layers** — an image with optional
 `position / size`, repeat and attachment, but no colour — because components append the surface
@@ -180,8 +182,8 @@ var(--card-bg)`). Shadow tokens default to a transparent zero shadow so they can
 
 ```css
 [data-theme="glass"] {
-  --card-bg: rgba(255, 255, 255, 0.12);
-  --surface-blur: blur(16px) saturate(140%);
+  --card-bg: #1a1733;
+  --surface-blur: blur(16px) saturate(140%); /* Modal, Dialog, Popover only */
   --pattern-backdrop: radial-gradient(circle at 20% 20%, #7f5af0 0, transparent 40%) fixed;
 }
 
@@ -258,7 +260,7 @@ file at `@cyberdynecorp/svelte-ui-foundation/themes/<id>.css` that defines
 | Organic | `organic` | `themes/organic.css` | light | earth tones, paper grain, asymmetric radii |
 | Maximalism | `maximalism` | `themes/maximalism.css` | light | loud colour, uppercase display type, hard shadows |
 | Y2K | `y2k` | `themes/y2k.css` | light | chrome sheen, glossy bubble buttons |
-| Glassmorphism | `glass` | `themes/glass.css` | dark | frosted panels (backdrop blur) over an aurora |
+| Glassmorphism | `glass` | `themes/glass.css` | dark | tinted glass panels with a rim highlight and sheen over an aurora |
 | Neumorphism | `neumorphism` | `themes/neumorphism.css` | light | twin light/dark extruded shadows |
 | Skeuomorphism | `skeuomorphism` | `themes/skeuomorphism.css` | light | leather and paper, bevels, pressed states |
 | Neo-brutalism | `brutalism` | `themes/brutalism.css` | light | 3px black borders, hard offset shadows |
@@ -291,8 +293,14 @@ Things to know:
   load. Without them the fallbacks render.
 - **Decorative layers are not contrast-checked.** Gradients, textures and patterns sit at low
   alpha over the checked flat colours; keep long text off busy backdrops.
-- **Glass surfaces are opaque tints** so their contrast is verifiable; the frost comes from the
-  surface sheen, `--surface-blur`, translucent borders and the backdrop.
+- **Glass surfaces are opaque tints** so their contrast is verifiable; the glass look comes from
+  the surface sheen, rim highlight, translucent borders and the aurora backdrop, not from a live
+  blur. `--surface-blur` only reaches the floating Modal, Dialog and Popover panels: a
+  `backdrop-filter` on a container would become the containing block of `position: fixed`
+  descendants (dialogs, menus, toasts), so Card, Drawer, NavBar, Header and BottomNav never set it.
+- **Brand gradients have state variants.** When `--gradient-brand` is opaque it hides the hover
+  and active button colours, so set `--gradient-brand-hover` / `--gradient-brand-active` too
+  (`presets.test.ts` requires distinct values and checks the label on every opaque stop).
 - **Shape changes are global.** Swiss sets `--radius-pill: 0`; brutalism, memphis and maximalism
   thicken `--border-width`; art-deco uses `--border-style: double`; organic sets four-value
   `--radius-lg` / `--radius-xl`, so use those two only as a whole `border-radius` value.

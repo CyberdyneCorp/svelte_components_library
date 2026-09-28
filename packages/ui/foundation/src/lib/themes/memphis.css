@@ -54,6 +54,8 @@
   --color-accent-3: var(--color-accent-violet);
   --gradient-surface: none;
   --gradient-brand: none;
+  --gradient-brand-hover: none;
+  --gradient-brand-active: none;
   --gradient-accent: linear-gradient(
     90deg,
     #ff9ecd 0 25%,

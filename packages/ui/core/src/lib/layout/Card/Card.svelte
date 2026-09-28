@@ -37,8 +37,6 @@
     border: var(--border-width) var(--border-style) var(--card-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-offset), var(--shadow-raised);
-    backdrop-filter: var(--surface-blur);
-    -webkit-backdrop-filter: var(--surface-blur);
     transition: all var(--transition-default);
   }
 
@@ -74,7 +72,7 @@
 
   .cy-card--hoverable:hover {
     border-color: var(--card-hover-border);
-    box-shadow: var(--shadow-offset), var(--shadow-glow-green);
+    box-shadow: var(--shadow-offset), var(--shadow-raised), var(--shadow-glow-green);
     transform: translateY(-2px);
   }
 </style>

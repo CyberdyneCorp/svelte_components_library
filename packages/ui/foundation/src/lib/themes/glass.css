@@ -1,8 +1,7 @@
 /* ══════════════════════════════════════════════════════════════
    CYBERDYNE DESIGN SYSTEM — Glass theme preset (glassmorphism)
-   Frosted panels (backdrop blur + saturate, light rim highlight)
-   floating over a vivid violet / pink / cyan aurora backdrop on a
-   deep indigo night.
+   Tinted glass panels (sheen + light rim highlight) floating over a
+   vivid violet / pink / cyan aurora backdrop on a deep indigo night.
 
    Usage: load after `@cyberdynecorp/svelte-ui-foundation/styles`
      import "@cyberdynecorp/svelte-ui-foundation/styles";
@@ -12,9 +11,12 @@
    back to Inter (already loaded by the foundation) and system-ui.
 
    Surface colours are opaque "composited" tints so text contrast
-   stays verifiable; the frost comes from --gradient-surface (a
-   translucent sheen layered over them), --surface-blur and the
-   translucent borders / overlay.
+   stays verifiable; the glass look comes from --gradient-surface (a
+   translucent sheen layered over them), the rim highlight in
+   --shadow-raised and the translucent borders / overlay.
+   --surface-blur only reaches the floating Modal, Dialog and Popover
+   panels (containers never set backdrop-filter, which would trap
+   position: fixed children).
 
    Every Layer 2 (semantic) and Layer 3 (component) token of the
    default :root block is redefined, except the theme-invariant
@@ -60,7 +62,7 @@
   --color-bg-elevated: #1b1734;
   --color-bg-overlay: rgba(8, 6, 20, 0.45);
 
-  /* Surfaces — frosted tints */
+  /* Surfaces — glass tints (opaque composites) */
   --color-surface-default: #1a1733;
   --color-surface-raised: #211d3d;
   --color-surface-overlay: #252146;
@@ -150,6 +152,9 @@
     rgba(255, 255, 255, 0.06) 100%
   );
   --gradient-brand: linear-gradient(135deg, #b39dfb 0%, #f0a8e0 100%);
+  /* The brand gradient is opaque, so hover / active carry their own stops. */
+  --gradient-brand-hover: linear-gradient(135deg, #c4b2fc 0%, #f4bde8 100%);
+  --gradient-brand-active: linear-gradient(135deg, #d3c6fd 0%, #f7cfee 100%);
   --gradient-accent: linear-gradient(135deg, #67e8f9 0%, #b39dfb 55%, #f9a8d4 100%);
   --gradient-backdrop:
     radial-gradient(circle at 15% 20%, rgba(124, 58, 237, 0.5), transparent 45%),

@@ -179,8 +179,6 @@
 <style>
   .cy-navbar {
     background: var(--texture-surface), var(--gradient-surface), var(--nav-bg);
-    backdrop-filter: var(--surface-blur);
-    -webkit-backdrop-filter: var(--surface-blur);
     border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
     font-family: var(--font-body);
     z-index: 1000;

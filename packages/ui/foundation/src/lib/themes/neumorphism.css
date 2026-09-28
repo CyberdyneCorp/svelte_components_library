@@ -141,6 +141,9 @@
   /* ── Layer 2: Style tokens ── */
   --gradient-surface: linear-gradient(145deg, rgba(255, 255, 255, 0.35), rgba(163, 177, 198, 0.12));
   --gradient-brand: linear-gradient(145deg, #5263a8, #3e4d88);
+  /* Hover deepens the dome; active inverts it so the key reads as pressed. */
+  --gradient-brand-hover: linear-gradient(145deg, #4a5b9e, #37457c);
+  --gradient-brand-active: linear-gradient(145deg, #3e4d88, #5263a8);
   --gradient-accent: linear-gradient(145deg, #e6ebf1, #d1d8e1);
   --gradient-backdrop: none;
   --texture-surface: none;

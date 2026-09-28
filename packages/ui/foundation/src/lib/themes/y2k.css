@@ -158,6 +158,23 @@
       rgba(255, 255, 255, 0) 50%
     ),
     linear-gradient(135deg, #2533b8 0%, #6a1fc4 55%, #a31267 100%);
+  /* The candy layer is opaque, so hover / active carry their own (deeper) stops. */
+  --gradient-brand-hover:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.08) 48%,
+      rgba(255, 255, 255, 0) 50%
+    ),
+    linear-gradient(135deg, #1f2b9e 0%, #5a1aa8 55%, #8c0f58 100%);
+  --gradient-brand-active:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.08) 48%,
+      rgba(255, 255, 255, 0) 50%
+    ),
+    linear-gradient(135deg, #192384 0%, #4b168c 55%, #750d4a 100%);
   /* Iridescent foil */
   --gradient-accent: linear-gradient(120deg, #ffd6f5 0%, #d6e4ff 35%, #d6fff4 65%, #f5e6ff 100%);
   --gradient-backdrop: linear-gradient(

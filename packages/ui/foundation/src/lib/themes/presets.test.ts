@@ -11,7 +11,10 @@ import { describe, it, expect } from "vitest";
  *   shape/type style token has a preset value;
  * - scope: presets only set tokens foundation defines, never primitives or
  *   --video-*;
- * - contrast: every declared pairing meets WCAG AA (4.5:1 text, 3:1 UI);
+ * - contrast: every declared pairing meets WCAG AA (4.5:1 text, 3:1 UI), and
+ *   text drawn on a gradient meets 4.5:1 on every opaque #rrggbb stop;
+ * - brand states: an opaque --gradient-brand has distinct hover / active
+ *   gradients, so the brand button's state colours stay visible;
  * - motion: every --transition-* is ≤ 200ms and never overshoots.
  */
 
@@ -276,6 +279,76 @@ function contrastFailures(theme: string): string[] {
   });
 }
 
+/**
+ * Text drawn directly on a gradient token. --gradient-accent is absent on
+ * purpose: Tabs paints it only as a decorative strip on the active underline,
+ * never under a label.
+ */
+const GRADIENT_TEXT: Record<string, string[]> = {
+  "--gradient-brand": ["--btn-brand-text"],
+  "--gradient-brand-hover": ["--btn-brand-text"],
+  "--gradient-brand-active": ["--btn-brand-text"],
+};
+
+/** Split a background value into its top-level comma-separated layers. */
+function layers(value: string): string[] {
+  const out: string[] = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < value.length; i++) {
+    const ch = value[i];
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    else if (ch === "," && depth === 0) {
+      out.push(value.slice(start, i).trim());
+      start = i + 1;
+    }
+  }
+  out.push(value.slice(start).trim());
+  return out.filter((layer) => layer !== "" && layer !== "none");
+}
+
+/** The opaque #rrggbb colour stops of a gradient value. */
+function opaqueStops(value: string): string[] {
+  return [...value.matchAll(/#[0-9a-f]{6}\b/gi)].map(([hex]) => hex.toLowerCase());
+}
+
+/** True when some layer is built only from opaque stops, hiding everything below it. */
+function hasOpaqueLayer(value: string): boolean {
+  return layers(value).some(
+    (layer) =>
+      opaqueStops(layer).length > 0 &&
+      !/rgba\(|hsla\(|transparent|#[0-9a-f]{3,4}\b|#[0-9a-f]{8}\b/i.test(layer),
+  );
+}
+
+function gradientTextFailures(decls: Decls): string[] {
+  return Object.entries(GRADIENT_TEXT).flatMap(([gradient, texts]) =>
+    texts.flatMap((text) => {
+      const fg = resolve(decls, text);
+      return opaqueStops(resolve(decls, gradient)).flatMap((stop) => {
+        const ratio = contrast(fg, stop);
+        return ratio >= MIN_RATIO.text
+          ? []
+          : [`${text} on ${gradient} stop ${stop}: ${ratio.toFixed(2)} < ${MIN_RATIO.text}`];
+      });
+    }),
+  );
+}
+
+/** An opaque brand gradient hides the hover / active colours unless the states swap it. */
+function brandStateFailures(decls: Decls): string[] {
+  const rest = resolve(decls, "--gradient-brand");
+  if (!hasOpaqueLayer(rest)) return [];
+  const hover = resolve(decls, "--gradient-brand-hover");
+  const active = resolve(decls, "--gradient-brand-active");
+  return [
+    ...(hover === rest ? ["--gradient-brand-hover equals the opaque --gradient-brand"] : []),
+    ...(active === rest ? ["--gradient-brand-active equals the opaque --gradient-brand"] : []),
+    ...(active === hover ? ["--gradient-brand-active equals --gradient-brand-hover"] : []),
+  ];
+}
+
 const SAFE_NAMED_EASINGS = new Set(["ease", "ease-in", "ease-out", "ease-in-out", "linear"]);
 
 function durationMs(value: string): number {
@@ -344,6 +417,14 @@ describe("theme presets", () => {
       expect(contrastFailures(theme)).toEqual([]);
     });
 
+    it("keeps text on opaque gradient stops at 4.5:1", () => {
+      expect(gradientTextFailures(themeDecls[theme])).toEqual([]);
+    });
+
+    it("gives the brand button visible hover and active states", () => {
+      expect(brandStateFailures(themeDecls[theme])).toEqual([]);
+    });
+
     it("keeps motion calm: ≤ 200ms and no overshoot", () => {
       const transitions = [...themeDecls[theme]].filter(([name]) =>
         name.startsWith("--transition-"),
@@ -395,6 +476,37 @@ describe("theme presets", () => {
       expect(resolve(decls, "--a")).toBe("#ffffff");
       expect(() => luminance(resolve(decls, "--c"))).toThrow(/opaque/);
       expect(() => resolve(decls, "--missing")).toThrow(/not defined/);
+    });
+
+    it("extracts opaque gradient stops and flags a label that disappears on them", () => {
+      const decls: Decls = new Map([
+        ["--btn-brand-text", "#ffffff"],
+        ["--gradient-brand", "linear-gradient(90deg, #1d3fd6 0%, rgba(0, 0, 0, 0.2) 100%)"],
+        ["--gradient-brand-hover", "linear-gradient(90deg, #ffffff 0%, #1d3fd6 100%)"],
+        ["--gradient-brand-active", "none"],
+      ]);
+      expect(opaqueStops(resolve(decls, "--gradient-brand"))).toEqual(["#1d3fd6"]);
+      expect(gradientTextFailures(decls)).toEqual([
+        "--btn-brand-text on --gradient-brand-hover stop #ffffff: 1.00 < 4.5",
+      ]);
+    });
+
+    it("flags an opaque brand gradient that hides the hover / active colours", () => {
+      const opaque = "linear-gradient(135deg, #ff71ce 0%, #b967ff 100%)";
+      const sheen = "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))";
+      expect(hasOpaqueLayer(opaque)).toBe(true);
+      expect(hasOpaqueLayer(sheen)).toBe(false);
+      expect(hasOpaqueLayer(`${sheen}, ${opaque}`)).toBe(true);
+      const decls: Decls = new Map([
+        ["--gradient-brand", opaque],
+        ["--gradient-brand-hover", "var(--gradient-brand)"],
+        ["--gradient-brand-active", "linear-gradient(135deg, #ffa3de 0%, #d29dff 100%)"],
+      ]);
+      expect(brandStateFailures(decls)).toEqual([
+        "--gradient-brand-hover equals the opaque --gradient-brand",
+      ]);
+      decls.set("--gradient-brand", sheen);
+      expect(brandStateFailures(decls)).toEqual([]);
     });
 
     it("flags overshooting and slow motion", () => {

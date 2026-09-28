@@ -162,9 +162,14 @@
   --color-accent-3: var(--color-accent-violet);
   --color-accent-4: var(--primitive-amber-10);
 
-  /* Gradients */
+  /* Gradients. --gradient-brand paints under the brand button label;
+     --gradient-brand-hover / -active replace it on hover / press, so a preset
+     with an opaque brand gradient still shows a state change. --gradient-accent
+     is a decorative strip (the active Tab indicator), never under text. */
   --gradient-surface: none;
   --gradient-brand: none;
+  --gradient-brand-hover: none;
+  --gradient-brand-active: none;
   --gradient-accent: none;
   --gradient-backdrop: none;
 
@@ -330,9 +335,14 @@
   --color-accent-3: var(--color-accent-violet);
   --color-accent-4: var(--primitive-amber-40);
 
-  /* Gradients */
+  /* Gradients. --gradient-brand paints under the brand button label;
+     --gradient-brand-hover / -active replace it on hover / press, so a preset
+     with an opaque brand gradient still shows a state change. --gradient-accent
+     is a decorative strip (the active Tab indicator), never under text. */
   --gradient-surface: none;
   --gradient-brand: none;
+  --gradient-brand-hover: none;
+  --gradient-brand-active: none;
   --gradient-accent: none;
   --gradient-backdrop: none;
 

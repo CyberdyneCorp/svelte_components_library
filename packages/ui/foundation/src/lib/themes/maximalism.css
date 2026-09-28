@@ -141,6 +141,9 @@
   /* ── Layer 2: Style tokens ── */
   --gradient-surface: none;
   --gradient-brand: linear-gradient(120deg, #c2006b 0%, #7b1fd1 50%, #1d3fd6 100%);
+  /* The brand gradient is opaque, so hover / active carry their own (deeper) stops. */
+  --gradient-brand-hover: linear-gradient(120deg, #a8005d 0%, #6a18b8 50%, #1834bb 100%);
+  --gradient-brand-active: linear-gradient(120deg, #8f004f 0%, #5a139e 50%, #142ca0 100%);
   --gradient-accent: linear-gradient(90deg, #ff4fa3 0%, #ffb800 50%, #00c2a8 100%);
   --gradient-backdrop:
     radial-gradient(circle at 92% 4%, rgba(255, 184, 0, 0.35), transparent 38%),

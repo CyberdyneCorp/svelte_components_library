@@ -50,6 +50,8 @@
   --color-accent-3: var(--color-accent-violet);
   --gradient-surface: none;
   --gradient-brand: none;
+  --gradient-brand-hover: none;
+  --gradient-brand-active: none;
   --gradient-accent: none;
   --gradient-backdrop: none;
   --texture-surface: none;

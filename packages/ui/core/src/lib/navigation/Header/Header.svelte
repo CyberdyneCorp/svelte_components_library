@@ -41,8 +41,6 @@
     height: var(--nav-height);
     padding: 0 var(--space-4);
     background: var(--texture-surface), var(--gradient-surface), var(--color-bg-primary);
-    backdrop-filter: var(--surface-blur);
-    -webkit-backdrop-filter: var(--surface-blur);
     border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
     flex-shrink: 0;
   }

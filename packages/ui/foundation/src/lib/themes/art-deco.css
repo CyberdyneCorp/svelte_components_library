@@ -56,6 +56,9 @@
   --color-accent-3: var(--color-accent-violet);
   --gradient-surface: linear-gradient(180deg, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
   --gradient-brand: linear-gradient(180deg, #ebd184 0%, #d4af37 50%, #b8963e 100%);
+  /* Hover lifts the gilt, active sinks it; both stay opaque like the base. */
+  --gradient-brand-hover: linear-gradient(180deg, #f1dc9c 0%, #dcbc52 50%, #c6a44f 100%);
+  --gradient-brand-active: linear-gradient(180deg, #d9bb5e 0%, #c29d2c 50%, #a68533 100%);
   --gradient-accent: linear-gradient(90deg, transparent 0%, #d4af37 50%, transparent 100%);
   --gradient-backdrop: radial-gradient(ellipse at 50% 0%, #1a1710 0%, #0b0b0c 60%);
   --texture-surface: none;

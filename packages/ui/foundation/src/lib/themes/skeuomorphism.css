@@ -150,6 +150,9 @@
     rgba(255, 255, 255, 0) 50%,
     rgba(0, 0, 0, 0.16) 100%
   );
+  /* Translucent sheen: the hover / active button colour shows through it. */
+  --gradient-brand-hover: var(--gradient-brand);
+  --gradient-brand-active: var(--gradient-brand);
   --gradient-accent: linear-gradient(180deg, #a86a2a 0%, #7a3b1e 100%);
   --gradient-backdrop: radial-gradient(
     ellipse at 50% 0%,

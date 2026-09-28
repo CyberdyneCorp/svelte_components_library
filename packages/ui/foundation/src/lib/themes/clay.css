@@ -149,6 +149,9 @@
     rgba(255, 255, 255, 0.1) 0%,
     rgba(255, 255, 255, 0) 55%
   );
+  /* Translucent sheen: the hover / active button colour shows through it. */
+  --gradient-brand-hover: var(--gradient-brand);
+  --gradient-brand-active: var(--gradient-brand);
   --gradient-accent: linear-gradient(135deg, #7b4fd6 0%, #b0306f 100%);
   /* Pastel ambient blobs behind the page */
   --gradient-backdrop:

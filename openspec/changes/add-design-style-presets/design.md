@@ -4,7 +4,7 @@ The foundation themes components through three token layers (primitives → sema
 
 | Style | Needs |
 |-------|-------|
-| Glass | translucent surfaces **and** `backdrop-filter` blur |
+| Glass | sheen and rim highlight on tinted surfaces; `backdrop-filter` blur on floating overlays only |
 | Neumorphism, Clay, Skeuomorphism | paired light/dark raised shadows, inset wells, pressed state |
 | Brutalism, Memphis | thick borders, hard offset shadows, multi-accent colour |
 | Vaporwave, Y2K, Maximalism | gradients on surfaces, brand and backdrop, background patterns |
