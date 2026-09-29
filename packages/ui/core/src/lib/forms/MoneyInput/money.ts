@@ -75,8 +75,12 @@ export function sanitizeMoneyTyping(raw: string, allowNegative = false): string 
  * `.` or `,` is the decimal separator when no more than `minorUnits` digits
  * follow it; every other separator is grouping and is dropped.
  */
+function lastSeparator(body: string): number {
+  return Math.max(body.lastIndexOf("."), body.lastIndexOf(","));
+}
+
 function splitDecimal(body: string, minorUnits: number): { int: string; frac: string } {
-  const last = Math.max(body.lastIndexOf("."), body.lastIndexOf(","));
+  const last = lastSeparator(body);
   const tail = last === -1 ? "" : body.slice(last + 1);
   if (last === -1 || tail.length > minorUnits) {
     return { int: body.replace(/[.,]/g, ""), frac: "" };
@@ -96,6 +100,20 @@ export function parseMoneyInput(raw: string, minorUnits: number, allowNegative =
   if (int === "" && frac === "") return null;
   const scaled = BigInt((int || "0") + frac.padEnd(minorUnits, "0"));
   return fromMinorUnits(negative ? -scaled : scaled, minorUnits);
+}
+
+/**
+ * True when typed text ends in a fraction longer than `minorUnits` that
+ * cannot be a three-digit thousands group. `parseMoneyInput` reads such a
+ * separator as grouping; asset inputs reject the keystroke instead, so
+ * "0.1234567" never silently becomes 1234567 USDC.
+ */
+export function exceedsDecimals(raw: string, minorUnits: number): boolean {
+  const body = sanitizeMoneyTyping(raw);
+  const last = lastSeparator(body);
+  if (last === -1) return false;
+  const tail = body.length - last - 1;
+  return tail > minorUnits && tail !== 3;
 }
 
 /** Locale currency formatting of a decimal string, without float conversion. */

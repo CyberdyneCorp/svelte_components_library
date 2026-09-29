@@ -1,10 +1,11 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import { formatAmount, resolveMinorUnits, type AmountFormatOptions } from "./asset.js";
   import {
     clampMoney,
     currencyMinorUnits,
-    formatMoney,
+    exceedsDecimals,
     parseMoneyInput,
     sanitizeMoneyTyping,
     toEditableMoney,
@@ -25,10 +26,12 @@
     required = false,
     id = "",
     allowNegative = false,
+    decimals = undefined,
+    symbol = undefined,
     onchange,
   }: {
     value?: string | null;
-    /** ISO 4217 code, e.g. "USD". Sets symbol and fraction digits. */
+    /** ISO 4217 code ("USD"), or any asset code ("ETH") when `decimals` is set. */
     currency: string;
     locale?: string;
     /** Decimal-string bounds, applied when the field loses focus. */
@@ -43,18 +46,51 @@
     required?: boolean;
     id?: string;
     allowNegative?: boolean;
+    /**
+     * Asset mode for non-ISO assets (crypto tokens): exactly this many fraction
+     * digits (integer 0–100), shown as "1.234,5678 ETH" when not focused.
+     */
+    decimals?: number;
+    /** Asset mode only: symbol placed where the locale puts currency symbols ("₿1.00"). */
+    symbol?: string;
     onchange?: (value: string | null) => void;
   } = $props();
 
   let inputId = $derived(id || `cy-mi-${Math.random().toString(36).slice(2, 9)}`);
-  let minorUnits = $derived(currencyMinorUnits(currency, locale));
+  let asset = $derived(decimals !== undefined);
+  let format = $derived<AmountFormatOptions>({ currency, locale, decimals, symbol });
+  // Asset mode never throws: invalid decimals or an empty code yield null
+  // (read-only field, warned once). ISO codes keep their existing behaviour.
+  let minorUnits = $derived(asset ? tryResolveMinorUnits(format) : currencyMinorUnits(currency, locale));
+  let invalid = $derived(minorUnits === null);
   let focused = $state(false);
   let draft = $state("");
 
   let display = $derived.by(() => {
     if (focused) return draft;
-    return value == null ? "" : formatMoney(value, { currency, locale });
+    if (value == null) return "";
+    return invalid ? value : formatAmount(value, format);
   });
+
+  // Plain variable on purpose: tracking what was already reported must not
+  // re-trigger the effect.
+  let lastWarned: string | undefined;
+
+  $effect(() => {
+    if (!invalid) return;
+    const key = `${currency}|${String(decimals)}`;
+    if (key === lastWarned) return;
+    lastWarned = key;
+    console.warn(`MoneyInput: invalid asset "${currency}" with decimals "${String(decimals)}".`);
+  });
+
+  function tryResolveMinorUnits(options: AmountFormatOptions): number | null {
+    try {
+      return resolveMinorUnits(options);
+    } catch {
+      return null;
+    }
+  }
 
   let describedBy = $derived(
     [hint && `${inputId}-hint`, error && `${inputId}-error`].filter(Boolean).join(" ") || undefined,
@@ -72,8 +108,12 @@
   }
 
   function handleInput(e: Event) {
+    if (minorUnits === null) return;
     const target = e.target as HTMLInputElement;
-    draft = sanitizeMoneyTyping(target.value, allowNegative);
+    const next = sanitizeMoneyTyping(target.value, allowNegative);
+    // Assets reject a fraction longer than their decimals instead of
+    // reading the separator as grouping.
+    if (!asset || !exceedsDecimals(next, minorUnits)) draft = next;
     // Keep rejected characters out of the field itself.
     if (target.value !== draft) target.value = draft;
     commit(parseMoneyInput(draft, minorUnits, allowNegative));
@@ -81,11 +121,15 @@
 
   function handleBlur() {
     focused = false;
-    if (value != null) commit(clampMoney(value, minorUnits, min, max));
+    if (value != null && minorUnits !== null) commit(clampMoney(value, minorUnits, min, max));
   }
 </script>
 
-<div class="cy-mi" class:cy-mi--error={!!error} class:cy-mi--disabled={disabled}>
+<div
+  class="cy-mi"
+  class:cy-mi--error={!!error || invalid}
+  class:cy-mi--disabled={disabled || invalid}
+>
   {#if label}
     <label class="cy-mi__label" for={inputId}>
       {label}
@@ -101,12 +145,12 @@
       inputmode="decimal"
       autocomplete="off"
       value={display}
-      {disabled}
+      disabled={disabled || invalid}
       {required}
       onfocus={handleFocus}
       oninput={handleInput}
       onblur={handleBlur}
-      aria-invalid={!!error}
+      aria-invalid={!!error || invalid}
       aria-describedby={describedBy}
     />
     {#if focused}

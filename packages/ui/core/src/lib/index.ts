@@ -32,12 +32,16 @@ export {
   clampMoney,
   compareMoney,
   currencyMinorUnits,
+  exceedsDecimals,
+  formatAmount,
   formatMoney,
   fromMinorUnits,
   parseMoneyInput,
+  resolveMinorUnits,
   sanitizeMoneyTyping,
   toEditableMoney,
   toMinorUnits,
+  type AmountFormatOptions,
   type FormatMoneyOptions,
 } from "./forms/MoneyInput/index.js";
 export { ComboBox } from "./forms/ComboBox/index.js";
