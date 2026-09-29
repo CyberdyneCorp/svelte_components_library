@@ -23,4 +23,4 @@
 - [x] 4.2 `DesignTokens.mdx` Themes section with the `app.html` snippet; README setup note
 - [x] 4.3 Exclude `*.test.ts` from the foundation tarball
 - [x] 4.4 Changeset: foundation minor, core minor
-- [ ] 4.5 Archive this change once released
+- [x] 4.5 Archive this change once released

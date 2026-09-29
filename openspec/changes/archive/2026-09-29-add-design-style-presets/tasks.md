@@ -26,4 +26,4 @@
 ## 4. Release
 
 - [x] 4.1 Changeset: foundation minor, core minor
-- [ ] 4.2 Archive this change once released
+- [x] 4.2 Archive this change once released
