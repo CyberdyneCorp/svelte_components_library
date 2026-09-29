@@ -1,7 +1,14 @@
 import { render } from "@testing-library/svelte";
 import { afterEach, describe, it, expect, vi } from "vitest";
 import CurrencyDisplay from "./CurrencyDisplay.svelte";
-import { displayedSign, isValidAmount, maskGlyphs, maskSizer } from "./currencyDisplay.js";
+import {
+  displayedSign,
+  formatAsset,
+  isValidAmount,
+  maskGlyphs,
+  maskSizer,
+  tryFormatAmount,
+} from "./currencyDisplay.js";
 
 /** Intl uses (narrow) no-break spaces; compare with plain spaces. */
 function text(el: Element | null | undefined): string {
@@ -272,5 +279,147 @@ describe("currencyDisplay helpers", () => {
   it("masks native digits too", () => {
     expect(maskSizer("١٬٢٣٤٫٥٠", "٠")).toBe("٠٬٠٠٠٫٠٠");
     expect(maskGlyphs("१,२३४.५०")).toBe("••••••");
+  });
+});
+
+describe("CurrencyDisplay crypto / custom assets", () => {
+  const cases: Array<[string, string, number, string, string]> = [
+    ["USDC", "1234.5", 6, "en-US", "1,234.500000 USDC"],
+    ["USDC", "1234.5", 6, "pt-BR", "1.234,500000 USDC"],
+    ["ETH", "1234.5678", 18, "pt-BR", "1.234,567800000000000000 ETH"],
+    ["ETH", "1234.5678", 18, "en-US", "1,234.567800000000000000 ETH"],
+    ["BTC", "0.00000001", 8, "pt-BR", "0,00000001 BTC"],
+    ["BTC", "21000000", 8, "en-US", "21,000,000.00000000 BTC"],
+  ];
+
+  it.each(cases)(
+    "formats %s %s (%i decimals, %s) as %s",
+    (currency, amount, decimals, locale, expected) => {
+      const { container } = render(CurrencyDisplay, {
+        props: { amount, currency, decimals, locale },
+      });
+      expect(value(container)).toBe(expected);
+    },
+  );
+
+  it("formats long 18-decimal amounts without precision loss", () => {
+    const amount = "123456789012345678.123456789012345678";
+    const { container } = render(CurrencyDisplay, {
+      props: { amount, currency: "ETH", decimals: 18, locale: "en-US" },
+    });
+    expect(value(container)).toBe("123,456,789,012,345,678.123456789012345678 ETH");
+    const wei = render(CurrencyDisplay, {
+      props: { amount: "0.000000000000000001", currency: "ETH", decimals: 18, locale: "pt-BR" },
+    });
+    expect(value(wei.container)).toBe("0,000000000000000001 ETH");
+  });
+
+  it("rounds half-expand to the asset decimals using the decimal string", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: { amount: "1.0000005", currency: "USDC", decimals: 6, locale: "en-US" },
+    });
+    expect(value(container)).toBe("1.000001 USDC");
+  });
+
+  it("shows negatives and honours signDisplay for assets", () => {
+    const neg = render(CurrencyDisplay, {
+      props: { amount: "-0.5", currency: "ETH", decimals: 4, locale: "pt-BR", tone: "signed" },
+    });
+    expect(value(neg.container)).toBe("-0,5000 ETH");
+    expect(root(neg.container).classList.contains("cy-currency--negative")).toBe(true);
+    const always = render(CurrencyDisplay, {
+      props: { amount: "2", currency: "BTC", decimals: 8, locale: "en-US", signDisplay: "always" },
+    });
+    expect(value(always.container)).toBe("+2.00000000 BTC");
+    const never = render(CurrencyDisplay, {
+      props: { amount: "-2", currency: "BTC", decimals: 8, locale: "en-US", signDisplay: "never" },
+    });
+    expect(text(root(never.container)).trim()).toBe("negative 2.00000000 BTC");
+    expect(never.container.querySelector(".cy-currency__sr")).not.toBeNull();
+  });
+
+  it("treats an asset amount that rounds to zero as zero", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: {
+        amount: "-0.0000004",
+        currency: "USDC",
+        decimals: 6,
+        locale: "en-US",
+        tone: "signed",
+        signDisplay: "never",
+      },
+    });
+    expect(value(container)).toBe("0.000000 USDC");
+    expect(container.querySelector(".cy-currency__sr")).toBeNull();
+    expect(root(container).className).not.toMatch(/--positive|--negative/);
+  });
+
+  it("masks asset amounts keeping the code and hiding every digit", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: { amount: "-1234.5678", currency: "ETH", decimals: 4, locale: "pt-BR", masked: true },
+    });
+    expect(accessibleText(root(container)).trim()).toBe("Hidden amount");
+    expect(container.textContent).not.toMatch(/[1-9]/);
+    expect(text(container.querySelector(".cy-currency__sizer"))).toBe("-0.000,0000 ETH");
+    expect(text(container.querySelector(".cy-currency__mask"))).toBe("••••••••");
+  });
+
+  it("places a symbol where the locale puts currency symbols", () => {
+    const en = render(CurrencyDisplay, {
+      props: { amount: "1.5", currency: "BTC", decimals: 8, symbol: "₿", locale: "en-US" },
+    });
+    expect(value(en.container)).toBe("₿1.50000000");
+    const de = render(CurrencyDisplay, {
+      props: { amount: "-1.5", currency: "BTC", decimals: 8, symbol: "₿", locale: "de-DE" },
+    });
+    expect(value(de.container)).toBe("-1,50000000 ₿");
+    const code = render(CurrencyDisplay, {
+      props: {
+        amount: "1.5",
+        currency: "BTC",
+        decimals: 8,
+        symbol: "₿",
+        locale: "en-US",
+        currencyDisplay: "code",
+      },
+    });
+    expect(value(code.container)).toBe("1.50000000 BTC");
+  });
+
+  it.each([-1, 1.5, 101, Number.NaN])("renders an em dash for invalid decimals %d", (decimals) => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { container } = render(CurrencyDisplay, {
+      props: { amount: "1", currency: "ETH", decimals, locale: "en-US" },
+    });
+    expect(value(container)).toBe("—");
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps rejecting non-ISO codes without decimals (ISO mode unchanged)", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { container } = render(CurrencyDisplay, { props: { amount: "1", currency: "USDC" } });
+    expect(value(container)).toBe("—");
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("asset helpers", () => {
+  it("formats assets from decimal strings", () => {
+    expect(formatAsset("1234.5678", { currency: "ETH", decimals: 4, locale: "pt-BR" })).toBe(
+      "1.234,5678\u00a0ETH",
+    );
+    expect(() => formatAsset("1", { currency: " ", decimals: 2 })).toThrow(RangeError);
+  });
+
+  it("detects the displayed sign at the asset precision", () => {
+    const eth = { currency: "ETH", decimals: 18, locale: "en-US" };
+    expect(displayedSign("-0.000000000000000001", eth)).toBe(-1);
+    expect(displayedSign("-0.0000000000000000004", eth)).toBe(0);
+  });
+
+  it("leaves ISO formatting untouched when decimals is not set", () => {
+    expect(tryFormatAmount("1234.5", { currency: "USD", locale: "en-US" })?.text).toBe("$1,234.50");
+    const brl = tryFormatAmount("-1234.5", { currency: "BRL", locale: "pt-BR" });
+    expect(brl?.text.replace(/\s/g, " ")).toBe("-R$ 1.234,50");
   });
 });
