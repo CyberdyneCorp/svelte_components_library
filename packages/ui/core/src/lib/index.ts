@@ -477,3 +477,23 @@ export type {
   TimeInForce,
   Trade,
 } from "./trading/index.js";
+export { TradingChart } from "./trading/index.js";
+export type {
+  AdxConfig,
+  AtrConfig,
+  BollingerConfig,
+  CrosshairInfo,
+  IndicatorConfig,
+  IndicatorType,
+  MacdConfig,
+  MovingAverageConfig,
+  PriceScaleMode,
+  PriceSource,
+  RsiConfig,
+  SeriesType,
+  StochasticConfig,
+  TradingChartLabels,
+  VisibleRange,
+  VolumeMode,
+  VwapConfig,
+} from "./trading/index.js";
