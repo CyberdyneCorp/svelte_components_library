@@ -18,8 +18,12 @@
   }: {
     /** Metric name, e.g. "Monthly spend". */
     label: string;
-    /** Preformatted value, e.g. "€1,240.00". */
-    value: string;
+    /**
+     * Preformatted value, e.g. "€1,240.00", or a snippet for rich markup
+     * (e.g. a masked `CurrencyDisplay`). Snippet content renders in the same
+     * value element, so it stays part of the link's accessible name.
+     */
+    value: string | Snippet;
     /** Preformatted change, e.g. "+4.2%". */
     delta?: string;
     /** Context for the change, e.g. "vs last month". */
@@ -58,7 +62,9 @@
 
 {#snippet body()}
   <div class="cy-kpi__label" id={labelId}>{label}</div>
-  <div class="cy-kpi__value">{value}</div>
+  <div class="cy-kpi__value">
+    {#if typeof value === "function"}{@render value()}{:else}{value}{/if}
+  </div>
   {#if hasDelta}
     <div class="cy-kpi__delta cy-kpi__delta--{sentiment}">
       {#if trend}
