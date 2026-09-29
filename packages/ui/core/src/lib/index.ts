@@ -477,3 +477,26 @@ export type {
   TimeInForce,
   Trade,
 } from "./trading/index.js";
+export {
+  OrderBook,
+  RecentTrades,
+  TickerBar,
+  buildBook,
+  computeSpread,
+  createFrameCoalescer,
+  defaultGroupingOptions,
+  formatCountdown,
+  groupLevels,
+} from "./trading/index.js";
+export type {
+  BookRow,
+  BookSide,
+  BookSpread,
+  BookView,
+  FrameCoalescer,
+  FrameScheduler,
+  OrderBookLabels,
+  OrderBookLayout,
+  RecentTradesLabels,
+  TickerBarLabels,
+} from "./trading/index.js";

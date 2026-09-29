@@ -32,11 +32,11 @@
 
 ## 5. Market data (PR 5)
 
-- [ ] 5.1 `OrderBook` (grouping, depth bars, spread, layouts, `onpriceclick`)
-- [ ] 5.2 `RecentTrades`
-- [ ] 5.3 `TickerBar` with funding countdown
-- [ ] 5.4 rAF coalescing, reduced-motion flashes
-- [ ] 5.5 Tests + stories in axe failing mode + README + changeset
+- [x] 5.1 `OrderBook` (grouping, depth bars, spread, layouts, `onpriceclick`)
+- [x] 5.2 `RecentTrades`
+- [x] 5.3 `TickerBar` with funding countdown
+- [x] 5.4 rAF coalescing, reduced-motion flashes
+- [x] 5.5 Tests + stories in axe failing mode + README + changeset
 
 ## 6. Integration (PR 6)
 
