@@ -1,5 +1,20 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.12.0
+
+### Minor Changes
+
+- 7a004d1: CurrencyDisplay: new `decimals` and `symbol` props for crypto and other non-ISO assets (USDC, ETH, BTC). With `decimals` set, `currency` may be any asset code and the amount is formatted from its decimal string with exactly that many fraction digits, locale grouping, sign display and masking (e.g. pt-BR `1.234,5678 ETH`). ISO currency behaviour is unchanged when `decimals` is omitted.
+- 957c92a: Drawer accessibility: focus moves into the panel on open (first focusable element, else the panel), Tab / Shift+Tab stay inside, Escape / backdrop click / close button close it, and focus returns to the opener. New optional props `closeLabel` (default "Close drawer") and `onclose` (called for user-initiated closes; `bind:open` keeps working). Drawer, Modal and Dialog overlays now stack on `--z-overlay`, above `BottomNav` (`--z-nav`), so the nav no longer covers an open drawer's footer on phones. Modal and Dialog share the new focus-trap helper, which also skips disabled controls.
+- c42ed1a: KpiCard: `value` now accepts a Svelte snippet as well as a string, so rich markup such as a masked `CurrencyDisplay` can be used. Strings render exactly as before; snippet content renders inside the same value element and stays part of the card link's accessible name.
+- 547dccf: SankeyChart: new `formatValue?: (value: number) => string` prop (same signature as `Sparkline`) formats values in node labels, tooltips and the screen-reader data table, e.g. for `Intl.NumberFormat` currency. Node labels now use the foundation body-sm size (`0.875rem`, was a hard-coded `11px`), overridable via `--cy-sankey-label-size`, and render with a space before the value (`Moradia (3200)`).
+
+### Patch Changes
+
+- e4ae970: GeoJsonLayer: datasets with polygons touching a pole (e.g. Antarctica in world-countries GeoJSON) no longer crash Cesium with "Invalid array length" and stop the globe rendering. Those polygons are drawn with geodesic edges; all others keep the rhumb-line default.
+- Updated dependencies [957c92a]
+  - @cyberdynecorp/svelte-ui-foundation@0.6.0
+
 ## 0.11.0
 
 ### Minor Changes
