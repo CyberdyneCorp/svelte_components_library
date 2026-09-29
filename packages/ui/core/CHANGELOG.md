@@ -1,5 +1,34 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.15.0
+
+### Minor Changes
+
+- 185ad21: Decimal-safe `LiquidityPositionCard` and themeable liquidity widgets.
+  - `LiquidityPositionCard`: new optional `valueMoney`, `pnlMoney`, `uncollectedFees` (per token), `uncollectedTotal` and `locale` props rendered through `CurrencyDisplay` (no float maths); they take precedence over the number props. `value`, `pnl`, `feeApyPct` and `uncollected` are now optional and their rows are hidden when absent. New `feeTier`, `tokenId`, `chain`, `walletLabel` and `rangeText` (screen-reader sentence; the range bar becomes decorative and `aria-hidden`). Exports the `LiquidityMoney` and `LiquidityTokenAmount` types.
+  - `LiquidityRangeBar`: new `decorative` prop that drops the `group`/`progressbar` roles and `aria-value*`. The progressbar now carries `ariaLabel` as its accessible name, and the bounds text uses `--color-text-secondary` for AA contrast on card surfaces.
+  - `TokenPairIcon`: new `showInitials` and `maxInitials` (default 2) props; ring colours default to the `--tpair-a-bg` / `--tpair-b-bg` tokens.
+  - Foundation: new Layer 3 tokens `--lpos-border`, `--lpos-radius`, `--lrange-track-bg`, `--lrange-track-border`, `--lrange-radius`, `--lrange-marker-color`, `--tpair-ring-border`, `--tpair-a-bg`, `--tpair-b-bg`, `--tpair-initials-color`. Defaults match the previous look in every theme; `calm` / `calm-dark` use hairline subtle borders, a pill track and tinted initials.
+
+- 5c87660: `StatusBadge`: two new statuses, `warning` and `info`, next to `active`, `inactive`, `pending` and `error`. `indicator="icon"` shows a distinct icon per status (check, minus, clock, x, triangle, info) and a default label when `label` is empty, so badges read without colour (WCAG 1.4.1). New `tone` prop (`success` | `neutral` | `warning` | `error` | `info`) overrides the colour, and an `icon` snippet replaces the marker. `STATUS_BADGE_DEFAULTS` and the `StatusBadgeStatus` / `StatusBadgeTone` / `StatusBadgeIndicator` / `StatusBadgeDefaults` types are exported. The default dot rendering is unchanged.
+
+  `Alert`: new `role` prop, `"alert"` (default), `"status"` (polite live region) or `"note"` (not announced).
+
+  `Tabs`: items with `href` render link tabs, a `<nav>` landmark with a list of `<a>` elements and `aria-current="page"` on the active one, for section navigation across routes. New `ariaLabel` names the landmark (or the tablist). Button tabs are unchanged. `TabItem` is exported.
+
+  `Table`: new `caption` (with `captionHidden`), `rowHeader` (column rendered as `<th scope="row">`), `rowAttributes(row, rowIndex)` for per-row `data-*` / `aria-current` / `class`, and a `cell` snippet receiving `{ row, column, rowIndex }`. Sorting is unchanged. `TableColumn`, `TableRow`, `TableCellContext` and `TableRowAttributes` are exported.
+
+  `Icon`: new `clock` and `alert-triangle` built-ins.
+
+- fac6ba5: New `TokenBalanceRow`: a compact, hover-free token row for wallet lists. It shows the symbol, an optional name, the amount formatted exactly from a decimal string with the token's `decimals` (via `CurrencyDisplay` asset mode, no float), the fiat `value` (`{ amount, currency }`) or an `unpricedLabel` when there is no price, and an optional `chain` label. `as="li"` renders it as a list item inside a `<ul>`/`<ol>`; the default `div` fits table cells and other containers.
+
+  `NetworkBadge`: `chainId` is now optional (the badge shows the name only when it is omitted), and `showStatus={false}` hides the connection dot and the disconnected dimming. Defaults are unchanged.
+
+### Patch Changes
+
+- Updated dependencies [185ad21]
+  - @cyberdynecorp/svelte-ui-foundation@0.8.0
+
 ## 0.14.0
 
 ### Minor Changes
