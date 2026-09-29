@@ -240,6 +240,50 @@ Pixel desktop-OS aesthetic for DAO / DeFi surfaces.
 - **Pixel primitives:** `PixelButton` · `PixelInput` · `PixelCheckbox` · `PixelRadio` · `PixelToggle` · `PixelTabs` · `PixelScrollArea` · `PixelTooltip` · `PixelAlert` · `PixelProgressBar` · `PixelNotification` · `PixelFileIcon` · `RetroContextMenu`
 - **DAO/DeFi widgets:** `ConnectWalletModal` · `StatCard` · `ProposalRow` · `StatusDotList` · `ShoppingCartPanel` · `LiquidityRangeBar` · `LiquidityPositionCard` · `PoolRangeHistogram` · `TokenPairIcon` · `PriceChart` · `DepthChart` · `TVLSparkline`
 
+## Trading
+
+### Trading — indicators
+
+Pure, framework-free TypeScript (`number` maths, no Svelte). Batch functions return series aligned index-for-index with the input, `null` during warm-up; multi-output indicators return an object of aligned arrays.
+
+| Function | Input | Output | First value |
+|---|---|---|---|
+| `sma(values, period)` · `ema(values, period)` · `wma(values, period)` | `number[]` | series | `period − 1` |
+| `rsi(values, period = 14)` | `number[]` | series (0–100) | `period` |
+| `bollinger(values, { period = 20, stdDev = 2 })` | `number[]` | `{ middle, upper, lower }` | `period − 1` |
+| `atr(candles, period = 14)` | `Candle[]` | series | `period − 1` |
+| `adx(candles, period = 14)` | `Candle[]` | `{ adx, plusDI, minusDI }` | ±DI `period`, ADX `2·period − 1` |
+| `macd(values, { fastPeriod = 12, slowPeriod = 26, signalPeriod = 9 })` | `number[]` | `{ macd, signal, histogram }` | 25 / 33 with defaults |
+| `stochastic(candles, { kPeriod = 14, smoothK = 1, dPeriod = 3 })` | `Candle[]` | `{ k, d }` | %K `kPeriod + smoothK − 2` |
+| `vwap(candles, { session = "day" })` | `Candle[]` | series | first bar with volume |
+
+```ts
+import { ema, rsi, macd, createEMA } from "@cyberdynecorp/svelte-ui-core";
+
+const closes = candles.map((c) => c.close);
+const ema21 = ema(closes, 21);
+const { macd: line, signal, histogram } = macd(closes);
+
+// Live feed: O(1) per tick.
+const live = createEMA(21);
+for (const c of closes) live.next(c); // append closed bars
+live.update(64_123.5); // revise the forming bar
+live.next(64_130); // a new bar opens
+```
+
+Every indicator has an incremental calculator (`createSMA`, `createEMA`, `createWMA`, `createRSI`, `createBollinger`, `createATR`, `createADX`, `createMACD`, `createStochastic`, `createVWAP`) with `next(input)` to append a bar and `update(input)` to revise the last one, each O(1) amortised. Batch functions run the same calculators, so batch and live values are identical.
+
+Conventions:
+- **Wilder smoothing** for RSI, ATR and ADX; **EMA** is seeded with the SMA of its first `period` values; MACD's EMAs each start at the first bar.
+- **ATR:** the first bar's true range is high − low and the first ATR is the mean of the first `period` true ranges (StockCharts / Wilder; TA-Lib starts one bar later). True range includes gaps from the previous close.
+- **Bollinger Bands** use the population standard deviation (Welford-style running M2, rebuilt exactly every `period` bars so long series don't drift).
+- **Stochastic:** `smoothK: 1` is the fast stochastic (default), `smoothK: 3` the slow one; %D is an SMA of %K.
+- **VWAP** uses the typical price (H + L + C) / 3 and resets on `session`: `"day"` (00:00 UTC), `"none"` (anchored), or `(time) => key` (resets when the key changes).
+- **Degenerate windows:** RSI is 100 with no losses, 0 with no gains and 50 on a flat window; a flat high–low range gives stochastic 50; zero true range gives ±DI and DX of 0.
+- **Invalid input throws `RangeError`:** periods must be integers ≥ 1, `stdDev` ≥ 0, `fastPeriod < slowPeriod`, prices finite. Missing or non-finite `volume` counts as 0 in VWAP (`null` until the session has volume); negative volume throws.
+
+Tests check RSI, ATR and ADX (+DI/−DI) against the StockCharts ChartSchool worked-example spreadsheets within 1e-6, every indicator against independent naive implementations, and batch ≡ incremental on seeded random walks with `update` revisions.
+
 ## Design System
 
 ### Color Palette
