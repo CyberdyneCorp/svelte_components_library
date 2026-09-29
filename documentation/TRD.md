@@ -198,7 +198,7 @@ Layer 3: Component         Scoped to specific components
 |------|---------|-------------|
 | `colors.css` | 3-layer color system | ~80 tokens |
 | `typography.css` | Font families, type scale classes | ~15 tokens |
-| `spacing.css` | Spacing scale (4px grid) | 14 tokens |
+| `spacing.css` | Spacing scale (4px grid) and stacking layers | 14 space + 2 z-index tokens |
 | `radius.css` | Border radius values | 6 tokens |
 | `animations.css` | Transitions, keyframes | 4 transition tokens + 7 keyframes |
 | `base.css` | Reset, selection, scrollbar, focus styles | — |
@@ -426,6 +426,13 @@ Based on a 4px base grid:
 | `--space-24` | 6rem | 96px |
 | `--space-32` | 8rem | 128px |
 
+**Stacking layers** (theme-invariant, `spacing.css`):
+
+| Token | Value | Used by |
+|-------|-------|---------|
+| `--z-nav` | 1000 | Fixed navigation (`BottomNav`) |
+| `--z-overlay` | 1100 | Modal overlays (`Drawer`, `Modal`, `Dialog`), above `--z-nav` |
+
 ### 6.4 Responsive Breakpoints & Grid
 
 | Breakpoint | Width | Grid Columns | Gutter | Margin |
@@ -569,7 +576,7 @@ Based on a 4px base grid:
 | `AppLayout` | sidebarWidth, hasSidebar, sidebar, header, children | CSS Grid app layout |
 | `PageHeader` | title, description, children | Page title with action area |
 | `ContentSlot` | name, padding, children | Named content region wrapper |
-| `Drawer` | open (bindable), side, width, title, children, footer | Slide-in panel with backdrop |
+| `Drawer` | open (bindable), side, width, title, closeLabel, onclose, children, footer | Slide-in modal panel with backdrop; focus moves in on open, Tab is trapped, Escape / backdrop / close button close it and call `onclose`, focus returns to the opener |
 | `SplitView` | direction, sizes (bindable), minSize, maxSize | Resizable split panels (horizontal/vertical) |
 | `GridLayout` | columns, gap, responsive, children | Responsive CSS grid layout container |
 | `PageShell` | sidebar, header, footer, children | Full page shell combining header, sidebar, and content area |
@@ -999,7 +1006,7 @@ A shared test data module at `packages/ui/core/src/lib/_testdata/index.ts` provi
 | ARIA attributes | `role`, `aria-label`, `aria-expanded`, `aria-current`, `aria-invalid`, `aria-describedby` |
 | Focus management | `:focus-visible` with cyan glow ring (2px solid, 2px offset) |
 | Keyboard navigation | All interactive elements reachable via Tab; arrow keys for menus, tabs, palettes |
-| Focus trapping | Modal, Dialog, CommandPalette trap focus when open |
+| Focus trapping | Modal, Dialog, Drawer, CommandPalette trap focus when open (shared `overlay/focusTrap.ts`); Drawer also restores focus to its opener on close |
 | Escape key | All overlays close on Escape |
 | Color contrast | Text on dark backgrounds meets 4.5:1 minimum |
 | Motion | `prefers-reduced-motion` disables all animations |

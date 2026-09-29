@@ -18,6 +18,8 @@ import { describe, it, expect } from "vitest";
  * - backdrop-filter: var(--surface-blur) is limited to floating overlay
  *   panels. On a container it would become the containing block of every
  *   position: fixed descendant (Dialog, Modal, menus, toasts).
+ * - modal overlays stack on --z-overlay and fixed navigation on --z-nav, so an
+ *   open Drawer / Modal / Dialog is never covered by BottomNav.
  */
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -62,6 +64,14 @@ const BLUR_ALLOWED = [
   "overlay/Popover/Popover.svelte",
 ];
 
+/** Root selector of each component and the stacking token it must use. */
+const LAYERS: [file: string, selector: string, token: string][] = [
+  ["layout/Drawer/Drawer.svelte", ".cy-drawer-overlay", "--z-overlay"],
+  ["overlay/Modal/Modal.svelte", ".cy-modal-overlay", "--z-overlay"],
+  ["feedback/Dialog/Dialog.svelte", ".cy-dialog-overlay", "--z-overlay"],
+  ["navigation/BottomNav/BottomNav.svelte", ".cy-bottomnav", "--z-nav"],
+];
+
 describe("design-style token contract", () => {
   it("finds component style rules", () => {
     expect(rules.some((r) => r.file === "primitives/Button/Button.svelte")).toBe(true);
@@ -100,5 +110,10 @@ describe("design-style token contract", () => {
     );
     const files = [...new Set(blurred.map((r) => r.file))].sort();
     expect(files.filter((file) => !BLUR_ALLOWED.includes(file))).toEqual([]);
+  });
+
+  it.each(LAYERS)("stacks %s on its layer token", (file, selector, token) => {
+    const rule = rules.find((r) => r.file === file && r.selector === selector);
+    expect(rule?.body).toMatch(new RegExp(`z-index\\s*:\\s*var\\(${token}\\)`));
   });
 });
