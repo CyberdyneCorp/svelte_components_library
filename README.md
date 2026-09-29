@@ -242,6 +242,8 @@ Pixel desktop-OS aesthetic for DAO / DeFi surfaces.
 
 ## Trading
 
+UI for perpetual-futures terminals. Components take data through props and report intent through callbacks; there is no exchange connectivity. Prices and sizes of books, trades and tickers are decimal strings (`"64123.5"`) formatted with the `MarketSpec` precision.
+
 ### Trading — indicators
 
 Pure, framework-free TypeScript (`number` maths, no Svelte). Batch functions return series aligned index-for-index with the input, `null` during warm-up; multi-output indicators return an object of aligned arrays.
@@ -283,6 +285,20 @@ Conventions:
 - **Invalid input throws `RangeError`:** periods must be integers ≥ 1, `stdDev` ≥ 0, `fastPeriod < slowPeriod`, prices finite. Missing or non-finite `volume` counts as 0 in VWAP (`null` until the session has volume); negative volume throws.
 
 Tests check RSI, ATR and ADX (+DI/−DI) against the StockCharts ChartSchool worked-example spreadsheets within 1e-6, every indicator against independent naive implementations, and batch ≡ incremental on seeded random walks with `update` revisions.
+
+### Trading — market data
+
+- **`OrderBook`** — `bids` / `asks` (`BookLevel[]`, best first; size `"0"` levels are ignored), `market`, `grouping` (bindable, a multiple of `tickSize`; a select offers `groupingOptions`, default tick × 1/10/100/1000), `levels` per side (12), `layout` `both` | `bids` | `asks`, `onpriceclick(price)`, `ongroupingchange`, `labels`, `locale`. Levels are aggregated with decimal-string maths: **bids group down, asks group up** (bids 63999.5 + 63999.0 at grouping `"1"` → one 63999 level), so a grouped level never looks better than its orders. Each row shows price, size and cumulative total with a depth bar proportional to the cumulative size (on one scale for both sides, `--color-trade-{long,short}-bg`). The spread is shown absolute and as a percentage of the mid price; a crossed or locked book is flagged. With `onpriceclick` each level is a button (Enter/Space) named e.g. "Bid 64,000.0, Size 1.000, Total 1.000".
+- **`RecentTrades`** — `trades: Trade[]` shown newest first; price coloured by side with a ▲/▼ glyph labelled "Buy"/"Sell", size and time (`Intl`, `timeZone` prop, default the user's zone). The list is windowed (`height`, `rowHeight`, `overscan`) inside a focusable region, so thousands of trades stay cheap. Newly arrived trades flash briefly, never under `prefers-reduced-motion`.
+- **`TickerBar`** — `ticker: Ticker` and `market`: last price (direction colour + ▲/▼ glyph), mark, index, 24h change (absolute and `changePct24h`, which is in percent), 24h high/low, 24h volume and turnover, open interest, and funding rate (`fundingRate` is a fraction: `"0.0001"` → `+0.0100%`) with an `HH:MM:SS` countdown to `nextFundingTime`, ticking every second. Absent fields are omitted.
+- **High-frequency updates** — all three coalesce prop changes to at most one render per animation frame (`createFrameCoalescer(apply, scheduler?)` is exported for app code). Helpers `buildBook`, `groupLevels`, `computeSpread`, `defaultGroupingOptions` and `formatCountdown` are exported too.
+- Every string goes through a typed `labels` prop (`OrderBookLabels`, `RecentTradesLabels`, `TickerBarLabels`). Stories `Trading/OrderBook`, `Trading/RecentTrades` and `Trading/TickerBar` (each with a simulated live feed) run axe in failing mode.
+
+```svelte
+<TickerBar {ticker} market={spec} />
+<OrderBook {bids} {asks} market={spec} bind:grouping onpriceclick={(price) => (limitPrice = price)} />
+<RecentTrades {trades} market={spec} timeZone="UTC" />
+```
 
 ## Design System
 
