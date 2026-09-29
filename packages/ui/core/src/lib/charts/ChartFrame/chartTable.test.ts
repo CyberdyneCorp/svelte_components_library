@@ -1,5 +1,25 @@
 import { describe, it, expect } from "vitest";
-import { categoryTable, columnHeaders, seriesTable } from "./chartTable.js";
+import { categoryTable, columnHeaders, matrixTable, seriesTable } from "./chartTable.js";
+
+describe("matrixTable", () => {
+  it("uses the y label as row header and x labels as columns", () => {
+    expect(matrixTable([[1, 2], [3, 4]], ["A", "B"], ["R1", "R2"], "Row")).toEqual({
+      columns: ["Row", "A", "B"],
+      rows: [
+        ["R1", 1, 2],
+        ["R2", 3, 4],
+      ],
+    });
+  });
+
+  it("falls back to numbered headers when labels are missing", () => {
+    expect(matrixTable([[1, 2]])).toEqual({ columns: ["Row", "Column 1", "Column 2"], rows: [["Row 1", 1, 2]] });
+  });
+
+  it("has no data columns for an empty matrix", () => {
+    expect(matrixTable([])).toEqual({ columns: ["Row"], rows: [] });
+  });
+});
 
 describe("seriesTable", () => {
   it("merges series on x, sorts ascending and leaves gaps empty", () => {

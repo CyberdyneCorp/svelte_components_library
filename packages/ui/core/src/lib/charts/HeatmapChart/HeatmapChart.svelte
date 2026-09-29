@@ -1,6 +1,10 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import ChartFrame from "../ChartFrame/ChartFrame.svelte";
+  import { matrixTable, type ChartLabels } from "../ChartFrame/chartTable.js";
+  import { cellRgb, contrastText, rgbCss, type HeatmapColorScale } from "./heatmapColor.js";
+
   let {
     data = [],
     xLabels = [],
@@ -10,15 +14,25 @@
     colorScale = "green",
     showValues = true,
     title = "",
+    description,
+    hideTitle = false,
+    showDataToggle = true,
+    labels = {},
   }: {
     data?: number[][];
     xLabels?: string[];
     yLabels?: string[];
     width?: string;
     height?: string;
-    colorScale?: "green" | "cyan" | "diverging";
+    colorScale?: HeatmapColorScale;
     showValues?: boolean;
+    /** Chart title, shown above the grid; becomes its accessible name. */
     title?: string;
+    description?: string;
+    hideTitle?: boolean;
+    showDataToggle?: boolean;
+    /** Localized strings; each key falls back to English. `columns.row` heads the row-label column. */
+    labels?: ChartLabels<"row">;
   } = $props();
 
   let hoveredCell: { row: number; col: number } | null = $state(null);
@@ -30,67 +44,32 @@
   let flatValues = $derived(data.flat());
   let minVal = $derived(flatValues.length ? Math.min(...flatValues) : 0);
   let maxVal = $derived(flatValues.length ? Math.max(...flatValues) : 1);
-  let valRange = $derived(maxVal - minVal || 1);
 
-  function normalize(val: number): number {
-    return (val - minVal) / valRange;
-  }
+  let tableData = $derived(
+    rows > 0
+      ? matrixTable(data.map((row) => row.map(formatVal)), xLabels, yLabels, labels.columns?.row)
+      : undefined,
+  );
 
-  function cellColor(val: number): string {
-    if (colorScale === "diverging") {
-      // -1 to 1 range assumed, map through red -> black -> green
-      const absMax = Math.max(Math.abs(minVal), Math.abs(maxVal)) || 1;
-      const norm = val / absMax; // -1 to 1
-      if (norm >= 0) {
-        const t = norm;
-        const g = Math.round(t * 255);
-        return `rgb(0, ${g}, ${Math.round(t * 65)})`;
-      } else {
-        const t = -norm;
-        const r = Math.round(t * 255);
-        return `rgb(${r}, ${Math.round(t * 30)}, ${Math.round(t * 30)})`;
-      }
-    }
-
-    const t = normalize(val);
-    if (colorScale === "cyan") {
-      const r = Math.round(t * 0);
-      const g = Math.round(t * 212);
-      const b = Math.round(t * 255);
-      return `rgb(${r}, ${g}, ${b})`;
-    }
-
-    // green
-    const r = Math.round(t * 0);
-    const g = Math.round(t * 255);
-    const b = Math.round(t * 65);
-    return `rgb(${r}, ${g}, ${b})`;
-  }
-
-  function textColor(val: number): string {
-    const t = colorScale === "diverging"
-      ? Math.abs(val) / (Math.max(Math.abs(minVal), Math.abs(maxVal)) || 1)
-      : normalize(val);
-    return t > 0.5 ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.7)";
+  function cellStyle(val: number): { background: string; color: string } {
+    const rgb = cellRgb(val, colorScale, minVal, maxVal);
+    return { background: rgbCss(rgb), color: contrastText(rgb) };
   }
 
   function formatVal(val: number): string {
     return Number.isInteger(val) ? val.toString() : val.toFixed(2);
   }
 
-  function onCellEnter(row: number, col: number, e: MouseEvent) {
-    hoveredCell = { row, col };
+  function trackPointer(e: MouseEvent) {
     const rect = (e.currentTarget as HTMLElement).closest(".cy-heatmap")?.getBoundingClientRect();
     if (rect) {
       tooltipPos = { x: e.clientX - rect.left + 12, y: e.clientY - rect.top - 8 };
     }
   }
 
-  function onCellMove(e: MouseEvent) {
-    const rect = (e.currentTarget as HTMLElement).closest(".cy-heatmap")?.getBoundingClientRect();
-    if (rect) {
-      tooltipPos = { x: e.clientX - rect.left + 12, y: e.clientY - rect.top - 8 };
-    }
+  function onCellEnter(row: number, col: number, e: MouseEvent) {
+    hoveredCell = { row, col };
+    trackPointer(e);
   }
 
   function onCellLeave() {
@@ -101,12 +80,21 @@
   let cellLargeEnough = $derived(rows <= 12 && cols <= 12);
 </script>
 
+<ChartFrame
+  title={title || undefined}
+  {description}
+  {hideTitle}
+  {showDataToggle}
+  fallbackLabel={labels.chart ?? "Heatmap"}
+  tableCaption={labels.tableCaption}
+  showDataLabel={labels.showData}
+  hideDataLabel={labels.hideData}
+  data={tableData}
+>
+{#snippet children(a11y)}
 <div class="cy-heatmap" style="width: {width}; height: {height};">
-  {#if title}
-    <div class="cy-heatmap__title">{title}</div>
-  {/if}
-
-  <div class="cy-heatmap__container">
+  <!-- The grid is one image; the ChartFrame data table is its text alternative. -->
+  <div class="cy-heatmap__container" role="img" {...a11y}>
     <!-- Y labels -->
     {#if yLabels.length > 0}
       <div class="cy-heatmap__y-labels">
@@ -124,18 +112,18 @@
       >
         {#each data as row, ri}
           {#each row as val, ci}
+            {@const style = cellStyle(val)}
             <div
               class="cy-heatmap__cell"
               class:cy-heatmap__cell--hovered={hoveredCell?.row === ri && hoveredCell?.col === ci}
-              style="background: {cellColor(val)};"
+              style="background: {style.background};"
               onmouseenter={(e) => onCellEnter(ri, ci, e)}
-              onmousemove={onCellMove}
+              onmousemove={trackPointer}
               onmouseleave={onCellLeave}
-              role="gridcell"
-              tabindex="0"
+              role="presentation"
             >
               {#if showValues && cellLargeEnough}
-                <span class="cy-heatmap__cell-val" style="color: {textColor(val)}">{formatVal(val)}</span>
+                <span class="cy-heatmap__cell-val" style="color: {style.color}">{formatVal(val)}</span>
               {/if}
             </div>
           {/each}
@@ -155,7 +143,7 @@
 
   <!-- Tooltip -->
   {#if hoveredCell}
-    <div class="cy-heatmap__tooltip" style="left: {tooltipPos.x}px; top: {tooltipPos.y}px;">
+    <div class="cy-heatmap__tooltip" style="left: {tooltipPos.x}px; top: {tooltipPos.y}px;" aria-hidden="true">
       <span class="cy-heatmap__tooltip-label">
         {#if yLabels[hoveredCell.row] && xLabels[hoveredCell.col]}
           {yLabels[hoveredCell.row]} / {xLabels[hoveredCell.col]}
@@ -167,6 +155,8 @@
     </div>
   {/if}
 </div>
+{/snippet}
+</ChartFrame>
 
 <style>
   .cy-heatmap {
@@ -176,14 +166,6 @@
     flex-direction: column;
   }
 
-  .cy-heatmap__title {
-    font-family: var(--font-display);
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    text-align: center;
-    margin-bottom: var(--space-3);
-  }
 
   .cy-heatmap__container {
     display: flex;

@@ -1,4 +1,4 @@
-import { render, fireEvent } from "@testing-library/svelte";
+import { render, screen, fireEvent } from "@testing-library/svelte";
 import { describe, it, expect, vi } from "vitest";
 import GanttChart from "./GanttChart.svelte";
 
@@ -319,5 +319,57 @@ describe("GanttChart", () => {
     // Week tick labels should contain month abbreviations
     const firstLabel = headerTexts[0].textContent || "";
     expect(firstLabel).toMatch(/\w{3}\s+\d+/);
+  });
+});
+
+// Regression: bars were always role="button" + tabindex, unnamed and not
+// keyboard-operable, inside an SVG role="img" (axe aria-command-name,
+// nested-interactive).
+describe("GanttChart accessibility", () => {
+  const tasks = [{ id: "1", label: "Design", start: "2024-01-05", end: "2024-01-15", progress: 40 }];
+  const range = { startDate: "2024-01-01", endDate: "2024-02-01" };
+
+  it("is a single image with no focusable bars without onTaskClick", () => {
+    render(GanttChart, { props: { tasks, ...range } });
+    expect(screen.getByRole("img", { name: "Gantt chart" })).toBeInTheDocument();
+    expect(document.querySelector(".cy-gantt__bar[tabindex]")).toBeNull();
+    expect(document.querySelector('.cy-gantt__bar[role="button"]')).toBeNull();
+  });
+
+  // Regression: with no focusable bars the overflowing timeline could not be
+  // scrolled by keyboard (axe scrollable-region-focusable).
+  it("makes the timeline a focusable region only when bars are not focusable", () => {
+    const { unmount } = render(GanttChart, { props: { tasks, ...range } });
+    expect(screen.getByRole("region", { name: "Gantt timeline" })).toHaveAttribute("tabindex", "0");
+    unmount();
+    render(GanttChart, { props: { tasks, ...range, onTaskClick: vi.fn() } });
+    expect(screen.queryByRole("region", { name: "Gantt timeline" })).toBeNull();
+    expect(document.querySelector(".cy-gantt__timeline")).not.toHaveAttribute("tabindex");
+  });
+
+  it("exposes named bar buttons inside a group with onTaskClick", () => {
+    render(GanttChart, { props: { tasks, ...range, onTaskClick: vi.fn() } });
+    expect(screen.getByRole("group", { name: "Gantt chart" })).toBeInTheDocument();
+    const bar = screen.getByRole("button", { name: /^Design, .+ to .+, 40% complete$/ });
+    expect(bar).toHaveAttribute("tabindex", "0");
+  });
+
+  it("omits progress from the name when showProgress is false", () => {
+    render(GanttChart, { props: { tasks, ...range, showProgress: false, onTaskClick: vi.fn() } });
+    expect(screen.getByRole("button", { name: /^Design/ }).getAttribute("aria-label")).not.toMatch(/complete/);
+  });
+
+  it.each(["Enter", " "])("activates a bar with %j", async (key) => {
+    const handler = vi.fn();
+    render(GanttChart, { props: { tasks, ...range, onTaskClick: handler } });
+    await fireEvent.keyDown(screen.getByRole("button", { name: /^Design/ }), { key });
+    expect(handler).toHaveBeenCalledWith(tasks[0]);
+  });
+
+  it("ignores other keys", async () => {
+    const handler = vi.fn();
+    render(GanttChart, { props: { tasks, ...range, onTaskClick: handler } });
+    await fireEvent.keyDown(screen.getByRole("button", { name: /^Design/ }), { key: "a" });
+    expect(handler).not.toHaveBeenCalled();
   });
 });

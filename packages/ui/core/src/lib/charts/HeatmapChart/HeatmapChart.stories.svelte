@@ -6,6 +6,10 @@
     title: "Charts/HeatmapChart",
     component: HeatmapChart,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const correlationLabels = ["Feature A", "Feature B", "Feature C", "Feature D", "Feature E"];

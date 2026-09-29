@@ -265,6 +265,21 @@
     return new Date(s).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   }
 
+  // Bars are buttons only when onTaskClick gives them an action; otherwise the
+  // SVG stays a single image (axe: nested-interactive, aria-command-name).
+  let interactive = $derived(!!onTaskClick);
+
+  function taskLabel(task: Task): string {
+    const progress = showProgress && task.progress != null ? `, ${task.progress}% complete` : "";
+    return `${task.label}, ${formatDate(task.start)} to ${formatDate(task.end)}${progress}`;
+  }
+
+  function onBarKeydown(e: KeyboardEvent, task: Task) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    e.preventDefault();
+    onTaskClick?.(task);
+  }
+
   // --- Drag to move ---
   let dragging: { task: Task; startMouseX: number; origTaskX: number; duration: number } | null = $state(null);
 
@@ -343,12 +358,20 @@
     {/each}
   </div>
 
-  <div class="cy-gantt__timeline">
+  <!-- Without focusable bars, the timeline itself takes focus so a wide chart
+       can be scrolled by keyboard (axe: scrollable-region-focusable). -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <div
+    class="cy-gantt__timeline"
+    role={interactive ? undefined : "region"}
+    aria-label={interactive ? undefined : "Gantt timeline"}
+    tabindex={interactive ? undefined : 0}
+  >
     <svg
       width={timelineWidth}
       height={svgHeight}
       class="cy-gantt__svg"
-      role="img"
+      role={interactive ? "group" : "img"}
       aria-label="Gantt chart"
     >
       <!-- Grid lines -->
@@ -432,6 +455,7 @@
             fill={taskColor(t)}
             opacity="0.35"
             class="cy-gantt__bar"
+            class:cy-gantt__bar--interactive={interactive}
             class:cy-gantt__bar--draggable={!!onTaskMove}
             data-task-id={t.id}
             onmouseenter={(e) => onBarMouseMove(e, t)}
@@ -439,8 +463,10 @@
             onmouseleave={onBarMouseLeave}
             onmousedown={(e) => onBarDragStart(e, t)}
             ondblclick={() => onTaskClick?.(t)}
-            role="button"
-            tabindex="0"
+            onkeydown={(e) => onBarKeydown(e, t)}
+            role={interactive ? "button" : "presentation"}
+            tabindex={interactive ? 0 : undefined}
+            aria-label={interactive ? taskLabel(t) : undefined}
           />
           <!-- Progress fill -->
           {#if showProgress && (t.progress ?? 0) > 0}
@@ -576,6 +602,11 @@
     overflow-y: hidden;
   }
 
+  .cy-gantt__timeline:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: -2px;
+  }
+
   .cy-gantt__svg {
     display: block;
   }
@@ -608,8 +639,16 @@
   }
 
   .cy-gantt__bar {
-    cursor: pointer;
     transition: opacity 150ms ease;
+  }
+
+  .cy-gantt__bar--interactive {
+    cursor: pointer;
+  }
+
+  .cy-gantt__bar--interactive:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 1px;
   }
 
   .cy-gantt__bar--draggable {

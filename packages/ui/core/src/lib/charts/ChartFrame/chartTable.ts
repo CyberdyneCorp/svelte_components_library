@@ -54,6 +54,24 @@ export function seriesTable(series: XYSeries[], xHeader = "x"): ChartTableData {
   };
 }
 
+/**
+ * One row per matrix row: its y label, then one cell per column. Missing
+ * labels fall back to 1-based "Row n" / "Column n".
+ */
+export function matrixTable(
+  data: (string | number)[][],
+  xLabels: string[] = [],
+  yLabels: string[] = [],
+  cornerHeader = "Row",
+): ChartTableData {
+  const width = Math.max(0, ...data.map((row) => row.length));
+  const columns = Array.from({ length: width }, (_, i) => xLabels[i] ?? `Column ${i + 1}`);
+  return {
+    columns: [cornerHeader, ...columns],
+    rows: data.map((row, i) => [yLabels[i] ?? `Row ${i + 1}`, ...row]),
+  };
+}
+
 type Category = { label: string; value: number };
 
 /** One row per category: label and value. */

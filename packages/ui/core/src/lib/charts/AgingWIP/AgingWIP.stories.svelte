@@ -1,11 +1,16 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
+  import { fn } from "storybook/test";
   import AgingWIP from "./AgingWIP.svelte";
 
   const { Story } = defineMeta({
     title: "Charts/AgingWIP",
     component: AgingWIP,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const defaultItems = [
@@ -34,3 +39,6 @@
 <Story name="Default" args={{ items: defaultItems }} />
 
 <Story name="HighAging" args={{ items: highAgingItems, warningThreshold: 7, criticalThreshold: 14 }} />
+
+<!-- With onitemclick the bars become named, keyboard-operable buttons. -->
+<Story name="Clickable" args={{ items: defaultItems, onitemclick: fn() }} />

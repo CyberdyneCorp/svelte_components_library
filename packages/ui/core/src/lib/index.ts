@@ -188,6 +188,7 @@ export {
   ChartFrame,
   categoryTable,
   columnHeaders,
+  matrixTable,
   seriesTable,
   type ChartA11yAttributes,
   type ChartLabels,

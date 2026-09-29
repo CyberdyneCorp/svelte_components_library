@@ -6,6 +6,10 @@
     title: "Charts/VelocityChart",
     component: VelocityChart,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const defaultSprints = [

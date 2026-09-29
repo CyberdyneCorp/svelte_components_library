@@ -1,11 +1,16 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
+  import { fn } from "storybook/test";
   import GanttChart from "./GanttChart.svelte";
 
   const { Story } = defineMeta({
     title: "Charts/GanttChart",
     component: GanttChart,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const sprintPlanTasks = [
@@ -42,3 +47,6 @@
 <Story name="Roadmap" args={{ tasks: roadmapTasks, zoom: "month", height: "380px" }} />
 
 <Story name="WithDependencies" args={{ tasks: depTasks, zoom: "day", height: "320px", showDependencies: true }} />
+
+<!-- With onTaskClick the bars become named, keyboard-operable buttons. -->
+<Story name="Clickable" args={{ tasks: sprintPlanTasks, zoom: "week", height: "420px", onTaskClick: fn() }} />
