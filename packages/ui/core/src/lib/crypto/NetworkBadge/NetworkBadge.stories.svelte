@@ -19,3 +19,11 @@
     <NetworkBadge network="Arbitrum" chainId={42161} connected={false} />
   </div>
 </Story>
+
+<Story name="LabelOnly">
+  <div style="display: flex; gap: 0.75rem; align-items: center;">
+    <NetworkBadge network="Ethereum" showStatus={false} />
+    <NetworkBadge network="Base" showStatus={false} />
+    <NetworkBadge network="Arbitrum One" showStatus={false} />
+  </div>
+</Story>

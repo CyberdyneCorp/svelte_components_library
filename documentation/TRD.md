@@ -617,9 +617,10 @@ Based on a 4px base grid:
 | Component | Props | Description |
 |-----------|-------|------------|
 | `TokenBalance` | symbol, balance, usdValue, icon, change | Crypto balance display with USD conversion |
+| `TokenBalanceRow` | symbol, name, amount, decimals, value, unpricedLabel, chain, locale, as, icon | Compact token row for wallet lists; exact decimal-string amounts via `CurrencyDisplay` |
 | `TransactionList` | transactions | Transaction history with type icons and status |
 | `AddressDisplay` | address, truncate, label, size | Truncated wallet address with copy button |
-| `NetworkBadge` | network, chainId, connected, icon | Connected chain indicator pill |
+| `NetworkBadge` | network, chainId?, connected, showStatus, icon | Chain indicator pill; name-only when `chainId` is omitted, status dot hidden with `showStatus={false}` |
 | `NFTCard` | name, image, collection, tokenId, rarity, price, currency, onclick | NFT display card with hover glow |
 | `PriceDisplay` | symbol, price, change, period | Token price with delta indicator |
 | `MetricCard` | label, value, change, changeLabel, icon, variant, size, secondary | KPI dashboard card; `size` (compact/md/lg — compact strips card chrome) + muted `secondary` sub-line |

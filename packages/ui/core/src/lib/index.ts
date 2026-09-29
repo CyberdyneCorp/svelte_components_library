@@ -148,6 +148,7 @@ export type { Attachment, ToolCall } from "./chat/types.js";
 
 // Crypto / Web3
 export { TokenBalance } from "./crypto/TokenBalance/index.js";
+export { TokenBalanceRow } from "./crypto/TokenBalanceRow/index.js";
 export { TransactionList } from "./crypto/TransactionList/index.js";
 export { AddressDisplay } from "./crypto/AddressDisplay/index.js";
 export { NetworkBadge } from "./crypto/NetworkBadge/index.js";

@@ -5,26 +5,35 @@
 
   let {
     network = "",
-    chainId = 0,
+    chainId = undefined,
     connected = true,
+    showStatus = true,
     icon,
   }: {
+    /** Network name or label ("Ethereum", "Base"). */
     network: string;
-    chainId: number;
+    /** Rendered as `#id` after the name; omit to show the name only. */
+    chainId?: number;
     connected?: boolean;
+    /** Show the connection dot; set `false` in lists where status is irrelevant. */
+    showStatus?: boolean;
     icon?: Snippet;
   } = $props();
 </script>
 
-<div class="cy-network-badge" class:cy-network-badge--disconnected={!connected}>
-  <span class="cy-network-badge__dot" class:cy-network-badge__dot--connected={connected}></span>
+<div class="cy-network-badge" class:cy-network-badge--disconnected={showStatus && !connected}>
+  {#if showStatus}
+    <span class="cy-network-badge__dot" class:cy-network-badge__dot--connected={connected}></span>
+  {/if}
   {#if icon}
     <span class="cy-network-badge__icon">
       {@render icon()}
     </span>
   {/if}
   <span class="cy-network-badge__name">{network}</span>
-  <span class="cy-network-badge__chain-id">#{chainId}</span>
+  {#if chainId !== undefined}
+    <span class="cy-network-badge__chain-id">#{chainId}</span>
+  {/if}
 </div>
 
 <style>
