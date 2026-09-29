@@ -33,4 +33,9 @@ describe("Icon", () => {
     const svg = container.querySelector("svg");
     expect(svg?.getAttribute("aria-hidden")).toBe("true");
   });
+
+  it.each(["clock", "alert-triangle"])("renders the %s built-in", (name) => {
+    const { container } = render(Icon, { props: { name } });
+    expect(container.querySelector("path")?.getAttribute("d")).toBeTruthy();
+  });
 });

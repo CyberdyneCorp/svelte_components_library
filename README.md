@@ -179,11 +179,19 @@ Use components:
 ### Feedback (13)
 `Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary` · `Carousel` · `VideoPlayer` · `GlobeLoader` (animated canvas globe loader)
 
+`Alert` takes `role`: `"alert"` (default, assertive), `"status"` (polite live region, for non-urgent updates such as "Saved") or `"note"` (static advisory text, not announced).
+
 ### Navigation (10)
 `Tabs` · `Breadcrumb` · `Sidebar` · `Header` · `MenuItem` · `BreadcrumbOverflow` · `NavBar` · `MegaMenu` · `MenuBar` · `BottomNav`
 
+`Tabs` has two modes. Items without `href` are an ARIA tab widget (`role="tablist"`, arrow keys) that switches content in place. When items carry `href` they are link tabs for section navigation across routes: a `<nav>` landmark named by `ariaLabel`, holding a list of `<a>` elements with `aria-current="page"` on the `activeId` item. Link tabs keep normal link keyboard behaviour (Tab, Enter) and do not call `onchange`; drive `activeId` from the current route.
+
 ### Data Display (20)
 `Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList` · `OrgChart` · `WeatherCard` · `CurrencyDisplay` (locale money amounts, crypto/custom assets via `decimals`, masked mode) · `KpiCard` (KPI tile with trend + delta; `value` takes a string or a snippet) · `BudgetBar` (money budget meter)
+
+`StatusBadge` has six statuses: `active`, `inactive`, `pending`, `error`, `warning` and `info`. With `indicator="icon"` each one shows its own icon (check, minus, clock, x, triangle, info) and a default label, so badges can be told apart without colour (WCAG 1.4.1). `tone` (`success` | `neutral` | `warning` | `error` | `info`) overrides the colour, and the `icon` snippet replaces the marker. The default `indicator="dot"` renders as before.
+
+`Table` accepts `caption` (with `captionHidden` for a screen-reader-only caption), `rowHeader` (column key rendered as `<th scope="row">`), `rowAttributes(row, rowIndex)` for per-row `data-*` / `aria-current` / `class`, and a `cell` snippet that receives `{ row, column, rowIndex }` for every column without its own `cell`. `rowIndex` is the displayed position after sorting.
 
 ### Layout (9)
 `Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` (focus trap, Escape / backdrop close, `closeLabel`, `onclose`) · `SplitView` · `GridLayout` · `PageShell` · `FloatingPanel` (draggable + resizable window)
