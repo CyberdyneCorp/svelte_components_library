@@ -43,4 +43,4 @@
 - [x] 6.1 `Trading/Terminal` story combining chart, ticket, book, trades, ticker and tables with a simulated feed
 - [x] 6.2 README Trading section and Getting-Started snippet
 - [x] 6.3 `openspec validate --all --strict`; tick this list
-- [ ] 6.4 Archive the change after release
+- [x] 6.4 Archive the change after release
