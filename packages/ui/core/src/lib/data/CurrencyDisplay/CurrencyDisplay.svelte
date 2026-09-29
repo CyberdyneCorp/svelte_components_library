@@ -19,10 +19,12 @@
     masked = false,
     maskedLabel = "Hidden amount",
     negativeLabel = "negative",
+    decimals = undefined,
+    symbol = undefined,
   }: {
     /** Decimal string ("-1234.50"), never a number. */
     amount: string;
-    /** ISO 4217 code, e.g. "USD". */
+    /** ISO 4217 code ("USD"), or any asset code ("ETH") when `decimals` is set. */
     currency: string;
     locale?: string;
     signDisplay?: NonNullable<FormatMoneyOptions["signDisplay"]>;
@@ -34,10 +36,27 @@
     maskedLabel?: string;
     /** Screen-reader prefix for negatives when `signDisplay="never"` drops the sign. */
     negativeLabel?: string;
+    /**
+     * Asset mode for non-ISO assets (crypto tokens): exactly this many fraction
+     * digits, with `currency` appended as a code ("1.234,5678 ETH").
+     */
+    decimals?: number;
+    /**
+     * Asset mode only: symbol placed where the locale puts currency symbols
+     * ("₿1.00"), unless `currencyDisplay` is "code" or "name".
+     */
+    symbol?: string;
   } = $props();
 
   let formatted = $derived(
-    tryFormatAmount(amount, { currency, locale, signDisplay, currencyDisplay }),
+    tryFormatAmount(amount, {
+      currency,
+      locale,
+      signDisplay,
+      currencyDisplay,
+      decimals,
+      symbol,
+    }),
   );
   let negative = $derived(formatted?.sign === -1);
   let positive = $derived(formatted?.sign === 1);
@@ -50,7 +69,7 @@
 
   $effect(() => {
     if (formatted !== null) return;
-    const key = `${String(amount)}|${currency}`;
+    const key = `${String(amount)}|${currency}|${String(decimals)}`;
     if (key === lastWarned) return;
     lastWarned = key;
     console.warn(

@@ -77,6 +77,26 @@
   {/snippet}
 </Story>
 
+<Story name="CryptoAssets">
+  {#snippet template()}
+    <div style="display: grid; gap: var(--space-2); justify-items: end;">
+      <CurrencyDisplay amount="1234.5" currency="USDC" decimals={6} locale="en-US" />
+      <CurrencyDisplay amount="1234.5678" currency="ETH" decimals={18} locale="pt-BR" />
+      <CurrencyDisplay amount="0.00000001" currency="BTC" decimals={8} locale="pt-BR" />
+      <CurrencyDisplay amount="1.5" currency="BTC" decimals={8} symbol="₿" locale="en-US" />
+      <CurrencyDisplay
+        amount="-0.25"
+        currency="ETH"
+        decimals={18}
+        locale="en-US"
+        tone="signed"
+        signDisplay="exceptZero"
+      />
+      <CurrencyDisplay amount="98765.4321" currency="USDC" decimals={6} locale="pt-BR" masked />
+    </div>
+  {/snippet}
+</Story>
+
 <Story
   name="Masked"
   args={{
