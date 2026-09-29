@@ -243,6 +243,21 @@ Pixel desktop-OS aesthetic for DAO / DeFi surfaces.
 ### Trading (8)
 `TradingChart` · `OrderBook` · `RecentTrades` · `TickerBar` · `OrderTicket` · `LeverageSlider` · `PositionsTable` · `OpenOrdersTable` — plus technical indicators and decimal-string order helpers. See [Trading](#trading).
 
+## Form controls
+
+- **`TextInput`**: `autocomplete`, `spellcheck`, `maxlength`, `name` and `inputmode` reach the native `<input>`, as does any other `aria-*` / `data-*` attribute. A consumer `aria-describedby` is appended after the component's own hint / error id (`aria-describedby="terms"` with a hint gives `"<id>-hint terms"`). `bind:inputRef` gives the element.
+- **`Select`**: `placeholder` defaults to `"Select an option..."` and renders a hidden prompt option while `value` is `""`. Pass `placeholder={null}` to render only `options` (then set `value` to one of them). The placeholder is also skipped when `options` has its own `""` option (e.g. "All"), so that option is the one shown. `id`, `ariaLabel` (accessible name for rows without a visible label) and `data-*` attributes reach the native `<select>`.
+- **`Button`**: any `aria-*` (`aria-expanded`, `aria-controls`, `aria-pressed`…) and `data-*` attribute reaches the native `<button>`. `bind:ref` gives the element, e.g. to return focus after closing a disclosure. `aria-busy` / `aria-disabled` stay driven by `loading` / `disabled`.
+- **`NumberInput`**: `decreaseLabel` / `increaseLabel` name the step buttons (default `"Decrease"` / `"Increase"`).
+- **`Checkbox` / `Radio`**: the native input is visually hidden (1×1 px, clipped) behind the custom control. In Playwright, `getByLabel(...)` and `getByRole(...)` resolve to that hidden input and `.check()` times out waiting for it to be visible. Call `.check()` on the visible label text instead, and keep the input locators for assertions:
+
+  ```ts
+  await page.getByText("Accept terms").check(); // Playwright forwards the label action to its input
+  await expect(page.getByLabel("Accept terms")).toBeChecked();
+  ```
+
+- **Label typography**: every form field label (`TextInput`, `Select`, `NumberInput`, `MoneyInput`, `PasswordInput`, `Textarea`, the pickers, `ComboBox`, `MultiSelect`, `TagInput`, `RangeSlider`, `CodeEditor`, `ColorPicker`, `ScheduleConfig`, and the `LeverageSlider` / `OrderTicket` segmented labels) takes its font, size, weight, case and tracking from `--input-label-font`, `--input-label-size`, `--input-label-weight`, `--input-label-transform` and `--input-label-letter-spacing`. The defaults keep the mono uppercase label; `calm` / `calm-dark` switch to sentence case in the body font.
+
 ## Trading
 
 UI for perpetual-futures terminals. Components take data through props and report intent through callbacks; there is no exchange connectivity. Prices and sizes of books, trades and tickers are decimal strings (`"64123.5"`) formatted with the `MarketSpec` precision.
@@ -451,6 +466,8 @@ Built on a 3-layer token architecture:
 | Space Grotesk | `--font-display` | Headings, hero text |
 | Inter | `--font-body` | Body copy, form inputs |
 | JetBrains Mono | `--font-mono` | Code, labels, data values |
+
+Form field labels use `--input-label-*` tokens (font, size, weight, transform, letter spacing); override them to restyle every label at once.
 
 ### Theming
 
