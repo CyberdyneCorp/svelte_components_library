@@ -27,7 +27,9 @@ export type IconName =
   | "maximize"
   | "download"
   | "play"
-  | "pause";
+  | "pause"
+  | "clock"
+  | "alert-triangle";
 
 export const BUILTIN_ICON_NAMES: readonly IconName[] = [
   "check",
@@ -55,4 +57,6 @@ export const BUILTIN_ICON_NAMES: readonly IconName[] = [
   "download",
   "play",
   "pause",
+  "clock",
+  "alert-triangle",
 ];

@@ -66,4 +66,30 @@ describe("LiquidityRangeBar", () => {
     const marker = container.querySelector<HTMLElement>(".cy-lrange__marker")!;
     expect(marker.style.left).toBe("0%");
   });
+  it("keeps the group and progressbar semantics by default", () => {
+    render(LiquidityRangeBar, { props: base });
+    expect(screen.getByRole("group", { name: "Liquidity range" })).toBeInTheDocument();
+    expect(screen.getByRole("group")).not.toHaveAttribute("aria-hidden");
+  });
+  it("gives the progressbar an accessible name (axe aria-progressbar-name)", () => {
+    render(LiquidityRangeBar, { props: { ...base, ariaLabel: "WETH/USDC range" } });
+    expect(screen.getByRole("progressbar", { name: "WETH/USDC range" })).toBeInTheDocument();
+  });
+  it("decorative drops the roles and aria-value* attributes", () => {
+    const { container } = render(LiquidityRangeBar, { props: { ...base, decorative: true } });
+    expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(screen.queryByRole("group")).not.toBeInTheDocument();
+    expect(container.querySelector("[role]")).toBeNull();
+    expect(container.querySelector("[aria-valuenow],[aria-valuemin],[aria-valuemax],[aria-label]")).toBeNull();
+    expect(container.querySelector(".cy-lrange")).toHaveAttribute("aria-hidden", "true");
+    // The visual output is unchanged.
+    expect(screen.getByText("In Range")).toBeInTheDocument();
+    expect(screen.getByTestId("cy-lrange-band").style.width).toBe("60%");
+  });
+  it("clips the band inside the track so rounded tracks stay clean", () => {
+    const { container } = render(LiquidityRangeBar, { props: base });
+    const band = screen.getByTestId("cy-lrange-band");
+    expect(band.parentElement).toHaveClass("cy-lrange__clip");
+    expect(container.querySelector(".cy-lrange__track > .cy-lrange__marker")).toBeInTheDocument();
+  });
 });

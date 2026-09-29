@@ -45,10 +45,39 @@
     { key: "status", label: "Status" },
   ];
 
+  const auditRows = [
+    { date: "2026-09-12", action: "Budget created", actor: "ana@example.com", amount: "R$ 1.200,00" },
+    { date: "2026-09-14", action: "Wallet added", actor: "ana@example.com", amount: "—" },
+    { date: "2026-09-20", action: "Budget edited", actor: "leo@example.com", amount: "R$ 1.500,00" },
+  ];
+
+  const auditCols = [
+    { key: "date", label: "Date", sortable: true },
+    { key: "action", label: "Action" },
+    { key: "actor", label: "By" },
+    { key: "amount", label: "Amount" },
+  ];
+
+  /** @param {Record<string, string>} row @param {number} rowIndex */
+  const auditRowAttributes = (row, rowIndex) => ({
+    "data-date": row.date,
+    "aria-current": rowIndex === 0 ? "true" : undefined,
+  });
+
   const { Story } = defineMeta({
     title: "Data Display/Table",
     component: Table,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for the table.
+      a11y: { test: "error" },
+      docs: {
+        description: {
+          component:
+            "Sortable data table. `caption` names the table (`captionHidden` keeps it for screen readers only), `rowHeader` renders one column as `<th scope=\"row\">`, `rowAttributes(row, rowIndex)` adds `data-*` / `aria-current` / `class` to each `<tr>`, and the `cell` snippet renders every column without its own `cell`, receiving `{ row, column, rowIndex }` (display order).",
+        },
+      },
+    },
     args: {
       columns: defaultCols,
       rows: cryptoRows,
@@ -87,5 +116,56 @@
       { zone: "Coastal B", status: "warn", gap: 0.8, selected: false },
       { zone: "Inland C", status: "good", gap: 0.3, selected: false },
     ]}
+  />
+</Story>
+
+<Story name="CaptionAndRowHeaders">
+  <Table
+    caption="Audit log, September 2026"
+    columns={auditCols}
+    rows={auditRows}
+    rowHeader="date"
+    rowAttributes={auditRowAttributes}
+  />
+</Story>
+
+<Story name="HiddenCaptionAndCellSnippet">
+  {#snippet auditCell({ row, column, rowIndex })}
+    {#if column.key === "amount"}
+      <span style="font-family: var(--font-mono);">{row.amount}</span>
+    {:else if column.key === "action"}
+      {rowIndex + 1}. {row.action}
+    {:else}
+      {row[column.key]}
+    {/if}
+  {/snippet}
+
+  <Table
+    caption="Audit log"
+    captionHidden
+    columns={auditCols}
+    rows={auditRows}
+    rowHeader="date"
+    cell={auditCell}
+  />
+</Story>
+
+<Story name="Calm" globals={{ theme: "calm" }}>
+  <Table
+    caption="Audit log, September 2026"
+    columns={auditCols}
+    rows={auditRows}
+    rowHeader="date"
+    striped
+  />
+</Story>
+
+<Story name="CalmDark" globals={{ theme: "calm-dark" }}>
+  <Table
+    caption="Audit log, September 2026"
+    columns={auditCols}
+    rows={auditRows}
+    rowHeader="date"
+    striped
   />
 </Story>

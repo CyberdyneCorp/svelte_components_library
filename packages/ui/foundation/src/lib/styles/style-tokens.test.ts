@@ -188,6 +188,45 @@ describe("stacking layer tokens", () => {
   });
 });
 
+describe("liquidity component tokens", () => {
+  /** Defaults reproduce the pre-token hard-coded look (2px text-primary borders, square corners). */
+  const LIQUIDITY_DEFAULTS: Record<string, string> = {
+    "--lpos-border": "2px solid var(--color-text-primary)",
+    "--lpos-radius": "0",
+    "--lrange-track-bg": "var(--color-surface-raised)",
+    "--lrange-track-border": "2px solid var(--color-text-primary)",
+    "--lrange-radius": "0",
+    "--lrange-marker-color": "var(--color-text-primary)",
+    "--tpair-ring-border": "2px solid var(--color-text-primary)",
+    "--tpair-a-bg": "var(--color-action-brand-default)",
+    "--tpair-b-bg": "var(--color-action-secondary-default)",
+    "--tpair-initials-color": "var(--color-text-inverse)",
+  };
+
+  it.each([
+    [":root", rootDecls],
+    ["light", lightDecls],
+  ])("defaults %s to today's look", (_, decls) => {
+    for (const [name, value] of Object.entries(LIQUIDITY_DEFAULTS)) {
+      expect(decls.get(name), name).toBe(value);
+    }
+  });
+
+  it.each(["calm", "calm-dark"])(
+    "softens %s: hairline subtle borders, pill track, tinted initials",
+    (theme) => {
+      const decls = declarationsFor(calmCss, `[data-theme="${theme}"]`);
+      for (const name of ["--lpos-border", "--lrange-track-border", "--tpair-ring-border"]) {
+        expect(decls.get(name), name).toBe("1px solid var(--color-border-subtle)");
+      }
+      expect(decls.get("--lrange-radius")).toBe("var(--radius-pill)");
+      expect(decls.get("--tpair-a-bg")).toBe("var(--color-action-brand-bg)");
+      expect(decls.get("--tpair-b-bg")).toBe("var(--color-action-secondary-bg)");
+      expect(decls.get("--tpair-initials-color")).toBe("var(--color-text-primary)");
+    },
+  );
+});
+
 describe("form label tokens", () => {
   /** Defaults reproduce the literals form labels used before the tokens existed. */
   const LABEL_DEFAULTS: Record<string, string> = {

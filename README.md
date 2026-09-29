@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **255 components** across 19 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **256 components** across 19 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdynecorp/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdynecorp/svelte-ui-core` | 255 UI components across 19 categories |
+| `@cyberdynecorp/svelte-ui-core` | 256 UI components across 19 categories |
 
 ## Installation
 
@@ -179,11 +179,19 @@ Use components:
 ### Feedback (13)
 `Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary` · `Carousel` · `VideoPlayer` · `GlobeLoader` (animated canvas globe loader)
 
+`Alert` takes `role`: `"alert"` (default, assertive), `"status"` (polite live region, for non-urgent updates such as "Saved") or `"note"` (static advisory text, not announced).
+
 ### Navigation (10)
 `Tabs` · `Breadcrumb` · `Sidebar` · `Header` · `MenuItem` · `BreadcrumbOverflow` · `NavBar` · `MegaMenu` · `MenuBar` · `BottomNav`
 
+`Tabs` has two modes. Items without `href` are an ARIA tab widget (`role="tablist"`, arrow keys) that switches content in place. When items carry `href` they are link tabs for section navigation across routes: a `<nav>` landmark named by `ariaLabel`, holding a list of `<a>` elements with `aria-current="page"` on the `activeId` item. Link tabs keep normal link keyboard behaviour (Tab, Enter) and do not call `onchange`; drive `activeId` from the current route.
+
 ### Data Display (20)
 `Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList` · `OrgChart` · `WeatherCard` · `CurrencyDisplay` (locale money amounts, crypto/custom assets via `decimals`, masked mode) · `KpiCard` (KPI tile with trend + delta; `value` takes a string or a snippet) · `BudgetBar` (money budget meter)
+
+`StatusBadge` has six statuses: `active`, `inactive`, `pending`, `error`, `warning` and `info`. With `indicator="icon"` each one shows its own icon (check, minus, clock, x, triangle, info) and a default label, so badges can be told apart without colour (WCAG 1.4.1). `tone` (`success` | `neutral` | `warning` | `error` | `info`) overrides the colour, and the `icon` snippet replaces the marker. The default `indicator="dot"` renders as before.
+
+`Table` accepts `caption` (with `captionHidden` for a screen-reader-only caption), `rowHeader` (column key rendered as `<th scope="row">`), `rowAttributes(row, rowIndex)` for per-row `data-*` / `aria-current` / `class`, and a `cell` snippet that receives `{ row, column, rowIndex }` for every column without its own `cell`. `rowIndex` is the displayed position after sorting.
 
 ### Layout (9)
 `Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` (focus trap, Escape / backdrop close, `closeLabel`, `onclose`) · `SplitView` · `GridLayout` · `PageShell` · `FloatingPanel` (draggable + resizable window)
@@ -197,8 +205,8 @@ Use components:
 ### Chat (8)
 `Chatbox` · `ChatPanel` · `ChatResponse` · `PromptExample` · `WelcomeText` · `BotAnswer` · `CommentThread` · `ChatSidebar` (conversation list with rename/delete)
 
-### Crypto / Web3 (13)
-`TokenBalance` · `TransactionList` · `AddressDisplay` · `NetworkBadge` · `NFTCard` · `PriceDisplay` · `MetricCard` · `GasEstimate` · `TierBadge` (6-tier NFT access system) · `SwapInterface` · `TokenSelector` · `StakingCard` · `TransactionConfirm`
+### Crypto / Web3 (14)
+`TokenBalance` · `TokenBalanceRow` (compact list row: exact token amount, fiat value or unpriced label, chain label; `as="li"` for lists) · `TransactionList` · `AddressDisplay` · `NetworkBadge` (optional `chainId`; `showStatus={false}` hides the connection dot) · `NFTCard` · `PriceDisplay` · `MetricCard` · `GasEstimate` · `TierBadge` (6-tier NFT access system) · `SwapInterface` · `TokenSelector` · `StakingCard` · `TransactionConfirm`
 
 ### ML / Data Tools (11)
 `CodeBlock` (syntax highlighting) · `Terminal` · `LogViewer` (severity filtering) · `Slider` · `StepProgress` · `Timeline` · `DataChart` (chart wrapper) · `Kbd` (keyboard shortcuts) · `NotebookCell` · `ModelCard` · `ConfusionMatrix`
@@ -238,7 +246,33 @@ Headless, controlled CesiumJS globe toolkit. `cesium` is an **optional peer depe
 Pixel desktop-OS aesthetic for DAO / DeFi surfaces.
 - **Desktop shell:** `RetroWindow` · `WindowManager` (store) · `WindowStatusBar` · `StartMenu` · `LauncherMenu` · `Taskbar` · `DesktopIcon` · `DesktopGrid` · `RetroTerminal` · `BootScreen` · `Clock` · `CRTBackground` · `CRTEffect`
 - **Pixel primitives:** `PixelButton` · `PixelInput` · `PixelCheckbox` · `PixelRadio` · `PixelToggle` · `PixelTabs` · `PixelScrollArea` · `PixelTooltip` · `PixelAlert` · `PixelProgressBar` · `PixelNotification` · `PixelFileIcon` · `RetroContextMenu`
-- **DAO/DeFi widgets:** `ConnectWalletModal` · `StatCard` · `ProposalRow` · `StatusDotList` · `ShoppingCartPanel` · `LiquidityRangeBar` · `LiquidityPositionCard` · `PoolRangeHistogram` · `TokenPairIcon` · `PriceChart` · `DepthChart` · `TVLSparkline`
+- **DAO/DeFi widgets:** `ConnectWalletModal` · `StatCard` · `ProposalRow` · `StatusDotList` · `ShoppingCartPanel` · `LiquidityRangeBar` (`decorative` mode for `aria-hidden` containers) · `LiquidityPositionCard` (decimal-safe money via `valueMoney` / `pnlMoney` / per-token `uncollectedFees`, `rangeText` for screen readers) · `PoolRangeHistogram` · `TokenPairIcon` (`showInitials`, `maxInitials`) · `PriceChart` · `DepthChart` · `TVLSparkline`
+
+`LiquidityPositionCard` keeps amounts as decimal strings end to end. The money props take
+precedence over the older number props (`value`, `pnl`, `uncollected`), and rows whose data is
+absent (P&L, fee APY, uncollected) are hidden:
+
+```svelte
+<LiquidityPositionCard
+  tokenA="WETH" tokenB="USDC" feeTier="0.05%"
+  tokenId="812345" chain="Ethereum" walletLabel="Cold wallet"
+  locale="pt-BR"
+  valueMoney={{ amount: "63002.10", currency: "BRL" }}
+  pnlMoney={{ amount: "-316.96", currency: "BRL" }}
+  uncollectedFees={[
+    { asset: "WETH", amount: "0.001234567890123456", decimals: 18 },
+    { asset: "USDC", amount: "3.214512", decimals: 6 },
+  ]}
+  uncollectedTotal={{ amount: "39.55", currency: "BRL" }}
+  range={{ min: 3100, max: 4100, lower: 3200, upper: 3900, current: 3450 }}
+  rangeText="Dentro da faixa: 3.200 a 3.900 USDC por WETH, preço atual 3.450."
+/>
+```
+
+`valueMoney`, `pnlMoney` and `uncollectedTotal` are `{ amount: string; currency: string; decimals?: number }`
+(ISO currency, or any asset code when `decimals` is set). A fee without `decimals` keeps the
+fraction digits of its `amount` string. With `rangeText`, the sentence describes the card and the
+range bar is rendered `decorative` inside an `aria-hidden` wrapper.
 
 ### Trading (8)
 `TradingChart` · `OrderBook` · `RecentTrades` · `TickerBar` · `OrderTicket` · `LeverageSlider` · `PositionsTable` · `OpenOrdersTable` — plus technical indicators and decimal-string order helpers. See [Trading](#trading).
@@ -459,6 +493,16 @@ Built on a 3-layer token architecture:
 - **Layer 2 — Semantic:** Purpose-based tokens (`--color-action-brand-default`)
 - **Layer 3 — Component:** Scoped to components (`--btn-brand-bg`)
 
+Liquidity widgets read Layer 3 tokens whose defaults keep the retro look (2px text-primary
+borders, square corners); `calm` / `calm-dark` switch them to hairline subtle borders, a pill
+track and tinted initials:
+
+| Token | Used by |
+|-------|---------|
+| `--lpos-border`, `--lpos-radius` | `LiquidityPositionCard` frame |
+| `--lrange-track-bg`, `--lrange-track-border`, `--lrange-radius`, `--lrange-marker-color` | `LiquidityRangeBar` track and marker |
+| `--tpair-ring-border`, `--tpair-a-bg`, `--tpair-b-bg`, `--tpair-initials-color` | `TokenPairIcon` rings and initials |
+
 ### Typography
 
 | Font | Family | Usage |
@@ -545,7 +589,7 @@ pnpm release            # Build & publish
 │       │       ├── styles/  CSS (colors, typography, spacing, radius, animations)
 │       │       ├── themes/  Optional theme presets (calm + 17 design styles)
 │       │       └── theme/   Theme preference helper + pre-paint init script
-│       └── core/            UI components (255 components)
+│       └── core/            UI components (256 components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
 │               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ScheduleConfig, ...

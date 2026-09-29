@@ -475,7 +475,7 @@ Based on a 4px base grid:
 |-----------|-------|------------|
 | `Button` | variant, size, disabled, loading, type, id, title, ariaLabel, dataAttrs, onclick | Primary action element with 5 variants (brand, secondary, outline, ghost, danger); `dataAttrs` forwards `data-*` to the inner button |
 | `Badge` | variant, size | Status indicator pill (success, warning, error, info, neutral) |
-| `Icon` | name, size, color | SVG icon system with 25 built-in icons |
+| `Icon` | name, size, color | SVG icon system with 27 built-in icons |
 | `IconButton` | icon, label, variant, size, disabled, onclick | Circular icon-only button |
 | `Avatar` | src, alt, initials, size, status | User avatar with image/initials fallback and status dot |
 | `Tooltip` | text, position | Hover tooltip with 4 positions |
@@ -517,7 +517,7 @@ Based on a 4px base grid:
 
 | Component | Props | Description |
 |-----------|-------|------------|
-| `Alert` | variant, severity, title, inline, card, borderSide, icon, dismissible, ondismiss | Alert with left/top border accent; `severity` tones (critical/warn/caution/good), `inline` (no banner chrome), `card` appearance, optional `icon` snippet |
+| `Alert` | variant, severity, title, inline, card, borderSide, icon, role, dismissible, ondismiss | Alert with left/top border accent; `severity` tones (critical/warn/caution/good), `inline` (no banner chrome), `card` appearance, optional `icon` snippet; `role` is `alert` (default, assertive), `status` (polite live region) or `note` (not announced) |
 | `Dialog` | open (bindable), title, confirmLabel, cancelLabel, variant, onconfirm, oncancel | Confirmation dialog modal |
 | `Notification` | variant, message, duration, onclose | Auto-dismissing toast notification |
 | `Toast` | children | Global toast queue manager with context API |
@@ -535,7 +535,7 @@ Based on a 4px base grid:
 
 | Component | Props | Description |
 |-----------|-------|------------|
-| `Tabs` | items, activeId (bindable), onchange | Horizontal tab bar with green underline |
+| `Tabs` | items, activeId (bindable), ariaLabel, onchange | Horizontal tab bar with green underline; items with `href` render link tabs (`<nav>` of `<a>`, `aria-current="page"` on the active one) instead of a tablist |
 | `Breadcrumb` | items | Chevron-separated navigation trail |
 | `Sidebar` | items, activeId, collapsed | Multi-level collapsible sidebar |
 | `Header` | title, children, logo | Top navigation bar |
@@ -550,10 +550,10 @@ Based on a 4px base grid:
 
 | Component | Props | Description |
 |-----------|-------|------------|
-| `Table` | columns, rows, striped | Sortable data table with sort indicators; per-column `cell` Snippet render override + `width` |
+| `Table` | columns, rows, striped, caption, captionHidden, rowHeader, rowAttributes, cell | Sortable data table with sort indicators; per-column `cell` Snippet render override + `width`; optional caption, `<th scope="row">` row headers, per-row attributes and a table-level `cell` snippet (`{ row, column, rowIndex }`) |
 | `Pagination` | currentPage (bindable), totalPages, onchange | Page navigation with smart range |
 | `ProgressBar` | value, variant, size, showLabel | Animated progress with glow effects |
-| `StatusBadge` | status, label | Status indicator with pulsing dot |
+| `StatusBadge` | status, label, tone, indicator, icon | Status indicator with pulsing dot; six statuses (active, inactive, pending, error, warning, info); `indicator="icon"` shows a distinct icon and default label per status |
 | `EmptyState` | title, description, icon, children | Empty data placeholder |
 | `StickyNote` | variant, title, children | Callout/annotation card |
 | `FileTree` | items, expanded, onselect | Recursive file/folder tree with file-type coloring and expand/collapse |
@@ -617,9 +617,10 @@ Based on a 4px base grid:
 | Component | Props | Description |
 |-----------|-------|------------|
 | `TokenBalance` | symbol, balance, usdValue, icon, change | Crypto balance display with USD conversion |
+| `TokenBalanceRow` | symbol, name, amount, decimals, value, unpricedLabel, chain, locale, as, icon | Compact token row for wallet lists; exact decimal-string amounts via `CurrencyDisplay` |
 | `TransactionList` | transactions | Transaction history with type icons and status |
 | `AddressDisplay` | address, truncate, label, size | Truncated wallet address with copy button |
-| `NetworkBadge` | network, chainId, connected, icon | Connected chain indicator pill |
+| `NetworkBadge` | network, chainId?, connected, showStatus, icon | Chain indicator pill; name-only when `chainId` is omitted, status dot hidden with `showStatus={false}` |
 | `NFTCard` | name, image, collection, tokenId, rarity, price, currency, onclick | NFT display card with hover glow |
 | `PriceDisplay` | symbol, price, change, period | Token price with delta indicator |
 | `MetricCard` | label, value, change, changeLabel, icon, variant, size, secondary | KPI dashboard card; `size` (compact/md/lg — compact strips card chrome) + muted `secondary` sub-line |

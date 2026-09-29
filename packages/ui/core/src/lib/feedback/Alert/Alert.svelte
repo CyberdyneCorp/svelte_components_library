@@ -24,6 +24,12 @@
     borderSide = "left",
     /** Optional leading icon snippet (e.g. an `<Icon name="alert-circle" />`). */
     icon,
+    /**
+     * ARIA role. `"alert"` (default) is assertive and interrupts; `"status"`
+     * is a polite live region for non-urgent updates; `"note"` is static
+     * advisory content that is not announced.
+     */
+    role = "alert",
     ondismiss,
     children,
   }: {
@@ -35,6 +41,7 @@
     card?: boolean;
     borderSide?: "left" | "top";
     icon?: Snippet;
+    role?: "alert" | "status" | "note";
     ondismiss?: () => void;
     children?: Snippet;
   } = $props();
@@ -54,7 +61,8 @@
 {#if visible}
   <div
     class="cy-alert cy-alert--{tone} cy-alert--{appearance} cy-alert--border-{borderSide}"
-    role="alert"
+    {role}
+    aria-live={role === "status" ? "polite" : undefined}
   >
     {#if icon && !inline}
       <span class="cy-alert__icon" aria-hidden="true">{@render icon()}</span>

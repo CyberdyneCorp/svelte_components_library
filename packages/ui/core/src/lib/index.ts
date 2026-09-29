@@ -69,7 +69,7 @@ export { VideoPlayer } from "./feedback/VideoPlayer/index.js";
 export { GlobeLoader } from "./feedback/GlobeLoader/index.js";
 
 // Navigation
-export { Tabs } from "./navigation/Tabs/index.js";
+export { Tabs, type TabItem } from "./navigation/Tabs/index.js";
 export { Breadcrumb } from "./navigation/Breadcrumb/index.js";
 export { Sidebar, type SidebarItem } from "./navigation/Sidebar/index.js";
 export { Header } from "./navigation/Header/index.js";
@@ -81,10 +81,23 @@ export { MenuBar } from "./navigation/MenuBar/index.js";
 export { BottomNav } from "./navigation/BottomNav/index.js";
 
 // Data Display
-export { Table } from "./data/Table/index.js";
+export {
+  Table,
+  type TableCellContext,
+  type TableColumn,
+  type TableRow,
+  type TableRowAttributes,
+} from "./data/Table/index.js";
 export { Pagination } from "./data/Pagination/index.js";
 export { ProgressBar } from "./data/ProgressBar/index.js";
-export { StatusBadge } from "./data/StatusBadge/index.js";
+export {
+  StatusBadge,
+  STATUS_BADGE_DEFAULTS,
+  type StatusBadgeDefaults,
+  type StatusBadgeIndicator,
+  type StatusBadgeStatus,
+  type StatusBadgeTone,
+} from "./data/StatusBadge/index.js";
 export { EmptyState } from "./data/EmptyState/index.js";
 export { StickyNote } from "./data/StickyNote/index.js";
 export { VirtualizedList } from "./data/VirtualizedList/index.js";
@@ -148,6 +161,7 @@ export type { Attachment, ToolCall } from "./chat/types.js";
 
 // Crypto / Web3
 export { TokenBalance } from "./crypto/TokenBalance/index.js";
+export { TokenBalanceRow } from "./crypto/TokenBalanceRow/index.js";
 export { TransactionList } from "./crypto/TransactionList/index.js";
 export { AddressDisplay } from "./crypto/AddressDisplay/index.js";
 export { NetworkBadge } from "./crypto/NetworkBadge/index.js";
@@ -415,7 +429,11 @@ export {
   type StatusDotItem,
   type StatusDotTone,
 } from "./retro/StatusDotList/index.js";
-export { LiquidityPositionCard } from "./retro/LiquidityPositionCard/index.js";
+export {
+  LiquidityPositionCard,
+  type LiquidityMoney,
+  type LiquidityTokenAmount,
+} from "./retro/LiquidityPositionCard/index.js";
 export { PriceChart, type OHLCCandle } from "./retro/PriceChart/index.js";
 export { DepthChart, type DepthLevel } from "./retro/DepthChart/index.js";
 export { TVLSparkline } from "./retro/TVLSparkline/index.js";

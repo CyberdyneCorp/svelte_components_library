@@ -242,6 +242,19 @@
   --nav-item-text-active: var(--color-action-brand-default);
   --nav-height: 56px;
 
+  /* ── Liquidity components (LiquidityPositionCard, LiquidityRangeBar, TokenPairIcon) ── */
+  --lpos-border: 2px solid var(--color-text-primary);
+  --lpos-radius: 0;
+  --lrange-track-bg: var(--color-surface-raised);
+  --lrange-track-border: 2px solid var(--color-text-primary);
+  --lrange-radius: 0;
+  --lrange-marker-color: var(--color-text-primary);
+  --tpair-ring-border: 2px solid var(--color-text-primary);
+  --tpair-a-bg: var(--color-action-brand-default);
+  --tpair-b-bg: var(--color-action-secondary-default);
+  --tpair-initials-color: var(--color-text-inverse);
+  /* ── end Liquidity components ── */
+
   /* Video — media surfaces stay black in every theme */
   --video-bg: #000;
   --video-scrim: rgba(0, 0, 0, 0.85);
@@ -421,4 +434,17 @@
   --nav-item-active: var(--color-surface-active);
   --nav-item-text: var(--color-text-secondary);
   --nav-item-text-active: var(--color-action-brand-default);
+
+  /* ── Liquidity components (LiquidityPositionCard, LiquidityRangeBar, TokenPairIcon) ── */
+  --lpos-border: 2px solid var(--color-text-primary);
+  --lpos-radius: 0;
+  --lrange-track-bg: var(--color-surface-raised);
+  --lrange-track-border: 2px solid var(--color-text-primary);
+  --lrange-radius: 0;
+  --lrange-marker-color: var(--color-text-primary);
+  --tpair-ring-border: 2px solid var(--color-text-primary);
+  --tpair-a-bg: var(--color-action-brand-default);
+  --tpair-b-bg: var(--color-action-secondary-default);
+  --tpair-initials-color: var(--color-text-inverse);
+  /* ── end Liquidity components ── */
 }
