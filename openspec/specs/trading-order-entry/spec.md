@@ -1,7 +1,8 @@
 # trading-order-entry Specification
 
 ## Purpose
-TBD - created by archiving change add-trading-suite. Update Purpose after archive.
+Order entry and account views for futures terminals (`trading/order/`): an order ticket with long/short, order types, leverage, TP/SL, validation and a cost preview; a leverage slider; and positions and open-orders tables. They only report user intent through callbacks and normalized order drafts; connecting to an exchange and computing exchange-specific values stay with the consuming app.
+
 ## Requirements
 ### Requirement: Order ticket
 

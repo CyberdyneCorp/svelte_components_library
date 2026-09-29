@@ -1,7 +1,8 @@
 # trading-indicators Specification
 
 ## Purpose
-TBD - created by archiving change add-trading-suite. Update Purpose after archive.
+Framework-free technical-indicator maths (`trading/indicators/`): moving averages, RSI, Bollinger Bands, ATR, ADX, MACD, Stochastic and VWAP, as batch functions aligned to their input and as incremental calculators for live feeds. `TradingChart` uses them, and apps can use them directly.
+
 ## Requirements
 ### Requirement: Indicator functions
 

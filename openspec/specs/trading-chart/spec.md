@@ -1,7 +1,8 @@
 # trading-chart Specification
 
 ## Purpose
-TBD - created by archiving change add-trading-suite. Update Purpose after archive.
+`TradingChart` (`trading/chart/`) is a canvas candlestick chart for trading terminals, drawn by the library's own engine with no third-party charting dependency. It shows price series, volume, indicator overlays and sub-panes, trade markers and draggable price lines, updates live, reads its colours from foundation tokens, and stays usable by keyboard and screen reader through a named summary, live announcements and a data table.
+
 ## Requirements
 ### Requirement: Canvas candlestick chart
 

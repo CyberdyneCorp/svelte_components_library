@@ -1,7 +1,8 @@
 # trading-foundation Specification
 
 ## Purpose
-TBD - created by archiving change add-trading-suite. Update Purpose after archive.
+Shared contracts for the `trading/` category: the types every trading component exchanges (candles, market specs, order drafts, positions, orders, book levels, trades, tickers, markers, price lines) and exact decimal-string helpers for rounding to a market's tick and step sizes and formatting prices and sizes. Chart and indicator data are numbers; everything order- or money-related is a decimal string.
+
 ## Requirements
 ### Requirement: Shared trading types
 

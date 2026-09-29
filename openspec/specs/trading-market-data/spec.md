@@ -1,7 +1,8 @@
 # trading-market-data Specification
 
 ## Purpose
-TBD - created by archiving change add-trading-suite. Update Purpose after archive.
+Market-data widgets for futures terminals (`trading/market/`): an order book with price grouping, depth bars and spread, a recent-trades list, and a ticker bar with mark/index prices, 24h stats and a funding countdown. They render data passed in as props, coalesce high-frequency updates to one render per frame, and never rely on colour alone for buy/sell direction.
+
 ## Requirements
 ### Requirement: Order book
 
