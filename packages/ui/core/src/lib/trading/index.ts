@@ -24,6 +24,29 @@ export type {
   TimeInForce,
   Trade,
 } from "./types.js";
+export {
+  OrderBook,
+  RecentTrades,
+  TickerBar,
+  buildBook,
+  computeSpread,
+  createFrameCoalescer,
+  defaultGroupingOptions,
+  formatCountdown,
+  groupLevels,
+} from "./market/index.js";
+export type {
+  BookRow,
+  BookSide,
+  BookSpread,
+  BookView,
+  FrameCoalescer,
+  FrameScheduler,
+  OrderBookLabels,
+  OrderBookLayout,
+  RecentTradesLabels,
+  TickerBarLabels,
+} from "./market/index.js";
 export { TradingChart } from "./chart/index.js";
 export type {
   AdxConfig,
