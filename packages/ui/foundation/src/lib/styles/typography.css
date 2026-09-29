@@ -19,6 +19,17 @@
      --font-decorative there too, since var() resolves where declared. */
   --font-decorative: var(--font-display);
   --heading-transform: none;
+
+  /* ── Form field labels (TextInput, Select, NumberInput, …) ──
+     Defaults keep the mono uppercase label. Themes that change
+     --font-mono on a subtree must redeclare --input-label-font there
+     too, since var() resolves where declared. */
+  --input-label-font: var(--font-mono);
+  --input-label-size: 0.8125rem;
+  --input-label-weight: var(--font-weight-medium);
+  --input-label-transform: uppercase;
+  --input-label-letter-spacing: 0.04em;
+  /* ── end form field labels ── */
 }
 
 .cy-type-display-1 {

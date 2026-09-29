@@ -2,6 +2,10 @@
 
 <script lang="ts">
   import { type Snippet } from "svelte";
+  import type { AriaAttributes } from "svelte/elements";
+
+  /** `data-*` attributes forwarded to the native `<button>`. */
+  type DataAttributes = { [key: `data-${string}`]: string | number | boolean | null | undefined };
 
   let {
     variant = "brand",
@@ -23,8 +27,15 @@
      * without a wrapper element.
      */
     dataAttrs,
+    /** Bindable reference to the native `<button>` (focus return, popover anchors). */
+    ref = $bindable(null),
     onclick,
     children,
+    /**
+     * Any `aria-*` (e.g. `aria-expanded`, `aria-controls`, `aria-pressed`)
+     * and `data-*` attribute, forwarded to the native `<button>`.
+     */
+    ...rest
   }: {
     variant?: "brand" | "secondary" | "outline" | "ghost" | "danger";
     size?: "sm" | "md" | "lg";
@@ -35,9 +46,11 @@
     ariaLabel?: string;
     id?: string;
     dataAttrs?: Record<string, string>;
+    ref?: HTMLButtonElement | null;
     onclick?: (e: MouseEvent) => void;
     children?: Snippet;
-  } = $props();
+  } & Omit<AriaAttributes, "aria-disabled" | "aria-busy"> &
+    DataAttributes = $props();
 
   let isDisabled = $derived(disabled || loading);
 
@@ -53,6 +66,8 @@
 </script>
 
 <button
+  {...rest}
+  bind:this={ref}
   class="cy-btn cy-btn--{variant} cy-btn--{size}"
   class:cy-btn--loading={loading}
   {type}
@@ -60,7 +75,7 @@
   disabled={isDisabled}
   aria-disabled={isDisabled}
   aria-busy={loading}
-  aria-label={ariaLabel || undefined}
+  aria-label={ariaLabel || rest["aria-label"] || undefined}
   title={title || undefined}
   {onclick}
   {...resolvedDataAttrs}

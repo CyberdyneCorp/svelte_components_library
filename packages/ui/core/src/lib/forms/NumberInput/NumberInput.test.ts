@@ -287,4 +287,11 @@ describe("NumberInput", () => {
     await fireEvent.keyDown(input, { key: "ArrowUp" });
     expect((input as HTMLInputElement).value).toBe("10");
   });
+
+  it("names the step buttons with decreaseLabel / increaseLabel", () => {
+    render(NumberInput, { props: { decreaseLabel: "Diminuir", increaseLabel: "Aumentar" } });
+    expect(screen.getByRole("button", { name: "Diminuir" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Aumentar" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Decrease" })).not.toBeInTheDocument();
+  });
 });
