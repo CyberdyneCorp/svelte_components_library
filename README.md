@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **255 components** across 19 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **256 components** across 19 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdynecorp/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdynecorp/svelte-ui-core` | 255 UI components across 19 categories |
+| `@cyberdynecorp/svelte-ui-core` | 256 UI components across 19 categories |
 
 ## Installation
 
@@ -197,8 +197,8 @@ Use components:
 ### Chat (8)
 `Chatbox` · `ChatPanel` · `ChatResponse` · `PromptExample` · `WelcomeText` · `BotAnswer` · `CommentThread` · `ChatSidebar` (conversation list with rename/delete)
 
-### Crypto / Web3 (13)
-`TokenBalance` · `TransactionList` · `AddressDisplay` · `NetworkBadge` · `NFTCard` · `PriceDisplay` · `MetricCard` · `GasEstimate` · `TierBadge` (6-tier NFT access system) · `SwapInterface` · `TokenSelector` · `StakingCard` · `TransactionConfirm`
+### Crypto / Web3 (14)
+`TokenBalance` · `TokenBalanceRow` (compact list row: exact token amount, fiat value or unpriced label, chain label; `as="li"` for lists) · `TransactionList` · `AddressDisplay` · `NetworkBadge` (optional `chainId`; `showStatus={false}` hides the connection dot) · `NFTCard` · `PriceDisplay` · `MetricCard` · `GasEstimate` · `TierBadge` (6-tier NFT access system) · `SwapInterface` · `TokenSelector` · `StakingCard` · `TransactionConfirm`
 
 ### ML / Data Tools (11)
 `CodeBlock` (syntax highlighting) · `Terminal` · `LogViewer` (severity filtering) · `Slider` · `StepProgress` · `Timeline` · `DataChart` (chart wrapper) · `Kbd` (keyboard shortcuts) · `NotebookCell` · `ModelCard` · `ConfusionMatrix`
@@ -564,7 +564,7 @@ pnpm release            # Build & publish
 │       │       ├── styles/  CSS (colors, typography, spacing, radius, animations)
 │       │       ├── themes/  Optional theme presets (calm + 17 design styles)
 │       │       └── theme/   Theme preference helper + pre-paint init script
-│       └── core/            UI components (255 components)
+│       └── core/            UI components (256 components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
 │               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ScheduleConfig, ...
