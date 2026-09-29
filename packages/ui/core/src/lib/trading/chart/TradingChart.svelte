@@ -43,6 +43,7 @@
     onrangechange,
     oncrosshairmove,
     onpricelinechange,
+    onindicatorerror,
   }: {
     /** Bars in ascending time order. Replace the last bar or append for live updates. */
     candles: Candle[];
@@ -76,6 +77,8 @@
     oncrosshairmove?: (info: CrosshairInfo | null) => void;
     /** A draggable price line was dropped at `price` (snapped to `market.tickSize`). */
     onpricelinechange?: (id: string, price: number) => void;
+    /** An indicator has invalid parameters or data and was disabled (default: a console warning). */
+    onindicatorerror?: (config: IndicatorConfig, error: Error) => void;
   } = $props();
 
   const ANNOUNCE_WAIT = 300;
@@ -132,6 +135,7 @@
       onpricelinechange: (id, price) => onpricelinechange?.(id, price),
       onpaneheightschange: (heights) => (paneHeights = heights),
       ondatachange: () => dataVersion++,
+      onindicatorerror: onindicatorerror ? (config, error) => onindicatorerror?.(config, error) : undefined,
     });
     engine = chart;
     const stopSize = observeSize(surface, (size, dpr) => chart.resize(size, dpr));

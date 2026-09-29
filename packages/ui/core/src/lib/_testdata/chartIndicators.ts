@@ -5,7 +5,7 @@
  * incremental.
  */
 import type { Candle } from "../trading/types.js";
-import type { BindingResolver, IndicatorBinding, IndicatorCalculator } from "../trading/chart/indicatorBindings.js";
+import type { BindingResolver, ChartCalculator, IndicatorBinding } from "../trading/chart/indicatorBindings.js";
 
 export interface CallCounter {
   created: number;
@@ -14,7 +14,7 @@ export interface CallCounter {
 }
 
 /** Simple moving average of closes with next / update. */
-function smaCalculator(period: number, counter: CallCounter): IndicatorCalculator {
+function smaCalculator(period: number, counter: CallCounter): ChartCalculator {
   const window: number[] = [];
   counter.created++;
   const value = () => (window.length === period ? window.reduce((a, b) => a + b, 0) / period : null);

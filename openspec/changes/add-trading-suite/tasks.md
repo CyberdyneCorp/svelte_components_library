@@ -7,10 +7,10 @@
 
 ## 2. Indicators (PR 2)
 
-- [ ] 2.1 Batch functions: sma, ema, wma, rsi, bollinger, atr, adx (+DI/−DI), macd, stochastic, vwap
-- [ ] 2.2 Incremental calculators (`next` / `update`) for each
-- [ ] 2.3 Reference-value fixtures and batch ≡ incremental property tests
-- [ ] 2.4 Exports + README + changeset
+- [x] 2.1 Batch functions: sma, ema, wma, rsi, bollinger, atr, adx (+DI/−DI), macd, stochastic, vwap
+- [x] 2.2 Incremental calculators (`next` / `update`) for each
+- [x] 2.3 Reference-value fixtures and batch ≡ incremental property tests
+- [x] 2.4 Exports + README + changeset
 
 ## 3. Chart (PR 3)
 

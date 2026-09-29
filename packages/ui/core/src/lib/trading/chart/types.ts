@@ -1,4 +1,5 @@
 /** Public types of `TradingChart` (OpenSpec add-trading-suite, trading-chart). */
+import type { VwapSession } from "../indicators/index.js";
 import type { Candle } from "../types.js";
 
 /** How the price series is drawn. */
@@ -72,26 +73,29 @@ export interface AdxConfig extends IndicatorBase {
 
 export interface MacdConfig extends IndicatorBase {
   type: "macd";
-  fast?: number;
-  slow?: number;
-  signal?: number;
+  /** Defaults 12 / 26 / 9. */
+  fastPeriod?: number;
+  slowPeriod?: number;
+  signalPeriod?: number;
   source?: PriceSource;
 }
 
 export interface StochasticConfig extends IndicatorBase {
   type: "stochastic";
   /** %K look-back; default 14. */
-  period?: number;
+  kPeriod?: number;
   /** %K smoothing; default 1 (fast stochastic). */
   smoothK?: number;
   /** %D period; default 3. */
-  smoothD?: number;
+  dPeriod?: number;
   overbought?: number;
   oversold?: number;
 }
 
 export interface VwapConfig extends IndicatorBase {
   type: "vwap";
+  /** Session reset: "day" (UTC day, default), "none", or a function of the bar time returning a session key. */
+  session?: VwapSession;
 }
 
 /** Declarative indicator: `{ type, pane, …params, color? }`. */

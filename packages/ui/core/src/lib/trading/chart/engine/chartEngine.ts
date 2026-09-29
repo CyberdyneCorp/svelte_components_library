@@ -31,6 +31,8 @@ export interface EngineCallbacks {
   onpaneheightschange?(heights: Record<string, number>): void;
   /** Candles or indicator values changed (refreshes the data table). */
   ondatachange?(): void;
+  /** An indicator threw (invalid parameters or data) and was disabled. */
+  onindicatorerror?(config: IndicatorConfig, error: Error): void;
 }
 
 export interface EngineDeps {
@@ -86,7 +88,7 @@ export class ChartEngine {
     private readonly callbacks: EngineCallbacks = {},
     deps: EngineDeps = {},
   ) {
-    this.store = new IndicatorStore(deps.resolver ?? defaultResolver);
+    this.store = new IndicatorStore(deps.resolver ?? defaultResolver, callbacks.onindicatorerror);
     this.readTheme = deps.readTheme ?? readTheme;
     this.theme = this.readTheme(host);
     this.mainCtx = mainCanvas.getContext("2d");
