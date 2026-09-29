@@ -375,12 +375,12 @@
   }
 
   .cy-sched__label {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    font-weight: var(--font-weight-medium);
+    font-family: var(--input-label-font);
+    font-size: var(--input-label-size);
+    font-weight: var(--input-label-weight);
     color: var(--input-label);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    letter-spacing: var(--input-label-letter-spacing);
+    text-transform: var(--input-label-transform);
   }
 
   /* Mode selector */
@@ -438,11 +438,11 @@
   }
 
   .cy-sched__field-label {
-    font-family: var(--font-mono);
+    font-family: var(--input-label-font);
     font-size: 0.75rem;
     color: var(--color-text-tertiary);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    letter-spacing: var(--input-label-letter-spacing);
+    text-transform: var(--input-label-transform);
   }
 
   /* Interval presets */

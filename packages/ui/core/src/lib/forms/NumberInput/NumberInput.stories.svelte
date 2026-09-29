@@ -16,3 +16,5 @@
 <Story name="WithRange" args={{ label: "Gas Limit", value: 21000, min: 21000, max: 1000000, step: 1000, unit: "gas" }} />
 
 <Story name="SmallSize" args={{ label: "Confirmations", value: 12, min: 1, max: 100, size: "sm" }} />
+
+<Story name="LocalizedButtons" args={{ label: "Quantidade", value: 1, decreaseLabel: "Diminuir", increaseLabel: "Aumentar" }} />

@@ -6,7 +6,21 @@
     title: "Primitives/Button",
     component: Button,
     tags: ["autodocs"],
+    parameters: {
+      docs: {
+        description: {
+          component:
+            "Native `<button>`. Any `aria-*` (`aria-expanded`, `aria-controls`, `aria-pressed`…) and `data-*` attribute is forwarded; `aria-busy` / `aria-disabled` stay managed by `loading` / `disabled`. `bind:ref` gives the native element, e.g. to return focus after closing a disclosure.",
+        },
+      },
+    },
   });
+</script>
+
+<script>
+  let disclosureOpen = $state(false);
+  /** @type {HTMLButtonElement | null} */
+  let disclosureRef = $state(null);
 </script>
 
 <Story name="Brand">
@@ -53,4 +67,34 @@
     <Button variant="ghost" disabled>Disabled</Button>
     <Button variant="danger" disabled>Disabled</Button>
   </div>
+</Story>
+
+<Story name="Disclosure">
+  {#snippet template()}
+    {@const panelId = "disclosure-panel"}
+    <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start;">
+      <Button
+        variant="secondary"
+        bind:ref={disclosureRef}
+        aria-expanded={disclosureOpen}
+        aria-controls={panelId}
+        onclick={() => (disclosureOpen = !disclosureOpen)}
+      >
+        {disclosureOpen ? "Hide details" : "Show details"}
+      </Button>
+      <div id={panelId} hidden={!disclosureOpen}>
+        <p style="margin: 0 0 0.5rem;">Fees are charged per transaction.</p>
+        <Button
+          variant="ghost"
+          size="sm"
+          onclick={() => {
+            disclosureOpen = false;
+            disclosureRef?.focus();
+          }}
+        >
+          Close
+        </Button>
+      </div>
+    </div>
+  {/snippet}
 </Story>

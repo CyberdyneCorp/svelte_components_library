@@ -24,6 +24,12 @@
   --font-decorative: var(--font-display);
   --heading-transform: none;
 
+  /* ── Form field labels — sentence case in the body font ── */
+  --input-label-font: var(--font-body);
+  --input-label-transform: none;
+  --input-label-letter-spacing: normal;
+  /* ── end form field labels ── */
+
   /* Radius — soft surfaces: cards 16px, inputs 10px */
   --radius-xs: 0.375rem;
   --radius-sm: 0.5rem;

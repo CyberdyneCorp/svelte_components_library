@@ -187,3 +187,47 @@ describe("stacking layer tokens", () => {
     expect(Number(spacing.get("--z-overlay"))).toBeGreaterThan(Number(spacing.get("--z-nav")));
   });
 });
+
+describe("form label tokens", () => {
+  /** Defaults reproduce the literals form labels used before the tokens existed. */
+  const LABEL_DEFAULTS: Record<string, string> = {
+    "--input-label-font": "var(--font-mono)",
+    "--input-label-size": "0.8125rem",
+    "--input-label-weight": "var(--font-weight-medium)",
+    "--input-label-transform": "uppercase",
+    "--input-label-letter-spacing": "0.04em",
+  };
+
+  /** Calm drops the mono uppercase label for sentence case in the body font. */
+  const CALM_LABELS: Record<string, string> = {
+    "--input-label-font": "var(--font-body)",
+    "--input-label-transform": "none",
+    "--input-label-letter-spacing": "normal",
+  };
+
+  it("defaults to the mono uppercase label in :root", () => {
+    for (const [name, value] of Object.entries(LABEL_DEFAULTS)) {
+      expect(rootDecls.get(name), name).toBe(value);
+    }
+  });
+
+  it.each(["calm", "calm-dark"])(
+    "uses the body font, no transform and normal tracking in %s",
+    (theme) => {
+      const decls = declarationsFor(calmCss, `[data-theme="${theme}"]`);
+      for (const [name, value] of Object.entries(CALM_LABELS)) {
+        expect(decls.get(name), name).toBe(value);
+      }
+      // Resolved against calm, the label font is Inter, not the mono stack.
+      const font = resolve(new Map([...rootDecls, ...decls]), "--input-label-font");
+      expect(font).toMatch(/^"Inter"/);
+      expect(font).not.toContain("JetBrains Mono");
+    },
+  );
+
+  it("keeps size and weight on the defaults in calm", () => {
+    const decls = declarationsFor(calmCss, '[data-theme="calm"]');
+    expect(decls.has("--input-label-size")).toBe(false);
+    expect(decls.has("--input-label-weight")).toBe(false);
+  });
+});
