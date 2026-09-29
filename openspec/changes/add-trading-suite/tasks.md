@@ -25,10 +25,10 @@
 
 ## 4. Order entry (PR 4)
 
-- [ ] 4.1 `LeverageSlider`
-- [ ] 4.2 `OrderTicket` with MoneyInput asset-mode fields, validation, preview, `estimateLiquidation` hook, normalized `onsubmit`
-- [ ] 4.3 `PositionsTable`, `OpenOrdersTable` with callbacks and empty states
-- [ ] 4.4 Tests (spec scenarios, keyboard, validation matrix) + stories in axe failing mode + README + changeset
+- [x] 4.1 `LeverageSlider`
+- [x] 4.2 `OrderTicket` with MoneyInput asset-mode fields, validation, preview, `estimateLiquidation` hook, normalized `onsubmit`
+- [x] 4.3 `PositionsTable`, `OpenOrdersTable` with callbacks and empty states
+- [x] 4.4 Tests (spec scenarios, keyboard, validation matrix) + stories in axe failing mode + README + changeset
 
 ## 5. Market data (PR 5)
 
