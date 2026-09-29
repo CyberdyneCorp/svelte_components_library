@@ -29,7 +29,9 @@
     | "maximize"
     | "download"
     | "play"
-    | "pause";
+    | "pause"
+    | "clock"
+    | "alert-triangle";
 
   let {
     name = "",
@@ -65,6 +67,8 @@
     "lock": "M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zm2-3a5 5 0 0 1 10 0v3H7V8z",
     "download": "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3",
     "play": "M6 4l14 8-14 8V4z",
+    "clock": "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 5v5l3 3",
+    "alert-triangle": "M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01",
   };
 
   let path = $derived(icons[name] ?? "");

@@ -2,31 +2,40 @@
 
 <script lang="ts">
   import type { Snippet } from "svelte";
-
-  type Row = Record<string, any>;
-  type Column = {
-    key: string;
-    label: string;
-    sortable?: boolean;
-    width?: string;
-    /**
-     * Per-cell render override. Receives the whole row so the cell can pull
-     * multiple fields and run formatters / render components (checkboxes,
-     * severity chips, mono-formatted numbers). When omitted the cell renders
-     * `row[col.key]` as text.
-     */
-    cell?: Snippet<[Row]>;
-  };
+  import type { TableCellContext, TableColumn, TableRow, TableRowAttributes } from "./types.js";
 
   let {
     columns = [],
     rows = [],
     striped = false,
+    /** Table caption (`<caption>`), which also names the table. */
+    caption,
+    /** Keep the caption for assistive technology but hide it visually. */
+    captionHidden = false,
+    /** Column key whose cells render as row headers (`<th scope="row">`). */
+    rowHeader,
+    /** Extra `<tr>` attributes per row (`data-*`, `aria-current`, `class`, ...). */
+    rowAttributes,
+    /**
+     * Cell render override for every column without its own `cell`. Receives
+     * `{ row, column, rowIndex }` (display order, after sorting).
+     */
+    cell,
   }: {
-    columns?: Column[];
-    rows?: Row[];
+    columns?: TableColumn[];
+    rows?: TableRow[];
     striped?: boolean;
+    caption?: string;
+    captionHidden?: boolean;
+    rowHeader?: string;
+    rowAttributes?: (row: TableRow, rowIndex: number) => TableRowAttributes;
+    cell?: Snippet<[TableCellContext]>;
   } = $props();
+
+  // String join, not a class array: arrays need Svelte 5.16 and the peer range is ^5.0.0.
+  function rowClass(attrs: TableRowAttributes): string {
+    return attrs.class ? `cy-table__row ${attrs.class}` : "cy-table__row";
+  }
 
   let sortKey = $state<string | null>(null);
   let sortDir = $state<"asc" | "desc">("asc");
@@ -53,8 +62,23 @@
   });
 </script>
 
+{#snippet cellContent(row: TableRow, col: TableColumn, rowIndex: number)}
+  {#if col.cell}
+    {@render col.cell(row)}
+  {:else if cell}
+    {@render cell({ row, column: col, rowIndex })}
+  {:else}
+    {row[col.key] ?? ""}
+  {/if}
+{/snippet}
+
 <div class="cy-table-wrapper">
   <table class="cy-table" class:cy-table--striped={striped}>
+    {#if caption}
+      <caption class="cy-table__caption" class:cy-table__caption--hidden={captionHidden}>
+        {caption}
+      </caption>
+    {/if}
     <thead>
       <tr>
         {#each columns as col}
@@ -83,15 +107,18 @@
     </thead>
     <tbody>
       {#each sortedRows as row, i (i)}
-        <tr class="cy-table__row">
+        {@const attrs = rowAttributes?.(row, i) ?? {}}
+        <tr {...attrs} class={rowClass(attrs)}>
           {#each columns as col (col.key)}
-            <td class="cy-table__td">
-              {#if col.cell}
-                {@render col.cell(row)}
-              {:else}
-                {row[col.key] ?? ""}
-              {/if}
-            </td>
+            {#if col.key === rowHeader}
+              <th class="cy-table__td cy-table__row-header" scope="row">
+                {@render cellContent(row, col, i)}
+              </th>
+            {:else}
+              <td class="cy-table__td">
+                {@render cellContent(row, col, i)}
+              </td>
+            {/if}
           {/each}
         </tr>
       {/each}
@@ -113,6 +140,26 @@
     font-size: 0.875rem;
   }
 
+  .cy-table__caption {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Visually hidden, still read as the table's name. */
+  .cy-table__caption--hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .cy-table__th {
     text-align: left;
     padding: var(--space-3) var(--space-4);
@@ -130,6 +177,11 @@
     padding: var(--space-3) var(--space-4);
     color: var(--color-text-primary);
     border-bottom: var(--border-width) var(--border-style) var(--table-border);
+  }
+
+  .cy-table__row-header {
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
   }
 
   .cy-table__row {

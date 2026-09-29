@@ -1,15 +1,25 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import type { TabItem } from "./types.js";
+
   let {
     items = [],
     activeId = $bindable(""),
+    /** Accessible name of the tablist, or of the `<nav>` landmark in link mode. */
+    ariaLabel,
     onchange,
   }: {
-    items?: Array<{ id: string; label: string }>;
+    items?: TabItem[];
     activeId: string;
+    ariaLabel?: string;
+    /** Button tabs only. In link mode navigation is left to the links. */
     onchange?: (id: string) => void;
   } = $props();
+
+  // Links navigate between pages, so they are a navigation landmark rather
+  // than an ARIA tab widget (which switches panels in place).
+  const linkMode = $derived(items.some((item) => item.href !== undefined));
 
   function selectTab(id: string) {
     activeId = id;
@@ -33,21 +43,40 @@
   }
 </script>
 
-<div class="cy-tabs" role="tablist">
-  {#each items as item, i}
-    <button
-      class="cy-tabs__tab"
-      class:cy-tabs__tab--active={activeId === item.id}
-      role="tab"
-      aria-selected={activeId === item.id}
-      tabindex={activeId === item.id ? 0 : -1}
-      onclick={() => selectTab(item.id)}
-      onkeydown={(e) => handleKeydown(e, i)}
-    >
-      {item.label}
-    </button>
-  {/each}
-</div>
+{#if linkMode}
+  <nav class="cy-tabs-nav" aria-label={ariaLabel}>
+    <ul class="cy-tabs cy-tabs--links">
+      {#each items as item (item.id)}
+        <li class="cy-tabs__item">
+          <a
+            class="cy-tabs__tab"
+            class:cy-tabs__tab--active={activeId === item.id}
+            href={item.href}
+            aria-current={activeId === item.id ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        </li>
+      {/each}
+    </ul>
+  </nav>
+{:else}
+  <div class="cy-tabs" role="tablist" aria-label={ariaLabel}>
+    {#each items as item, i}
+      <button
+        class="cy-tabs__tab"
+        class:cy-tabs__tab--active={activeId === item.id}
+        role="tab"
+        aria-selected={activeId === item.id}
+        tabindex={activeId === item.id ? 0 : -1}
+        onclick={() => selectTab(item.id)}
+        onkeydown={(e) => handleKeydown(e, i)}
+      >
+        {item.label}
+      </button>
+    {/each}
+  </div>
+{/if}
 
 <style>
   .cy-tabs {
@@ -55,6 +84,16 @@
     gap: 0;
     border-bottom: var(--border-width) var(--border-style) var(--color-border-subtle);
     font-family: var(--font-body);
+  }
+
+  .cy-tabs--links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cy-tabs__item {
+    display: flex;
   }
 
   .cy-tabs__tab {
@@ -70,6 +109,7 @@
     cursor: pointer;
     transition: all var(--transition-default);
     white-space: nowrap;
+    text-decoration: none;
   }
 
   .cy-tabs__tab:hover {

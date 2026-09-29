@@ -6,6 +6,16 @@
     title: "Feedback/Alert",
     component: Alert,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for the alert.
+      a11y: { test: "error" },
+      docs: {
+        description: {
+          component:
+            "Banner, card or inline message. `role` picks the semantics: `\"alert\"` (default, assertive: interrupts the screen reader), `\"status\"` (polite live region for non-urgent updates) or `\"note\"` (static advisory content, not announced).",
+        },
+      },
+    },
   });
 </script>
 
@@ -68,4 +78,43 @@
   <Alert severity="critical" card borderSide="top" title="Critical">
     Top-bordered severity card variant.
   </Alert>
+</Story>
+
+<Story name="Roles">
+  <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 520px;">
+    <Alert variant="error" title="Payment failed">
+      role="alert" (default): announced immediately.
+    </Alert>
+    <Alert variant="success" role="status" title="Draft saved">
+      role="status": announced politely when the screen reader is idle.
+    </Alert>
+    <Alert variant="info" role="note" title="About imported balances">
+      role="note": advisory text, not announced.
+    </Alert>
+  </div>
+</Story>
+
+<Story name="CalmNote" globals={{ theme: "calm" }}>
+  <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 520px;">
+    <Alert variant="info" role="note" title="Watch-only wallet">
+      Balances are read from the chain. Nothing here can move funds.
+    </Alert>
+    <Alert variant="success" role="status" title="Budget updated">
+      Your changes were saved.
+    </Alert>
+    <Alert variant="warning" role="note" card title="Unpriced assets">
+      Two tokens have no price source and are left out of the total.
+    </Alert>
+  </div>
+</Story>
+
+<Story name="CalmDarkNote" globals={{ theme: "calm-dark" }}>
+  <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 520px;">
+    <Alert variant="info" role="note" title="Watch-only wallet">
+      Balances are read from the chain. Nothing here can move funds.
+    </Alert>
+    <Alert variant="error" title="Sync failed">
+      The RPC endpoint did not answer. Retrying in 30 s.
+    </Alert>
+  </div>
 </Story>
