@@ -10,15 +10,15 @@ import { roundToTick } from "../format.js";
 import type { BookLevel } from "../types.js";
 import {
   commonScale,
-  compare,
+  compareDecimal,
   isDecimal,
   isMultipleOf,
-  multiply,
+  multiplyByInteger,
   scaled,
   signOf,
-  subtract,
+  subtractDecimal,
   unscaled,
-} from "./decimal.js";
+} from "../decimal.js";
 
 export type BookSide = "bid" | "ask";
 export type OrderBookLayout = "both" | "bids" | "asks";
@@ -63,8 +63,8 @@ export function isLiveLevel(level: BookLevel | null | undefined): level is BookL
 
 function bestFirst(side: BookSide) {
   return side === "bid"
-    ? (a: BookLevel, b: BookLevel) => compare(b.price, a.price)
-    : (a: BookLevel, b: BookLevel) => compare(a.price, b.price);
+    ? (a: BookLevel, b: BookLevel) => compareDecimal(b.price, a.price)
+    : (a: BookLevel, b: BookLevel) => compareDecimal(a.price, b.price);
 }
 
 /**
@@ -116,7 +116,7 @@ export function bestLevel(levels: readonly BookLevel[], side: BookSide): BookLev
 /** Spread between the best bid and ask, or `null` when either side is empty. */
 export function computeSpread(bestBid?: BookLevel, bestAsk?: BookLevel): BookSpread | null {
   if (!bestBid || !bestAsk) return null;
-  const absolute = subtract(bestAsk.price, bestBid.price);
+  const absolute = subtractDecimal(bestAsk.price, bestBid.price);
   const mid = (Number(bestAsk.price) + Number(bestBid.price)) / 2;
   const percent = mid > 0 ? (Number(absolute) / mid) * 100 : 0;
   return { absolute, percent, crossed: signOf(absolute) <= 0 };
@@ -146,7 +146,7 @@ export function buildBook({ bids, asks, grouping, levels }: BuildBookOptions): B
 
 /** Default grouping choices: the tick size × 1, 10, 100 and 1000. */
 export function defaultGroupingOptions(tickSize: string): string[] {
-  return DEFAULT_FACTORS.map((factor) => multiply(tickSize, factor));
+  return DEFAULT_FACTORS.map((factor) => multiplyByInteger(tickSize, factor));
 }
 
 /** `grouping` when it is a positive multiple of `tickSize`, otherwise the tick size. */

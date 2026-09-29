@@ -156,6 +156,15 @@ export interface TradingChartLabels {
   columns?: Partial<Record<"time" | "open" | "high" | "low" | "close" | "volume", string>>;
   /** Short legend prefixes; default O, H, L, C, V. */
   legend?: Partial<Record<"open" | "high" | "low" | "close" | "volume", string>>;
+  /**
+   * Keyboard help for draggable price lines, appended to `keyboardHint` when
+   * the chart has a draggable line.
+   */
+  priceLineHint?: string;
+  /** Name of a price line without a label or kind tag (default "Price line"). */
+  priceLine?: string;
+  /** Live announcements of keyboard price-line editing. Placeholders: {line} {price}. */
+  priceLineEdit?: Partial<Record<"select" | "move" | "commit" | "cancel", string>>;
   /** Default price-line tags per kind; default Entry, TP, SL, Liq. (custom has none). */
   priceLines?: Partial<Record<"entry" | "take-profit" | "stop-loss" | "liquidation", string>>;
   /** Indicator abbreviations (default SMA, EMA, WMA, RSI, BB, ATR, ADX, MACD, Stoch, VWAP). */

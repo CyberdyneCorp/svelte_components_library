@@ -1,6 +1,16 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { MarketSpec } from "../types.js";
-import { barAnnouncement, chartSummary, chartTable, createThrottle, tableCaption, type A11yContext } from "./accessibility.js";
+import {
+  barAnnouncement,
+  chartSummary,
+  chartTable,
+  createThrottle,
+  keyboardDescription,
+  priceLineAnnouncement,
+  priceLineName,
+  tableCaption,
+  type A11yContext,
+} from "./accessibility.js";
 import { TimeFormatter } from "./engine/timeLabels.js";
 import { DEFAULT_LABELS, fillTemplate, resolveLabels } from "./labels.js";
 
@@ -131,5 +141,44 @@ describe("announcement throttle", () => {
     throttle.cancel();
     vi.advanceTimersByTime(500);
     expect(speak).toHaveBeenCalledTimes(1);
+  });
+
+  it("calls the global timers unbound (browsers reject setTimeout called on another object)", () => {
+    vi.useFakeTimers();
+    const set = vi.spyOn(globalThis, "setTimeout");
+    const clear = vi.spyOn(globalThis, "clearTimeout");
+    const throttle = createThrottle(vi.fn(), 300);
+    throttle.push("a");
+    throttle.push("b");
+    throttle.cancel();
+    expect(set).toHaveBeenCalledTimes(1);
+    expect(set.mock.contexts[0]).toBeUndefined();
+    expect(clear.mock.contexts[0]).toBeUndefined();
+    set.mockRestore();
+    clear.mockRestore();
+  });
+});
+
+describe("price-line announcements", () => {
+  const labels = resolveLabels();
+  const ctx = { candles, labels, market, locale: "en-US", time: new TimeFormatter("UTC", "en-US"), interval: HOUR } as A11yContext;
+
+  it("names a line by label, kind tag, or the generic name", () => {
+    expect(priceLineName(labels, { price: 1, label: "Target" })).toBe("Target");
+    expect(priceLineName(labels, { price: 1, kind: "stop-loss" })).toBe("SL");
+    expect(priceLineName(labels, { price: 1 })).toBe("Price line");
+  });
+
+  it("fills each phase template with the tick-precision price", () => {
+    const line = { id: "tp", price: 110, kind: "take-profit" as const };
+    expect(priceLineAnnouncement(ctx, { phase: "move", id: "tp", price: 110.5, line })).toBe("TP 110.5");
+    expect(priceLineAnnouncement(ctx, { phase: "commit", id: "tp", price: 1234, line })).toBe("TP set to 1,234.0");
+    const custom = { ...ctx, labels: resolveLabels({ priceLineEdit: { cancel: "{line}: {price} mantido" } }) };
+    expect(priceLineAnnouncement(custom, { phase: "cancel", id: "tp", price: 110, line })).toBe("TP: 110.0 mantido");
+  });
+
+  it("adds the price-line help to the description only with draggable lines", () => {
+    expect(keyboardDescription(labels, false)).toBe(labels.keyboardHint);
+    expect(keyboardDescription(labels, true)).toBe(`${labels.keyboardHint} ${labels.priceLineHint}`);
   });
 });

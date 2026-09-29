@@ -1,7 +1,7 @@
 /** Display helpers shared by the market-data widgets. */
 import { formatPrice } from "../format.js";
 import type { MarketSpec } from "../types.js";
-import { isDecimal, shiftPoint, signOf } from "./decimal.js";
+import { isDecimal, shiftPoint, signOf } from "../decimal.js";
 
 export type Direction = "up" | "down" | "flat";
 

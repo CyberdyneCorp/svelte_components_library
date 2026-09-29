@@ -4,7 +4,8 @@
  * latest bars with the active indicator values.
  */
 import type { ChartTableData } from "../../charts/ChartFrame/chartTable.js";
-import type { Candle, MarketSpec } from "../types.js";
+import type { Candle, MarketSpec, PriceLine } from "../types.js";
+import type { PriceLineEdit } from "./engine/priceLineEditor.js";
 import { autoDigits, fixedFormatter, percentFormatter, priceDigits, volumeFormatter } from "./engine/numberFormat.js";
 import type { TimeFormatter } from "./engine/timeLabels.js";
 import { intervalName } from "./engine/timeLabels.js";
@@ -76,6 +77,26 @@ export function barAnnouncement(ctx: A11yContext, index: number, columns: readon
   });
 }
 
+/** Spoken name of a price line: its label, else its kind tag, else the generic name. */
+export function priceLineName(labels: ResolvedLabels, line: PriceLine): string {
+  const kind = line.kind ?? "custom";
+  const tag = kind === "custom" ? "" : labels.priceLines[kind];
+  return line.label || tag || labels.priceLine;
+}
+
+/** Live-region text for a keyboard price-line edit step. */
+export function priceLineAnnouncement(ctx: A11yContext, edit: PriceLineEdit): string {
+  return fillTemplate(ctx.labels.priceLineEdit[edit.phase], {
+    line: priceLineName(ctx.labels, edit.line),
+    price: priceFormat(ctx)(edit.price),
+  });
+}
+
+/** Chart description: the keyboard help, plus the price-line help when a line is draggable. */
+export function keyboardDescription(labels: ResolvedLabels, draggableLines: boolean): string {
+  return draggableLines ? `${labels.keyboardHint} ${labels.priceLineHint}` : labels.keyboardHint;
+}
+
 function formatValue(value: number | undefined, locale?: string): string {
   if (value === undefined || !Number.isFinite(value)) return "";
   return fixedFormatter(autoDigits(value), locale)(value);
@@ -122,11 +143,15 @@ export function tableCaption(labels: ResolvedLabels, rows: number): string {
 export function createThrottle(
   speak: (text: string) => void,
   wait: number,
-  timers: { set: typeof setTimeout; clear: typeof clearTimeout } = { set: setTimeout, clear: clearTimeout },
+  // Wrapped: browsers throw "Illegal invocation" when setTimeout is called as a method of another object.
+  timers: { set: (fn: () => void, ms: number) => unknown; clear: (id: never) => void } = {
+    set: (fn, ms) => setTimeout(fn, ms),
+    clear: (id) => clearTimeout(id),
+  },
 ) {
   let last = -Infinity;
   let pending: string | null = null;
-  let timer: ReturnType<typeof setTimeout> | null = null;
+  let timer: unknown = null;
   const fire = () => {
     timer = null;
     last = Date.now();
@@ -141,7 +166,7 @@ export function createThrottle(
       else timer ??= timers.set(fire, Math.max(0, wait - elapsed));
     },
     cancel() {
-      if (timer !== null) timers.clear(timer);
+      if (timer !== null) timers.clear(timer as never);
       timer = null;
       pending = null;
     },

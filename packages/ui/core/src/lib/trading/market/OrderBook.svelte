@@ -13,7 +13,7 @@
     type OrderBookLayout,
   } from "./book.js";
   import { coalesced } from "./coalesced.svelte.js";
-  import { isMultipleOf } from "./decimal.js";
+  import { isMultipleOf } from "../decimal.js";
   import { DEFAULT_ORDER_BOOK_LABELS, type OrderBookLabels } from "./labels.js";
 
   let {

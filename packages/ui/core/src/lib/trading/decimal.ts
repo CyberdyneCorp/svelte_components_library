@@ -134,3 +134,52 @@ export function trimDecimal(value: string): string {
   const trimmed = text.includes(".") ? text.replace(/\.?0+$/, "") : text;
   return trimmed === "-0" ? "0" : trimmed;
 }
+
+// ── Fixed-scale helpers (order book aggregation, display) ──────────
+
+/** Fraction digits written in a decimal string ("1.50" → 2). */
+export function scaleOf(value: string): number {
+  const text = value.trim();
+  const dot = text.indexOf(".");
+  return dot === -1 ? 0 : text.length - dot - 1;
+}
+
+/** Largest fraction-digit count across `values`. */
+export function commonScale(values: readonly string[]): number {
+  return values.reduce((max, value) => Math.max(max, scaleOf(value)), 0);
+}
+
+/** Decimal string → BigInt scaled by 10^scale. */
+export function scaled(value: string, scale: number): bigint {
+  return toMinorUnits(value, scale);
+}
+
+/** BigInt scaled by 10^scale → decimal string. */
+export function unscaled(value: bigint, scale: number): string {
+  return fromMinorUnits(value, scale);
+}
+
+/** True when `value` is a positive whole multiple of `step` (both positive decimal strings). */
+export function isMultipleOf(value: string, step: string): boolean {
+  if (!isDecimal(value) || !isDecimal(step)) return false;
+  if (signOf(step) <= 0 || signOf(value) <= 0) return false;
+  const scale = commonScale([value, step]);
+  return scaled(value, scale) % scaled(step, scale) === ZERO;
+}
+
+/** `step × factor` (an integer) with the step's precision: ("0.01", 10) → "0.10". */
+export function multiplyByInteger(step: string, factor: number): string {
+  const scale = scaleOf(step);
+  return unscaled(scaled(step, scale) * BigInt(factor), scale);
+}
+
+/**
+ * Moves the decimal point `places` to the right, exactly:
+ * `shiftPoint("0.0001", 2)` → `"0.01"`. Shows a funding-rate fraction as a percentage.
+ */
+export function shiftPoint(value: string, places: number): string {
+  const scale = scaleOf(value);
+  const units = scaled(value, scale);
+  if (scale >= places) return unscaled(units, scale - places);
+  return unscaled(units * TEN ** BigInt(places - scale), 0);
+}

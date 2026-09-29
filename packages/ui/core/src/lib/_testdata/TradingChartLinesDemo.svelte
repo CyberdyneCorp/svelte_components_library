@@ -36,7 +36,7 @@
   );
 </script>
 
-<p class="note">Drag the TP / SL lines; prices snap to the 0.5 tick. {summary}</p>
+<p class="note">Drag the TP / SL lines, or focus the chart and press L, ↑/↓ and Enter; prices snap to the 0.5 tick. {summary}</p>
 <TradingChart {candles} market={BTC_PERP} {markers} {priceLines} {onpricelinechange} volume="none" />
 
 <style>

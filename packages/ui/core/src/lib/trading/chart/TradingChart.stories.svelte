@@ -1,5 +1,6 @@
-<script module>
+<script module lang="ts">
   import { defineMeta } from "@storybook/addon-svelte-csf";
+  import { expect, userEvent, waitFor, within } from "storybook/test";
   import TradingChart from "./TradingChart.svelte";
   import TradingChartLinesDemo from "../../_testdata/TradingChartLinesDemo.svelte";
   import TradingChartLiveDemo from "../../_testdata/TradingChartLiveDemo.svelte";
@@ -15,7 +16,7 @@
       docs: {
         description: {
           component:
-            "Canvas candlestick chart on the library's own engine: candles, hollow candles, OHLC bars, line and area series, volume, overlay and sub-pane indicators, trade markers, draggable price lines and live updates. Focus it and use ←/→ (crosshair), Shift+←/→ (pan), +/− (zoom), Home/End; drag to pan, wheel or pinch to zoom, double-click to reset.",
+            "Canvas candlestick chart on the library's own engine: candles, hollow candles, OHLC bars, line and area series, volume, overlay and sub-pane indicators, trade markers, draggable price lines and live updates. Focus it and use ←/→ (crosshair), Shift+←/→ (pan), +/− (zoom), Home/End; L selects a draggable price line, ↑/↓ move it by a tick (Shift: ten), Enter applies and Escape cancels; drag to pan, wheel or pinch to zoom, double-click to reset.",
         },
       },
     },
@@ -26,6 +27,18 @@
       timeZone: { control: "text" },
     },
   });
+
+  /** Keyboard alternative to dragging: L selects the TP line, ↑ moves it one tick, Enter applies. */
+  async function keyboardPriceLine({ canvasElement }: { canvasElement: HTMLElement }) {
+    const canvas = within(canvasElement);
+    const note = canvas.getByText(/TP [\d.]+/);
+    const before = Number(/TP ([\d.]+)/.exec(note.textContent ?? "")![1]);
+    const chart = canvas.getByRole("img", { name: /^Price chart/ });
+    chart.focus();
+    await userEvent.keyboard("l{ArrowUp}{Enter}");
+    await waitFor(() => expect(note.textContent).toContain(`TP ${before + 0.5}`));
+    await waitFor(() => expect(canvasElement.querySelector("[aria-live='polite']")?.textContent).toMatch(/^TP set to /));
+  }
 
   const candles = marketCandles(500);
   const daily = marketCandles(400, { interval: 24 * HOUR, seed: 9, volatility: 0.03 });
@@ -82,7 +95,7 @@
   }}
 />
 
-<Story name="Markers and price lines" asChild>
+<Story name="Markers and price lines" asChild play={keyboardPriceLine}>
   <TradingChartLinesDemo />
 </Story>
 

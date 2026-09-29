@@ -66,6 +66,7 @@ export interface Position {
   leverage: number;
   marginMode: MarginMode;
   unrealizedPnl: string;
+  /** Return on equity as a percentage string: `"13.75"` = 13.75 %. */
   roe?: string;
   takeProfit?: string;
   stopLoss?: string;
@@ -103,14 +104,18 @@ export interface Ticker {
   last: string;
   mark?: string;
   index?: string;
+  /** Absolute 24h price change in the quote asset. */
   change24h?: string;
+  /** 24h change as a percentage: `"2.35"` = 2.35 %. */
   changePct24h?: string;
   high24h?: string;
   low24h?: string;
   volume24h?: string;
   quoteVolume24h?: string;
   openInterest?: string;
+  /** Funding rate per period as a fraction: `"0.0001"` = 0.01 %. */
   fundingRate?: string;
+  /** Next funding time, UTC ms. */
   nextFundingTime?: number;
 }
 
