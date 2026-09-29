@@ -1,9 +1,9 @@
 ## 1. Foundation (PR 1, merges first)
 
-- [ ] 1.1 `trading/types.ts` with the D2 types, exported from the core barrel under `// Trading`
-- [ ] 1.2 `trading/format.ts`: `roundToTick`, `roundToStep` (string maths, modes down/up/nearest), `formatPrice`, `formatSize`, precision derived from tick/step; unit tests incl. spec scenarios
-- [ ] 1.3 Foundation trade tokens (`--color-trade-{long,short}{,-bg,-text}`) in `:root`, light, calm/calm-dark and all 17 style presets; extend preset completeness + AA contrast tests
-- [ ] 1.4 Changesets (core minor, foundation minor)
+- [x] 1.1 `trading/types.ts` with the D2 types, exported from the core barrel under `// Trading`
+- [x] 1.2 `trading/format.ts`: `roundToTick`, `roundToStep` (string maths, modes down/up/nearest), `formatPrice`, `formatSize`, precision derived from tick/step; unit tests incl. spec scenarios
+- [x] 1.3 Foundation trade tokens (`--color-trade-{long,short}{,-bg,-text}`) in `:root`, light, calm/calm-dark and all 17 style presets; extend preset completeness + AA contrast tests
+- [x] 1.4 Changesets (core minor, foundation minor)
 
 ## 2. Indicators (PR 2)
 

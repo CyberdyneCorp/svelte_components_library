@@ -129,6 +129,14 @@
   --color-state-info: #3a5a78;
   --color-state-info-bg: #d3dde8;
 
+  /* Trade direction — long / buy / up and short / sell / down */
+  --color-trade-long: var(--color-state-success);
+  --color-trade-long-bg: var(--color-state-success-bg);
+  --color-trade-long-text: var(--color-state-success);
+  --color-trade-short: var(--color-state-error);
+  --color-trade-short-bg: var(--color-state-error-bg);
+  --color-trade-short-text: var(--color-state-error);
+
   /* Shadows — twin light/dark soft shadows */
   --shadow-sm: 3px 3px 6px #b8bec7, -3px -3px 6px #ffffff;
   --shadow-md: 6px 6px 12px #b8bec7, -6px -6px 12px #ffffff;

@@ -115,6 +115,66 @@ describe("design-style tokens", () => {
   });
 });
 
+/** Follow var() chains until a literal value is reached. */
+function resolve(decls: Decls, token: string): string {
+  const value = decls.get(token);
+  if (value === undefined) throw new Error(`${token} is not defined`);
+  const ref = /^var\(\s*(--[\w-]+)\s*\)$/.exec(value);
+  return ref ? resolve(decls, ref[1]) : value;
+}
+
+function luminance(hex: string): number {
+  const match = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
+  if (!match) throw new Error(`expected an opaque #rrggbb colour, got "${hex}"`);
+  const [r, g, b] = match.slice(1).map((part) => {
+    const c = parseInt(part, 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrast(a: string, b: string): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+describe("trade direction tokens", () => {
+  const TRADE_TOKENS = ["long", "short"].flatMap((side) =>
+    ["", "-bg", "-text"].map((suffix) => `--color-trade-${side}${suffix}`),
+  );
+  const SURFACES = ["--color-bg-primary", "--color-surface-default", "--color-surface-raised"];
+  // The light theme inherits primitives from :root.
+  const themes: [string, Decls][] = [
+    [":root", rootDecls],
+    ["light", new Map([...rootDecls, ...lightDecls])],
+  ];
+
+  it("declares every trade token in :root and the light theme", () => {
+    for (const name of TRADE_TOKENS) {
+      expect(rootDecls.has(name), `:root ${name}`).toBe(true);
+      expect(lightDecls.has(name), `light ${name}`).toBe(true);
+    }
+  });
+
+  it("maps the trade colours onto the success / error primitives", () => {
+    expect(rootDecls.get("--color-trade-long")).toBe("var(--primitive-green-10)");
+    expect(rootDecls.get("--color-trade-short")).toBe("var(--primitive-red-10)");
+    expect(lightDecls.get("--color-trade-long")).toBe("var(--primitive-green-50)");
+    expect(lightDecls.get("--color-trade-short")).toBe("var(--primitive-red-30)");
+  });
+
+  it.each(themes)("keeps %s trade text at WCAG AA on its surfaces", (_, decls) => {
+    const failures = ["long", "short"].flatMap((side) =>
+      SURFACES.flatMap((surface) => {
+        const fg = `--color-trade-${side}-text`;
+        const ratio = contrast(resolve(decls, fg), resolve(decls, surface));
+        return ratio >= 4.5 ? [] : [`${fg} on ${surface}: ${ratio.toFixed(2)}`];
+      }),
+    );
+    expect(failures).toEqual([]);
+  });
+});
+
 describe("stacking layer tokens", () => {
   const spacing = declarationsFor(read("spacing.css"), ":root");
 

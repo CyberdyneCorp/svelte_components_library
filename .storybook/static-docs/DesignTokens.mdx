@@ -65,6 +65,33 @@ Layer 3: Component      →  Scoped to components (button bg, input border)
 --color-accent-green / -cyan / -violet
 ```
 
+### Trade colours
+
+Trading components colour long / buy / up and short / sell / down only through these tokens:
+
+```css
+--color-trade-long        /* Candles, depth bars, icons (≥ 3:1 on surfaces) */
+--color-trade-long-bg     /* Subtle tint behind long rows and flashes */
+--color-trade-long-text   /* Text on surfaces and on -bg (≥ 4.5:1, WCAG AA) */
+--color-trade-short / -short-bg / -short-text
+```
+
+The default and light themes map them to the green / red success and error primitives (light uses a
+darker green for text); every preset aliases its own `--color-state-success` / `--color-state-error`
+pair. `presets.test.ts` and `style-tokens.test.ts` enforce the contrast ratios. For red-up markets,
+swap the two groups in one place:
+
+```css
+:root {
+  --color-trade-long: var(--primitive-red-10);
+  --color-trade-long-bg: var(--color-state-error-bg);
+  --color-trade-long-text: var(--primitive-red-10);
+  --color-trade-short: var(--primitive-green-10);
+  --color-trade-short-bg: var(--color-state-success-bg);
+  --color-trade-short-text: var(--primitive-green-10);
+}
+```
+
 Every foundation-namespaced token a core component references must be defined here. `token-coverage.test.ts` fails the test suite on an undefined `var(--color-…)`, `var(--font-…)`, and so on.
 
 ## Typography

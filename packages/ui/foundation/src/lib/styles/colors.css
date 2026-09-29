@@ -139,6 +139,15 @@
   --color-state-info: var(--primitive-cyan-10);
   --color-state-info-bg: rgba(0, 212, 255, 0.1);
 
+  /* Trade direction — long / buy / up and short / sell / down.
+     Swap long and short here for red-up markets. -text meets AA on surfaces. */
+  --color-trade-long: var(--primitive-green-10);
+  --color-trade-long-bg: var(--color-state-success-bg);
+  --color-trade-long-text: var(--primitive-green-10);
+  --color-trade-short: var(--primitive-red-10);
+  --color-trade-short-bg: var(--color-state-error-bg);
+  --color-trade-short-text: var(--primitive-red-10);
+
   /* Shadows (dark glow effects) */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
@@ -317,6 +326,14 @@
   --color-state-error-bg: rgba(204, 46, 46, 0.08);
   --color-state-info: var(--primitive-cyan-40);
   --color-state-info-bg: rgba(0, 149, 179, 0.08);
+
+  /* Trade direction — -text uses darker steps for AA on white */
+  --color-trade-long: var(--primitive-green-50);
+  --color-trade-long-bg: var(--color-state-success-bg);
+  --color-trade-long-text: var(--primitive-green-60);
+  --color-trade-short: var(--primitive-red-30);
+  --color-trade-short-bg: var(--color-state-error-bg);
+  --color-trade-short-text: var(--primitive-red-30);
 
   /* Shadows — standard box shadows instead of glows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);

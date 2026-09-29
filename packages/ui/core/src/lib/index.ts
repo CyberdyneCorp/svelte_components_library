@@ -99,8 +99,18 @@ export { SortableList } from "./data/SortableList/index.js";
 export { OrgChart } from "./data/OrgChart/index.js";
 export { WeatherCard } from "./data/WeatherCard/index.js";
 export { CurrencyDisplay } from "./data/CurrencyDisplay/index.js";
-export { KpiCard, type KpiSentiment, type KpiTrend, type KpiTrendLabels } from "./data/KpiCard/index.js";
-export { BudgetBar, type BudgetMessages, type BudgetState, type BudgetStateLabels } from "./data/BudgetBar/index.js";
+export {
+  KpiCard,
+  type KpiSentiment,
+  type KpiTrend,
+  type KpiTrendLabels,
+} from "./data/KpiCard/index.js";
+export {
+  BudgetBar,
+  type BudgetMessages,
+  type BudgetState,
+  type BudgetStateLabels,
+} from "./data/BudgetBar/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
@@ -362,14 +372,22 @@ export {
 export { Taskbar, type TaskbarItem } from "./retro/Taskbar/index.js";
 export { DesktopIcon } from "./retro/DesktopIcon/index.js";
 export { DesktopGrid } from "./retro/DesktopGrid/index.js";
-export { RetroTerminal, type RetroTerminalLine, type RetroTerminalLineKind } from "./retro/RetroTerminal/index.js";
+export {
+  RetroTerminal,
+  type RetroTerminalLine,
+  type RetroTerminalLineKind,
+} from "./retro/RetroTerminal/index.js";
 export { ConnectWalletModal, type WalletProvider } from "./retro/ConnectWalletModal/index.js";
 export { PixelButton } from "./retro/PixelButton/index.js";
 export { StatCard, type StatCardRow } from "./retro/StatCard/index.js";
 export { ProposalRow } from "./retro/ProposalRow/index.js";
 export { WindowStatusBar } from "./retro/WindowStatusBar/index.js";
 export { CRTBackground } from "./retro/CRTBackground/index.js";
-export { ShoppingCartPanel, type CartItem, type CartSuggestion } from "./retro/ShoppingCartPanel/index.js";
+export {
+  ShoppingCartPanel,
+  type CartItem,
+  type CartSuggestion,
+} from "./retro/ShoppingCartPanel/index.js";
 export { PixelAlert } from "./retro/PixelAlert/index.js";
 export { PixelProgressBar } from "./retro/PixelProgressBar/index.js";
 export { PixelTabs, type PixelTabItem } from "./retro/PixelTabs/index.js";
@@ -385,10 +403,18 @@ export { PixelTooltip } from "./retro/PixelTooltip/index.js";
 export { RetroContextMenu, type RetroContextMenuItem } from "./retro/RetroContextMenu/index.js";
 export { PixelNotification } from "./retro/PixelNotification/index.js";
 export { PixelFileIcon } from "./retro/PixelFileIcon/index.js";
-export { createWindowManager, type WindowManager, type ManagedWindow } from "./retro/WindowManager/index.js";
+export {
+  createWindowManager,
+  type WindowManager,
+  type ManagedWindow,
+} from "./retro/WindowManager/index.js";
 export { LiquidityRangeBar } from "./retro/LiquidityRangeBar/index.js";
 export { TokenPairIcon } from "./retro/TokenPairIcon/index.js";
-export { StatusDotList, type StatusDotItem, type StatusDotTone } from "./retro/StatusDotList/index.js";
+export {
+  StatusDotList,
+  type StatusDotItem,
+  type StatusDotTone,
+} from "./retro/StatusDotList/index.js";
 export { LiquidityPositionCard } from "./retro/LiquidityPositionCard/index.js";
 export { PriceChart, type OHLCCandle } from "./retro/PriceChart/index.js";
 export { DepthChart, type DepthLevel } from "./retro/DepthChart/index.js";
@@ -423,3 +449,31 @@ export type {
   Viewport,
   ConnectionDraft,
 } from "./flow/index.js";
+
+// Trading
+export {
+  formatPrice,
+  formatSize,
+  precisionOf,
+  pricePrecisionOf,
+  roundToStep,
+  roundToTick,
+  sizePrecisionOf,
+} from "./trading/index.js";
+export type {
+  BookLevel,
+  Candle,
+  ChartMarker,
+  MarginMode,
+  MarketSpec,
+  OpenOrder,
+  OrderDraft,
+  OrderType,
+  Position,
+  PriceLine,
+  RoundingMode,
+  Side,
+  Ticker,
+  TimeInForce,
+  Trade,
+} from "./trading/index.js";
