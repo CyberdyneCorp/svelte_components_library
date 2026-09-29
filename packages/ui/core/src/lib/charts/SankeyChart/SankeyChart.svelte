@@ -25,6 +25,7 @@
     hideTitle = false,
     showDataToggle = true,
     labels = {},
+    formatValue,
   }: {
     nodes?: SankeyNode[];
     links?: SankeyLink[];
@@ -44,7 +45,14 @@
     showDataToggle?: boolean;
     /** Localized strings; each key falls back to English. */
     labels?: ChartLabels<"source" | "target" | "value">;
+    /**
+     * Formats values in node labels, tooltips and the data table
+     * (e.g. Intl currency). Defaults to the raw number.
+     */
+    formatValue?: (value: number) => string;
   } = $props();
+
+  const fmt = (value: number): string => (formatValue ? formatValue(value) : String(value));
 
   const defaultColors = ["#00ff41", "#00d4ff", "#a855f7", "#ffb800", "#ff5555", "#50fa7b", "#ff79c6", "#8be9fd"];
   const viewW = 800;
@@ -207,7 +215,7 @@
 
   let tableData = $derived<ChartTableData>({
     columns: columnHeaders({ source: "Source", target: "Target", value: "Value" }, labels.columns),
-    rows: links.map((l) => [nodeLabel(l.source), nodeLabel(l.target), l.value]),
+    rows: links.map((l) => [nodeLabel(l.source), nodeLabel(l.target), formatValue ? formatValue(l.value) : l.value]),
   });
 
   // Tooltip state
@@ -218,7 +226,7 @@
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
     tooltip = {
-      text: `${link.source.label} → ${link.target.label}: ${link.value}`,
+      text: `${link.source.label} → ${link.target.label}: ${fmt(link.value)}`,
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
     };
@@ -229,7 +237,7 @@
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
     tooltip = {
-      text: `${node.label}: ${node.value}`,
+      text: `${node.label}: ${fmt(node.value)}`,
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
     };
@@ -299,7 +307,7 @@
         text-anchor={node.column === 0 ? "end" : "start"}
         class="cy-sankey-chart__node-label"
       >
-        {node.label}{#if showValues} ({node.value}){/if}
+        {node.label}{#if showValues}{` (${fmt(node.value)})`}{/if}
       </text>
     {/each}
   </svg>
@@ -367,7 +375,8 @@
 
   .cy-sankey-chart__node-label {
     fill: var(--color-text-secondary);
-    font-size: 11px;
+    /* Foundation body-sm size (0.875rem); override per instance. */
+    font-size: var(--cy-sankey-label-size, 0.875rem);
     font-family: var(--font-body, "Inter", sans-serif);
   }
 

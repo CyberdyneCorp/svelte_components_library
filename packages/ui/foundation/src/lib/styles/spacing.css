@@ -13,4 +13,10 @@
   --space-20: 5rem;
   --space-24: 6rem;
   --space-32: 8rem;
+
+  /* Stacking layers — theme-invariant. Fixed navigation (BottomNav) sits on
+     --z-nav; modal overlays (Drawer, Modal, Dialog) sit above it on
+     --z-overlay so a bar never covers an open panel. */
+  --z-nav: 1000;
+  --z-overlay: 1100;
 }

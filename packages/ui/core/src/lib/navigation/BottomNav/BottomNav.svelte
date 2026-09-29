@@ -61,7 +61,7 @@
     border-top: var(--border-width) var(--border-style) var(--color-border-subtle);
     font-family: var(--font-body);
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    z-index: 1000;
+    z-index: var(--z-nav);
     height: 64px;
   }
 

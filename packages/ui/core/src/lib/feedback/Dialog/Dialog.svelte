@@ -2,6 +2,7 @@
 
 <script lang="ts">
   import { type Snippet } from "svelte";
+  import { trapTab } from "../../overlay/focusTrap.js";
 
   let {
     open = $bindable(false),
@@ -39,19 +40,8 @@
     if (e.key === "Escape") {
       handleCancel();
     }
-    if (e.key === "Tab" && dialogEl) {
-      const focusable = dialogEl.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last?.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first?.focus();
-      }
+    if (dialogEl) {
+      trapTab(dialogEl, e);
     }
   }
 
@@ -102,7 +92,7 @@
     justify-content: center;
     background: var(--color-bg-overlay);
     backdrop-filter: blur(4px);
-    z-index: 1000;
+    z-index: var(--z-overlay);
     animation: cy-fade-in 150ms ease;
   }
 

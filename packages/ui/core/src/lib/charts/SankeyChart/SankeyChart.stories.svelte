@@ -91,6 +91,27 @@
       { source: "curve", target: "staking", value: 200 },
     ],
   };
+
+  const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+  const formatBRL = (value) => brl.format(value);
+
+  const budgetFlow = {
+    nodes: [
+      { id: "salario", label: "Salário" },
+      { id: "freela", label: "Freelance" },
+      { id: "moradia", label: "Moradia" },
+      { id: "alimentacao", label: "Alimentação" },
+      { id: "transporte", label: "Transporte" },
+      { id: "investimentos", label: "Investimentos" },
+    ],
+    links: [
+      { source: "salario", target: "moradia", value: 3200 },
+      { source: "salario", target: "alimentacao", value: 1450.5 },
+      { source: "salario", target: "transporte", value: 620 },
+      { source: "salario", target: "investimentos", value: 1729.5 },
+      { source: "freela", target: "investimentos", value: 1500 },
+    ],
+  };
 </script>
 
 <Story name="Default" args={{ ...trafficFlow }} />
@@ -107,5 +128,20 @@
     ...pipeline,
     title: "ML data pipeline",
     description: "10,000 cleaned records feed training, validation and test; 2,500 are discarded.",
+  }}
+/>
+
+<Story
+  name="CurrencyBRL"
+  args={{
+    ...budgetFlow,
+    title: "Fluxo do orçamento mensal",
+    formatValue: formatBRL,
+    labels: {
+      chart: "Diagrama de Sankey",
+      columns: { source: "Origem", target: "Destino", value: "Valor" },
+      showData: "Mostrar dados",
+      hideData: "Ocultar dados",
+    },
   }}
 />
