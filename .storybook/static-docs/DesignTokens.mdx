@@ -106,6 +106,15 @@ Based on a 4px grid:
 | `--space-12` | 3rem | 48px |
 | `--space-16` | 4rem | 64px |
 
+## Stacking layers
+
+Theme-invariant z-index tokens (defined in `spacing.css`). Modal overlays sit above fixed navigation, so an open panel is never covered by the nav bar.
+
+| Token | Value | Used by |
+|-------|-------|---------|
+| `--z-nav` | 1000 | `BottomNav` |
+| `--z-overlay` | 1100 | `Drawer`, `Modal`, `Dialog` |
+
 ## Border Radius
 
 | Token | Value |

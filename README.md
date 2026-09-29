@@ -186,7 +186,7 @@ Use components:
 `Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList` · `OrgChart` · `WeatherCard` · `CurrencyDisplay` (locale money amounts, masked mode) · `KpiCard` (KPI tile with trend + delta) · `BudgetBar` (money budget meter)
 
 ### Layout (9)
-`Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` · `SplitView` · `GridLayout` · `PageShell` · `FloatingPanel` (draggable + resizable window)
+`Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` (focus trap, Escape / backdrop close, `closeLabel`, `onclose`) · `SplitView` · `GridLayout` · `PageShell` · `FloatingPanel` (draggable + resizable window)
 
 ### Overlay (5)
 `Modal` · `ModalBackdrop` · `ContextMenu` · `Popover` · `CommandPalette` (Cmd+K)

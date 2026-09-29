@@ -114,3 +114,16 @@ describe("design-style tokens", () => {
     }
   });
 });
+
+describe("stacking layer tokens", () => {
+  const spacing = declarationsFor(read("spacing.css"), ":root");
+
+  it("defines --z-nav and --z-overlay as integers", () => {
+    expect(spacing.get("--z-nav")).toMatch(/^\d+$/);
+    expect(spacing.get("--z-overlay")).toMatch(/^\d+$/);
+  });
+
+  it("stacks overlays above fixed navigation", () => {
+    expect(Number(spacing.get("--z-overlay"))).toBeGreaterThan(Number(spacing.get("--z-nav")));
+  });
+});
