@@ -165,9 +165,9 @@ const macdBinding: IndicatorBinding<MacdConfig> = {
   overlay: false,
   params: (c) => [c.fastPeriod ?? 12, c.slowPeriod ?? 26, c.signalPeriod ?? 9],
   outputs: [
-    { key: "histogram", style: "histogram", name: "histogram" },
     { key: "macd", style: "line" },
     { key: "signal", style: "line", name: "signal" },
+    { key: "histogram", style: "histogram", name: "histogram" },
   ],
   includeZero: true,
   create: (c) =>

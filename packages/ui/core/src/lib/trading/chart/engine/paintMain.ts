@@ -38,6 +38,7 @@ function paintPane(ctx: CanvasRenderingContext2D, frame: Frame, scene: Scene, pa
   const ticks = pane.scale.ticks().map((value) => ({ at: pane.scale.priceToY(value), text: pane.format(value) }));
   const inside = ticks.filter((t) => t.at >= pane.rect.top + 6 && t.at <= pane.rect.top + pane.rect.height - 6);
   drawGrid(ctx, pane.rect, inside.map((t) => t.at), frame.timeTicks.map((t) => t.at), scene.theme.grid, scene.dpr);
+  const labels = pane.id === MAIN_PANE ? inside.filter((t) => !underLastPrice(scene, pane, t.at)) : inside;
 
   ctx.save();
   ctx.beginPath();
@@ -47,8 +48,16 @@ function paintPane(ctx: CanvasRenderingContext2D, frame: Frame, scene: Scene, pa
   ctx.restore();
 
   const axis = axisBoxOf(frame, pane);
-  drawPriceAxis(ctx, axis, inside, { color: scene.theme.text, font: scene.theme.font }, scene.theme.border, scene.dpr);
+  drawPriceAxis(ctx, axis, labels, { color: scene.theme.text, font: scene.theme.font }, scene.theme.border, scene.dpr);
   if (pane.id === MAIN_PANE) paintPriceMarks(ctx, frame, scene, pane, axis);
+}
+
+/** Half the height of an axis label box: ticks closer than this to the last price are hidden. */
+const LABEL_CLEARANCE = 10;
+
+function underLastPrice(scene: Scene, pane: PaneFrame, y: number): boolean {
+  const last = scene.candles[scene.candles.length - 1];
+  return !!last && Math.abs(pane.scale.priceToY(last.close) - y) < LABEL_CLEARANCE;
 }
 
 function paintContent(ctx: CanvasRenderingContext2D, frame: Frame, scene: Scene, pane: PaneFrame): void {
@@ -126,7 +135,9 @@ function paintIndicators(ctx: CanvasRenderingContext2D, bars: BarGeometry, scene
   const y = (value: number) => pane.scale.priceToY(value);
   for (const instance of pane.indicators) {
     paintGuides(ctx, scene, pane, instance);
-    for (const series of instance.series) {
+    // Histograms first, so lines stay on top.
+    const ordered = [...instance.series].sort((a, b) => Number(b.spec.style === "histogram") - Number(a.spec.style === "histogram"));
+    for (const series of ordered) {
       const valueAt = (i: number) => series.values[i];
       if (series.spec.style === "histogram") {
         const colors = [scene.theme.up, scene.theme.down] as const;

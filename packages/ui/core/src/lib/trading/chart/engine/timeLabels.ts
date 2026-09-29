@@ -188,12 +188,12 @@ const FORMATS: Record<FormatKind, Intl.DateTimeFormatOptions> = {
     weekday: "short",
     day: "numeric",
     month: "short",
-    year: "2-digit",
+    year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
     hourCycle: "h23",
   },
-  crosshairDate: { weekday: "short", day: "numeric", month: "short", year: "2-digit" },
+  crosshairDate: { weekday: "short", day: "numeric", month: "short", year: "numeric" },
   full: { dateStyle: "medium", timeStyle: "short", hourCycle: "h23" } as Intl.DateTimeFormatOptions,
 };
 

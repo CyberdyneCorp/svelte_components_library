@@ -407,6 +407,7 @@ export class ChartEngine {
 
   private draw(main: boolean, overlay: boolean): void {
     if (this.size.width <= 0 || this.size.height <= 0) return;
+    if (main) this.fitAxisWidth();
     const frame = this.currentFrame;
     const scene = this.scene();
     if (main && this.mainCtx) {
@@ -418,24 +419,24 @@ export class ChartEngine {
       paintOverlay(this.overlayCtx, frame, scene);
     }
     this.emitRange();
-    if (main) this.fitAxisWidth(frame);
   }
 
-  /** Widens or narrows the price axis to its longest label (repaints once if it changed). */
-  private fitAxisWidth(frame: Frame): void {
+  /** Sizes the price axis to its longest label before painting (rebuilding the frame if it changed). */
+  private fitAxisWidth(): void {
     const ctx = this.mainCtx;
     if (!ctx) return;
     ctx.font = fontOf(this.theme.font);
+    const lastClose = this.candles[this.candles.length - 1]?.close ?? 0;
     let widest = 0;
-    for (const pane of frame.panes) {
-      for (const value of [pane.scale.min, pane.scale.max, this.candles[this.candles.length - 1]?.close ?? 0]) {
+    for (const pane of this.currentFrame.panes) {
+      for (const value of [pane.scale.min, pane.scale.max, lastClose]) {
         widest = Math.max(widest, ctx.measureText(pane.format(value)).width);
       }
     }
     const width = Math.max(MIN_AXIS_WIDTH, Math.ceil((widest + 14) / 4) * 4);
     if (width !== this.priceAxisWidth) {
       this.priceAxisWidth = width;
-      this.invalidate();
+      this.frame = null;
     }
   }
 
