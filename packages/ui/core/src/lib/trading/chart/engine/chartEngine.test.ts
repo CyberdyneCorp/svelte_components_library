@@ -54,7 +54,10 @@ interface Setup {
   engine: ChartEngine;
   main: RecordingContext;
   overlay: RecordingContext;
-  callbacks: Record<"onrangechange" | "oncrosshairmove" | "onpricelinechange" | "onpaneheightschange" | "ondatachange", Mock>;
+  callbacks: Record<
+    "onrangechange" | "oncrosshairmove" | "onpricelinechange" | "onpaneheightschange" | "ondatachange" | "onpricelineedit",
+    Mock
+  >;
   counter: ReturnType<typeof fakeBindings>["counter"];
   setTheme(next: ChartTheme): void;
 }
@@ -72,6 +75,7 @@ function setup(count = 500): Setup {
     onpricelinechange: vi.fn(),
     onpaneheightschange: vi.fn(),
     ondatachange: vi.fn(),
+    onpricelineedit: vi.fn(),
   };
   const engine = new ChartEngine(host, main.canvas, overlay.canvas, callbacks, {
     resolver,
@@ -342,6 +346,61 @@ describe("ChartEngine dragging", () => {
     s.engine.flush();
     s.engine.endPriceLineDrag();
     expect(s.callbacks.onpricelinechange).toHaveBeenCalledWith("sl", 63990.5);
+  });
+
+  it("edits a draggable line from the keyboard: select, move by ticks, commit", () => {
+    s.engine.setPriceLines([
+      { id: "entry", price: 64000, kind: "entry" },
+      { id: "tp", price: 65000, kind: "take-profit", draggable: true },
+      { id: "sl", price: 63000.5, kind: "stop-loss", draggable: true },
+    ]);
+    expect(s.engine.hasDraggablePriceLines).toBe(true);
+    s.engine.selectPriceLine(1);
+    expect(s.engine.editingPriceLine).toEqual({ id: "tp", price: 65000 });
+    s.engine.selectPriceLine(1);
+    expect(s.engine.editingPriceLine).toEqual({ id: "sl", price: 63000.5 });
+    expect(s.engine.dragging).toBe(false);
+    s.engine.nudgePriceLine(-1);
+    s.engine.nudgePriceLine(-10);
+    expect(s.engine.editingPriceLine).toEqual({ id: "sl", price: 62995 });
+    s.engine.commitPriceLine();
+    expect(s.callbacks.onpricelinechange).toHaveBeenCalledWith("sl", 62995);
+    expect(s.engine.editingPriceLine).toBeNull();
+    const phases = s.callbacks.onpricelineedit.mock.calls.map(([edit]) => [edit.phase, edit.id, edit.price]);
+    expect(phases).toEqual([
+      ["select", "tp", 65000],
+      ["select", "sl", 63000.5],
+      ["move", "sl", 63000],
+      ["move", "sl", 62995],
+      ["commit", "sl", 62995],
+    ]);
+  });
+
+  it("cancels a keyboard edit without reporting a change", () => {
+    s.engine.setPriceLines([{ id: "sl", price: 63000, kind: "stop-loss", draggable: true }]);
+    s.engine.selectPriceLine(-1);
+    s.engine.nudgePriceLine(3);
+    s.engine.cancelPriceLine();
+    expect(s.callbacks.onpricelinechange).not.toHaveBeenCalled();
+    expect(s.callbacks.onpricelineedit).toHaveBeenLastCalledWith(expect.objectContaining({ phase: "cancel", price: 63000 }));
+    expect(s.engine.editingPriceLine).toBeNull();
+  });
+
+  it("drops a keyboard edit when its line disappears, and ignores keys without lines", () => {
+    s.engine.nudgePriceLine(1);
+    s.engine.commitPriceLine();
+    s.engine.cancelPriceLine();
+    s.engine.selectPriceLine(1);
+    expect(s.engine.editingPriceLine).toBeNull();
+    s.engine.setPriceLines([{ id: "sl", price: 63000, draggable: true }]);
+    s.engine.selectPriceLine(1);
+    s.engine.setPriceLines([{ id: "tp", price: 65000, draggable: true }]);
+    expect(s.engine.editingPriceLine).toBeNull();
+    s.engine.selectPriceLine(1);
+    s.engine.beginPriceLineDrag("tp");
+    expect(s.engine.editingPriceLine).toBeNull();
+    expect(s.engine.dragging).toBe(true);
+    expect(s.callbacks.onpricelinechange).not.toHaveBeenCalled();
   });
 
   it("ignores drags of unknown lines", () => {

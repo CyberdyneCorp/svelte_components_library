@@ -40,6 +40,22 @@ The system SHALL provide `TradingChart`, rendering `candles: Candle[]` on canvas
 - **WHEN** the user drags it to a price of 63990.3
 - **THEN** `onpricelinechange` SHALL be called with that line's id and 63990.5
 
+### Requirement: Keyboard price-line editing
+
+When `priceLines` contains a `draggable` line, `TradingChart` SHALL offer a keyboard alternative to dragging it: while the chart is focused, L selects the next draggable line (Shift+L the previous), ↑/↓ move the selected line by one `tickSize` (Shift: ten ticks), Enter applies the move by calling `onpricelinechange(id, price)` with a tick-snapped price, and Escape (or leaving the chart) cancels it without calling `onpricelinechange`. Each step SHALL be announced through the chart's polite live region, the chart's description SHALL explain these keys only when a draggable line exists, and every string SHALL be localisable through `labels`.
+
+#### Scenario: Moving a stop-loss with the keyboard
+
+- **GIVEN** a focused chart with a draggable `stop-loss` line at 64000 and a market with `tickSize` `"0.5"`
+- **WHEN** the user presses L, ↓, Shift+↓ and Enter
+- **THEN** `onpricelinechange` SHALL be called once with that line's id and 63994.5, and the live region SHALL announce "SL set to 63,994.5"
+
+#### Scenario: Cancelling a keyboard edit
+
+- **GIVEN** a selected draggable line that has been moved with ↑
+- **WHEN** the user presses Escape
+- **THEN** `onpricelinechange` SHALL NOT be called and the line SHALL be drawn at its original price
+
 ### Requirement: Live updates
 
 When the last candle is replaced (same `time`) or a new candle is appended, `TradingChart` SHALL update the series and indicators incrementally, without recomputing indicators over the whole series, and SHALL keep following the latest bar only if the view was already at the right edge.

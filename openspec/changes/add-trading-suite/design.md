@@ -47,6 +47,13 @@ interface Ticker { market: string; last: string; mark?: string; index?: string; 
   fundingRate?: string; nextFundingTime?: number }
 ```
 
+Units of the percentage-like fields (documented in JSDoc on the types and what the components render):
+
+- `Ticker.changePct24h` is a **percentage**: `"2.35"` means 2.35 %.
+- `Ticker.fundingRate` is a **fraction** per funding period: `"0.0001"` means 0.01 % (`TickerBar` shifts the point by two places to display it).
+- `Position.roe` is a **percentage**: `"13.75"` means 13.75 % (`PositionsTable` appends `%`).
+- Fee rates on `OrderTicket` (`makerFee`, `takerFee`) are fractions, like `fundingRate`.
+
 These types are the contract between all the implementation PRs. They are created first, and changing them later requires updating this design.
 
 ### D3. Chart engine architecture (`trading/chart/engine/`)

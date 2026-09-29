@@ -195,4 +195,42 @@ describe("TradingChart", () => {
     expect(price).toBeLessThan(Math.round(candles[99].close));
     expect((price * 2) % 1).toBe(0);
   });
+
+  it("edits a draggable price line from the keyboard and announces each step", async () => {
+    const onpricelinechange = vi.fn();
+    render(TradingChart, {
+      props: {
+        candles: makeCandles(100).map((c) => ({ ...c, open: c.open + 64000, high: c.high + 64000, low: c.low + 64000, close: c.close + 64000 })),
+        market,
+        locale: "en-US",
+        priceLines: [
+          { id: "entry", price: 64050, kind: "entry" },
+          { id: "sl", price: 64000, kind: "stop-loss", draggable: true },
+        ],
+        onpricelinechange,
+      },
+    });
+    const description = document.getElementById(chart().getAttribute("aria-describedby")!);
+    expect(description).toHaveTextContent(/Press L to select a draggable price line/);
+    const live = document.querySelector("[aria-live='polite']")!;
+    chart().focus();
+    await fireEvent.keyDown(chart(), { key: "l" });
+    await waitFor(() => expect(live.textContent).toBe("SL selected at 64,000.0. Up and Down move it, Enter applies, Escape cancels."));
+    await fireEvent.keyDown(chart(), { key: "ArrowDown" });
+    await fireEvent.keyDown(chart(), { key: "ArrowDown", shiftKey: true });
+    await fireEvent.keyDown(chart(), { key: "Enter" });
+    expect(onpricelinechange).toHaveBeenCalledWith("sl", 63994.5);
+    await waitFor(() => expect(live.textContent).toBe("SL set to 63,994.5"), { timeout: 1000 });
+    await fireEvent.keyDown(chart(), { key: "l" });
+    await fireEvent.keyDown(chart(), { key: "ArrowUp" });
+    await fireEvent.keyDown(chart(), { key: "Escape" });
+    expect(onpricelinechange).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(live.textContent).toBe("SL unchanged at 64,000.0"), { timeout: 1000 });
+  });
+
+  it("omits the price-line help without draggable lines", () => {
+    render(TradingChart, { props: { candles: makeCandles(20), priceLines: [{ price: 1 }] } });
+    const description = document.getElementById(chart().getAttribute("aria-describedby")!);
+    expect(description).not.toHaveTextContent(/Press L/);
+  });
 });

@@ -4,7 +4,16 @@
   import { onMount, untrack } from "svelte";
   import ChartFrame from "../../charts/ChartFrame/ChartFrame.svelte";
   import type { Candle, ChartMarker, MarketSpec, PriceLine } from "../types.js";
-  import { barAnnouncement, chartSummary, chartTable, createThrottle, tableCaption, type ValueColumn } from "./accessibility.js";
+  import {
+    barAnnouncement,
+    chartSummary,
+    chartTable,
+    createThrottle,
+    keyboardDescription,
+    priceLineAnnouncement,
+    tableCaption,
+    type ValueColumn,
+  } from "./accessibility.js";
   import { ChartEngine } from "./engine/chartEngine.js";
   import { attachInteraction } from "./engine/interaction.js";
   import { handleChartKey } from "./engine/keyboard.js";
@@ -75,7 +84,10 @@
     class?: string;
     onrangechange?: (range: VisibleRange) => void;
     oncrosshairmove?: (info: CrosshairInfo | null) => void;
-    /** A draggable price line was dropped at `price` (snapped to `market.tickSize`). */
+    /**
+     * A draggable price line was dropped (pointer) or applied with Enter
+     * (keyboard: L selects, ↑/↓ move by ticks) at `price`, snapped to `market.tickSize`.
+     */
     onpricelinechange?: (id: string, price: number) => void;
     /** An indicator has invalid parameters or data and was disabled (default: a console warning). */
     onindicatorerror?: (config: IndicatorConfig, error: Error) => void;
@@ -117,6 +129,7 @@
   let table = $derived(chartTable(a11yContext, columns, tableRows));
   let summary = $derived(chartSummary(a11yContext, range));
   let caption = $derived(tableCaption(resolved, table.rows.length));
+  let description = $derived(keyboardDescription(resolved, priceLines.some((line) => line.draggable)));
 
   const announcer = createThrottle((text) => (announcement = text), ANNOUNCE_WAIT);
 
@@ -133,6 +146,7 @@
       },
       oncrosshairmove: handleCrosshair,
       onpricelinechange: (id, price) => onpricelinechange?.(id, price),
+      onpricelineedit: (edit) => announcer.push(priceLineAnnouncement(a11yContext, edit)),
       onpaneheightschange: (heights) => (paneHeights = heights),
       ondatachange: () => dataVersion++,
       onindicatorerror: onindicatorerror ? (config, error) => onindicatorerror?.(config, error) : undefined,
@@ -188,6 +202,7 @@
   }
 
   function onblur() {
+    engine?.cancelPriceLine();
     if (engine?.currentCrosshair?.source === "keyboard") engine.clearCrosshair();
   }
 </script>
@@ -195,7 +210,7 @@
 <div class="cy-trading-chart {className}" bind:this={root}>
   <ChartFrame
     fallbackLabel={summary}
-    description={resolved.keyboardHint}
+    {description}
     hideTitle
     data={table}
     tableCaption={caption}

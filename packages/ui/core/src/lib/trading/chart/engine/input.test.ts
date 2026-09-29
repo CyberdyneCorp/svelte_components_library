@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { FRICTION, inertiaStep, MIN_VELOCITY, startInertia, VelocityTracker } from "./inertia.js";
-import { applyKeyCommand, handleChartKey, KEY_ZOOM, keyCommand } from "./keyboard.js";
+import { applyKeyCommand, handleChartKey, KEY_ZOOM, keyCommand, priceLineCommand } from "./keyboard.js";
+import { draggableIds, nextDraggable, nudgedPrice, tickStep } from "./priceLineEditor.js";
 import { wheelFactor } from "./interaction.js";
 import type { ChartEngine } from "./chartEngine.js";
 import type { FrameClock } from "./scheduler.js";
@@ -31,8 +32,47 @@ describe("keyboard commands", () => {
       crosshairTo: vi.fn(),
       clearCrosshair: vi.fn(),
       visibleRange: vi.fn(() => ({ from: 0, to: 99, fromTime: 0, toTime: 0 })),
+      selectPriceLine: vi.fn(),
+      nudgePriceLine: vi.fn(),
+      commitPriceLine: vi.fn(),
+      cancelPriceLine: vi.fn(),
+      editingPriceLine: null as { id: string; price: number } | null,
+      hasDraggablePriceLines: false,
     };
   }
+
+  it("maps the price-line keys only when lines are draggable or being edited", () => {
+    const line = (k: string, editing: boolean, available = true, shiftKey = false) =>
+      priceLineCommand({ key: k, shiftKey }, editing, available);
+    expect(line("l", false)).toEqual({ type: "line-select", step: 1 });
+    expect(line("L", false, true, true)).toEqual({ type: "line-select", step: -1 });
+    expect(line("l", false, false)).toBeNull();
+    expect(line("ArrowUp", false)).toBeNull();
+    expect(line("ArrowUp", true)).toEqual({ type: "line-nudge", ticks: 1 });
+    expect(line("ArrowDown", true, true, true)).toEqual({ type: "line-nudge", ticks: -10 });
+    expect(line("Enter", true)).toEqual({ type: "line-commit" });
+    expect(line("Escape", true)).toEqual({ type: "line-cancel" });
+    expect(line("ArrowLeft", true)).toBeNull();
+  });
+
+  it("routes price-line keys to the engine before navigation", () => {
+    const engine = fakeEngine();
+    const e = engine as unknown as ChartEngine;
+    const press = (key: string, shiftKey = false) =>
+      handleChartKey(e, new KeyboardEvent("keydown", { key, shiftKey, cancelable: true }));
+    expect(press("ArrowUp")).toBe(false);
+    engine.hasDraggablePriceLines = true;
+    expect(press("l")).toBe(true);
+    expect(engine.selectPriceLine).toHaveBeenCalledWith(1);
+    engine.editingPriceLine = { id: "sl", price: 1 };
+    press("ArrowUp", true);
+    press("Enter");
+    press("Escape");
+    expect(engine.nudgePriceLine).toHaveBeenCalledWith(10);
+    expect(engine.commitPriceLine).toHaveBeenCalled();
+    expect(engine.cancelPriceLine).toHaveBeenCalled();
+    expect(engine.clearCrosshair).not.toHaveBeenCalled();
+  });
 
   it("applies commands to the engine", () => {
     const engine = fakeEngine();
@@ -62,6 +102,29 @@ describe("keyboard commands", () => {
     engine.visibleRange.mockReturnValue(null as never);
     handleChartKey(engine as unknown as ChartEngine, new KeyboardEvent("keydown", { key: "ArrowRight", shiftKey: true }));
     expect(engine.panBars).toHaveBeenLastCalledWith(1);
+  });
+});
+
+describe("price-line editor helpers", () => {
+  const market = { tickSize: "0.5" } as never;
+  const lines = [{ price: 1 }, { price: 2, draggable: true }, { id: "sl", price: 3, draggable: true }];
+
+  it("lists and cycles the draggable lines", () => {
+    expect(draggableIds(lines)).toEqual(["price-line-1", "sl"]);
+    expect(nextDraggable(lines, null, 1)).toBe("price-line-1");
+    expect(nextDraggable(lines, null, -1)).toBe("sl");
+    expect(nextDraggable(lines, "sl", 1)).toBe("price-line-1");
+    expect(nextDraggable(lines, "price-line-1", -1)).toBe("sl");
+    expect(nextDraggable(lines, "gone", 1)).toBe("price-line-1");
+    expect(nextDraggable([{ price: 1 }], null, 1)).toBeNull();
+  });
+
+  it("moves by market ticks, or by the displayed precision without a market", () => {
+    expect(tickStep(64000, market)).toBe(0.5);
+    expect(nudgedPrice(63990.3, 1, market)).toBe(63991);
+    expect(nudgedPrice(64000, -10, market)).toBe(63995);
+    expect(tickStep(64000, undefined)).toBe(0.01);
+    expect(nudgedPrice(0.1, 2, undefined)).toBe(0.10002);
   });
 });
 

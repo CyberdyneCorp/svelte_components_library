@@ -40,6 +40,7 @@
 
 ## 6. Integration (PR 6)
 
-- [ ] 6.1 `Trading/Terminal` story combining chart, ticket, book, trades, ticker and tables with a simulated feed
-- [ ] 6.2 README Trading section and Getting-Started snippet
-- [ ] 6.3 `openspec validate --all --strict`; tick this list; archive after release
+- [x] 6.1 `Trading/Terminal` story combining chart, ticket, book, trades, ticker and tables with a simulated feed
+- [x] 6.2 README Trading section and Getting-Started snippet
+- [x] 6.3 `openspec validate --all --strict`; tick this list
+- [ ] 6.4 Archive the change after release

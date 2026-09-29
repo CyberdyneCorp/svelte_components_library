@@ -23,6 +23,15 @@ export const DEFAULT_LABELS: ResolvedLabels = {
   columns: { time: "Time", open: "Open", high: "High", low: "Low", close: "Close", volume: "Volume" },
   legend: { open: "O", high: "H", low: "L", close: "C", volume: "V" },
   priceLines: { entry: "Entry", "take-profit": "TP", "stop-loss": "SL", liquidation: "Liq." },
+  priceLineHint:
+    "Press L to select a draggable price line (Shift+L for the previous one); Up and Down move it one tick, Shift for ten ticks; Enter applies and Escape cancels.",
+  priceLine: "Price line",
+  priceLineEdit: {
+    select: "{line} selected at {price}. Up and Down move it, Enter applies, Escape cancels.",
+    move: "{line} {price}",
+    commit: "{line} set to {price}",
+    cancel: "{line} unchanged at {price}",
+  },
   indicators: {
     sma: "SMA",
     ema: "EMA",
@@ -58,6 +67,7 @@ export function resolveLabels(labels: TradingChartLabels = {}): ResolvedLabels {
     columns: { ...d.columns, ...stripUndefined(labels.columns) },
     legend: { ...d.legend, ...stripUndefined(labels.legend) },
     priceLines: { ...d.priceLines, ...stripUndefined(labels.priceLines) },
+    priceLineEdit: { ...d.priceLineEdit, ...stripUndefined(labels.priceLineEdit) },
     indicators: { ...d.indicators, ...stripUndefined(labels.indicators) },
     outputs: { ...d.outputs, ...(stripUndefined(labels.outputs) as Record<string, string>) },
   };

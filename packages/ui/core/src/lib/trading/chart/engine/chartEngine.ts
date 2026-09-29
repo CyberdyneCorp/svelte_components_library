@@ -14,6 +14,7 @@ import { IndicatorStore } from "./indicatorStore.js";
 import { dragSeparator, paneAt, type ChartLayout } from "./layout.js";
 import { paintMain } from "./paintMain.js";
 import { paintOverlay } from "./paintOverlay.js";
+import { findPriceLine, nextDraggable, nudgedPrice, type PriceLineEdit } from "./priceLineEditor.js";
 import { createScheduler, type FrameClock, type Layer, type Scheduler } from "./scheduler.js";
 import { classifyChange, indexAtTime, snapshotOf, type SeriesSnapshot } from "./series.js";
 import type { ChartOptions, Crosshair, IndexedMarker, Scene } from "./scene.js";
@@ -27,6 +28,8 @@ export interface EngineCallbacks {
   onrangechange?(range: VisibleRange): void;
   oncrosshairmove?(info: CrosshairInfo | null): void;
   onpricelinechange?(id: string, price: number): void;
+  /** A keyboard price-line edit step (select, move, commit, cancel), for announcements. */
+  onpricelineedit?(edit: PriceLineEdit): void;
   /** Pane heights in px after a separator drag, keyed by pane id. */
   onpaneheightschange?(heights: Record<string, number>): void;
   /** Candles or indicator values changed (refreshes the data table). */
@@ -73,6 +76,8 @@ export class ChartEngine {
   private priceAxisWidth = 64;
   private crosshair: Crosshair | null = null;
   private draft: { id: string; price: number } | null = null;
+  /** True while `draft` comes from the keyboard rather than a pointer drag. */
+  private keyEdit = false;
   private hoverLine: string | null = null;
   private separatorDrag: { index: number; layout: ChartLayout } | null = null;
   private frame: Frame | null = null;
@@ -145,6 +150,7 @@ export class ChartEngine {
 
   setPriceLines(lines: readonly PriceLine[]): void {
     this.priceLines = lines;
+    if (this.draft && !findPriceLine(lines, this.draft.id)) this.stopEdit();
     this.invalidate("main");
   }
 
@@ -344,8 +350,10 @@ export class ChartEngine {
   }
 
   beginPriceLineDrag(id: string): void {
-    const line = this.priceLines.find((l, i) => (l.id ?? `price-line-${i}`) === id);
-    if (line) this.draft = { id, price: line.price };
+    const line = findPriceLine(this.priceLines, id);
+    if (!line) return;
+    this.keyEdit = false;
+    this.draft = { id, price: line.price };
   }
 
   /** Moves the dragged line to the tick-snapped price under `y`. */
@@ -365,7 +373,68 @@ export class ChartEngine {
   }
 
   get dragging(): boolean {
-    return this.draft !== null || this.separatorDrag !== null;
+    return (this.draft !== null && !this.keyEdit) || this.separatorDrag !== null;
+  }
+
+  // ── Keyboard price-line editing ──────────────────────────────────
+
+  /** The line being edited from the keyboard and its draft price. */
+  get editingPriceLine(): { id: string; price: number } | null {
+    return this.keyEdit ? this.draft : null;
+  }
+
+  get hasDraggablePriceLines(): boolean {
+    return this.priceLines.some((line) => line.draggable);
+  }
+
+  /** Selects the next (1) or previous (−1) draggable line for editing; a pending move is dropped. */
+  selectPriceLine(step: 1 | -1): void {
+    const id = nextDraggable(this.priceLines, this.editingPriceLine?.id ?? null, step);
+    const line = id === null ? undefined : findPriceLine(this.priceLines, id);
+    if (!id || !line) return;
+    this.keyEdit = true;
+    this.draft = { id, price: line.price };
+    this.invalidate("main");
+    this.emitEdit("select", line.price);
+  }
+
+  /** Moves the edited line by `ticks` market ticks (tick-snapped). */
+  nudgePriceLine(ticks: number): void {
+    const edit = this.editingPriceLine;
+    if (!edit) return;
+    this.draft = { id: edit.id, price: nudgedPrice(edit.price, ticks, this.options.market) };
+    this.invalidate("main");
+    this.emitEdit("move", this.draft.price);
+  }
+
+  /** Ends the keyboard edit and reports the draft price through `onpricelinechange`. */
+  commitPriceLine(): void {
+    const edit = this.editingPriceLine;
+    if (!edit) return;
+    this.emitEdit("commit", edit.price);
+    this.stopEdit();
+    this.callbacks.onpricelinechange?.(edit.id, edit.price);
+  }
+
+  /** Ends the keyboard edit, leaving the line at its current price. */
+  cancelPriceLine(): void {
+    const edit = this.editingPriceLine;
+    if (!edit) return;
+    const line = findPriceLine(this.priceLines, edit.id);
+    if (line) this.emitEdit("cancel", line.price);
+    this.stopEdit();
+  }
+
+  private stopEdit(): void {
+    this.draft = null;
+    this.keyEdit = false;
+    this.invalidate("main");
+  }
+
+  private emitEdit(phase: PriceLineEdit["phase"], price: number): void {
+    const id = this.draft?.id;
+    const line = id === undefined ? undefined : findPriceLine(this.priceLines, id);
+    if (id !== undefined && line) this.callbacks.onpricelineedit?.({ phase, id, price, line });
   }
 
   // ── Painting ─────────────────────────────────────────────────────

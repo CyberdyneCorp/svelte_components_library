@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **247 components** across 18 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **255 components** across 19 categories, design tokens, and full Storybook documentation.
 
 ## Storybook
 
@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdynecorp/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdynecorp/svelte-ui-core` | 247 UI components across 18 categories |
+| `@cyberdynecorp/svelte-ui-core` | 255 UI components across 19 categories |
 
 ## Installation
 
@@ -168,7 +168,7 @@ Use components:
 </Card>
 ```
 
-## Components (247)
+## Components (255)
 
 ### Primitives (14)
 `Button` · `Badge` · `Icon` (20+ built-in) · `IconButton` · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle` · `StarRating`
@@ -240,9 +240,78 @@ Pixel desktop-OS aesthetic for DAO / DeFi surfaces.
 - **Pixel primitives:** `PixelButton` · `PixelInput` · `PixelCheckbox` · `PixelRadio` · `PixelToggle` · `PixelTabs` · `PixelScrollArea` · `PixelTooltip` · `PixelAlert` · `PixelProgressBar` · `PixelNotification` · `PixelFileIcon` · `RetroContextMenu`
 - **DAO/DeFi widgets:** `ConnectWalletModal` · `StatCard` · `ProposalRow` · `StatusDotList` · `ShoppingCartPanel` · `LiquidityRangeBar` · `LiquidityPositionCard` · `PoolRangeHistogram` · `TokenPairIcon` · `PriceChart` · `DepthChart` · `TVLSparkline`
 
+### Trading (8)
+`TradingChart` · `OrderBook` · `RecentTrades` · `TickerBar` · `OrderTicket` · `LeverageSlider` · `PositionsTable` · `OpenOrdersTable` — plus technical indicators and decimal-string order helpers. See [Trading](#trading).
+
 ## Trading
 
 UI for perpetual-futures terminals. Components take data through props and report intent through callbacks; there is no exchange connectivity. Prices and sizes of books, trades and tickers are decimal strings (`"64123.5"`) formatted with the `MarketSpec` precision.
+
+| Component / module | What it does | Key props → callbacks |
+|---|---|---|
+| `TradingChart` | Canvas candlestick chart: series, volume, indicators and sub-panes, markers, draggable price lines, live updates | `candles`, `market`, `indicators`, `markers`, `priceLines` → `onpricelinechange`, `onrangechange`, `oncrosshairmove` |
+| `OrderBook` | Bids / asks with grouping, depth bars and spread | `bids`, `asks`, `market`, `bind:grouping` → `onpriceclick` |
+| `RecentTrades` | Windowed trade tape, newest first | `trades`, `market`, `timeZone` |
+| `TickerBar` | Last / mark / index, 24h stats, open interest, funding with countdown | `ticker`, `market` |
+| `OrderTicket` | Long/short order form with validation and cost preview | `market`, `available`, `referencePrice`, `bind:price` → `onsubmit(draft)` |
+| `LeverageSlider` | 1×–max leverage slider with numeric input | `bind:value`, `max` → `onchange` |
+| `PositionsTable` | Open positions with PnL / ROE | `positions`, `markets` → `onclose`, `onedittpsl` |
+| `OpenOrdersTable` | Resting orders | `orders`, `markets` → `oncancel`, `oncancelall` |
+| Indicators | `sma` … `vwap` batch functions + `create*` incremental calculators | `number[]` / `Candle[]` in, aligned series out |
+| Helpers | `roundToTick`, `roundToStep`, `formatPrice`, `formatSize`, decimal-string maths | `MarketSpec` precision |
+
+Units on the shared types: `Ticker.changePct24h` and `Position.roe` are **percentages** (`"2.35"` = 2.35 %), while `Ticker.fundingRate` and the ticket's `makerFee` / `takerFee` are **fractions** (`"0.0001"` = 0.01 %).
+
+### Trading — getting started: a terminal
+
+Wire the pieces to your own feed and account state; every component only renders props and reports intent. The `Trading/Terminal` story is a complete, runnable version of this with a simulated feed (desktop grid and stacked phone layout).
+
+```svelte
+<script lang="ts">
+  import {
+    TickerBar, TradingChart, OrderBook, RecentTrades, OrderTicket, PositionsTable, OpenOrdersTable,
+    type MarketSpec, type OrderDraft, type Position, type PriceLine,
+  } from "@cyberdynecorp/svelte-ui-core";
+
+  const market: MarketSpec = {
+    symbol: "BTC-PERP", baseAsset: "BTC", quoteAsset: "USDT",
+    tickSize: "0.5", stepSize: "0.001", minSize: "0.001", maxLeverage: 100,
+  };
+  // From your exchange feed / account (e.g. websocket stores): candles, ticker, bids, asks, trades, positions, orders.
+  let { candles, ticker, bids, asks, trades, positions, orders, available, api } = $props();
+
+  let price = $state<string | null>(null); // the book fills the ticket's limit price
+  const position: Position | undefined = $derived(positions[0]);
+
+  // Entry / TP / SL / liquidation of the open position; TP and SL can be dragged (or moved with L, ↑/↓, Enter).
+  const line = (id: string, value: string | undefined, kind: PriceLine["kind"], draggable = false): PriceLine[] =>
+    value === undefined ? [] : [{ id, price: Number(value), kind, draggable }];
+  const priceLines = $derived(
+    position
+      ? [
+          ...line("entry", position.entryPrice, "entry"),
+          ...line("tp", position.takeProfit, "take-profit", true),
+          ...line("sl", position.stopLoss, "stop-loss", true),
+          ...line("liq", position.liquidationPrice, "liquidation"),
+        ]
+      : [],
+  );
+</script>
+
+<TickerBar {ticker} {market} />
+<TradingChart
+  {candles}
+  {market}
+  {priceLines}
+  indicators={[{ type: "ema", period: 21 }, { type: "bollinger" }, { type: "rsi" }, { type: "macd" }]}
+  onpricelinechange={(id, value) => position && api.setProtection(position.id, id, value)}
+/>
+<OrderBook {bids} {asks} {market} onpriceclick={(level) => (price = level)} />
+<RecentTrades {trades} {market} />
+<OrderTicket {market} {available} referencePrice={ticker.mark} bind:price onsubmit={(draft: OrderDraft) => api.placeOrder(draft)} />
+<PositionsTable {positions} markets={{ [market.symbol]: market }} onclose={(p, kind) => api.close(p, kind)} />
+<OpenOrdersTable {orders} markets={{ [market.symbol]: market }} oncancel={(o) => api.cancel(o.id)} />
+```
 
 ### Trading — indicators
 
@@ -308,13 +377,14 @@ Tests check RSI, ATR and ADX (+DI/−DI) against the StockCharts ChartSchool wor
 - **Indicators:** declarative `indicators={[{ type, pane?, …params, color? }]}` covering every `trading/indicators` function. Moving averages, Bollinger Bands (band fill) and VWAP overlay the price pane; RSI (30/70 guides), MACD (histogram), ATR, ADX (+DI/−DI) and Stochastic (20/80 guides) get a sub-pane named after the type, or the `pane` you give (indicators sharing a pane id share the pane). Parameters use the indicator names (`period`, `stdDev`, `fastPeriod`/`slowPeriod`/`signalPeriod`, `kPeriod`/`smoothK`/`dPeriod`, `session`, `source`). Values are computed once per data change and updated incrementally for live bars. An invalid config disables that indicator and calls `onindicatorerror(config, error)` (default: a console warning) instead of breaking the chart.
 - **Panes:** sub-pane heights are resizable by dragging the separator; `bind:paneHeights` (relative heights keyed by pane id, e.g. `{ main: 3, rsi: 1 }`) sets and receives them.
 - **Markers and price lines:** `markers: ChartMarker[]` are anchored to bars (above / below / at, arrows, circles, squares, optional text; several on one bar stack). `priceLines: PriceLine[]` are coloured by `kind` from tokens (entry → neutral, take-profit → long, stop-loss → short, liquidation → warning, `color` overrides; var() allowed). A `draggable` line calls `onpricelinechange(id, price)` on drop with the price snapped to `market.tickSize` (decimal-string rounding via `roundToTick`).
+- **Keyboard price-line editing:** the keyboard alternative to dragging. With the chart focused, **L** selects the next draggable line (Shift+L the previous), **↑/↓** move it one tick (Shift: ten ticks), **Enter** applies it through the same `onpricelinechange(id, price)` (tick-snapped) and **Escape** — or leaving the chart — cancels. Each step is announced in the polite live region ("SL selected at 64,000.0…", "SL set to 63,994.5"), and the chart's description explains the keys only when a draggable line exists. Strings: `labels.priceLineHint`, `labels.priceLine` and `labels.priceLineEdit.{select,move,commit,cancel}` (placeholders `{line}`, `{price}`).
 - **Navigation:** drag to pan (with inertia, off under `prefers-reduced-motion`), wheel or pinch to zoom around the pointer, double-click to reset. When focused: ←/→ move the crosshair one bar, Shift+←/→ pan, +/− zoom, Home/End jump to the first/last bar, Escape hides the crosshair. `onrangechange({ from, to, fromTime, toTime })` and `oncrosshairmove(info | null)` report the visible bars and the hovered bar.
 - **Live updates:** pass a new array with the last bar replaced (same `time`) or bars appended; only the tail and the indicator tails are recomputed. The view follows new bars only when it is at the right edge, so a scrolled-back view stays put. Prepending history keeps the view; any other change resets it. Use `$state.raw` for large series.
 - **Time:** time labels adapt to the zoom and use `timeZone` (IANA, default `"UTC"`) and `locale`.
 - **Theming:** colours come from foundation tokens (`--color-trade-long/short`, borders, text, accents), re-read when `data-theme` / `class` on `<html>` or the colour scheme changes, without remounting. Override per chart through the `--cy-trading-chart-*` custom properties.
 - **Accessibility:** the chart is a focusable named image summarising symbol, interval, visible range, last close and change; keyboard crosshair moves are announced in a polite, throttled live region; "Show data" reveals a table of the latest `tableRows` (50) bars with OHLCV and one column per indicator output. Every string is in `labels` (`TradingChartLabels`).
 - **Performance** (Chromium, 100k candles, ~2,200 bars visible, DPR 2): load + indicators ≈ 36 ms, pan/zoom frame ≈ 1.2 ms, live last-bar update < 0.1 ms script (≈ 1.4 ms including repaint). Only visible bars are drawn, and the crosshair repaints a separate overlay canvas.
-- Stories `Trading/TradingChart` (series types, indicators, markers & price lines, live feed, 100k candles, theme switching, pt-BR) run axe in failing mode.
+- Stories `Trading/TradingChart` (series types, indicators, markers & price lines with a keyboard-editing play test, live feed, 100k candles, theme switching, pt-BR) and `Trading/Terminal` (the full terminal, with a book → ticket → position play test) run axe in failing mode.
 
 ```svelte
 <TradingChart
@@ -458,7 +528,7 @@ pnpm release            # Build & publish
 │       │       ├── styles/  CSS (colors, typography, spacing, radius, animations)
 │       │       ├── themes/  Optional theme presets (calm + 17 design styles)
 │       │       └── theme/   Theme preference helper + pre-paint init script
-│       └── core/            UI components (247 components)
+│       └── core/            UI components (255 components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
 │               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ScheduleConfig, ...
@@ -478,6 +548,7 @@ pnpm release            # Build & publish
 │               ├── cesium/       CesiumGlobe + 48 layers/chrome (3D globe; optional cesium peer dep)
 │               ├── retro/        RetroWindow, Taskbar, WindowManager, Pixel* primitives, DeFi widgets (36)
 │               ├── flow/         NodeEditor, FlowNode, FlowPort, FlowEdge, NodePalette, ... (node-graph editor)
+│               ├── trading/      Futures terminal: chart/ (TradingChart + canvas engine), indicators/, market/ (OrderBook, RecentTrades, TickerBar), order/ (OrderTicket, LeverageSlider, PositionsTable, OpenOrdersTable), types, format, decimal (8)
 │               └── _testdata/    Shared test data module for stories
 └── docs/                    Built Storybook output
 ```
