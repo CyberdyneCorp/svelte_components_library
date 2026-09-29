@@ -24,5 +24,5 @@
 
 - [x] 4.1 Add a changeset (minor bump of `@cyberdynecorp/svelte-ui-core`)
 - [x] 4.2 Document the chart accessibility API in Storybook docs
-- [ ] 4.3 Follow-up: `HeatmapChart` grid semantics and the remaining charts
-- [ ] 4.4 Archive this change once released
+- [x] 4.3 Follow-up: `HeatmapChart` grid semantics and the remaining charts (moved to change `enforce-axe-all-charts`)
+- [x] 4.4 Archive this change once released

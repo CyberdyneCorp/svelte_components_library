@@ -3,17 +3,21 @@
 ## Purpose
 
 The repository is a pnpm-workspace monorepo publishing two packages — `@cyberdynecorp/svelte-ui-foundation` (design tokens, shipped as raw source) and `@cyberdynecorp/svelte-ui-core` (components, compiled with `svelte-package`) — to the GitHub Packages registry. Storybook is the development and documentation surface, Vitest and Playwright provide unit/story/visual testing, and Changesets drives versioning and release. This spec captures the build, packaging, documentation, testing, and release contracts.
-
 ## Requirements
-
 ### Requirement: Monorepo package layout
 
-The system SHALL define a pnpm workspace covering `packages/config/*` and `packages/ui/*`, publishing two packages: `@cyberdynecorp/svelte-ui-foundation` (private:false via `access: public`, ships raw `src/lib`, no build step, `svelte` field pointing at `./src/lib/index.ts`) and `@cyberdynecorp/svelte-ui-core` (ships compiled `dist`, `svelte` field `./dist/index.js`). Core SHALL depend on foundation via `workspace:*`. (src: pnpm-workspace.yaml:1-3; packages/ui/foundation/package.json:2-23; packages/ui/core/package.json:2-15,29-31)
+The system SHALL define a pnpm workspace covering `packages/config/*` and `packages/ui/*`, publishing two packages: `@cyberdynecorp/svelte-ui-foundation` (private:false via `access: public`, ships raw `src/lib`, no build step, `svelte` field pointing at `./src/lib/index.ts`) and `@cyberdynecorp/svelte-ui-core` (ships compiled `dist`, `svelte` field `./dist/index.js`). Core SHALL depend on foundation via `workspace:*`. The foundation tarball SHALL contain only runtime source: its `files` field SHALL be `src` with `src/**/*.test.ts` and `src/stories` negated, a form `pnpm publish` honours. `pnpm check:package` SHALL inspect `pnpm pack` output for both packages. (src: pnpm-workspace.yaml:1-3; packages/ui/foundation/package.json; packages/ui/core/package.json:2-15,29-31; scripts/check-package-contents.mjs)
 
 #### Scenario: Foundation ships raw source
 
 - **WHEN** the foundation package is packed
 - **THEN** the system SHALL include `src/lib` and point its `svelte`/`exports` entries at raw `./src/lib/*` files with no compiled `dist`
+
+#### Scenario: Foundation tarball excludes tests and stories
+
+- **GIVEN** the foundation package
+- **WHEN** `pnpm check:package` inspects the output of `pnpm pack`
+- **THEN** the system SHALL fail if any `.test.`, `.stories.` or `stories/` file would ship, if an `exports` target is missing from the tarball, or if a shipped module imports a relative path that is not shipped
 
 #### Scenario: Core resolves foundation from the workspace
 
@@ -32,12 +36,18 @@ The system SHALL declare `cesium` (`^1.124.0`) as an optional peer dependency of
 
 ### Requirement: Recursive build with svelte-package
 
-The system SHALL build all packages via the root `build` script `pnpm -r build`; core SHALL build with `svelte-package` producing `dist/index.js` and `dist/index.d.ts`, while foundation (having no `scripts`) SHALL be a no-op that ships raw source. (src: package.json:8; packages/ui/core/package.json:16-19)
+The system SHALL build all packages via the root `build` script `pnpm -r build`; core SHALL build with `svelte-package` producing `dist/index.js` and `dist/index.d.ts`, while foundation (having no `scripts`) SHALL be a no-op that ships raw source. The published core tarball SHALL contain only runtime artifacts: its `files` field SHALL exclude `dist/**/*.test.*`, `dist/**/*.stories.*` and `dist/_testdata`. (src: package.json; packages/ui/core/package.json; scripts/check-package-contents.mjs)
 
 #### Scenario: Core build output
 
 - **WHEN** `pnpm -r build` runs
 - **THEN** the system SHALL invoke `svelte-package` in core and emit compiled `dist` artifacts
+
+#### Scenario: Tests and stories are not published
+
+- **GIVEN** a built core package
+- **WHEN** `pnpm check:package` inspects the output of `npm pack --dry-run`
+- **THEN** the system SHALL fail if any `.test.`, `.stories.` or `_testdata` file would ship, or if a shipped module imports a relative path that is not shipped
 
 ### Requirement: Storybook documentation surface
 
@@ -68,16 +78,40 @@ The system SHALL manage versioning with Changesets (base branch `main`, `access:
 
 ### Requirement: Continuous integration
 
-The system SHALL run PR checks via `.github/workflows/test.yaml` (on pull_request to `main`: `pnpm check`, `pnpm build`, Playwright chromium install, `pnpm test`), publish Storybook to GitHub Pages on push to `main`, and validate OpenSpec specs on pull requests and pushes to `main`. CI workflows SHALL use `ubuntu-latest`, Node 20, pnpm cache, and `pnpm install --frozen-lockfile`. (src: .github/workflows/test.yaml:1-23; .github/workflows/publish-storybook.yaml:1-40; .github/workflows/openspec-validate.yaml)
+The system SHALL run PR checks via `.github/workflows/test.yaml` (on pull_request to `main`: `pnpm check`, `pnpm build`, `pnpm check:package`, Playwright chromium install, `pnpm test`), publish Storybook to GitHub Pages on push to `main`, and validate OpenSpec specs on pull requests and pushes to `main`. CI workflows SHALL use `ubuntu-latest`, Node 20, pnpm cache, and `pnpm install --frozen-lockfile`. (src: .github/workflows/test.yaml:1-23; .github/workflows/publish-storybook.yaml:1-40; .github/workflows/openspec-validate.yaml)
 
 #### Scenario: PR test job
 
 - **GIVEN** a pull request targeting `main`
 - **WHEN** CI runs
-- **THEN** the system SHALL execute `pnpm check`, `pnpm build`, and `pnpm test`
+- **THEN** the system SHALL execute `pnpm check`, `pnpm build`, `pnpm check:package`, and `pnpm test`
 
 #### Scenario: OpenSpec validation on PRs
 
 - **GIVEN** a pull request targeting `main`
 - **WHEN** CI runs
 - **THEN** the system SHALL execute `openspec validate --all --strict` and fail the build on any spec error
+
+### Requirement: Foundation subpath exports
+
+The foundation package SHALL expose, besides `.`, `./styles` and `./tokens`, the subpaths `./themes/calm.css` (pointing to `./src/lib/themes/calm.css`) and `./theme` (with `types` and `default` conditions pointing to `./src/lib/theme/index.ts`). Its `files` field SHALL exclude `src/lib/**/*.test.ts` so tests are not published. Storybook SHALL alias `@cyberdynecorp/svelte-ui-foundation/theme` ahead of the bare package alias, so that the subpath resolves to source. (src: packages/ui/foundation/package.json; .storybook/main.ts)
+
+#### Scenario: Consumer imports the calm preset and helper
+
+- **WHEN** an app imports `@cyberdynecorp/svelte-ui-foundation/themes/calm.css` and `@cyberdynecorp/svelte-ui-foundation/theme`
+- **THEN** both SHALL resolve through the package `exports` map
+
+#### Scenario: Foundation tarball excludes tests
+
+- **WHEN** the foundation package is packed
+- **THEN** no `*.test.ts` file SHALL be included
+
+### Requirement: Design-style preset exports
+
+The foundation package SHALL expose each design-style preset as an explicit `./themes/<name>.css` subpath export that points to `./src/lib/themes/<name>.css`, alongside `./themes/calm.css`. (src: packages/ui/foundation/package.json)
+
+#### Scenario: Consumer imports a preset
+
+- **WHEN** an app imports `@cyberdynecorp/svelte-ui-foundation/themes/glass.css`
+- **THEN** it SHALL resolve through the package `exports` map
+

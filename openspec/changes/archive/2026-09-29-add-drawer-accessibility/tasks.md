@@ -21,4 +21,4 @@
 
 - [x] 4.1 Update README, TRD and the design-token docs
 - [x] 4.2 Add changesets (minor core, minor foundation)
-- [ ] 4.3 Archive this change once released
+- [x] 4.3 Archive this change once released

@@ -18,4 +18,4 @@
 - [x] 3.1 Export both components and their types from the barrel
 - [x] 3.2 Update the README and the Storybook overview counts
 - [x] 3.3 Add a changeset (minor bump of `@cyberdynecorp/svelte-ui-core`)
-- [ ] 3.4 Archive this change once released
+- [x] 3.4 Archive this change once released

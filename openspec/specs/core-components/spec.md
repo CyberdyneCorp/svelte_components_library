@@ -161,3 +161,327 @@ The system SHALL provide a `MoneyInput` form component. It SHALL:
 - **AND** the input SHALL set `aria-invalid="true"` and an `aria-describedby` that references both the hint id and the error id
 - **AND** the error text SHALL be rendered with `role="alert"`
 
+### Requirement: CurrencyDisplay contract
+
+The system SHALL provide a `CurrencyDisplay` data component. It SHALL:
+
+- Take a required decimal-string `amount` (e.g. `"-1234.50"`) and a required ISO 4217 `currency`, plus optional `locale`, `signDisplay` (`auto` | `always` | `exceptZero` | `negative` | `never`, default `auto`), `currencyDisplay` (`symbol` | `narrowSymbol` | `code` | `name`, default `symbol`), `tone` (`neutral` | `signed`, default `neutral`), `masked` (default `false`), `maskedLabel` (default `"Hidden amount"`) and `negativeLabel` (default `"negative"`).
+- Format through `formatMoney` (Intl currency style with string input) and never convert the amount to a JS `number`.
+- Render with tabular numerals (`font-variant-numeric: tabular-nums`) using foundation font tokens.
+- Keep negative amounts identifiable without colour: the formatted sign SHALL be shown for negatives unless `signDisplay="never"`, in which case a visually hidden `negativeLabel` prefix SHALL be rendered. The sign SHALL be the sign of the amount as displayed after rounding to the currency's minor units: an amount that displays as zero (e.g. `"-0.00"`, or `"-0.001"` in USD) SHALL render without a minus sign, label or tone colour. `tone="signed"` MAY colour positive and negative amounts with `--color-state-success` / `--color-state-error`, and colouring SHALL be dropped while masked.
+- When `masked`, keep the rendered width of the value, expose only `maskedLabel` to assistive technology, and keep the real digits (including locale-native digits such as Arabic-Indic) out of both the accessibility tree and the DOM.
+- When the amount is not a decimal string or the currency cannot be formatted, render an em dash and log a single `console.warn` per invalid input, without throwing.
+
+(src: packages/ui/core/src/lib/data/CurrencyDisplay/CurrencyDisplay.svelte; packages/ui/core/src/lib/data/CurrencyDisplay/currencyDisplay.ts)
+
+#### Scenario: Locale formatting
+
+- **GIVEN** a `CurrencyDisplay` with `amount="1234.56"`
+- **WHEN** it renders with `currency="USD"`, `locale="en-US"`, or with `currency="EUR"`, `locale="de-DE"`, or with `amount="1500"`, `currency="JPY"`
+- **THEN** it SHALL display `$1,234.56`, `1.234,56 €` and `¥1,500` respectively
+- **AND** `amount="12345678901234.56"` in USD SHALL display `$12,345,678,901,234.56` exactly
+
+#### Scenario: Negative without colour
+
+- **GIVEN** `amount="-12.30"`, `currency="USD"`, `locale="en-US"`
+- **WHEN** `signDisplay` is `auto`, `always`, `exceptZero` or `negative`
+- **THEN** it SHALL display `-$12.30` with no additional label
+- **WHEN** `signDisplay` is `never`
+- **THEN** it SHALL display `$12.30` preceded by visually hidden text `negative`, so assistive technology announces "negative $12.30"
+
+#### Scenario: Amount that displays as zero
+
+- **GIVEN** `amount="-0.00"` or `amount="-0.001"`, `currency="USD"`, `locale="en-US"`, `tone="signed"`
+- **WHEN** it renders
+- **THEN** it SHALL display `$0.00` without a minus sign and without the error or success colour
+- **AND** with `signDisplay="never"` it SHALL NOT render the `negativeLabel`
+
+#### Scenario: Signed tone
+
+- **GIVEN** `tone="signed"`
+- **WHEN** the amount is negative, positive or zero
+- **THEN** the component SHALL apply the error colour, the success colour, or no colour respectively
+- **AND** the negative sign or label SHALL still be rendered
+
+#### Scenario: Masked amount
+
+- **GIVEN** a `CurrencyDisplay` with `amount="-1234.56"` and `masked`
+- **WHEN** it renders
+- **THEN** the only text exposed to assistive technology SHALL be `maskedLabel` ("Hidden amount" by default)
+- **AND** the DOM SHALL contain no digit of the real amount
+- **AND** its rendered width SHALL equal the width of the same amount unmasked
+- **AND** with `locale="ar-EG"` the DOM SHALL contain no Arabic-Indic digit of the real amount either
+
+#### Scenario: Invalid amount
+
+- **GIVEN** an `amount` such as `"abc"`, `""` or `"1,234.50"`, or an unknown `currency`
+- **WHEN** it renders, including on later re-renders with the same input
+- **THEN** it SHALL display an em dash (`—`)
+- **AND** it SHALL call `console.warn` exactly once for that input and SHALL NOT throw
+
+### Requirement: ThemeToggle theme preference
+
+`ThemeToggle` SHALL delegate theme resolution, application and persistence to `createThemePreference` from `@cyberdynecorp/svelte-ui-foundation/theme`, using `persistKey` as the storage key; an empty `persistKey` keeps the choice in memory only. By default it SHALL render the existing two-state light/dark switch with its existing props (`theme`, `size`, `persistKey`, `onchange`) and accessible name. With `includeSystem` it SHALL render a `role="radiogroup"` named by `ariaLabel` (default "Color theme") that contains native radio inputs labelled "Light", "Dark" and "System"; the checked option SHALL be marked by an outline of at least 3:1 contrast, not by colour alone. The `themes` prop (default `{ light: "light", dark: "dark" }`) SHALL map the modes to the `data-theme` values applied. The component SHALL expose bindable `theme` (the resolved mode) and `preference` (`"light" | "dark" | "system"`). It SHALL call `onchange` with the resolved mode and `onpreferencechange` with the chosen preference after a user choice. It SHALL stop following the OS when it unmounts. (src: packages/ui/core/src/lib/primitives/ThemeToggle/ThemeToggle.svelte)
+
+#### Scenario: Two-state default is unchanged
+
+- **GIVEN** a `ThemeToggle` with no new props and a stored `"light"` under `cyberdyne-theme`
+- **WHEN** it mounts and the user clicks it
+- **THEN** it SHALL first apply `data-theme="light"`, then apply and persist `"dark"`, and call `onchange("dark")`
+
+#### Scenario: System option follows the OS
+
+- **GIVEN** `includeSystem` and `themes={{ light: "calm", dark: "calm-dark" }}` with no stored choice
+- **WHEN** the OS switches from light to dark
+- **THEN** the "System" radio SHALL stay checked and `data-theme` SHALL change from `calm` to `calm-dark`
+
+#### Scenario: Explicit choice from the radio group
+
+- **GIVEN** `includeSystem`
+- **WHEN** the user selects "Dark"
+- **THEN** the component SHALL persist the dark theme name, call `onpreferencechange("dark")`, and ignore later OS changes
+
+### Requirement: KpiCard contract
+
+The system SHALL provide a neutral `KpiCard` data-display component, exported from the package root. (`StatCard` is taken by `retro/StatCard`.) It SHALL:
+
+- Take a required `label` and a preformatted `value`, plus optional preformatted `delta`, `deltaLabel`, `trend` (`"up" | "down" | "flat"`), `sentiment` (`"positive" | "negative" | "neutral"`, default `"neutral"`), `href`, a `sparkline` snippet, `trendLabels` and `ariaLabel`.
+- Drive the arrow icon from `trend` and the colour from `sentiment`, so the two stay independent.
+- Never convey the trend by colour alone. It SHALL render an `aria-hidden` arrow icon together with visually hidden text, which defaults to `increased`, `decreased` and `unchanged` and can be overridden per trend through `trendLabels`.
+- When `href` is set, render the whole card as a single `<a>` whose accessible name is the card text (label, value, trend text, delta and delta label) unless `ariaLabel` overrides it.
+- When `href` is not set, render a non-interactive `<article>` labelled by the label (or by `ariaLabel`).
+- Render the `sparkline` snippet in its own area below the value, and omit that area when no snippet is given.
+- Style only with defined card and state tokens (`--card-bg`, `--card-border`, `--card-hover-border`, `--color-state-success`, `--color-state-error`).
+
+(src: packages/ui/core/src/lib/data/KpiCard/KpiCard.svelte)
+
+#### Scenario: Rising expenses are negative
+
+- **GIVEN** a `KpiCard` with `trend="up"`, `sentiment="negative"` and `delta="+12%"`
+- **WHEN** it renders
+- **THEN** it SHALL show an upward arrow icon with `aria-hidden="true"` and the visually hidden text `increased`
+- **AND** the delta SHALL use the negative (error) colour
+
+#### Scenario: Linked card
+
+- **GIVEN** a `KpiCard` with `label="Monthly spend"`, `value="€1,240.00"`, `trend="up"`, `delta="+4.2%"`, `deltaLabel="vs last month"` and `href="/spend"`
+- **WHEN** it renders
+- **THEN** it SHALL render exactly one link to `/spend` with the accessible name `Monthly spend €1,240.00 increased +4.2% vs last month`
+- **AND** it SHALL NOT render an `article`
+
+#### Scenario: Static card
+
+- **GIVEN** a `KpiCard` without `href`
+- **WHEN** it renders
+- **THEN** it SHALL render an `article` whose accessible name is the label, with no link
+
+#### Scenario: Translated trend text
+
+- **GIVEN** a `KpiCard` with `trend="down"` and `trendLabels={{ down: "diminuiu" }}`
+- **WHEN** it renders
+- **THEN** the visually hidden trend text SHALL be `diminuiu`
+
+### Requirement: BudgetBar contract
+
+The system SHALL provide a `BudgetBar` data-display component, exported from the package root. It SHALL:
+
+- Take `spent`, `limit` and an optional `committed` as decimal strings, a required ISO 4217 `currency`, an optional `locale`, `thresholds` (default `[0.8, 1]`), a required `label`, plus `stateLabels`, `messages` and `ariaLabel` for i18n and naming.
+- Treat an invalid amount as `"0"` and an empty `committed` as absent. Truncate every amount to the currency's minor units, and display that same canonical amount, so the shown values always agree with the state and overage. Compute the overage with BigInt minor units. Use `Number()` only to derive the spent/limit ratio, and format every displayed amount with `formatMoney`.
+- Never divide by a zero or negative limit. With such a limit, any positive spending SHALL be `exceeded`, and no spending SHALL be `ok`.
+- Derive the state from the ratio: `approaching` when the ratio is at or above `thresholds[0]`, `exceeded` when it is strictly above `thresholds[1]`, and `ok` otherwise.
+- Distinguish the states by visible text and a distinct `aria-hidden` icon, as well as colour (`--color-state-success`, `--color-state-warning`, `--color-state-error`).
+- Render the track with `role="meter"`, named by the label through `aria-labelledby` (or by `ariaLabel`), with `aria-valuemin="0"`, `aria-valuemax="100"`, `aria-valuenow` equal to the rounded spent percentage capped at 100, and an `aria-valuetext` joining the amount text, the committed text, the overage text and the state label.
+- Cap the spent segment at 100% width and show the overage as text when `spent` exceeds `limit`.
+- Draw `committed` as a striped, translucent segment stacked after `spent`, capped so both segments fit within 100%.
+
+(src: packages/ui/core/src/lib/data/BudgetBar/BudgetBar.svelte; packages/ui/core/src/lib/data/BudgetBar/budget.ts)
+
+#### Scenario: Approaching the limit
+
+- **GIVEN** a `BudgetBar` with `spent="820"`, `limit="1000"`, `currency="EUR"`, `locale="en-IE"` and `label="Groceries"`
+- **WHEN** it renders
+- **THEN** a meter named `Groceries` SHALL expose `aria-valuenow="82"` and `aria-valuetext="€820.00 of €1,000.00, approaching limit"`
+- **AND** the visible state SHALL read `approaching limit` next to the approaching icon
+
+#### Scenario: Over the limit
+
+- **GIVEN** a `BudgetBar` with `spent="1120.50"` and `limit="1000"` in EUR
+- **WHEN** it renders
+- **THEN** the spent segment SHALL be 100% wide and `aria-valuenow` SHALL be `100`
+- **AND** the text `€120.50 over` SHALL be shown
+- **AND** `aria-valuetext` SHALL be `€1,120.50 of €1,000.00, €120.50 over, limit exceeded`
+
+#### Scenario: Zero limit
+
+- **GIVEN** a `BudgetBar` with `spent="25"` and `limit="0"`
+- **WHEN** it renders
+- **THEN** no division by zero SHALL occur, the state SHALL be `exceeded` and no text SHALL contain `NaN`
+
+#### Scenario: Sub-minor-unit precision
+
+- **GIVEN** a `BudgetBar` with `spent="1000.009"` and `limit="1000"` in EUR
+- **WHEN** it renders
+- **THEN** `aria-valuetext` SHALL be `€1,000.00 of €1,000.00, approaching limit` (no rounded-up `€1,000.01` beside a non-exceeded state)
+
+#### Scenario: Committed amount
+
+- **GIVEN** a `BudgetBar` with `spent="600"`, `committed="150"` and `limit="1000"`
+- **WHEN** it renders
+- **THEN** a committed segment 15% wide SHALL follow the spent segment
+- **AND** `aria-valuetext` SHALL include `€150.00 committed`
+
+#### Scenario: Translated text
+
+- **GIVEN** a `BudgetBar` with `stateLabels={{ exceeded: "orçamento estourado" }}` and `messages` overriding `amount` and `overage`
+- **WHEN** it renders over the limit
+- **THEN** the visible state and `aria-valuetext` SHALL use the translated words
+
+### Requirement: Components expose design-style tokens
+
+Core components SHALL route the style-defining parts of their look through the design-style tokens, so that a theme can reach them.
+
+Backgrounds SHALL be written as `background: <layer tokens>, <surface colour>`:
+
+- **Surface containers** use `var(--texture-surface), var(--gradient-surface), <surface>`. They are Card, Modal, Dialog, Drawer, Popover, NavBar, Header, Sidebar, BottomNav, DataTable, the PageShell/AppLayout header and sidebar, and the secondary Button.
+- **Table headers** (Table, DataTable) use `var(--gradient-surface), <header bg>`.
+- **The brand Button** uses `var(--gradient-brand), <brand bg>` at rest, `var(--gradient-brand-hover), <brand hover bg>` on hover and `var(--gradient-brand-active), <brand active bg>` when pressed.
+- **The active Tab** SHALL paint `var(--gradient-accent)` only as a decorative indicator strip on its underline, never under the label.
+- **Page shells** (PageShell, AppLayout, and `body` in `base.css`) use `var(--pattern-backdrop), var(--gradient-backdrop), var(--color-bg-primary)`.
+
+Other properties:
+
+- **Glass:** the floating Modal, Dialog and Popover panels SHALL set `backdrop-filter: var(--surface-blur)`. Containers that can hold arbitrary content (Card, Drawer, NavBar, Header, BottomNav) SHALL NOT set `backdrop-filter`, because it makes them the containing block of `position: fixed` descendants.
+- **Borders:** the wired components SHALL write their borders as `var(--border-width) var(--border-style) <colour>`. Tab and NavBar active indicators SHALL use `var(--border-width-strong)`. Focus outlines SHALL keep their literal width.
+- **Shadows:**
+  - Button and Card SHALL include `var(--shadow-offset)` and `var(--shadow-raised)` in `box-shadow`, at rest and on hover (hover glows are appended, never substituted).
+  - Button `:active` SHALL include `var(--shadow-pressed)`.
+  - Modal, Dialog, Drawer and Popover SHALL prepend `var(--shadow-offset)` to their elevation shadow.
+  - TextInput, Textarea and Select SHALL include `var(--shadow-inset)`, at rest and when focused.
+- **Titles:** the Modal, Dialog, Drawer, Header and PageHeader titles SHALL use `font-family: var(--font-decorative)` and `text-transform: var(--heading-transform)`.
+- **Accents:** CommentThread depth markers SHALL use `--color-accent-1..3` for depths 1–3 and `--color-accent-4` for depth 4 and deeper.
+
+With the default token values, every component SHALL render as before. (src: packages/ui/core/src/lib/primitives/Button/Button.svelte; packages/ui/core/src/lib/layout/Card/Card.svelte; packages/ui/core/src/lib/overlay/Modal/Modal.svelte; packages/ui/core/src/lib/navigation/Tabs/Tabs.svelte)
+
+#### Scenario: Default rendering is unchanged
+
+- **GIVEN** no design-style preset is loaded
+- **WHEN** a Card, Button or Modal renders
+- **THEN** its computed background colour, border and visible shadows SHALL match the pre-change rendering
+
+#### Scenario: Brutalism reaches the Button
+
+- **GIVEN** a theme that sets `--border-width: 3px` and `--shadow-offset: 4px 4px 0 0 #000`
+- **WHEN** a Button renders inside it
+- **THEN** the Button SHALL show a 3px border and a hard 4px offset shadow, with no prop changes
+
+### Requirement: Drawer accessibility contract
+
+The system SHALL implement `Drawer` as a modal dialog. Its existing props (`open` bindable, `side`, `width`, `title`, `children`, `footer`) keep their meaning. It SHALL:
+
+- On open, move focus to the first focusable element in the panel, or to the panel itself (which carries `tabindex="-1"`) when it has none.
+- Keep Tab and Shift+Tab inside the panel: Tab on the last focusable element moves to the first, and Shift+Tab on the first moves to the last. Disabled controls are skipped.
+- Close on Escape, on a click on the backdrop (not the panel), and on the close button. Each of these SHALL set `open` to `false` and then call the optional `onclose` callback once. Setting `open` to `false` from the parent SHALL NOT call `onclose`.
+- On close, return focus to the element that was focused when it opened, if that element is still in the document.
+- Name the close button with the optional `closeLabel` prop, defaulting to `"Close drawer"`.
+- Share its Tab trap with `Modal` and `Dialog` through `overlay/focusTrap.ts`.
+
+(src: packages/ui/core/src/lib/layout/Drawer/Drawer.svelte; packages/ui/core/src/lib/overlay/focusTrap.ts)
+
+#### Scenario: Focus moves in and returns to the opener
+
+- **GIVEN** a focused button outside the drawer
+- **WHEN** the drawer opens and the user then presses Escape
+- **THEN** focus SHALL first be on the drawer's first focusable element
+- **AND** after Escape the drawer SHALL close, `onclose` SHALL be called once, and focus SHALL be back on the button
+
+#### Scenario: Tab wraps inside the drawer
+
+- **GIVEN** an open drawer whose footer holds an "Apply" button
+- **WHEN** focus is on "Apply" and the user presses Tab
+- **THEN** focus SHALL move to the close button
+- **AND** Shift+Tab on the close button SHALL move focus back to "Apply"
+
+#### Scenario: Translated close label
+
+- **GIVEN** a drawer with `closeLabel="Fechar painel"`
+- **WHEN** it renders open
+- **THEN** its close button SHALL have the accessible name "Fechar painel"
+
+#### Scenario: Drawer stories fail on axe violations
+
+- **WHEN** the Storybook test project runs the `Layout/Drawer` stories
+- **THEN** they SHALL run with `parameters.a11y.test = "error"`, so any axe violation fails the run
+
+### Requirement: Overlays stack above fixed navigation
+
+The system SHALL set the `z-index` of the `Drawer`, `Modal` and `Dialog` overlays to `var(--z-overlay)` and of `BottomNav` to `var(--z-nav)`, so an open overlay, including the drawer footer, is never covered by `BottomNav`. (src: packages/ui/core/src/lib/layout/Drawer/Drawer.svelte; packages/ui/core/src/lib/overlay/Modal/Modal.svelte; packages/ui/core/src/lib/feedback/Dialog/Dialog.svelte; packages/ui/core/src/lib/navigation/BottomNav/BottomNav.svelte; packages/ui/core/src/lib/style-contract.test.ts)
+
+#### Scenario: Drawer footer above BottomNav on a phone
+
+- **GIVEN** an open drawer with a footer and a `BottomNav` rendered after it, on a phone-sized layout
+- **WHEN** the point at the centre of a footer button is hit-tested
+- **THEN** the topmost element there SHALL be inside the drawer footer
+
+### Requirement: CurrencyDisplay custom asset amounts
+
+`CurrencyDisplay` SHALL accept optional `decimals` and `symbol` props for crypto and other non-ISO assets. It SHALL:
+
+- Enter asset mode only when `decimals` is set. In asset mode, `currency` MAY be any non-empty asset code (e.g. `USDC`, `ETH`, `BTC`). When `decimals` is omitted, all existing ISO 4217 behaviour SHALL be unchanged.
+- In asset mode, display exactly `decimals` fraction digits, rounding half-expand. The amount SHALL be formatted from its decimal string and never converted to a JS `number`, so amounts with 18 fraction digits and 18 integer digits display without precision loss.
+- Use the locale's grouping separator, decimal separator and digits, and honour `signDisplay`, `tone`, `negativeLabel` and `masked` exactly as for ISO amounts. "Displays as zero" SHALL be judged at the asset's precision.
+- By default, append the asset code after the number with a no-break space, in every locale. When `symbol` is set and `currencyDisplay` is `symbol` or `narrowSymbol` (the default), the symbol SHALL take the locale's currency-symbol position instead. `currencyDisplay` `code` or `name` SHALL always use the code suffix.
+- Treat `decimals` that is not an integer from 0 to 100, or an empty asset code, as invalid input: render an em dash and log a single `console.warn`, without throwing.
+
+(src: packages/ui/core/src/lib/data/CurrencyDisplay/CurrencyDisplay.svelte; packages/ui/core/src/lib/data/CurrencyDisplay/currencyDisplay.ts)
+
+#### Scenario: Assets with their own decimals
+
+- **GIVEN** `amount="1234.5"`, `currency="USDC"`, `decimals={6}`
+- **WHEN** it renders with `locale="en-US"` or `locale="pt-BR"`
+- **THEN** it SHALL display `1,234.500000 USDC` or `1.234,500000 USDC` respectively
+- **AND** `amount="1234.5678"`, `currency="ETH"`, `decimals={18}`, `locale="pt-BR"` SHALL display `1.234,567800000000000000 ETH`
+- **AND** `amount="0.00000001"`, `currency="BTC"`, `decimals={8}`, `locale="pt-BR"` SHALL display `0,00000001 BTC`
+
+#### Scenario: No precision loss
+
+- **GIVEN** `amount="123456789012345678.123456789012345678"`, `currency="ETH"`, `decimals={18}`, `locale="en-US"`
+- **WHEN** it renders
+- **THEN** it SHALL display `123,456,789,012,345,678.123456789012345678 ETH`
+
+#### Scenario: Asset signs and zero
+
+- **GIVEN** `currency="ETH"`, `decimals={4}`, `locale="pt-BR"`, `tone="signed"`
+- **WHEN** `amount="-0.5"`
+- **THEN** it SHALL display `-0,5000 ETH` with the error colour
+- **WHEN** `amount="-0.0000004"` with `currency="USDC"`, `decimals={6}`, `signDisplay="never"`
+- **THEN** it SHALL display `0.000000 USDC` (en-US) with no minus sign, no `negativeLabel` and no tone colour
+
+#### Scenario: Masked asset
+
+- **GIVEN** `amount="-1234.5678"`, `currency="ETH"`, `decimals={4}`, `locale="pt-BR"`, `masked`
+- **WHEN** it renders
+- **THEN** only `maskedLabel` SHALL be exposed to assistive technology
+- **AND** the DOM SHALL contain no digit of the real amount
+- **AND** the hidden sizer SHALL be `-0.000,0000 ETH`
+
+#### Scenario: Asset symbol placement
+
+- **GIVEN** `amount="1.5"`, `currency="BTC"`, `decimals={8}`, `symbol="₿"`
+- **WHEN** it renders with `locale="en-US"`
+- **THEN** it SHALL display `₿1.50000000`
+- **AND** with `locale="de-DE"` and `amount="-1.5"` it SHALL display `-1,50000000 ₿`
+- **AND** with `currencyDisplay="code"` it SHALL display `1.50000000 BTC`
+
+#### Scenario: ISO behaviour unchanged
+
+- **GIVEN** no `decimals`
+- **WHEN** `currency="USDC"`
+- **THEN** it SHALL render the em dash and warn once, as before
+- **AND** `amount="1234.5"`, `currency="USD"`, `locale="en-US"` SHALL still display `$1,234.50`
+
+#### Scenario: Invalid decimals
+
+- **GIVEN** `decimals` of `-1`, `1.5`, `101` or `NaN`
+- **WHEN** it renders
+- **THEN** it SHALL display an em dash and call `console.warn` once
+
