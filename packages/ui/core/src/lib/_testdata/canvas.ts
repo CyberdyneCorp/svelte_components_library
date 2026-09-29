@@ -70,7 +70,7 @@ type Size = { width: number; height: number };
 /** Controllable ResizeObserver stub; `trigger()` notifies every observer. */
 export class FakeResizeObserver {
   static instances: FakeResizeObserver[] = [];
-  constructor(private readonly callback: ResizeObserverCallback) {
+  constructor(private readonly callback: ConstructorParameters<typeof ResizeObserver>[0]) {
     FakeResizeObserver.instances.push(this);
   }
   observe() {}

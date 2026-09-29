@@ -14,14 +14,14 @@
 
 ## 3. Chart (PR 3)
 
-- [ ] 3.1 Engine: timeScale, priceScale (linear/log), layout/panes, scheduler, DPR + ResizeObserver
-- [ ] 3.2 Renderers: candles, hollow, OHLC bars, line, area, histogram, band fill, grid, axes, last-price label, crosshair + legend
-- [ ] 3.3 Interaction: pan, wheel/pinch zoom, double-click reset, keyboard (←/→, Shift+←/→, +/−, Home/End), follow-latest behaviour
-- [ ] 3.4 `TradingChart` component: props, `indicators` wiring (via PR 2 functions), sub-panes with draggable separators, markers, price lines (draggable, tick-snapped), live last-bar/append updates
-- [ ] 3.5 Theming from tokens with live theme switching; reduced motion
-- [ ] 3.6 Accessibility: named image, live-region crosshair announcements, data table with indicator columns, `labels`
-- [ ] 3.7 Tests: engine units (scales, layout, hit-testing), renderer tests against a recording context, component tests, Storybook stories (basic, indicators, markers/price lines, live feed, 100k candles perf) in axe failing mode
-- [ ] 3.8 README + changeset
+- [x] 3.1 Engine: timeScale, priceScale (linear/log), layout/panes, scheduler, DPR + ResizeObserver
+- [x] 3.2 Renderers: candles, hollow, OHLC bars, line, area, histogram, band fill, grid, axes, last-price label, crosshair + legend
+- [x] 3.3 Interaction: pan, wheel/pinch zoom, double-click reset, keyboard (←/→, Shift+←/→, +/−, Home/End), follow-latest behaviour
+- [x] 3.4 `TradingChart` component: props, `indicators` wiring (via PR 2 functions), sub-panes with draggable separators, markers, price lines (draggable, tick-snapped), live last-bar/append updates
+- [x] 3.5 Theming from tokens with live theme switching; reduced motion
+- [x] 3.6 Accessibility: named image, live-region crosshair announcements, data table with indicator columns, `labels`
+- [x] 3.7 Tests: engine units (scales, layout, hit-testing), renderer tests against a recording context, component tests, Storybook stories (basic, indicators, markers/price lines, live feed, 100k candles perf) in axe failing mode
+- [x] 3.8 README + changeset
 
 ## 4. Order entry (PR 4)
 

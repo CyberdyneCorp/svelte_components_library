@@ -1,9 +1,9 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 import { assigned, callsOf, makeCandles, recordingCanvas, textsOf, type RecordingContext } from "../../../_testdata/canvas.js";
 import { fakeBindings } from "../../../_testdata/chartIndicators.js";
 import type { MarketSpec } from "../../types.js";
 import { resolveLabels } from "../labels.js";
-import { ChartEngine, type EngineCallbacks } from "./chartEngine.js";
+import { ChartEngine } from "./chartEngine.js";
 import { hitPriceLine, snapPrice } from "./hitTest.js";
 import type { FrameClock } from "./scheduler.js";
 import type { ChartTheme } from "./theme.js";
@@ -54,7 +54,7 @@ interface Setup {
   engine: ChartEngine;
   main: RecordingContext;
   overlay: RecordingContext;
-  callbacks: Required<Pick<EngineCallbacks, "onrangechange" | "oncrosshairmove" | "onpricelinechange" | "onpaneheightschange" | "ondatachange">>;
+  callbacks: Record<"onrangechange" | "oncrosshairmove" | "onpricelinechange" | "onpaneheightschange" | "ondatachange", Mock>;
   counter: ReturnType<typeof fakeBindings>["counter"];
   setTheme(next: ChartTheme): void;
 }

@@ -4,11 +4,10 @@
  */
 import { isUp } from "../renderers/candles.js";
 import { drawPriceLabel, drawTimeLabel } from "../renderers/axes.js";
-import { drawCrosshair, drawLegend, LEGEND_LINE_HEIGHT, type LegendRow } from "../renderers/crosshair.js";
+import { drawCrosshair, drawLegend, type LegendRow } from "../renderers/crosshair.js";
 import type { Box } from "../renderers/types.js";
 import type { Frame, PaneFrame } from "./frame.js";
-import type { IndicatorInstance } from "./indicatorStore.js";
-import { MAIN_PANE } from "./indicatorStore.js";
+import { MAIN_PANE, type IndicatorInstance } from "./indicatorStore.js";
 import { paneAt } from "./layout.js";
 import { percentFormatter, volumeFormatter } from "./numberFormat.js";
 import { axisBoxOf, seriesColor } from "./paintMain.js";
@@ -93,6 +92,3 @@ function indicatorRow(scene: Scene, pane: PaneFrame, instance: IndicatorInstance
   }
   return row;
 }
-
-/** Height taken by a pane's legend, for tests and hit areas. */
-export const legendHeight = (rows: number) => rows * LEGEND_LINE_HEIGHT;

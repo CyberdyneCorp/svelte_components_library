@@ -179,13 +179,14 @@ export function attachInteraction(element: HTMLElement, engine: ChartEngine, opt
     engine.resetView();
   }
 
-  const listeners: [string, EventListener, AddEventListenerOptions?][] = [
-    ["pointerdown", onPointerDown as EventListener],
-    ["pointermove", onPointerMove as EventListener],
-    ["pointerup", onPointerUp as EventListener],
-    ["pointercancel", onPointerUp as EventListener],
+  type Listener = (event: Event) => void;
+  const listeners: [string, Listener, { passive: boolean }?][] = [
+    ["pointerdown", onPointerDown as Listener],
+    ["pointermove", onPointerMove as Listener],
+    ["pointerup", onPointerUp as Listener],
+    ["pointercancel", onPointerUp as Listener],
     ["pointerleave", onPointerLeave],
-    ["wheel", onWheel as EventListener, { passive: false }],
+    ["wheel", onWheel as Listener, { passive: false }],
     ["dblclick", onDoubleClick],
   ];
   for (const [type, listener, opts] of listeners) element.addEventListener(type, listener, opts);

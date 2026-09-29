@@ -1,0 +1,5 @@
+---
+"@cyberdynecorp/svelte-ui-core": minor
+---
+
+`TradingChart`: canvas candlestick chart on an in-house engine (no charting dependency). Candles, hollow candles, OHLC bars, line and area series with volume (overlay or pane), linear or log price scale, and a crosshair with an OHLCV legend. Declarative `indicators` prop covers every `trading/indicators` function: overlays (moving averages, Bollinger Bands with a band fill, VWAP) and resizable sub-panes (RSI, MACD, ATR, ADX, Stochastic) via `bind:paneHeights`. Trade `markers` and `priceLines` are coloured by kind from tokens; draggable lines report a tick-snapped price through `onpricelinechange`. Drag, wheel, pinch and keyboard navigation (`onrangechange`, `oncrosshairmove`). Live last-bar and append updates are incremental, and the view follows new bars only at the right edge. Time labels use `timeZone`. Theme colours are re-read on theme switch. The accessible fallback is a named image, polite crosshair announcements and a "Show data" table with indicator columns, and every string goes through `labels`. Invalid indicator configs are disabled and reported through `onindicatorerror`.

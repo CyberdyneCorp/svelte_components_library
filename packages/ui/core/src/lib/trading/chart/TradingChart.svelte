@@ -206,7 +206,7 @@
   >
     {#snippet children(a11y)}
       <!-- Focusable so the keyboard crosshair works; the canvases are decorative. -->
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex, a11y_no_noninteractive_element_interactions -->
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
       <div
         class="cy-trading-chart__surface"
         role="img"

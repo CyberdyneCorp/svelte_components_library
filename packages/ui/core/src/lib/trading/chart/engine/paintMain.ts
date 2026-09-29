@@ -157,20 +157,22 @@ function paintGuides(ctx: CanvasRenderingContext2D, scene: Scene, pane: PaneFram
 }
 
 /** Markers on visible bars; several markers on one side of a bar stack outwards. */
+const STACK_STEP = 12;
+const ANCHOR = { above: "high", below: "low", at: "close" } as const;
+const STACK_DIRECTION = { above: -1, below: 1, at: 0 } as const;
+
 export function placeMarkers(bars: BarGeometry, scene: Scene, scale: PriceScale): PlacedMarker[] {
   const stacks = new Map<string, number>();
   const placed: PlacedMarker[] = [];
   for (const { index, marker } of scene.markers) {
     if (index < bars.first || index > bars.last) continue;
-    const candle = scene.candles[index];
-    const anchor = marker.position === "above" ? candle.high : marker.position === "below" ? candle.low : candle.close;
+    const anchor = scene.candles[index][ANCHOR[marker.position]];
     const key = `${index}:${marker.position}`;
     const depth = stacks.get(key) ?? 0;
     stacks.set(key, depth + 1);
-    const shift = marker.position === "below" ? depth * 12 : marker.position === "above" ? -depth * 12 : 0;
     placed.push({
       x: bars.x(index),
-      y: scale.priceToY(anchor) + shift,
+      y: scale.priceToY(anchor) + STACK_DIRECTION[marker.position] * depth * STACK_STEP,
       shape: marker.shape,
       position: marker.position,
       color: scene.color(marker.color, defaultMarkerColor(scene, marker.shape)),
