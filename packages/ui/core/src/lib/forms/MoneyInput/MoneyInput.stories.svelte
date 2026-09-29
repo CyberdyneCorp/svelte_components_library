@@ -21,4 +21,22 @@
 
 <Story name="NegativeAllowed" args={{ label: "Adjustment", currency: "USD", locale: "en-US", value: "-45.00", allowNegative: true, hint: "Use a minus sign for refunds" }} />
 
-<Story name="Empty" args={{ label: "Amount", currency: "USD", locale: "en-US", name: "amount", required: true }} />
+<Story name="CryptoAssets">
+  {#snippet template()}
+    <div style="display: grid; gap: var(--space-3); max-width: 360px;">
+      <MoneyInput label="USDC" currency="USDC" decimals={6} locale="en-US" value="1234.5" name="usdc" />
+      <MoneyInput
+        label="ETH"
+        currency="ETH"
+        decimals={18}
+        locale="pt-BR"
+        value="1234.5678"
+        allowNegative
+        hint="18 casas decimais, sem perda de precisão"
+      />
+      <MoneyInput label="BTC" currency="BTC" decimals={8} symbol="₿" locale="en-US" value="0.00000001" />
+    </div>
+  {/snippet}
+</Story>
+
+<Story name="Empty"args={{ label: "Amount", currency: "USD", locale: "en-US", name: "amount", required: true }} />
