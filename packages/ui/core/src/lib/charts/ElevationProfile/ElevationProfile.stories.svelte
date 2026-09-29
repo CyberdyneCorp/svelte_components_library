@@ -7,6 +7,8 @@
     component: ElevationProfile,
     tags: ["autodocs"],
     parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
       docs: {
         description: {
           component:

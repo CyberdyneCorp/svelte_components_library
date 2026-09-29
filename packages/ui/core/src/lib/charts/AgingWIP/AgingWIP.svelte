@@ -65,8 +65,23 @@
 
   let xTicks = $derived(niceSteps(maxDays, 5));
 
+  // Bars are buttons only when there is something to activate; otherwise the
+  // SVG stays a single image (axe: nested-interactive, aria-command-name).
+  let interactive = $derived(!!onitemclick);
+
   function handleClick(item: WipItem) {
     onitemclick?.(item);
+  }
+
+  function handleKeydown(e: KeyboardEvent, item: WipItem) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    e.preventDefault();
+    handleClick(item);
+  }
+
+  function itemLabel(item: WipItem): string {
+    const assignee = item.assignee ? `, ${item.assignee}` : "";
+    return `${item.title}, ${item.status}, ${item.daysInProgress} days in progress${assignee}`;
   }
 
   function onMouseMove(e: MouseEvent) {
@@ -82,7 +97,7 @@
     preserveAspectRatio="xMidYMid meet"
     class="cy-aging-wip__svg"
     onmousemove={onMouseMove}
-    role="img"
+    role={interactive ? "group" : "img"}
     aria-label="Aging Work in Progress chart"
   >
     <!-- Grid -->
@@ -145,7 +160,8 @@
         text-anchor="end"
       >{truncate(item.title, 18)}</text>
 
-      <!-- Bar -->
+      <!-- Bar: tabindex is only set together with role="button" (the checker can't see through the ternary). -->
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
       <rect
         x={padding.left}
         y={barY}
@@ -154,13 +170,15 @@
         fill={color}
         opacity={isHovered ? 1 : 0.85}
         class="cy-aging-wip__bar"
+        class:cy-aging-wip__bar--interactive={interactive}
         style={isHovered ? `filter: drop-shadow(0 0 6px ${color === 'var(--color-state-error)' ? 'red' : color === 'var(--color-state-warning)' ? 'orange' : 'green'})` : ""}
         onmouseenter={() => hoveredIndex = i}
         onmouseleave={() => hoveredIndex = null}
         onclick={() => handleClick(item)}
-        role="button"
-        tabindex="0"
-        onkeydown={(e) => { if (e.key === 'Enter') handleClick(item); }}
+        role={interactive ? "button" : "presentation"}
+        tabindex={interactive ? 0 : undefined}
+        aria-label={interactive ? itemLabel(item) : undefined}
+        onkeydown={(e) => handleKeydown(e, item)}
       />
 
       <!-- Days label on bar -->
@@ -242,7 +260,15 @@
   .cy-aging-wip__bar {
     transition: opacity 150ms ease, filter 150ms ease;
     rx: 2;
+  }
+
+  .cy-aging-wip__bar--interactive {
     cursor: pointer;
+  }
+
+  .cy-aging-wip__bar--interactive:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 1px;
   }
 
   .cy-aging-wip__label {

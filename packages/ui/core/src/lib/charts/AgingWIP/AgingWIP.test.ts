@@ -192,3 +192,36 @@ describe("AgingWIP", () => {
     expect(svg).toBeInTheDocument();
   });
 });
+
+// Regression: bars were always role="button" + tabindex with no accessible
+// name inside an SVG role="img" (axe aria-command-name, nested-interactive).
+describe("AgingWIP accessibility", () => {
+  const items = [
+    { id: "1", title: "Task Alpha", status: "In Progress", daysInProgress: 12, assignee: "Alice" },
+    { id: "2", title: "Task Beta", status: "In Review", daysInProgress: 3 },
+  ];
+
+  it("is a single image with no focusable bars without onitemclick", () => {
+    render(AgingWIP, { props: { items } });
+    expect(screen.getByRole("img", { name: "Aging Work in Progress chart" })).toBeInTheDocument();
+    expect(screen.queryAllByRole("button")).toHaveLength(0);
+    expect(document.querySelector(".cy-aging-wip__bar[tabindex]")).toBeNull();
+  });
+
+  it("exposes named bar buttons inside a group with onitemclick", () => {
+    render(AgingWIP, { props: { items, onitemclick: vi.fn() } });
+    expect(screen.getByRole("group", { name: "Aging Work in Progress chart" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Task Alpha, In Progress, 12 days in progress, Alice" })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+    expect(screen.getByRole("button", { name: "Task Beta, In Review, 3 days in progress" })).toBeInTheDocument();
+  });
+
+  it("activates a bar with the space key", async () => {
+    const handler = vi.fn();
+    render(AgingWIP, { props: { items, onitemclick: handler } });
+    await fireEvent.keyDown(screen.getByRole("button", { name: /Task Beta/ }), { key: " " });
+    expect(handler).toHaveBeenCalledWith(items[1]);
+  });
+});

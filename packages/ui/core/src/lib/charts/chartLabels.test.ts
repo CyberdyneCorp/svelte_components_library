@@ -4,6 +4,7 @@ import type { Component } from "svelte";
 import AreaChart from "./AreaChart/AreaChart.svelte";
 import BarChart from "./BarChart/BarChart.svelte";
 import Gauge from "./Gauge/Gauge.svelte";
+import HeatmapChart from "./HeatmapChart/HeatmapChart.svelte";
 import LineChart from "./LineChart/LineChart.svelte";
 import PieChart from "./PieChart/PieChart.svelte";
 import SankeyChart from "./SankeyChart/SankeyChart.svelte";
@@ -60,6 +61,7 @@ const CASES: Case[] = [
   },
   { name: "ScatterChart", component: ScatterChart, props: { series }, columns: { series: "Série", x: "Eixo X", y: "Eixo Y" }, expectedHeaders: ["Série", "Eixo X", "Eixo Y"], chart: "Gráfico de dispersão" },
   { name: "Sparkline", component: Sparkline, props: { data: [1, 2, 3], showDataToggle: true }, columns: { point: "Ponto", value: "Valor" }, expectedHeaders: ["Ponto", "Valor"], chart: "Minigráfico" },
+  { name: "HeatmapChart", component: HeatmapChart, props: { data: [[1, 2]], xLabels: ["A", "B"] }, columns: { row: "Linha" }, expectedHeaders: ["Linha", "A", "B"], chart: "Mapa de calor" },
   { name: "Gauge", component: Gauge, props: { value: 40, showDataToggle: true }, columns: { measure: "Medida", value: "Valor", minimum: "Mínimo", maximum: "Máximo" }, expectedHeaders: ["Medida", "Valor", "Mínimo", "Máximo"], chart: "Medidor" },
 ];
 
@@ -85,7 +87,8 @@ describe.each(CASES)("$name labels", ({ component, props, columns, expectedHeade
 
   it("uses labels.chart as the accessible name when there is no title", () => {
     render(component, { props: { ...props, labels } });
-    const img = document.querySelector("svg[role=img]");
+    // HeatmapChart draws its grid in HTML, so its image is a div.
+    const img = document.querySelector("[role=img]");
     expect(img?.getAttribute("aria-label")).toContain(chart);
   });
 

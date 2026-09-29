@@ -330,7 +330,7 @@
     color: var(--color-text-primary);
   }
   .cy-elev-profile__muted {
-    color: var(--color-text-tertiary);
+    color: var(--color-text-secondary);
   }
   .cy-elev-profile__chart {
     width: 100%;
@@ -358,6 +358,6 @@
     font-size: 0.6875rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-secondary);
   }
 </style>

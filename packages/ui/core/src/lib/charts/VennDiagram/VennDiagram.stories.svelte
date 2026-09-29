@@ -6,6 +6,10 @@
     title: "Charts/VennDiagram",
     component: VennDiagram,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   const twoSets = {

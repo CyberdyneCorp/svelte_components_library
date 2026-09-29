@@ -6,6 +6,10 @@
     title: "Charts/ActivityHeatmap",
     component: ActivityHeatmap,
     tags: ["autodocs"],
+    parameters: {
+      // Axe violations fail the storybook test project for this chart.
+      a11y: { test: "error" },
+    },
   });
 
   // Use seeded pseudo-random for consistent data across renders
