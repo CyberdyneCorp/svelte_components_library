@@ -164,6 +164,7 @@ const bodyText = [
   "--color-syntax-number",
 ];
 const states = ["success", "warning", "error", "info"];
+const trades = ["long", "short"];
 const uiSurfaces = ["--color-bg-primary", "--color-surface-default", "--color-surface-raised"];
 
 /** Every foreground/background pairing the calm themes promise to keep legible. */
@@ -221,6 +222,14 @@ const PAIRINGS: Pairing[] = [
     ["--color-text-primary"],
     states.map((s) => `--color-state-${s}-bg`),
     "text",
+  ),
+  ...trades.flatMap((d) =>
+    cross([`--color-trade-${d}-text`], [`--color-trade-${d}-bg`, ...uiSurfaces], "text"),
+  ),
+  ...cross(
+    trades.map((d) => `--color-trade-${d}`),
+    uiSurfaces,
+    "ui",
   ),
   ...cross(
     ["--btn-brand-text"],
@@ -371,6 +380,10 @@ describe("theme presets", () => {
     expect(themedTokens).toContain("--nav-height");
     expect(themedTokens).toContain("--color-action-danger-text");
     expect(themedTokens).toContain("--gradient-brand");
+    for (const suffix of ["", "-bg", "-text"]) {
+      expect(themedTokens).toContain(`--color-trade-long${suffix}`);
+      expect(themedTokens).toContain(`--color-trade-short${suffix}`);
+    }
     expect(themedTokens.some((t) => t.startsWith("--video-"))).toBe(false);
   });
 
