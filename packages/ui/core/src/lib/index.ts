@@ -561,3 +561,29 @@ export type {
   VolumeMode,
   VwapConfig,
 } from "./trading/index.js";
+export {
+  addDecimal,
+  compareDecimal,
+  DEFAULT_LEVERAGE_LABELS,
+  DEFAULT_OPEN_ORDERS_LABELS,
+  DEFAULT_ORDER_TICKET_LABELS,
+  DEFAULT_POSITIONS_LABELS,
+  divideDecimal,
+  isDecimal,
+  LeverageSlider,
+  multiplyDecimal,
+  OpenOrdersTable,
+  OrderTicket,
+  PositionsTable,
+  signOf,
+  subtractDecimal,
+  trimDecimal,
+} from "./trading/index.js";
+export type {
+  DecimalRounding,
+  LeverageSliderLabels,
+  OpenOrdersTableLabels,
+  OrderTicketLabels,
+  OrderTicketLabelsInput,
+  PositionsTableLabels,
+} from "./trading/index.js";

@@ -328,6 +328,35 @@ Tests check RSI, ATR and ADX (+DI/−DI) against the StockCharts ChartSchool wor
 />
 ```
 
+### Trading — order entry
+
+`OrderTicket` · `LeverageSlider` · `PositionsTable` · `OpenOrdersTable`
+
+Order maths uses exact decimal-string helpers (`addDecimal`, `subtractDecimal`, `multiplyDecimal`, `divideDecimal`, `compareDecimal`, `signOf`, `isDecimal`, `trimDecimal`) on top of `roundToTick` / `roundToStep`, so an order never carries float noise. Long/short colours come from the `--color-trade-long/short{,-bg,-text}` tokens.
+
+```svelte
+<OrderTicket
+  market={btcUsdt}
+  available="2500"
+  referencePrice={ticker.mark}
+  makerFee="0.0002"
+  takerFee="0.0005"
+  estimateLiquidation={(draft) => myExchange.liqPrice(draft)}
+  bind:price
+  onsubmit={(draft) => api.placeOrder(draft)}
+/>
+```
+
+`market` is a `MarketSpec` (`tickSize`, `stepSize`, `minSize`, `maxSize?`, `minNotional?`, `maxLeverage`), `available` the available margin in the quote asset, `referencePrice` (mark or last) the entry of market orders, and `bind:price` lets an order-book click fill the limit price. `estimateLiquidation` is optional; without it the liquidation row is hidden.
+
+- **`OrderTicket`**: Long/Short radio group, market / limit / stop-market / stop-limit, size in base or quote (`MoneyInput` asset mode), a size-percentage slider of `available` × leverage, `LeverageSlider`, cross/isolated, reduce-only, post-only (limit only), time in force (limit and stop-limit), take profit / stop loss.
+  - **Validation** (inline, blocks submit): required price / trigger per type, `minSize` / `maxSize`, `minNotional`, initial margin ≤ `available` (skipped for reduce-only), 1 ≤ leverage ≤ `maxLeverage`, take profit above / stop loss below the entry for longs and the reverse for shorts. The entry is the limit price (limit, stop-limit), the trigger (stop-market) or `referencePrice` (market).
+  - **Preview**: notional, initial margin (= notional ÷ leverage, rounded up) and estimated fee. The fee uses `makerFee` only for post-only limit orders; every other order (market, stop, IOC/FOK, plain GTC limits that may cross the book) uses `takerFee`, so the estimate is never too low.
+  - **`onsubmit(draft)`** receives a normalized `OrderDraft`: prices rounded to `tickSize` (nearest), size rounded **down** to `stepSize` and converted to base (`sizeUnit: "base"`), only the fields the order type uses. 1000 USDT at a 64000 limit becomes `size: "0.015"`.
+- **`LeverageSlider`**: `input[type=range]` from 1× to `max` with `aria-valuetext` ("20×"), a synced numeric input and quick-set `marks`. ←/↓ and →/↑ step by 1×, Page Up/Down by 10×, Home/End jump to the ends. `bind:value`, `onchange`.
+- **`PositionsTable`** / **`OpenOrdersTable`**: real tables (caption, column and row headers). Pass `markets: Record<symbol, MarketSpec>` for price / size precision; rows without a spec show the raw strings. PnL is signed and coloured with the trade tokens; `roe` is a percentage string ("13.75" → "+13.75%"). Actions are intents only — `onclose(position, "market" | "limit")`, `onedittpsl(position)`, `oncancel(order)`, `oncancelall()` — and a button only renders when its callback is set; the tables change only when the consumer updates `positions` / `orders`. Both show an empty state.
+- **`labels`**: every visible and accessible string can be replaced (`DEFAULT_ORDER_TICKET_LABELS`, `DEFAULT_LEVERAGE_LABELS`, `DEFAULT_POSITIONS_LABELS`, `DEFAULT_OPEN_ORDERS_LABELS`); messages with values are functions, e.g. ``errorMinSize: (min) => `Tamanho mínimo ${min}` ``.
+
 ## Design System
 
 ### Color Palette

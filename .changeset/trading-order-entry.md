@@ -1,0 +1,5 @@
+---
+"@cyberdynecorp/svelte-ui-core": minor
+---
+
+Trading order entry. New `OrderTicket` (Long/Short radio group, market / limit / stop-market / stop-limit, base or quote size via `MoneyInput` asset mode, size-percentage slider, leverage, cross/isolated, reduce-only, post-only, time in force, TP/SL; inline validation against `MarketSpec` and `available` that blocks submit; notional / initial margin / fee preview; optional `estimateLiquidation(draft)`; `onsubmit(draft)` with prices rounded to `tickSize` and size rounded down to `stepSize` in base asset), `LeverageSlider` (range input with `aria-valuetext` "20×", synced numeric input, marks, keyboard), `PositionsTable` and `OpenOrdersTable` (real tables, signed PnL in trade colours, `onclose` / `onedittpsl` / `oncancel` / `oncancelall` intents, empty states). Every string is replaceable through `labels`. Also adds exact decimal-string helpers `addDecimal`, `subtractDecimal`, `multiplyDecimal`, `divideDecimal`, `compareDecimal`, `signOf`, `isDecimal` and `trimDecimal`.

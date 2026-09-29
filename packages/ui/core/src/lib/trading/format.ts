@@ -8,6 +8,7 @@
  */
 import { MAX_ASSET_DECIMALS } from "../forms/MoneyInput/asset.js";
 import { fromMinorUnits, toMinorUnits } from "../forms/MoneyInput/money.js";
+import { divideRounded } from "./decimal.js";
 import type { MarketSpec } from "./types.js";
 
 /**
@@ -19,8 +20,6 @@ export type RoundingMode = "down" | "up" | "nearest";
 
 const DECIMAL_STRING = /^-?(?:\d+\.?\d*|\.\d+)$/;
 const ZERO = BigInt(0);
-const ONE = BigInt(1);
-const TWO = BigInt(2);
 const TEN = BigInt(10);
 
 /** Validates a plain decimal string ("12", "-0.5", ".25", "10.") and returns its fraction digit count. */
@@ -45,26 +44,6 @@ export function precisionOf(step: string): number {
   }
   const fraction = step.trim().split(".")[1] ?? "";
   return fraction.replace(/0+$/, "").length;
-}
-
-/** `n / d` (d > 0) rounded to an integer by `mode`. */
-function divideRounded(n: bigint, d: bigint, mode: RoundingMode): bigint {
-  const quotient = n / d; // truncates towards zero
-  const remainder = n % d; // carries the sign of n
-  if (remainder === ZERO) return quotient;
-  switch (mode) {
-    case "down":
-      return remainder < ZERO ? quotient - ONE : quotient;
-    case "up":
-      return remainder > ZERO ? quotient + ONE : quotient;
-    case "nearest": {
-      const twice = TWO * (remainder < ZERO ? -remainder : remainder);
-      if (twice < d) return quotient;
-      return remainder > ZERO ? quotient + ONE : quotient - ONE;
-    }
-    default:
-      throw new RangeError(`Invalid rounding mode: ${JSON.stringify(mode)}`);
-  }
 }
 
 /** Rounds `value` to a multiple of `increment`, returned with the increment's precision. */
