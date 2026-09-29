@@ -300,6 +300,34 @@ Tests check RSI, ATR and ADX (+DI/−DI) against the StockCharts ChartSchool wor
 <RecentTrades {trades} market={spec} timeZone="UTC" />
 ```
 
+### Trading — chart
+
+**`TradingChart`** is a canvas candlestick chart on the library's own engine (no third-party charting dependency). Chart data is `number` maths (`Candle[]`, UTC-ms bar open times, ascending).
+
+- **Series:** `seriesType` `candles` | `hollow` | `bars` (OHLC) | `line` | `area`; `volume` `overlay` (bottom of the price pane, default) | `pane` | `none`; `scaleMode` `linear` | `log`. Price, grid and time axes, a last-price label, and a crosshair with an OHLCV + indicator legend.
+- **Indicators:** declarative `indicators={[{ type, pane?, …params, color? }]}` covering every `trading/indicators` function. Moving averages, Bollinger Bands (band fill) and VWAP overlay the price pane; RSI (30/70 guides), MACD (histogram), ATR, ADX (+DI/−DI) and Stochastic (20/80 guides) get a sub-pane named after the type, or the `pane` you give (indicators sharing a pane id share the pane). Parameters use the indicator names (`period`, `stdDev`, `fastPeriod`/`slowPeriod`/`signalPeriod`, `kPeriod`/`smoothK`/`dPeriod`, `session`, `source`). Values are computed once per data change and updated incrementally for live bars. An invalid config disables that indicator and calls `onindicatorerror(config, error)` (default: a console warning) instead of breaking the chart.
+- **Panes:** sub-pane heights are resizable by dragging the separator; `bind:paneHeights` (relative heights keyed by pane id, e.g. `{ main: 3, rsi: 1 }`) sets and receives them.
+- **Markers and price lines:** `markers: ChartMarker[]` are anchored to bars (above / below / at, arrows, circles, squares, optional text; several on one bar stack). `priceLines: PriceLine[]` are coloured by `kind` from tokens (entry → neutral, take-profit → long, stop-loss → short, liquidation → warning, `color` overrides; var() allowed). A `draggable` line calls `onpricelinechange(id, price)` on drop with the price snapped to `market.tickSize` (decimal-string rounding via `roundToTick`).
+- **Navigation:** drag to pan (with inertia, off under `prefers-reduced-motion`), wheel or pinch to zoom around the pointer, double-click to reset. When focused: ←/→ move the crosshair one bar, Shift+←/→ pan, +/− zoom, Home/End jump to the first/last bar, Escape hides the crosshair. `onrangechange({ from, to, fromTime, toTime })` and `oncrosshairmove(info | null)` report the visible bars and the hovered bar.
+- **Live updates:** pass a new array with the last bar replaced (same `time`) or bars appended; only the tail and the indicator tails are recomputed. The view follows new bars only when it is at the right edge, so a scrolled-back view stays put. Prepending history keeps the view; any other change resets it. Use `$state.raw` for large series.
+- **Time:** time labels adapt to the zoom and use `timeZone` (IANA, default `"UTC"`) and `locale`.
+- **Theming:** colours come from foundation tokens (`--color-trade-long/short`, borders, text, accents), re-read when `data-theme` / `class` on `<html>` or the colour scheme changes, without remounting. Override per chart through the `--cy-trading-chart-*` custom properties.
+- **Accessibility:** the chart is a focusable named image summarising symbol, interval, visible range, last close and change; keyboard crosshair moves are announced in a polite, throttled live region; "Show data" reveals a table of the latest `tableRows` (50) bars with OHLCV and one column per indicator output. Every string is in `labels` (`TradingChartLabels`).
+- **Performance** (Chromium, 100k candles, ~2,200 bars visible, DPR 2): load + indicators ≈ 36 ms, pan/zoom frame ≈ 1.2 ms, live last-bar update < 0.1 ms script (≈ 1.4 ms including repaint). Only visible bars are drawn, and the crosshair repaints a separate overlay canvas.
+- Stories `Trading/TradingChart` (series types, indicators, markers & price lines, live feed, 100k candles, theme switching, pt-BR) run axe in failing mode.
+
+```svelte
+<TradingChart
+  {candles}
+  market={spec}
+  indicators={[{ type: "ema", period: 21 }, { type: "bollinger" }, { type: "rsi", period: 14 }, { type: "macd" }]}
+  {markers}
+  priceLines={[{ id: "sl", price: 63_500, kind: "stop-loss", draggable: true }]}
+  onpricelinechange={(id, price) => updateStop(price)}
+  timeZone="America/New_York"
+/>
+```
+
 ### Trading — order entry
 
 `OrderTicket` · `LeverageSlider` · `PositionsTable` · `OpenOrdersTable`
