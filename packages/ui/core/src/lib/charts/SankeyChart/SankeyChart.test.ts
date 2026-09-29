@@ -242,3 +242,55 @@ describe("SankeyChart accessibility", () => {
     expect(button).toHaveAttribute("aria-expanded", "true");
   });
 });
+
+describe("SankeyChart formatValue", () => {
+  const nodes = [
+    { id: "salary", label: "Salário" },
+    { id: "rent", label: "Moradia" },
+  ];
+  const links = [{ source: "salary", target: "rent", value: 3200 }];
+  const brl = (v: number) => `R$ ${v.toFixed(2).replace(".", ",")}`;
+
+  const labelTexts = () =>
+    [...document.querySelectorAll(".cy-sankey-chart__node-label")].map((l) => l.textContent?.trim());
+  const tableRows = () =>
+    [...document.querySelectorAll("table tr")].map((r) => [...r.children].map((c) => c.textContent));
+  const tooltipText = () => document.querySelector(".cy-sankey-chart__tooltip")?.textContent?.trim();
+
+  it("keeps raw values in labels, tooltips and the table by default", async () => {
+    render(SankeyChart, { props: { nodes, links } });
+    expect(labelTexts()).toEqual(["Salário (3200)", "Moradia (3200)"]);
+    expect(tableRows()[1]).toEqual(["Salário", "Moradia", "3200"]);
+    await fireEvent.mouseEnter(document.querySelector(".cy-sankey-chart__link") as SVGElement);
+    expect(tooltipText()).toBe("Salário → Moradia: 3200");
+  });
+
+  it("formats node label values", () => {
+    render(SankeyChart, { props: { nodes, links, formatValue: brl } });
+    expect(labelTexts()).toEqual(["Salário (R$ 3200,00)", "Moradia (R$ 3200,00)"]);
+  });
+
+  it("formats link and node tooltips", async () => {
+    render(SankeyChart, { props: { nodes, links, formatValue: brl } });
+    await fireEvent.mouseEnter(document.querySelector(".cy-sankey-chart__link") as SVGElement);
+    expect(tooltipText()).toBe("Salário → Moradia: R$ 3200,00");
+    await fireEvent.mouseEnter(document.querySelector(".cy-sankey-chart__node") as SVGElement);
+    expect(tooltipText()).toBe("Salário: R$ 3200,00");
+  });
+
+  it("formats the screen-reader data table", () => {
+    render(SankeyChart, { props: { nodes, links, formatValue: brl } });
+    expect(tableRows()[1]).toEqual(["Salário", "Moradia", "R$ 3200,00"]);
+  });
+
+  it("omits formatted values from labels when showValues is false", () => {
+    render(SankeyChart, { props: { nodes, links, formatValue: brl, showValues: false } });
+    expect(labelTexts()).toEqual(["Salário", "Moradia"]);
+  });
+
+  it("works with Intl currency formatters", () => {
+    const intl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+    render(SankeyChart, { props: { nodes, links, formatValue: (v: number) => intl.format(v) } });
+    expect(tableRows()[1][2]).toBe(intl.format(3200));
+  });
+});
