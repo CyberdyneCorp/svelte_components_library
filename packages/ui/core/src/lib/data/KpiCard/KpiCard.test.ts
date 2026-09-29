@@ -79,6 +79,48 @@ describe("KpiCard", () => {
     expect(container.querySelector(".cy-kpi__sparkline [data-testid='spark']")).not.toBeNull();
   });
 
+  describe("value", () => {
+    const richValue = createRawSnippet(() => ({
+      render: () => `<span data-testid="rich"><strong>€1,240</strong>.00</span>`,
+    }));
+    // Mirrors a masked CurrencyDisplay: hidden glyphs, spoken label.
+    const maskedValue = createRawSnippet(() => ({
+      render: () =>
+        `<span><span class="sr">Hidden amount</span><span aria-hidden="true">••••••</span></span>`,
+    }));
+
+    it("renders a string value as plain text (unchanged)", () => {
+      const { container } = render(KpiCard, { props: base });
+      const valueEl = container.querySelector(".cy-kpi__value");
+      expect(valueEl?.textContent?.trim()).toBe("€1,240.00");
+      expect(valueEl?.children).toHaveLength(0);
+    });
+
+    it("renders a snippet value inside the value element", () => {
+      const { container } = render(KpiCard, { props: { ...base, value: richValue } });
+      const rich = container.querySelector(".cy-kpi__value [data-testid='rich']");
+      expect(rich).not.toBeNull();
+      expect(rich).toHaveTextContent("€1,240.00");
+    });
+
+    it("keeps the article named by the label with a snippet value", () => {
+      render(KpiCard, { props: { ...base, value: richValue } });
+      expect(screen.getByRole("article", { name: "Monthly spend" })).toHaveTextContent("€1,240.00");
+    });
+
+    it("includes snippet text in the link's accessible name", () => {
+      render(KpiCard, {
+        props: { ...base, value: richValue, href: "/spend", trend: "up", delta: "+4.2%" },
+      });
+      expect(screen.getByRole("link", { name: "Monthly spend €1,240.00 increased +4.2%" })).toBeInTheDocument();
+    });
+
+    it("announces a masked snippet's label, not its hidden glyphs", () => {
+      render(KpiCard, { props: { ...base, value: maskedValue, href: "/spend" } });
+      expect(screen.getByRole("link", { name: "Monthly spend Hidden amount" })).toBeInTheDocument();
+    });
+  });
+
   it("renders no sparkline area without the snippet", () => {
     const { container } = render(KpiCard, { props: base });
     expect(container.querySelector(".cy-kpi__sparkline")).toBeNull();

@@ -1,6 +1,7 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import KpiCard from "./KpiCard.svelte";
+  import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay.svelte";
 
   const { Story } = defineMeta({
     title: "Data Display/KpiCard",
@@ -56,6 +57,21 @@
             stroke-width="2"
           />
         </svg>
+      {/snippet}
+    </KpiCard>
+  </div>
+</Story>
+
+<Story name="SnippetValue">
+  <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+    <KpiCard label="Net worth" delta="+2.4%" deltaLabel="vs last month" trend="up" sentiment="positive">
+      {#snippet value()}
+        <CurrencyDisplay amount="48210.00" currency="EUR" locale="en-IE" />
+      {/snippet}
+    </KpiCard>
+    <KpiCard label="Net worth (hidden)" href="#net-worth">
+      {#snippet value()}
+        <CurrencyDisplay amount="48210.00" currency="EUR" locale="en-IE" masked />
       {/snippet}
     </KpiCard>
   </div>
