@@ -415,7 +415,11 @@ export {
   type StatusDotItem,
   type StatusDotTone,
 } from "./retro/StatusDotList/index.js";
-export { LiquidityPositionCard } from "./retro/LiquidityPositionCard/index.js";
+export {
+  LiquidityPositionCard,
+  type LiquidityMoney,
+  type LiquidityTokenAmount,
+} from "./retro/LiquidityPositionCard/index.js";
 export { PriceChart, type OHLCCandle } from "./retro/PriceChart/index.js";
 export { DepthChart, type DepthLevel } from "./retro/DepthChart/index.js";
 export { TVLSparkline } from "./retro/TVLSparkline/index.js";

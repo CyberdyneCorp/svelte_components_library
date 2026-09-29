@@ -107,6 +107,20 @@
   --nav-item-text: var(--color-text-secondary);
   --nav-item-text-active: var(--color-action-brand-hover);
   --nav-height: 64px;
+
+  /* ── Liquidity components (LiquidityPositionCard, LiquidityRangeBar, TokenPairIcon):
+     hairline borders, pill track, tinted initials ── */
+  --lpos-border: 1px solid var(--color-border-subtle);
+  --lpos-radius: var(--radius-lg);
+  --lrange-track-bg: var(--color-bg-tertiary);
+  --lrange-track-border: 1px solid var(--color-border-subtle);
+  --lrange-radius: var(--radius-pill);
+  --lrange-marker-color: var(--color-text-primary);
+  --tpair-ring-border: 1px solid var(--color-border-subtle);
+  --tpair-a-bg: var(--color-action-brand-bg);
+  --tpair-b-bg: var(--color-action-secondary-bg);
+  --tpair-initials-color: var(--color-text-primary);
+  /* ── end Liquidity components ── */
 }
 
 /* ══════════════════════════════════════════════════════════════
