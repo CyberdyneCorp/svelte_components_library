@@ -15,6 +15,10 @@
     error = "",
     unit = "",
     size = "md",
+    /** Accessible name of the decrement button (localise for i18n). */
+    decreaseLabel = "Decrease",
+    /** Accessible name of the increment button (localise for i18n). */
+    increaseLabel = "Increase",
     /**
      * Fires on every committed value change with `null` when the field is
      * cleared. Lets consumers keep the source of truth elsewhere / transform
@@ -32,6 +36,8 @@
     error?: string;
     unit?: string;
     size?: "sm" | "md";
+    decreaseLabel?: string;
+    increaseLabel?: string;
     onchange?: (value: number | null) => void;
   } = $props();
 
@@ -97,7 +103,7 @@
   {/if}
 
   <div class="cy-ni__control">
-    <button class="cy-ni__btn cy-ni__btn--dec" type="button" onclick={decrement} {disabled} aria-label="Decrease" tabindex={-1}>
+    <button class="cy-ni__btn cy-ni__btn--dec" type="button" onclick={decrement} {disabled} aria-label={decreaseLabel} tabindex={-1}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /></svg>
     </button>
     <div class="cy-ni__field-wrapper">
@@ -116,7 +122,7 @@
         <span class="cy-ni__unit">{unit}</span>
       {/if}
     </div>
-    <button class="cy-ni__btn cy-ni__btn--inc" type="button" onclick={increment} {disabled} aria-label="Increase" tabindex={-1}>
+    <button class="cy-ni__btn cy-ni__btn--inc" type="button" onclick={increment} {disabled} aria-label={increaseLabel} tabindex={-1}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
     </button>
   </div>
@@ -135,12 +141,12 @@
   }
 
   .cy-ni__label {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    font-weight: var(--font-weight-medium);
+    font-family: var(--input-label-font);
+    font-size: var(--input-label-size);
+    font-weight: var(--input-label-weight);
     color: var(--input-label);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    letter-spacing: var(--input-label-letter-spacing);
+    text-transform: var(--input-label-transform);
   }
 
   .cy-ni__control {

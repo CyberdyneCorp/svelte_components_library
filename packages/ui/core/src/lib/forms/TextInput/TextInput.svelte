@@ -1,6 +1,11 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import type { AriaAttributes, HTMLInputAttributes } from "svelte/elements";
+
+  /** `data-*` attributes forwarded to the native `<input>`. */
+  type DataAttributes = { [key: `data-${string}`]: string | number | boolean | null | undefined };
+
   let {
     value = $bindable(""),
     label = "",
@@ -18,6 +23,23 @@
     onfocus,
     onblur,
     onkeydown,
+    /** Native `autocomplete` token (e.g. `"off"`, `"email"`, `"one-time-code"`). */
+    autocomplete,
+    /** Native `spellcheck`; set `false` for addresses, codes and secrets. */
+    spellcheck,
+    /** Native `maxlength`. */
+    maxlength,
+    /** Native `name`, for form submission. */
+    name,
+    /** Native `inputmode` virtual-keyboard hint. */
+    inputmode,
+    /**
+     * Extra ids appended to the input's `aria-describedby`, after the
+     * component's own hint / error id.
+     */
+    "aria-describedby": ariaDescribedby,
+    /** Other `aria-*` and `data-*` attributes, forwarded to the native `<input>`. */
+    ...rest
   }: {
     value?: string;
     label?: string;
@@ -45,9 +67,22 @@
     onfocus?: (e: FocusEvent) => void;
     onblur?: (e: FocusEvent) => void;
     onkeydown?: (e: KeyboardEvent) => void;
-  } = $props();
+    autocomplete?: HTMLInputAttributes["autocomplete"];
+    spellcheck?: boolean;
+    maxlength?: number;
+    name?: string;
+    inputmode?: HTMLInputAttributes["inputmode"];
+    "aria-describedby"?: string;
+  } & Omit<AriaAttributes, "aria-describedby" | "aria-invalid"> &
+    DataAttributes = $props();
 
   let inputId = $derived(id || `cy-input-${Math.random().toString(36).slice(2, 9)}`);
+
+  let describedBy = $derived(
+    [error ? `${inputId}-error` : hint ? `${inputId}-hint` : "", ariaDescribedby ?? ""]
+      .filter(Boolean)
+      .join(" ") || undefined,
+  );
 </script>
 
 <div class="cy-text-input" class:cy-text-input--error={!!error} class:cy-text-input--disabled={disabled}>
@@ -59,6 +94,7 @@
   {/if}
 
   <input
+    {...rest}
     class="cy-text-input__field"
     {type}
     id={inputId}
@@ -72,8 +108,13 @@
     {onfocus}
     {onblur}
     {onkeydown}
+    {autocomplete}
+    {spellcheck}
+    {maxlength}
+    {name}
+    {inputmode}
     aria-invalid={!!error}
-    aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+    aria-describedby={describedBy}
   />
 
   {#if error}
@@ -92,12 +133,12 @@
   }
 
   .cy-text-input__label {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    font-weight: var(--font-weight-medium);
+    font-family: var(--input-label-font);
+    font-size: var(--input-label-size);
+    font-weight: var(--input-label-weight);
     color: var(--input-label);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    letter-spacing: var(--input-label-letter-spacing);
+    text-transform: var(--input-label-transform);
   }
 
   .cy-text-input__required {

@@ -20,6 +20,8 @@ import { describe, it, expect } from "vitest";
  *   position: fixed descendant (Dialog, Modal, menus, toasts).
  * - modal overlays stack on --z-overlay and fixed navigation on --z-nav, so an
  *   open Drawer / Modal / Dialog is never covered by BottomNav.
+ * - form field labels take their typography from the --input-label-* tokens,
+ *   so a theme (calm) can drop the mono uppercase label style.
  */
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -115,5 +117,70 @@ describe("design-style token contract", () => {
   it.each(LAYERS)("stacks %s on its layer token", (file, selector, token) => {
     const rule = rules.find((r) => r.file === file && r.selector === selector);
     expect(rule?.body).toMatch(new RegExp(`z-index\\s*:\\s*var\\(${token}\\)`));
+  });
+});
+
+/** Every form field label rule; each one must take its typography from tokens. */
+const FORM_LABELS: [file: string, selector: string][] = [
+  ["forms/TextInput/TextInput.svelte", ".cy-text-input__label"],
+  ["forms/Select/Select.svelte", ".cy-select__label"],
+  ["forms/NumberInput/NumberInput.svelte", ".cy-ni__label"],
+  ["forms/MoneyInput/MoneyInput.svelte", ".cy-mi__label"],
+  ["forms/PasswordInput/PasswordInput.svelte", ".cy-password__label"],
+  ["forms/Textarea/Textarea.svelte", ".cy-textarea__label"],
+  ["forms/DatePicker/DatePicker.svelte", ".cy-dp__label"],
+  ["forms/DateRangePicker/DateRangePicker.svelte", ".cy-drp__label"],
+  ["forms/TimePicker/TimePicker.svelte", ".cy-tp__label"],
+  ["forms/ComboBox/ComboBox.svelte", ".cy-cb__label"],
+  ["forms/MultiSelect/MultiSelect.svelte", ".cy-ms__label"],
+  ["forms/TagInput/TagInput.svelte", ".cy-ti__label"],
+  ["forms/RangeSlider/RangeSlider.svelte", ".cy-rs__label"],
+  ["forms/CodeEditor/CodeEditor.svelte", ".cy-ce__label"],
+  ["forms/ColorPicker/ColorPicker.svelte", ".cy-color-picker__label"],
+  ["forms/ScheduleConfig/ScheduleConfig.svelte", ".cy-sched__label"],
+  ["forms/ScheduleConfig/ScheduleConfig.svelte", ".cy-sched__field-label"],
+  ["trading/order/LeverageSlider.svelte", ".cy-lev__label"],
+  ["trading/order/SegmentedRadio.svelte", ".cy-seg__legend"],
+];
+
+const LABEL_TOKENS: [property: string, token: string][] = [
+  ["font-family", "--input-label-font"],
+  ["text-transform", "--input-label-transform"],
+  ["letter-spacing", "--input-label-letter-spacing"],
+];
+
+/** Label typography declarations that do not use their --input-label-* token. */
+function hardCodedLabelTypography(body: string): string[] {
+  return LABEL_TOKENS.flatMap(([property, token]) => {
+    const value = new RegExp(`(^|[;\\s])${property}\\s*:\\s*([^;]+);`).exec(body)?.[2].trim();
+    return value !== undefined && value !== `var(${token})` ? [`${property}: ${value}`] : [];
+  });
+}
+
+describe("form label typography contract", () => {
+  it.each(FORM_LABELS)("%s %s uses the --input-label-* tokens", (file, selector) => {
+    const rule = rules.find((r) => r.file === file && r.selector === selector);
+    expect(rule, `${file} ${selector}`).toBeDefined();
+    for (const [property, token] of LABEL_TOKENS) {
+      expect(rule?.body, property).toMatch(new RegExp(`${property}\\s*:\\s*var\\(${token}\\)`));
+    }
+    expect(hardCodedLabelTypography(rule?.body ?? "")).toEqual([]);
+  });
+
+  it("never hard-codes font-family, text-transform or letter-spacing on a label painted with --input-label", () => {
+    const labels = rules.filter((r) => /color\s*:\s*var\(--input-label\)/.test(r.body));
+    expect(labels.length).toBeGreaterThan(0);
+    const offenders = labels.flatMap((r) =>
+      hardCodedLabelTypography(r.body).map((decl) => `${describeRule(r)} → ${decl}`),
+    );
+    expect(offenders).toEqual([]);
+  });
+
+  it("flags a hard-coded label declaration", () => {
+    expect(
+      hardCodedLabelTypography(
+        "font-family: var(--font-mono); letter-spacing: 0.04em; text-transform: var(--input-label-transform);",
+      ),
+    ).toEqual(["font-family: var(--font-mono)", "letter-spacing: 0.04em"]);
   });
 });

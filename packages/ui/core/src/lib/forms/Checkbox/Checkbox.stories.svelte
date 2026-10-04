@@ -6,6 +6,14 @@
     title: "Forms/Checkbox",
     component: Checkbox,
     tags: ["autodocs"],
+    parameters: {
+      docs: {
+        description: {
+          component:
+            "Checkbox with a visible `label` (or `ariaLabel` when there is none). `checked` is bindable. The native input is visually hidden (1×1 px, clipped) behind the custom box, so Playwright's visibility check never passes on it: `getByLabel(...)` and `getByRole(...)` resolve to that input and `.check()` times out. Call `.check()` on the visible label instead, e.g. `page.getByText(\"Accept terms\").check()`, which Playwright forwards to the input; keep `getByLabel` / `getByRole` for assertions such as `toBeChecked()`.",
+        },
+      },
+    },
   });
 </script>
 

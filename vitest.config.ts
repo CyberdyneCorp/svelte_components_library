@@ -60,6 +60,13 @@ export default defineConfig({
             configDir: path.join(dirname, ".storybook"),
           }),
         ],
+        // Pre-bundle storybook/test (used by play functions). Otherwise Vite discovers
+        // it mid-run, re-optimizes and reloads the browser, and whichever
+        // story file is loading at that moment fails with "Vitest failed to
+        // find the runner / current suite".
+        optimizeDeps: {
+          include: ["storybook/test"],
+        },
         test: {
           name: "storybook",
           // Cesium stories mount a WebGL globe. A headless CI browser has no

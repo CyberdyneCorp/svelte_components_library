@@ -134,12 +134,12 @@
   }
 
   .cy-lev__label {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    font-weight: var(--font-weight-medium);
+    font-family: var(--input-label-font);
+    font-size: var(--input-label-size);
+    font-weight: var(--input-label-weight);
     color: var(--input-label);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    letter-spacing: var(--input-label-letter-spacing);
+    text-transform: var(--input-label-transform);
   }
 
   .cy-lev__number {

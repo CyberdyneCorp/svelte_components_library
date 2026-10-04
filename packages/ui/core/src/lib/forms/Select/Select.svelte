@@ -1,25 +1,46 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  /** `data-*` attributes forwarded to the native `<select>`. */
+  type DataAttributes = { [key: `data-${string}`]: string | number | boolean | null | undefined };
+
   let {
     value = $bindable(""),
     label = "",
     options = [],
+    /**
+     * Hidden prompt option shown while `value` is `""`. Pass `null` (or `""`)
+     * to render only `options`; `value` should then match one of them. It is
+     * also skipped when `options` contains its own `""` option.
+     */
     placeholder = "Select an option...",
     error = "",
     disabled = false,
+    /** Forwarded to the native `<select id>`; auto-generated when omitted. */
+    id = "",
+    /** Accessible name when no visible `label` is rendered (e.g. list rows). */
+    ariaLabel = "",
     onchange,
+    /** `data-*` attributes forwarded to the native `<select>`. */
+    ...rest
   }: {
     value?: string;
     label?: string;
     options?: Array<{ value: string; label: string }>;
-    placeholder?: string;
+    placeholder?: string | null;
     error?: string;
     disabled?: boolean;
+    id?: string;
+    ariaLabel?: string;
     onchange?: (e: Event) => void;
-  } = $props();
+  } & DataAttributes = $props();
 
-  let inputId = `cy-select-${Math.random().toString(36).slice(2, 9)}`;
+  const fallbackId = `cy-select-${Math.random().toString(36).slice(2, 9)}`;
+  let inputId = $derived(id || fallbackId);
+
+  // An explicit `""` option already represents the empty value; a second,
+  // hidden placeholder with the same value would be the one shown as checked.
+  let showPlaceholder = $derived(!!placeholder && !options.some((opt) => opt.value === ""));
 </script>
 
 <div class="cy-select" class:cy-select--error={!!error} class:cy-select--disabled={disabled}>
@@ -29,18 +50,20 @@
 
   <div class="cy-select__wrapper">
     <select
+      {...rest}
       class="cy-select__field"
       id={inputId}
       bind:value
       {disabled}
       {onchange}
+      aria-label={!label && ariaLabel ? ariaLabel : undefined}
       aria-invalid={!!error}
       aria-describedby={error ? `${inputId}-error` : undefined}
     >
-      {#if placeholder}
-        <option value="" disabled selected hidden>{placeholder}</option>
+      {#if showPlaceholder}
+        <option value="" disabled hidden>{placeholder}</option>
       {/if}
-      {#each options as opt}
+      {#each options as opt (opt.value)}
         <option value={opt.value}>{opt.label}</option>
       {/each}
     </select>
@@ -64,12 +87,12 @@
   }
 
   .cy-select__label {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    font-weight: var(--font-weight-medium);
+    font-family: var(--input-label-font);
+    font-size: var(--input-label-size);
+    font-weight: var(--input-label-weight);
     color: var(--input-label);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    letter-spacing: var(--input-label-letter-spacing);
+    text-transform: var(--input-label-transform);
   }
 
   .cy-select__wrapper {
