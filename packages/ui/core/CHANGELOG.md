@@ -1,5 +1,11 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.17.0
+
+### Minor Changes
+
+- 256c26f: Add ten composable landing page sections for hero content, feature grids, logos, testimonials, pricing, FAQs, calls to action, footers, and metrics.
+
 ## 0.16.0
 
 ### Minor Changes
