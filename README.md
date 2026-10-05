@@ -2,7 +2,7 @@
 
 A comprehensive Svelte 5 component library built for **Cyberdyne** — powering products across Crypto, Machine Learning, and Research.
 
-Dark-first, cyberpunk-inspired design system with **256 components** across 19 categories, design tokens, and full Storybook documentation.
+Dark-first, cyberpunk-inspired design system with **270 public components** across 20 categories, design tokens, and Storybook documentation.
 
 ## Storybook
 
@@ -36,7 +36,7 @@ All stories use the `args` pattern for Storybook Svelte CSF compatibility. Visua
 | Package | Description |
 |---------|------------|
 | `@cyberdynecorp/svelte-ui-foundation` | Design tokens, CSS custom properties, typography, colors, spacing, animations |
-| `@cyberdynecorp/svelte-ui-core` | 256 UI components across 19 categories |
+| `@cyberdynecorp/svelte-ui-core` | 270 public UI components across 20 categories |
 
 ## Installation
 
@@ -524,6 +524,33 @@ All components use CSS custom properties. Override any token:
 }
 ```
 
+### Marketing / Landing Pages
+
+Compose a responsive landing page from `MarketingSection`, `HeroSection`, `FeatureGrid`, `LogoCloud`, `TestimonialGrid`, `PricingTable`, `FAQSection`, `CTASection`, `MarketingFooter`, and `StatsSection`. These components render content and links supplied by the consuming product; they do not invent endorsements, metrics, plan prices, or checkout behavior.
+
+```svelte
+<script lang="ts">
+  import { HeroSection, FeatureGrid, FAQSection } from "@cyberdynecorp/svelte-ui-core";
+
+  const actions = [{ label: "Explore features", href: "#features" }];
+  const features = [{ id: "control", title: "Clear controls", description: "Copy supplied by your product team." }];
+  const questions = [{ id: "support", question: "How do I get support?", answer: "Add your confirmed support instructions." }];
+</script>
+
+<main>
+  <HeroSection
+    id="top"
+    title="A clear product promise"
+    description="A short description provided by your product team."
+    {actions}
+  />
+  <FeatureGrid id="features" heading="Product features" {features} />
+  <FAQSection id="faq" heading="Frequently asked questions" items={questions} />
+</main>
+```
+
+`PricingTable` accepts already formatted price strings and action destinations, so the consumer owns billing terms and calculations. `FAQSection` uses native `<details>` / `<summary>` disclosure. The Storybook `Marketing/Landing Page` recipe includes desktop, mobile and centered-hero examples with placeholder content clearly marked for replacement.
+
 ## Tech Stack
 
 | Layer | Technology |
@@ -531,8 +558,8 @@ All components use CSS custom properties. Override any token:
 | Framework | Svelte 5 (runes) |
 | Styling | CSS Custom Properties |
 | Types | TypeScript (strict) |
-| Docs | Storybook 8 |
-| Testing | Playwright (visual regression) |
+| Docs | Storybook 10 |
+| Testing | Vitest, Testing Library, Storybook browser tests, Playwright |
 | Build | Vite + svelte-package |
 | Monorepo | pnpm workspaces |
 | Versioning | Changesets |
@@ -542,8 +569,8 @@ All components use CSS custom properties. Override any token:
 
 ```bash
 # Clone
-git clone git@github.com:CyberdyneCorp/svelte-components-library.git
-cd svelte-components-library
+git clone git@github.com:CyberdyneCorp/svelte_components_library.git
+cd svelte_components_library
 
 # Install
 pnpm install
@@ -589,7 +616,7 @@ pnpm release            # Build & publish
 │       │       ├── styles/  CSS (colors, typography, spacing, radius, animations)
 │       │       ├── themes/  Optional theme presets (calm + 17 design styles)
 │       │       └── theme/   Theme preference helper + pre-paint init script
-│       └── core/            UI components (256 components)
+│       └── core/            UI components (270 public components)
 │           └── src/lib/
 │               ├── primitives/   Button, Badge, Icon, Avatar, ToggleGroup, AvatarGroup, ThemeToggle, StarRating, ...
 │               ├── forms/        TextInput, Select, DateRangePicker, ColorPicker, SearchInput, DatePicker, TimePicker, ScheduleConfig, ...
@@ -610,13 +637,26 @@ pnpm release            # Build & publish
 │               ├── retro/        RetroWindow, Taskbar, WindowManager, Pixel* primitives, DeFi widgets (36)
 │               ├── flow/         NodeEditor, FlowNode, FlowPort, FlowEdge, NodePalette, ... (node-graph editor)
 │               ├── trading/      Futures terminal: chart/ (TradingChart + canvas engine), indicators/, market/ (OrderBook, RecentTrades, TickerBar), order/ (OrderTicket, LeverageSlider, PositionsTable, OpenOrdersTable), types, format, decimal (8)
+│               ├── marketing/    Landing page sections, pricing, FAQ, social proof, and CTA blocks (10 public components)
 │               └── _testdata/    Shared test data module for stories
 └── docs/                    Built Storybook output
 ```
 
 ## Target Products
 
-This design system is built to support:
+Current frontend coverage assessment: [Cyberdyne frontend readiness](documentation/FRONTEND_COVERAGE.md).
+The library provides shared UI; product integrations and complete workflow readiness must be validated separately.
+
+Current priority products:
+
+- **Trade4Me** — Trading terminals and order/position workflows.
+- **Liquidity4Me** — Liquidity and DeFi position management.
+- **CyberWealth** — Wealth and portfolio dashboards.
+- **Market4Me** — Product-specific workflows pending clarification.
+- **Cyberdyne finance systems** — Financial dashboards, budgets and transaction workflows.
+- **Cyberdyne landing pages** — Reusable marketing sections and complete page compositions.
+
+Additional existing target products:
 
 - **CyberdyneDAO** — Web3 terminal platform with NFT-gated access
 - **YieldPath** — AI-powered DeFi life planner
