@@ -478,6 +478,34 @@ export {
   roundToTick,
   sizePrecisionOf,
 } from "./trading/index.js";
+
+// Marketing / Landing Pages
+export {
+  MarketingSection,
+  HeroSection,
+  FeatureGrid,
+  LogoCloud,
+  TestimonialGrid,
+  PricingTable,
+  FAQSection,
+  CTASection,
+  MarketingFooter,
+  StatsSection,
+} from "./marketing/index.js";
+export type {
+  MarketingAction,
+  MarketingFaqItem,
+  MarketingFeature,
+  MarketingHeadingLevel,
+  MarketingLink,
+  MarketingLinkGroup,
+  MarketingLogo,
+  MarketingMetric,
+  MarketingPlan,
+  MarketingSectionTone,
+  MarketingSectionWidth,
+  MarketingTestimonial,
+} from "./marketing/index.js";
 export type {
   BookLevel,
   Candle,
