@@ -667,3 +667,7 @@ Additional existing target products:
 ## License
 
 Private — Cyberdyne Corp.
+
+### Finance dashboard patterns
+
+See [the finance dashboard adoption guide](guides/finance-dashboard.md) and **Finance / Dashboard** in Storybook for synthetic wealth, transactions and empty-position screens. `FilterBar` composes responsive controls, `AllocationBreakdown` presents signed allocations, and `KpiCard` supports opt-in metric emphasis and value tone.

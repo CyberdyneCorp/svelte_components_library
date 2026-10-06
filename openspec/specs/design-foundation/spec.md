@@ -6,6 +6,13 @@ The `@cyberdynecorp/svelte-ui-foundation` package provides the design system's t
 ## Requirements
 ### Requirement: Three-layer token architecture
 
+The foundation SHALL expose reference, semantic and component CSS token layers through base.css.
+
+#### Scenario: Complete Three-layer token architecture contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL define color tokens in three layers within a single `:root` block: Layer 1 primitives (raw hex values named `--primitive-{family}-{step}`), Layer 2 semantic tokens (named `--color-{category}-{role}`, each resolving to a `var(--primitive-*)` or `rgba()`), and Layer 3 component tokens (named `--{component}-{property}`, each resolving to a Layer 2 `var(--color-*)` token, except the theme-invariant `--video-*` tokens, which are literal values because media surfaces stay black in every theme). (src: packages/ui/foundation/src/lib/styles/colors.css)
 
 #### Scenario: Semantic token resolves to a primitive
@@ -21,6 +28,13 @@ The system SHALL define color tokens in three layers within a single `:root` blo
 - **THEN** the system SHALL resolve it to `var(--color-action-brand-default)`
 
 ### Requirement: Signature brand colors
+
+The system SHALL define three signature brand primitives: Neon Green `#00ff41` (crypto), Electric Cyan `#00d4ff` (ML/data), and Violet `#a855f7` (research/innovation), each promoted to an action role (brand=green, secondary=cyan, tertiary=violet) and each having a corresponding glow shadow token.
+
+#### Scenario: Complete Signature brand colors contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL define three signature brand primitives: Neon Green `#00ff41` (crypto), Electric Cyan `#00d4ff` (ML/data), and Violet `#a855f7` (research/innovation), each promoted to an action role (brand=green, secondary=cyan, tertiary=violet) and each having a corresponding glow shadow token. The same three hex values SHALL be mirrored in the TypeScript token object. (src: packages/ui/foundation/src/lib/styles/colors.css:10,18,26,97,103,109,128-130; packages/ui/foundation/src/lib/tokens/tokens.ts:66,75,83)
 
@@ -84,6 +98,13 @@ The system SHALL export from `tokens.ts` the token objects `breakpoints`, `grid`
 
 ### Requirement: Complete token surface for core
 
+The system SHALL define, in both the default (dark) and `[data-theme="light"]` blocks, every token in a foundation-owned namespace that `@cyberdynecorp/svelte-ui-core` references.
+
+#### Scenario: Complete Complete token surface for core contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL define, in both the default (dark) and `[data-theme="light"]` blocks, every token in a foundation-owned namespace that `@cyberdynecorp/svelte-ui-core` references. The namespaces are the prefixes foundation itself defines:
 
 - `--color-`, `--primitive-`, `--shadow-`, `--font-`, `--space-`, `--radius-`, `--transition-`
@@ -112,6 +133,13 @@ This includes:
 - **THEN** the system SHALL resolve it to `var(--primitive-red-30)`, with `--color-action-danger-text` resolving to `#ffffff`
 
 ### Requirement: Calm theme preset
+
+The system SHALL ship an optional stylesheet `@cyberdynecorp/svelte-ui-foundation/themes/calm.css`, loaded after the foundation styles, that defines two themes: `[data-theme="calm"]` (light) and `[data-theme="calm-dark"]`.
+
+#### Scenario: Complete Calm theme preset contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL ship an optional stylesheet `@cyberdynecorp/svelte-ui-foundation/themes/calm.css`, loaded after the foundation styles, that defines two themes: `[data-theme="calm"]` (light) and `[data-theme="calm-dark"]`. Each theme SHALL redefine every Layer 2 (`--color-*`, `--shadow-*`) and Layer 3 (`--btn-*`, `--input-*`, `--card-*`, `--table-*`, `--nav-*`) token that the default `:root` block defines, except the theme-invariant `--video-*` tokens. Neither theme SHALL redefine any `--primitive-*` or `--video-*` token. Both themes SHALL set `--font-display` to Inter. Every `--transition-*` token SHALL use a duration of at most 200ms and a timing function that does not overshoot. `--transition-spring` SHALL be a plain ease. Declared text/background pairings SHALL meet a WCAG 2.x contrast ratio of at least 4.5:1, and declared non-text UI pairings (focus rings, input and strong borders, accents) SHALL meet at least 3:1. (src: packages/ui/foundation/src/lib/themes/calm.css; packages/ui/foundation/src/lib/themes/presets.test.ts)
 
@@ -146,6 +174,13 @@ The system SHALL ship an optional stylesheet `@cyberdynecorp/svelte-ui-foundatio
 
 ### Requirement: Theme preference helper
 
+The system SHALL export from `@cyberdynecorp/svelte-ui-foundation/theme` a framework-agnostic `createThemePreference({ storageKey, themes: { light, dark } })`.
+
+#### Scenario: Complete Theme preference helper contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL export from `@cyberdynecorp/svelte-ui-foundation/theme` a framework-agnostic `createThemePreference({ storageKey, themes: { light, dark } })`. It SHALL return an object with these members:
 
 - `get()`, which returns the stored preference: `"system"`, `themes.light` or `themes.dark`.
@@ -176,6 +211,13 @@ The helper SHALL apply the resolved theme to `document.documentElement.dataset.t
 
 ### Requirement: Pre-paint theme init script
 
+The system SHALL export `themeInitScript({ storageKey, themes })` from `@cyberdynecorp/svelte-ui-foundation/theme`.
+
+#### Scenario: Complete Pre-paint theme init script contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL export `themeInitScript({ storageKey, themes })` from `@cyberdynecorp/svelte-ui-foundation/theme`. It SHALL return a self-contained inline-script string for `app.html` that sets `document.documentElement.dataset.theme` before first paint, using the same storage key and resolution rules as `createThemePreference`. A stored explicit theme SHALL win. Otherwise `prefers-color-scheme: dark` SHALL pick between the two themes, and storage or `matchMedia` failures SHALL fall back without throwing. Option values SHALL be escaped so that they cannot terminate the surrounding `<script>` element. (src: packages/ui/foundation/src/lib/theme/themePreference.ts)
 
 #### Scenario: No flash of the wrong theme
@@ -191,6 +233,13 @@ The system SHALL export `themeInitScript({ storageKey, themes })` from `@cyberdy
 - **THEN** the theme applied by the script SHALL equal the helper's `resolved()`
 
 ### Requirement: Design-style tokens
+
+The system SHALL define design-style tokens whose default values are no-ops.
+
+#### Scenario: Complete Design-style tokens contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL define design-style tokens whose default values are no-ops. With these defaults, the default, light and calm themes SHALL render exactly as they did without the tokens.
 
@@ -235,6 +284,13 @@ Value rules:
 - **THEN** the Card background SHALL show the dot tile above its `--card-bg` colour
 
 ### Requirement: Design-style preset pack
+
+The system SHALL ship optional design-style presets as CSS files at `packages/ui/foundation/src/lib/themes/<name>.css`, next to `calm.css`.
+
+#### Scenario: Complete Design-style preset pack contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL ship optional design-style presets as CSS files at `packages/ui/foundation/src/lib/themes/<name>.css`, next to `calm.css`. Each preset SHALL define `[data-theme="<name>"]` and set `color-scheme`, and it MAY also define `[data-theme="<name>-dark"]`. The presets are: `minimal`, `flat`, `material`, `swiss`, `organic`, `maximalism`, `y2k`, `glass`, `neumorphism`, `skeuomorphism`, `brutalism`, `bento`, `clay`, `memphis`, `vaporwave`, `art-deco` and `editorial`.
 

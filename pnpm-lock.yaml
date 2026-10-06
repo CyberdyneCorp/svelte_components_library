@@ -74,6 +74,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: 3.2.4
         version: 3.2.4(@vitest/browser@3.2.4)(vitest@3.2.4)
+      cesium:
+        specifier: ^1.124.0
+        version: 1.141.0
       eslint:
         specifier: ^9.27.0
         version: 9.39.4

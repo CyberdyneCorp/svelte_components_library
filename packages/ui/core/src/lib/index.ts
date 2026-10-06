@@ -633,3 +633,6 @@ export type {
   OrderTicketLabelsInput,
   PositionsTableLabels,
 } from "./trading/index.js";
+
+// Finance presentation patterns
+export { AllocationBreakdown, type AllocationItem, type AllocationTone } from "./data/AllocationBreakdown/index.js";

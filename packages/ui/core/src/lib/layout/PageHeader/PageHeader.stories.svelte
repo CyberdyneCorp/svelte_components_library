@@ -42,3 +42,11 @@
     ">New Experiment</button>
   </PageHeader>
 </Story>
+
+<Story name="NarrowFinanceActions" asChild>
+  <div style="width: 320px; max-width: 100%;">
+    <PageHeader title="Transações e planejamento financeiro da família" description="Acompanhe seus registros.">
+      <button type="button">Nova transação</button><button type="button">Transferir</button>
+    </PageHeader>
+  </div>
+</Story>

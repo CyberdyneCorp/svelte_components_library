@@ -2,6 +2,13 @@
 
 ### Requirement: Form label typography tokens
 
+The foundation SHALL provide shared typography tokens for form labels.
+
+#### Scenario: Complete Form label typography tokens contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL define, in the `:root` block of `typography.css`, five form label tokens whose defaults reproduce the previous label literals:
 
 - `--input-label-font`: `var(--font-mono)`

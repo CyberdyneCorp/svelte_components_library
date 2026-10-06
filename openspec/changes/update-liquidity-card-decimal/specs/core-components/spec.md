@@ -4,6 +4,15 @@
 
 `LiquidityPositionCard` SHALL accept optional decimal-safe props next to its number props:
 
+- `valueMoney`, `pnlMoney` and `uncollectedTotal` of type `LiquidityMoney` (`{ amount: string; currency: string; decimals?: number }`).
+
+#### Scenario: Complete Decimal-safe LiquidityPositionCard contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+`LiquidityPositionCard` SHALL accept optional decimal-safe props next to its number props:
+
 - `valueMoney`, `pnlMoney` and `uncollectedTotal` of type `LiquidityMoney` (`{ amount: string; currency: string; decimals?: number }`). They are rendered through `CurrencyDisplay` with the card's optional `locale`. Their amounts SHALL never be converted to a JS `number`.
 - `uncollectedFees` of type `LiquidityTokenAmount[]` (`{ asset: string; amount: string; decimals?: number }`), one entry per token. Each fee SHALL be shown in `CurrencyDisplay` asset mode. When `decimals` is omitted, the number of fraction digits written in `amount` is used, so no fee is rounded. The fees SHALL be shown in order, followed by `≈ uncollectedTotal` when that prop is set.
 - When set, `valueMoney` SHALL take precedence over `value`, `pnlMoney` over `pnl`, and `uncollectedFees` / `uncollectedTotal` over `uncollected`.
@@ -57,6 +66,13 @@
 
 ### Requirement: Decorative, themeable LiquidityRangeBar
 
+`LiquidityRangeBar` SHALL accept `decorative?: boolean` (default `false`).
+
+#### Scenario: Complete Decorative, themeable LiquidityRangeBar contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 `LiquidityRangeBar` SHALL accept `decorative?: boolean` (default `false`). When `decorative` is true, it SHALL render no `role`, `aria-label` or `aria-value*` attributes and SHALL mark its root `aria-hidden="true"`. The visual output SHALL be the same. When `decorative` is false, the progressbar SHALL carry `ariaLabel` as its accessible name. The track SHALL be styled by the `--lrange-track-bg`, `--lrange-track-border`, `--lrange-radius` and `--lrange-marker-color` tokens. The band SHALL be clipped to the track's rounded corners, and the marker SHALL stay unclipped. The bounds text SHALL use `--color-text-secondary`. (src: packages/ui/core/src/lib/retro/LiquidityRangeBar/LiquidityRangeBar.svelte)
 
 #### Scenario: Decorative mode drops the semantics
@@ -73,6 +89,13 @@
 - **THEN** a `progressbar` named `WETH/USDC range` SHALL be present
 
 ### Requirement: TokenPairIcon initials options
+
+`TokenPairIcon` SHALL accept `showInitials?: boolean` (default `true`) and `maxInitials?: number` (default `2`).
+
+#### Scenario: Complete TokenPairIcon initials options contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 `TokenPairIcon` SHALL accept `showInitials?: boolean` (default `true`) and `maxInitials?: number` (default `2`). Rings without an icon SHALL show the first `maxInitials` characters of the symbol, upper-cased, or no text when `showInitials` is false. Icons SHALL still take precedence over initials. The accessible name SHALL be unchanged. The ring border, backgrounds and initials colour SHALL come from `--tpair-ring-border`, `--tpair-a-bg`, `--tpair-b-bg` and `--tpair-initials-color`. `tokenAColor` / `tokenBColor`, when set, SHALL override the background tokens. (src: packages/ui/core/src/lib/retro/TokenPairIcon/TokenPairIcon.svelte)
 

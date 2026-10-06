@@ -31,6 +31,7 @@
 <style>
   .cy-page-header {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--space-4);
@@ -40,7 +41,7 @@
   }
 
   .cy-page-header__text {
-    flex: 1;
+    flex: 1 1 16rem;
     min-width: 0;
   }
 
@@ -52,6 +53,7 @@
     color: var(--color-text-primary);
     margin: 0;
     line-height: 1.25;
+    overflow-wrap: anywhere;
   }
 
   .cy-page-header__desc {
@@ -66,6 +68,12 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    flex-shrink: 0;
+    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .cy-page-header__actions :global(*) {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 </style>

@@ -1,7 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-  import { tick } from "svelte";
+  import { tick, type Snippet } from "svelte";
 
   type FilterOption = { value: string; label: string };
 
@@ -14,6 +14,9 @@
   };
 
   let {
+    children,
+    actions,
+    ariaLabel = "Filters",
     filters = [],
     activeFilters = $bindable({}),
     onchange,
@@ -21,6 +24,10 @@
     showClearAll = true,
     compact = false,
   }: {
+    /** When supplied, use native, application-owned controls instead of filter chips. */
+    children?: Snippet;
+    actions?: Snippet;
+    ariaLabel?: string;
     filters?: Filter[];
     activeFilters?: Record<string, any>;
     onchange?: (filters: Record<string, any>) => void;
@@ -155,11 +162,19 @@
 
 <svelte:window onclick={handleClickOutside} />
 
+{#if children}
+<section class="cy-filter-layout" aria-label={ariaLabel}>
+  <div class="cy-filter-layout__controls">
+    {#if children}{@render children()}{/if}
+  </div>
+  {#if actions}<div class="cy-filter-layout__actions">{@render actions()}</div>{/if}
+</section>
+{:else}
 <div
   class="cy-filter-bar"
   class:cy-filter-bar--compact={compact}
   role="toolbar"
-  aria-label="Filters"
+  aria-label={ariaLabel}
 >
   {#each filters as filter (filter.id)}
     {@const isActive = activeFilters[filter.id] !== undefined}
@@ -307,7 +322,38 @@
   {/if}
 </div>
 
+{/if}
+
 <style>
+
+  .cy-filter-layout {
+    min-width: 0;
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-default);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+  }
+  .cy-filter-layout__controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    align-items: end;
+    gap: var(--space-3);
+  }
+  .cy-filter-layout__controls :global(> *) { min-width: 0; max-width: 100%; }
+  .cy-filter-layout__controls :global(input),
+  .cy-filter-layout__controls :global(select) { min-width: 0; max-width: 100%; }
+  .cy-filter-layout__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  .cy-filter-layout__actions :global(> *) { max-width: 100%; overflow-wrap: anywhere; }
+
   .cy-filter-bar {
     display: flex;
     flex-wrap: wrap;

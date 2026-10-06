@@ -1,3 +1,4 @@
+import { createRawSnippet } from "svelte";
 import { render, screen, fireEvent } from "@testing-library/svelte";
 import { describe, it, expect, vi } from "vitest";
 import FilterBar from "./FilterBar.svelte";
@@ -295,5 +296,20 @@ describe("FilterBar", () => {
       props: { filters: [selectFilter, textFilter], activeFilters: { status: "active", search: "test" } },
     });
     expect(screen.getByText("2")).toBeInTheDocument();
+  });
+});
+
+describe("FilterBar composition", () => {
+  it("renders a labelled region and leaves native form navigation intact", () => {
+    render(FilterBar, { props: { ariaLabel: "Filtros", children: createRawSnippet(() => ({ render: () => '<label>Buscar<input type="search"></label>' })), actions: createRawSnippet(() => ({ render: () => '<button type="submit">Filtrar</button>' })) } });
+    const region = screen.getByRole("region", { name: "Filtros" });
+    expect(region).toContainElement(screen.getByRole("searchbox", { name: "Buscar" }));
+    expect(region).toContainElement(screen.getByRole("button", { name: "Filtrar" }));
+    expect(screen.queryByRole("toolbar")).toBeNull();
+    expect(screen.getByRole("button")).toHaveAttribute("type", "submit");
+  });
+  it("omits the actions wrapper when no actions are supplied", () => {
+    const { container } = render(FilterBar, { props: { ariaLabel: "Filtros" } });
+    expect(container.querySelector(".cy-filter-layout__actions")).toBeNull();
   });
 });

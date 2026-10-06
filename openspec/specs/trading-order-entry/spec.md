@@ -6,6 +6,13 @@ Order entry and account views for futures terminals (`trading/order/`): an order
 ## Requirements
 ### Requirement: Order ticket
 
+The system SHALL provide `OrderTicket` for a `market: MarketSpec`, with a Long/Short side selector (radio group), order types market, limit, stop-market and stop-limit, size in base or quote asset, a size-percentage slider of the `available` margin, a leverage control, cross/isolated margin mode, reduce-only, post-only (limit only), time in force (GTC/IOC/FOK) and optional take-profit / stop-loss.
+
+#### Scenario: Complete Order ticket contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL provide `OrderTicket` for a `market: MarketSpec`, with a Long/Short side selector (radio group), order types market, limit, stop-market and stop-limit, size in base or quote asset, a size-percentage slider of the `available` margin, a leverage control, cross/isolated margin mode, reduce-only, post-only (limit only), time in force (GTC/IOC/FOK) and optional take-profit / stop-loss. Price and size fields SHALL use `MoneyInput` in asset mode. The ticket SHALL NOT submit orders itself: it calls `onsubmit(draft: OrderDraft)` with prices rounded to `tickSize` and size rounded down to `stepSize` and expressed in the base asset.
 
 #### Scenario: Quote-denominated size is normalised
@@ -15,6 +22,13 @@ The system SHALL provide `OrderTicket` for a `market: MarketSpec`, with a Long/S
 - **THEN** `onsubmit` SHALL receive `side: "long"`, `sizeUnit: "base"` and `size: "0.015"`
 
 ### Requirement: Order validation and preview
+
+`OrderTicket` SHALL validate against `MarketSpec` and `available` (min/max size, min notional, leverage ≤ `maxLeverage`, a price for limit/stop-limit orders, a trigger price for stop orders, take-profit above and stop-loss below the entry for longs and the reverse for shorts), show errors inline next to the field and block submit while invalid.
+
+#### Scenario: Complete Order validation and preview contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 `OrderTicket` SHALL validate against `MarketSpec` and `available` (min/max size, min notional, leverage ≤ `maxLeverage`, a price for limit/stop-limit orders, a trigger price for stop orders, take-profit above and stop-loss below the entry for longs and the reverse for shorts), show errors inline next to the field and block submit while invalid. It SHALL preview the notional, the initial margin (notional ÷ leverage) and the estimated fee from `makerFee` / `takerFee`, and SHALL show an estimated liquidation price only when the consumer supplies `estimateLiquidation(draft)`.
 
@@ -35,6 +49,13 @@ The system SHALL provide `LeverageSlider` (1× to `max`, configurable marks, a n
 - **THEN** the value SHALL be 12× and its accessible value text SHALL be "12×"
 
 ### Requirement: Positions and open orders tables
+
+The system SHALL provide `PositionsTable` (market, side, size, entry, mark, liquidation, margin and mode, unrealized PnL with ROE, TP/SL) and `OpenOrdersTable` (market, side, type, price or trigger, size and filled, reduce-only, TIF, time), rendered as real tables, with PnL coloured by the trade tokens plus a sign, and actions reported through callbacks only (`onclose(position, "market" | "limit")`, `onedittpsl(position)`, `oncancel(order)`, `oncancelall()`).
+
+#### Scenario: Complete Positions and open orders tables contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL provide `PositionsTable` (market, side, size, entry, mark, liquidation, margin and mode, unrealized PnL with ROE, TP/SL) and `OpenOrdersTable` (market, side, type, price or trigger, size and filled, reduce-only, TIF, time), rendered as real tables, with PnL coloured by the trade tokens plus a sign, and actions reported through callbacks only (`onclose(position, "market" | "limit")`, `onedittpsl(position)`, `oncancel(order)`, `oncancelall()`). Both SHALL show an empty state and accept `labels`.
 

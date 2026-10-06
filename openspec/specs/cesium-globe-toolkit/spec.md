@@ -24,6 +24,13 @@ The system SHALL declare `cesium` as an optional peer dependency and SHALL refer
 
 ### Requirement: Headless viewer mounting and controlled camera
 
+The system SHALL construct the Cesium `Viewer` with a headless preset that disables the animation, timeline, geocoder, home button, scene-mode picker, navigation help, fullscreen button, base-layer picker, info box, and selection indicator by default, while spreading a `viewerOptions` escape hatch to override any of them.
+
+#### Scenario: Complete Headless viewer mounting and controlled camera contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL construct the Cesium `Viewer` with a headless preset that disables the animation, timeline, geocoder, home button, scene-mode picker, navigation help, fullscreen button, base-layer picker, info box, and selection indicator by default, while spreading a `viewerOptions` escape hatch to override any of them. The `camera` and `viewBBox` props SHALL be `$bindable`: the viewer's `moveEnd` SHALL write observed camera state back and invoke `oncameramove`, and writing the bound `camera` prop SHALL fly the camera, with a guard preventing feedback loops. Child layers SHALL render only after the viewer is `ready`. (src: packages/ui/core/src/lib/cesium/CesiumGlobe/CesiumGlobe.svelte:58-59,122-135,139,184-213,267-297,355-356)
 
 #### Scenario: Headless defaults with override
@@ -33,6 +40,13 @@ The system SHALL construct the Cesium `Viewer` with a headless preset that disab
 - **THEN** the system SHALL disable the timeline, animation, geocoder, and other default chrome widgets
 
 ### Requirement: Non-throwing failure modes and base-URL warning
+
+The system SHALL route CesiumJS import failure and Viewer/WebGL initialization failure to an in-component error overlay rather than throwing out of `onMount`, and SHALL `console.warn` when `window.CESIUM_BASE_URL` is not set (provisioning the base URL is the consumer's responsibility).
+
+#### Scenario: Complete Non-throwing failure modes and base-URL warning contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL route CesiumJS import failure and Viewer/WebGL initialization failure to an in-component error overlay rather than throwing out of `onMount`, and SHALL `console.warn` when `window.CESIUM_BASE_URL` is not set (provisioning the base URL is the consumer's responsibility). The one intentional throw SHALL be `useCesiumViewer()` called outside a `CesiumGlobe` subtree. (src: packages/ui/core/src/lib/cesium/CesiumGlobe/CesiumGlobe.svelte:88-101,104,108-111,138-146; packages/ui/core/src/lib/cesium/viewerContext.ts:23-31)
 
@@ -60,6 +74,13 @@ The system SHALL share the viewer instance through Svelte context: `CesiumGlobe`
 
 ### Requirement: Uniform layer styling conventions
 
+The system SHALL apply a uniform `opacity` prop (clamped to 0..1, default 1) to entity/billboard layers, and SHALL apply a `labelMode` prop restricted to `"all" | "perEntity" | "selected" | "none"` (default `"selected"`) to tracked-entity layers, with `alwaysShowLabels` retained as a deprecated boolean alias (`true` -> `"all"`, `false` -> `"selected"`).
+
+#### Scenario: Complete Uniform layer styling conventions contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL apply a uniform `opacity` prop (clamped to 0..1, default 1) to entity/billboard layers, and SHALL apply a `labelMode` prop restricted to `"all" | "perEntity" | "selected" | "none"` (default `"selected"`) to tracked-entity layers, with `alwaysShowLabels` retained as a deprecated boolean alias (`true` -> `"all"`, `false` -> `"selected"`). `TrackedEntitiesLayer` SHALL be the low-level generic styling primitive that domain layers (e.g. `AircraftLayer`) compose. (src: packages/ui/core/src/lib/cesium/MarkersLayer/MarkersLayer.svelte:17-18,32,40; packages/ui/core/src/lib/cesium/TrackedEntitiesLayer/TrackedEntitiesLayer.svelte:16-51,69-85; packages/ui/core/src/lib/cesium/types.ts:205-217; packages/ui/core/src/lib/cesium/AircraftLayer/AircraftLayer.svelte:59-71)
 
 #### Scenario: Opacity clamping
@@ -75,6 +96,13 @@ The system SHALL apply a uniform `opacity` prop (clamped to 0..1, default 1) to 
 - **THEN** the system SHALL show labels only for the selected entity
 
 ### Requirement: Component and type catalog
+
+The system SHALL export 50 globe components across engine (`CesiumGlobe`, `ImageryLayer`, `Terrain`), tilesets/models/contours, vector layers, live-entity layers, raster timelines, particle/flow layers, and chrome, plus shared utilities (`viewerContext`, `sampler`, `reconcile`, `gibs`) and a shared `types.ts` defining domain entity shapes and discriminated provider-spec unions with documented allowed values and defaults.
+
+#### Scenario: Complete Component and type catalog contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL export 50 globe components across engine (`CesiumGlobe`, `ImageryLayer`, `Terrain`), tilesets/models/contours, vector layers, live-entity layers, raster timelines, particle/flow layers, and chrome, plus shared utilities (`viewerContext`, `sampler`, `reconcile`, `gibs`) and a shared `types.ts` defining domain entity shapes and discriminated provider-spec unions with documented allowed values and defaults. (src: packages/ui/core/src/lib/cesium/index.ts:1-68; packages/ui/core/src/lib/cesium/types.ts:16-650)
 

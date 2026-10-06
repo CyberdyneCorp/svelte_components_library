@@ -76,3 +76,6 @@
     </KpiCard>
   </div>
 </Story>
+
+<Story name="FeaturedWealth" args={{ label: "Patrimônio líquido", value: "R$ 240.000,00", emphasis: "featured", deltaLabel: "Ativos menos dívidas" }} />
+<Story name="DebtValue" args={{ label: "Dívidas", value: "R$ 60.000,00", valueTone: "negative", deltaLabel: "Compromissos a descontar" }} />
