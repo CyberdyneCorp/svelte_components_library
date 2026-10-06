@@ -54,3 +54,9 @@ The library SHALL document a synthetic finance composition using existing shared
 
 - **WHEN** the finance showcase renders
 - **THEN** it SHALL use synthetic records and explain that the consuming application supplies financial data and semantics
+
+#### Scenario: Cash flow and negative balance demonstration
+
+- **GIVEN** synthetic transaction amounts and preformatted balance states
+- **WHEN** a user simulates successive outflows
+- **THEN** income SHALL appear blue, outflows red, zero balance SHALL show a warning and negative balance SHALL show an accessible alert without persisting financial operations

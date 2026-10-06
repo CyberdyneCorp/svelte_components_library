@@ -70,3 +70,9 @@ The central baseline is zero. Positive bars extend right and negative bars left.
 ## Verification
 
 Run focused unit tests and `pnpm exec playwright test tests/finance-dashboard.spec.ts` for viewport, heading/action overlap, keyboard filter submit/clear and calm light coverage. Storybook exposes individual new patterns and complete wealth, transaction and empty-state examples. These tests validate synthetic presentation, not the deployed application's backend or financial calculations.
+
+## Cash flow and negative balance
+
+The transaction example uses blue (`--color-state-info`) for income and red (`--color-state-error`) for outflows. Labels and signed amounts remain visible. KpiCard accepts value snippets for these colors without changing the shared positive sentiment color. The demo's “Simular saída” button advances preformatted synthetic balances through positive, zero and negative states. Zero shows a warning; negative shows the existing Alert with `role="alert"`. Reset restores the initial state. These fixtures do not calculate or persist money.
+
+For adoption, the application must supply accurate decimal-based balances and their sign, and update the presentation when transactions change. An on-screen alert is not an email, push notification or background monitor; those require application services.

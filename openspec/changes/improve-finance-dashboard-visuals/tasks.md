@@ -30,3 +30,10 @@
 
 - CI exposed use of `$props.id()`, introduced after the supported Svelte 5.0 peer minimum. Removed that API and kept the explanatory paragraph within the labelled allocation region; the existing peer-compatibility guard and allocation tests pass (7 tests).
 - Allocation accessibility stories pass after the correction (3 tests). Check, build and package contents pass again. MarkdownEditor stories pass in isolation (8 tests); its full-suite runner failure is not classified as pre-existing or resolved until CI confirms.
+
+## Cash flow presentation follow-up
+
+- [x] Use existing KpiCard value snippets and theme tokens for blue income and red outflows.
+- [x] Add synthetic decreasing-balance controls with zero warning, negative Alert and reset.
+- [x] Verify the transition and reset in Chromium; all 7 finance E2E checks pass.
+- Application balance calculations, persistence and external notifications remain outside this synthetic presentation example.

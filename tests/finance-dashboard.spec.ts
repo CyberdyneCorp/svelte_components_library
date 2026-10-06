@@ -58,3 +58,34 @@ test("finance patterns render in calm light theme", async ({ page }) => {
   await expect(page.getByText("-25%", { exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+
+test("cash flow colors and negative balance warning follow simulated outflows", async ({
+  page,
+}) => {
+  await page.goto(
+    "/iframe.html?id=finance-dashboard--transactions&viewMode=story&globals=theme:calm-dark",
+  );
+  await expect(page.getByRole("article", { name: "Entradas do período" })).toContainText(
+    "R$ 8.000,00",
+  );
+  const income = page.getByRole("cell", { name: "+R$ 8.000,00", exact: true }).locator("span");
+  const expense = page.getByRole("cell", { name: "−R$ 320,00", exact: true }).locator("span");
+  expect(await income.evaluate((el) => getComputedStyle(el).color)).not.toEqual(
+    await expense.evaluate((el) => getComputedStyle(el).color),
+  );
+  const simulate = page.getByRole("button", { name: "Simular saída", exact: true });
+  const balance = page.getByRole("article", { name: "Saldo do período" });
+  await simulate.click();
+  await expect(balance).toContainText("R$ 2.680,00");
+  await simulate.click();
+  await expect(balance).toContainText("R$ 0,00");
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.getByText("Saldo zerado", { exact: true })).toBeVisible();
+  await simulate.click();
+  await expect(balance).toContainText("−R$ 320,00");
+  await expect(page.getByRole("alert")).toContainText("Saldo no vermelho");
+  await expect(simulate).toBeDisabled();
+  await page.getByRole("button", { name: "Reiniciar demonstração" }).click();
+  await expect(balance).toContainText("R$ 5.680,00");
+  await expect(page.getByRole("alert")).toHaveCount(0);
+});

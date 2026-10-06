@@ -1,6 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+  import Alert from "../feedback/Alert/Alert.svelte";
   import PageShell from "../layout/PageShell/PageShell.svelte";
   import PageHeader from "../layout/PageHeader/PageHeader.svelte";
   import Card from "../layout/Card/Card.svelte";
@@ -17,6 +18,39 @@
 
   let { transactions = false, empty = false }: { transactions?: boolean; empty?: boolean } =
     $props();
+  // Preformatted fixtures only: the consuming application owns balance calculations.
+  const balanceSteps = [
+    {
+      value: "R$ 5.680,00",
+      expense: "R$ 2.320,00",
+      negative: false,
+      zero: false,
+      movement: "Saldo inicial da demonstração",
+    },
+    {
+      value: "R$ 2.680,00",
+      expense: "R$ 5.320,00",
+      negative: false,
+      zero: false,
+      movement: "Saída simulada: −R$ 3.000,00",
+    },
+    {
+      value: "R$ 0,00",
+      expense: "R$ 8.000,00",
+      negative: false,
+      zero: true,
+      movement: "Saída simulada: −R$ 2.680,00",
+    },
+    {
+      value: "−R$ 320,00",
+      expense: "R$ 8.320,00",
+      negative: true,
+      zero: false,
+      movement: "Saída simulada: −R$ 320,00",
+    },
+  ];
+  let balanceStep = $state(0);
+  let balance = $derived(balanceSteps[balanceStep]);
   let query = $state("");
   let appliedQuery = $state("");
   let message = $state("");
@@ -57,6 +91,7 @@
   ];
   const records = [
     {
+      direction: "income",
       id: "income",
       name: "Salário · exemplo",
       category: "Receitas",
@@ -64,6 +99,7 @@
       value: "+R$ 8.000,00",
     },
     {
+      direction: "expense",
       id: "food",
       name: "Mercado · exemplo",
       category: "Alimentação",
@@ -71,6 +107,7 @@
       value: "−R$ 320,00",
     },
     {
+      direction: "expense",
       id: "rent",
       name: "Aluguel · exemplo",
       category: "Moradia",
@@ -104,7 +141,21 @@
   );
 </script>
 
-{#snippet amount(row: Record<string, unknown>)}<span class="amount">{String(row.value)}</span
+{#snippet amount(row: Record<string, unknown>)}
+  <span
+    class="amount"
+    class:income={row.direction === "income"}
+    class:expense={row.direction === "expense"}>{String(row.value)}</span
+  >
+{/snippet}
+{#snippet primaryValue()}<span class="income">{transactions ? "R$ 8.000,00" : "R$ 240.000,00"}</span
+  >{/snippet}
+{#snippet assetsValue()}<span class:income={!transactions} class:expense={transactions}
+    >{transactions ? balance.expense : "R$ 300.000,00"}</span
+  >{/snippet}
+{#snippet balanceValue()}<span
+    class:income={!balance.negative && !balance.zero}
+    class:expense={balance.negative}>{balance.value}</span
   >{/snippet}
 <div class="finance-demo">
   <p class="demo-notice">
@@ -161,22 +212,48 @@
       <section class="metrics" aria-label="Resumo financeiro">
         <KpiCard
           label={transactions ? "Entradas do período" : "Patrimônio líquido"}
-          value={transactions ? "R$ 8.000,00" : "R$ 240.000,00"}
+          value={primaryValue}
           emphasis="featured"
           deltaLabel={transactions ? "Período ilustrativo" : "Ativos menos dívidas"}
         />
         <KpiCard
           label={transactions ? "Saídas do período" : "Ativos"}
-          value={transactions ? "R$ 2.320,00" : "R$ 300.000,00"}
+          value={assetsValue}
           deltaLabel={transactions ? "Despesas registradas" : "Valor total das posições"}
         />
         <KpiCard
           label={transactions ? "Saldo do período" : "Dívidas"}
-          value={transactions ? "R$ 5.680,00" : "R$ 60.000,00"}
+          value={transactions ? balanceValue : "R$ 60.000,00"}
           valueTone={transactions ? "default" : "negative"}
           deltaLabel={transactions ? "Entradas menos saídas" : "Compromissos a descontar"}
         />
       </section>
+      {#if transactions}
+        <Card padding="lg">
+          <h2>Acompanhe o saldo</h2>
+          <p role="status">{balance.movement} · Saldo: {balance.value}</p>
+          {#if balance.negative}
+            <Alert variant="error" title="Saldo no vermelho"
+              >As saídas superaram as entradas. Faltam R$ 320,00 para zerar o saldo desta
+              demonstração.</Alert
+            >
+          {:else if balance.zero}
+            <Alert variant="warning" role="status" title="Saldo zerado"
+              >A próxima saída deixará o saldo negativo.</Alert
+            >
+          {/if}
+          <div class="balance-actions">
+            <Button
+              disabled={balanceStep === balanceSteps.length - 1}
+              onclick={() => (balanceStep += 1)}>Simular saída</Button
+            >
+            <Button variant="outline" onclick={() => (balanceStep = 0)}
+              >Reiniciar demonstração</Button
+            >
+          </div>
+          <p class="footnote">Simulação com valores fictícios; não altera contas ou registros.</p>
+        </Card>
+      {/if}
       {#if !transactions && !empty}
         <div class="panels">
           <Card padding="lg"
@@ -312,6 +389,18 @@
     display: block;
     text-align: right;
     font-variant-numeric: tabular-nums;
+  }
+  .income {
+    color: var(--color-state-info);
+  }
+  .expense {
+    color: var(--color-state-error);
+  }
+  .balance-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
   }
   .footnote {
     font-size: 0.75rem;
