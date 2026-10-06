@@ -1,5 +1,11 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.18.0
+
+### Minor Changes
+
+- 09a78c1: Add responsive FilterBar and signed AllocationBreakdown presentation, optional KpiCard emphasis and value tone, and wrapping PageHeader actions. Include synthetic finance dashboard examples and an adoption guide.
+
 ## 0.17.0
 
 ### Minor Changes
