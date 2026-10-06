@@ -5,6 +5,8 @@
   import { DEFAULT_TREND_LABELS, type KpiSentiment, type KpiTrend, type KpiTrendLabels } from "./types.js";
 
   let {
+    emphasis = "default",
+    valueTone = "default",
     label,
     value,
     delta = "",
@@ -16,6 +18,10 @@
     trendLabels = {},
     ariaLabel = "",
   }: {
+    /** Opt-in hierarchy for a primary metric. */
+    emphasis?: "default" | "featured";
+    /** Application-selected value color; independent of delta sentiment. */
+    valueTone?: "default" | "positive" | "negative";
     /** Metric name, e.g. "Monthly spend". */
     label: string;
     /**
@@ -62,7 +68,7 @@
 
 {#snippet body()}
   <div class="cy-kpi__label" id={labelId}>{label}</div>
-  <div class="cy-kpi__value">
+  <div class="cy-kpi__value" class:cy-kpi__value--positive={valueTone === "positive"} class:cy-kpi__value--negative={valueTone === "negative"}>
     {#if typeof value === "function"}{@render value()}{:else}{value}{/if}
   </div>
   {#if hasDelta}
@@ -81,12 +87,13 @@
 {/snippet}
 
 {#if href}
-  <a class="cy-kpi cy-kpi--link" {href} aria-label={ariaLabel || undefined}>
+  <a class="cy-kpi cy-kpi--link" class:cy-kpi--featured={emphasis === "featured"} {href} aria-label={ariaLabel || undefined}>
     {@render body()}
   </a>
 {:else}
   <article
     class="cy-kpi"
+    class:cy-kpi--featured={emphasis === "featured"}
     aria-label={ariaLabel || undefined}
     aria-labelledby={ariaLabel ? undefined : labelId}
   >
@@ -96,6 +103,7 @@
 
 <style>
   .cy-kpi {
+    min-width: 0;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -129,7 +137,22 @@
     font-size: 1.5rem;
     font-weight: var(--font-weight-semibold);
     line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
   }
+
+  .cy-kpi--featured {
+    background: var(--kpi-featured-bg, var(--color-action-brand-bg));
+    border-color: var(--kpi-featured-border, var(--color-border-brand));
+    padding: var(--space-5);
+  }
+
+  .cy-kpi--featured .cy-kpi__value {
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
+  }
+
+  .cy-kpi__value--positive { color: var(--color-state-success); }
+  .cy-kpi__value--negative { color: var(--color-state-error); }
 
   .cy-kpi__delta {
     display: flex;

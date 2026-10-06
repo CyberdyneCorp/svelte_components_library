@@ -1,5 +1,8 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
+  import TextInput from "../../forms/TextInput/TextInput.svelte";
+  import Select from "../../forms/Select/Select.svelte";
+  import Button from "../../primitives/Button/Button.svelte";
   import FilterBar from "./FilterBar.svelte";
 
   const { Story } = defineMeta({
@@ -77,3 +80,12 @@
   onchange: (f) => console.log("Filters changed:", f),
   onclear: () => console.log("Filters cleared"),
 }} />
+
+<Story name="TransactionFilters" asChild>
+  <FilterBar ariaLabel="Filtros de transações">
+    <TextInput label="Buscar" type="search" />
+    <Select label="Conta" options={[{value:"",label:"Todas as contas"}]} />
+    <TextInput label="De" type="date" /><TextInput label="Até" type="date" />
+    {#snippet actions()}<Button variant="ghost">Limpar filtros</Button><Button>Filtrar</Button>{/snippet}
+  </FilterBar>
+</Story>

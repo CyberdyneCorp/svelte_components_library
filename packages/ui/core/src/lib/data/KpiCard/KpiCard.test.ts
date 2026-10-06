@@ -126,3 +126,16 @@ describe("KpiCard", () => {
     expect(container.querySelector(".cy-kpi__sparkline")).toBeNull();
   });
 });
+
+it("allows featured emphasis and negative value without changing delta sentiment", () => {
+  const { container } = render(KpiCard, { props: { ...base, emphasis: "featured", valueTone: "negative", delta: "+1%", sentiment: "positive" } });
+  expect(screen.getByRole("article", { name: base.label })).toHaveClass("cy-kpi--featured");
+  expect(container.querySelector(".cy-kpi__value")).toHaveClass("cy-kpi__value--negative");
+  expect(container.querySelector(".cy-kpi__delta")).toHaveClass("cy-kpi__delta--positive");
+});
+
+it("keeps default emphasis and tone opt-in", () => {
+  const { container } = render(KpiCard, { props: base });
+  expect(screen.getByRole("article")).not.toHaveClass("cy-kpi--featured");
+  expect(container.querySelector(".cy-kpi__value")).not.toHaveClass("cy-kpi__value--negative", "cy-kpi__value--positive");
+});

@@ -22,3 +22,4 @@ jobs:
       # Playwright — install the browser + its OS deps before running tests.
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test
+      - run: pnpm exec playwright test tests/finance-dashboard.spec.ts
