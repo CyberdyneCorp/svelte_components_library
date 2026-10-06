@@ -8,6 +8,13 @@ The `flow/` family provides a node-graph editor (8 components): a pan/zoom canva
 
 ### Requirement: Controlled canvas with bindable viewport
 
+The system SHALL make `NodeEditor` a controlled component whose `nodes` and `edges` are parent-owned, exposing bindable `viewport` (`{ x, y, z }`, default `{ x: 40, y: 40, z: 1 }`) and `selectedId` (default `null`).
+
+#### Scenario: Complete Controlled canvas with bindable viewport contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL make `NodeEditor` a controlled component whose `nodes` and `edges` are parent-owned, exposing bindable `viewport` (`{ x, y, z }`, default `{ x: 40, y: 40, z: 1 }`) and `selectedId` (default `null`). Node position changes, node additions, edge additions/deletions, and canvas clicks SHALL be reported through callbacks (`onnodemove`, `onnodeadd`, `onedgeadd`, `onedgedelete`, `oncanvasclick`) rather than mutated internally. (src: packages/ui/core/src/lib/flow/NodeEditor/NodeEditor.svelte:20-34,57-61,111-133)
 
 #### Scenario: Node drag reports position
@@ -27,6 +34,13 @@ The system SHALL pan the canvas on background pointer-drag (left/middle button) 
 - **THEN** the system SHALL keep that world point under the cursor and clamp zoom within 0.3–1.6
 
 ### Requirement: Type-checked port connections
+
+The system SHALL start an edge only from an `out` port and commit a new edge (`onedgeadd`) only when released over an `in` port on a different node whose `type` matches the source port's `type`.
+
+#### Scenario: Complete Type-checked port connections contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL start an edge only from an `out` port and commit a new edge (`onedgeadd`) only when released over an `in` port on a different node whose `type` matches the source port's `type`. `FlowPort` SHALL carry a `side` (`"in" | "out"`) and a `type` used for compatibility, and `FlowEdge` SHALL render the connection as a horizontal cubic-bezier S-curve with control offset `dx = max(40, |x2-x1| * 0.5)`. (src: packages/ui/core/src/lib/flow/NodeEditor/NodeEditor.svelte:135-185; packages/ui/core/src/lib/flow/FlowPort/FlowPort.svelte:6-26; packages/ui/core/src/lib/flow/geometry.ts:18-21)
 

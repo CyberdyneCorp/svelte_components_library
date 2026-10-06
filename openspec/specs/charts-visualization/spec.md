@@ -6,6 +6,13 @@ The `charts/` family provides 19 data-visualization components (line, bar, area,
 ## Requirements
 ### Requirement: Dependency-free hand-rolled rendering
 
+The system SHALL render charts using inline SVG markup with manually computed coordinate math (scale functions, path string construction, tick generation) and SHALL NOT depend on any external charting library (d3, ECharts, Plotly, Chart.js, etc.).
+
+#### Scenario: Complete Dependency-free hand-rolled rendering contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL render charts using inline SVG markup with manually computed coordinate math (scale functions, path string construction, tick generation) and SHALL NOT depend on any external charting library (d3, ECharts, Plotly, Chart.js, etc.). Heatmap-style charts (`HeatmapChart`, `ActivityHeatmap`) MAY render with a CSS grid of cells instead of SVG. (src: packages/ui/core/src/lib/charts/LineChart/LineChart.svelte:49-61,106-184; packages/ui/core/src/lib/charts/BarChart/BarChart.svelte:54-181; packages/ui/core/package.json)
 
 #### Scenario: No charting dependency
@@ -14,6 +21,13 @@ The system SHALL render charts using inline SVG markup with manually computed co
 - **THEN** the system SHALL contain no runtime charting-library dependency and SHALL build chart geometry with local functions
 
 ### Requirement: Consistent data-input conventions
+
+The system SHALL accept chart data through one of two conventions: a `series` array of `{ name, data: { x, y }[], color? }` for multi-series X/Y charts (e.g. `LineChart`, `AreaChart`), or a flat `data` array of category/value objects for categorical charts (e.g. `BarChart`).
+
+#### Scenario: Complete Consistent data-input conventions contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL accept chart data through one of two conventions: a `series` array of `{ name, data: { x, y }[], color? }` for multi-series X/Y charts (e.g. `LineChart`, `AreaChart`), or a flat `data` array of category/value objects for categorical charts (e.g. `BarChart`). Per-series or per-datum `color` overrides SHALL fall back to a shared default palette. (src: packages/ui/core/src/lib/charts/LineChart/LineChart.svelte:4-5,8,29; packages/ui/core/src/lib/charts/AreaChart/AreaChart.svelte:4-5,8; packages/ui/core/src/lib/charts/BarChart/BarChart.svelte:4,7,14)
 
@@ -24,6 +38,13 @@ The system SHALL accept chart data through one of two conventions: a `series` ar
 - **THEN** the system SHALL assign colors from the shared default palette
 
 ### Requirement: Token-themed chrome and responsive scaling
+
+The system SHALL draw structural chrome (grid lines, axes, tick labels, tooltip surfaces) using design tokens (`--color-border-subtle`, `--color-text-*`, `--font-body`, `--font-mono`, `--color-bg-secondary`, `--radius-*`, `--space-*`) and SHALL render into a fixed internal `viewBox` with `preserveAspectRatio="xMidYMid meet"` and 100%-width SVG so charts scale responsively to a prop-driven outer `width`/`height` (defaults `100%` / `300px` for X/Y charts).
+
+#### Scenario: Complete Token-themed chrome and responsive scaling contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL draw structural chrome (grid lines, axes, tick labels, tooltip surfaces) using design tokens (`--color-border-subtle`, `--color-text-*`, `--font-body`, `--font-mono`, `--color-bg-secondary`, `--radius-*`, `--space-*`) and SHALL render into a fixed internal `viewBox` with `preserveAspectRatio="xMidYMid meet"` and 100%-width SVG so charts scale responsively to a prop-driven outer `width`/`height` (defaults `100%` / `300px` for X/Y charts). (src: packages/ui/core/src/lib/charts/LineChart/LineChart.svelte:8-9,31-32,107-108,221,227-313; packages/ui/core/src/lib/charts/BarChart/BarChart.svelte:56-57,191-236)
 
@@ -39,6 +60,13 @@ The system SHALL draw structural chrome (grid lines, axes, tick labels, tooltip 
 - **THEN** the system SHALL color them via `--color-border-subtle` and `--color-text-*` tokens so they follow the active theme
 
 ### Requirement: Accessible chart frame
+
+The system SHALL provide a `ChartFrame` component that wraps a chart in a `<figure>` and takes optional `title`, `description`, `hideTitle`, `fallbackLabel`, `data`, `tableCaption`, `showDataToggle`, bindable `dataExpanded`, `showDataLabel`, `hideDataLabel`, `inline` and `class` props, plus a `children` snippet.
+
+#### Scenario: Complete Accessible chart frame contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL provide a `ChartFrame` component that wraps a chart in a `<figure>` and takes optional `title`, `description`, `hideTitle`, `fallbackLabel`, `data`, `tableCaption`, `showDataToggle`, bindable `dataExpanded`, `showDataLabel`, `hideDataLabel`, `inline` and `class` props, plus a `children` snippet. It SHALL:
 
@@ -73,6 +101,13 @@ The system SHALL provide a `ChartFrame` component that wraps a chart in a `<figu
 
 ### Requirement: Non-colour series encoding
 
+The system SHALL provide a `ChartLegend` component and marker helpers (`seriesStyle`, `markerPath`, `markerClipPath`, `CHART_MARKER_SHAPES`, `CHART_DASH_PATTERNS`).
+
+#### Scenario: Complete Non-colour series encoding contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL provide a `ChartLegend` component and marker helpers (`seriesStyle`, `markerPath`, `markerClipPath`, `CHART_MARKER_SHAPES`, `CHART_DASH_PATTERNS`). They SHALL:
 
 - Assign each series index a marker shape from `circle`, `square`, `triangle`, `diamond`, `triangle-down`, `cross`, and a dash pattern where the first series is solid. Both SHALL cycle together, so the first six series are pairwise distinct in shape and dash.
@@ -102,6 +137,13 @@ Charts SHALL use the same encoding in their plot marks:
 - **THEN** each slice SHALL contain the same shape as its legend item (circle, square, triangle)
 
 ### Requirement: Chart accessibility coverage
+
+`LineChart`, `AreaChart`, `BarChart`, `PieChart`, `Sparkline`, `SankeyChart`, `ScatterChart`, `TreeMap` and `Gauge` SHALL render through `ChartFrame` and accept optional `title`, `description`, `hideTitle` and `showDataToggle` props, while keeping every existing prop and default.
+
+#### Scenario: Complete Chart accessibility coverage contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 `LineChart`, `AreaChart`, `BarChart`, `PieChart`, `Sparkline`, `SankeyChart`, `ScatterChart`, `TreeMap` and `Gauge` SHALL render through `ChartFrame` and accept optional `title`, `description`, `hideTitle` and `showDataToggle` props, while keeping every existing prop and default. Each SHALL derive its table from its existing data props:
 
@@ -143,6 +185,13 @@ Charts SHALL use the same encoding in their plot marks:
 
 ### Requirement: Localizable chart strings
 
+Every chart rendered through `ChartFrame` (LineChart, AreaChart, BarChart, PieChart, ScatterChart, TreeMap, SankeyChart, Sparkline, Gauge, HeatmapChart) SHALL accept an optional `labels` prop of type `ChartLabels<Column>`.
+
+#### Scenario: Complete Localizable chart strings contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 Every chart rendered through `ChartFrame` (LineChart, AreaChart, BarChart, PieChart, ScatterChart, TreeMap, SankeyChart, Sparkline, Gauge, HeatmapChart) SHALL accept an optional `labels` prop of type `ChartLabels<Column>`. Its optional keys are `chart` (accessible name when no title), `columns` (data-table column headers keyed per chart), `tableCaption`, `showData`, `hideData` and `legend` (accessible name of the legend). Each key SHALL override the corresponding English default. Omitted keys SHALL keep the English default, so a chart without `labels` renders exactly as before. `HeatmapChart`'s only column key is `row`, the header of its row-label column (default "Row"). (src: packages/ui/core/src/lib/charts/ChartFrame/chartTable.ts; packages/ui/core/src/lib/charts/chartLabels.test.ts)
 
 #### Scenario: pt-BR data table
@@ -177,6 +226,13 @@ Every Storybook story file under `packages/ui/core/src/lib/charts/` SHALL set `p
 
 ### Requirement: Accessible heatmap
 
+`HeatmapChart` SHALL render through `ChartFrame`.
+
+#### Scenario: Complete Accessible heatmap contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 `HeatmapChart` SHALL render through `ChartFrame`. It SHALL keep its existing props and accept optional `description`, `hideTitle`, `showDataToggle` and `labels` (`ChartLabels<"row">`). It SHALL:
 
 - Expose the labelled grid (axis labels and cells) as one `role="img"` element that receives the `ChartFrame` attributes. `title` SHALL name it, and without a title the name SHALL be `labels.chart` or "Heatmap".
@@ -200,6 +256,13 @@ Every Storybook story file under `packages/ui/core/src/lib/charts/` SHALL set `p
 - **THEN** the text colour SHALL reach at least 4.5:1 contrast against the background
 
 ### Requirement: Interactive chart bars
+
+`AgingWIP` and `GanttChart` SHALL make their bars interactive only when a click handler is given (`onitemclick` for `AgingWIP`, `onTaskClick` for `GanttChart`).
+
+#### Scenario: Complete Interactive chart bars contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 `AgingWIP` and `GanttChart` SHALL make their bars interactive only when a click handler is given (`onitemclick` for `AgingWIP`, `onTaskClick` for `GanttChart`). With the handler:
 

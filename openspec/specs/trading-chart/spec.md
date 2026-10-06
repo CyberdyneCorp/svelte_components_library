@@ -6,6 +6,13 @@
 ## Requirements
 ### Requirement: Canvas candlestick chart
 
+The system SHALL provide `TradingChart`, rendering `candles: Candle[]` on canvas as candles, hollow candles, OHLC bars, line or area (`seriesType`), with an optional volume histogram, price and time axes, grid, a last-price label, and a crosshair with an OHLCV legend.
+
+#### Scenario: Complete Canvas candlestick chart contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL provide `TradingChart`, rendering `candles: Candle[]` on canvas as candles, hollow candles, OHLC bars, line or area (`seriesType`), with an optional volume histogram, price and time axes, grid, a last-price label, and a crosshair with an OHLCV legend. It SHALL use only its own engine (design D3), with no third-party charting dependency, render sharply at any `devicePixelRatio`, follow container resizes, and read all colours from foundation tokens, re-reading them when the theme changes.
 
 #### Scenario: Theme change repaints
@@ -26,6 +33,13 @@ The system SHALL provide `TradingChart`, rendering `candles: Candle[]` on canvas
 
 ### Requirement: Indicators and panes
 
+`TradingChart` SHALL accept `indicators` as an array of `{ type, pane, …params, color? }` covering every function in `trading-indicators`.
+
+#### Scenario: Complete Indicators and panes contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 `TradingChart` SHALL accept `indicators` as an array of `{ type, pane, …params, color? }` covering every function in `trading-indicators`. `pane: "main"` overlays the price pane (any number of moving averages; Bollinger Bands drawn with a band fill; VWAP), and any other pane id creates a sub-pane below with its own price scale (RSI with 30/70 guides, MACD with a histogram, ATR, ADX with +DI/−DI, Stochastic, volume). Sub-pane heights SHALL be resizable by dragging the separator and settable via `paneHeights`.
 
 #### Scenario: Multiple moving averages and an RSI pane
@@ -45,6 +59,13 @@ The system SHALL provide `TradingChart`, rendering `candles: Candle[]` on canvas
 - **THEN** `onpricelinechange` SHALL be called with that line's id and 63990.5
 
 ### Requirement: Keyboard price-line editing
+
+When `priceLines` contains a `draggable` line, `TradingChart` SHALL offer a keyboard alternative to dragging it: while the chart is focused, L selects the next draggable line (Shift+L the previous), ↑/↓ move the selected line by one `tickSize` (Shift: ten ticks), Enter applies the move by calling `onpricelinechange(id, price)` with a tick-snapped price, and Escape (or leaving the chart) cancels it without calling `onpricelinechange`.
+
+#### Scenario: Complete Keyboard price-line editing contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 When `priceLines` contains a `draggable` line, `TradingChart` SHALL offer a keyboard alternative to dragging it: while the chart is focused, L selects the next draggable line (Shift+L the previous), ↑/↓ move the selected line by one `tickSize` (Shift: ten ticks), Enter applies the move by calling `onpricelinechange(id, price)` with a tick-snapped price, and Escape (or leaving the chart) cancels it without calling `onpricelinechange`. Each step SHALL be announced through the chart's polite live region, the chart's description SHALL explain these keys only when a draggable line exists, and every string SHALL be localisable through `labels`.
 

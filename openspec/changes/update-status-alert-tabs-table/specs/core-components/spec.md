@@ -2,6 +2,13 @@
 
 ### Requirement: Accessible overlays and tab navigation
 
+The system SHALL implement `Modal` as a dialog with `role="dialog"`, `aria-modal="true"`, `aria-labelledby` pointing at its title, focus trap on Tab/Shift+Tab, Escape-to-close, backdrop-click-to-close, and auto-focus of the close button on open.
+
+#### Scenario: Complete Accessible overlays and tab navigation contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL implement `Modal` as a dialog with `role="dialog"`, `aria-modal="true"`, `aria-labelledby` pointing at its title, focus trap on Tab/Shift+Tab, Escape-to-close, backdrop-click-to-close, and auto-focus of the close button on open. `Tabs` whose items have no `href` SHALL implement `role="tablist"`/`role="tab"` with `aria-selected`, roving tabindex, and ArrowLeft/ArrowRight navigation with wraparound; the optional `ariaLabel` prop names the tablist.
 
 When any `Tabs` item has an `href`, the system SHALL instead render link tabs for navigation between pages, following the WAI-ARIA navigation (not tab widget) pattern:
@@ -36,6 +43,17 @@ When any `Tabs` item has an `href`, the system SHALL instead render link tabs fo
 ## ADDED Requirements
 
 ### Requirement: StatusBadge contract
+
+The system SHALL provide `StatusBadge` with:
+
+- `status`: `"active"` (default), `"inactive"`, `"pending"`, `"error"`, `"warning"` or `"info"`;
+- `label` (default `""`);
+- `tone`: `"success"`, `"neutral"`, `"warning"`, `"error"` or `"info"`, overriding the colour.
+
+#### Scenario: Complete StatusBadge contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL provide `StatusBadge` with:
 
@@ -93,6 +111,15 @@ The system SHALL give `Alert` a `role` prop: `"alert"` (default), `"status"` or 
 - **THEN** it SHALL expose `role="alert"`
 
 ### Requirement: Table accessibility options
+
+The system SHALL give `Table` these optional props, and without them SHALL render as before:
+
+- `caption`: rendered as the table's `<caption>`, which names the table.
+
+#### Scenario: Complete Table accessibility options contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL give `Table` these optional props, and without them SHALL render as before:
 

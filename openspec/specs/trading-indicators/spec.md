@@ -6,6 +6,13 @@ Framework-free technical-indicator maths (`trading/indicators/`): moving average
 ## Requirements
 ### Requirement: Indicator functions
 
+The system SHALL export pure functions `sma`, `ema`, `wma`, `rsi`, `bollinger`, `atr`, `adx`, `macd`, `stochastic` and `vwap` that take a `number[]` of values or a `Candle[]` (for indicators that need high, low or volume) plus parameters, and return output aligned index-for-index with the input, using `null` for warm-up positions.
+
+#### Scenario: Complete Indicator functions contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL export pure functions `sma`, `ema`, `wma`, `rsi`, `bollinger`, `atr`, `adx`, `macd`, `stochastic` and `vwap` that take a `number[]` of values or a `Candle[]` (for indicators that need high, low or volume) plus parameters, and return output aligned index-for-index with the input, using `null` for warm-up positions. Multi-output indicators SHALL return an object of aligned arrays: `bollinger` → `{ middle, upper, lower }`, `adx` → `{ adx, plusDI, minusDI }`, `macd` → `{ macd, signal, histogram }`, `stochastic` → `{ k, d }`. Definitions SHALL follow design D4 (Wilder smoothing for RSI/ATR/ADX, SMA-seeded EMA, population standard deviation for Bollinger Bands, session-reset VWAP).
 
 #### Scenario: Output is aligned with warm-up nulls

@@ -46,3 +46,10 @@
 
 - Verification: 9 Chromium finance regressions and 3 Finance Dashboard Storybook checks passed. `pnpm check` completed with zero errors (core: 30 warnings). Individual OpenSpec strict validation and diff whitespace checks passed.
 - Removed the finance story's fixed dark global so URL/toolbar theme selection is respected; exact color regressions now confirm both calm themes.
+
+## Repository validation repair
+
+- [x] Compare global strict validation on the branch and origin/main: both failed on the same 14 entries before repair.
+- [x] Move 67 long normative bodies into explicit contract scenarios while retaining short requirement summaries. All original contract text is preserved verbatim; no validator options or thresholds are relaxed.
+- [x] Verify full strict validation: 18 passed, zero failed. Check full-text preservation and diff whitespace.
+- The application test job for commit 89d1794 passed in CI; final documentation repair triggers a fresh CI run.

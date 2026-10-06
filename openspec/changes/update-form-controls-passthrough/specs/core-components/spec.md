@@ -2,6 +2,13 @@
 
 ### Requirement: Form labels use label typography tokens
 
+Every form field label in core SHALL take `font-family`, `text-transform` and `letter-spacing` from `var(--input-label-font)`, `var(--input-label-transform)` and `var(--input-label-letter-spacing)`, and SHALL NOT hard-code those properties.
+
+#### Scenario: Complete Form labels use label typography tokens contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 Every form field label in core SHALL take `font-family`, `text-transform` and `letter-spacing` from `var(--input-label-font)`, `var(--input-label-transform)` and `var(--input-label-letter-spacing)`, and SHALL NOT hard-code those properties. Labels that used the default label size and weight SHALL take them from `var(--input-label-size)` and `var(--input-label-weight)`. This covers `TextInput`, `Select`, `NumberInput`, `MoneyInput`, `PasswordInput`, `Textarea`, `DatePicker`, `DateRangePicker`, `TimePicker`, `ComboBox`, `MultiSelect`, `TagInput`, `RangeSlider`, `CodeEditor`, `ColorPicker`, `ScheduleConfig` (group and field labels), `LeverageSlider` and the `SegmentedRadio` legend, and any rule painted with `color: var(--input-label)`. With default tokens every label SHALL render as before. (src: packages/ui/core/src/lib/forms; packages/ui/core/src/lib/trading/order/LeverageSlider.svelte; packages/ui/core/src/lib/trading/order/SegmentedRadio.svelte; packages/ui/core/src/lib/style-contract.test.ts)
 
 #### Scenario: Hard-coded label typography fails
@@ -18,6 +25,13 @@ Every form field label in core SHALL take `font-family`, `text-transform` and `l
 - **AND** a `TextInput` label outside the calm subtree SHALL stay uppercase in JetBrains Mono
 
 ### Requirement: TextInput native attribute passthrough
+
+`TextInput` SHALL forward `autocomplete`, `spellcheck`, `maxlength`, `name` and `inputmode` to its native `<input>`, and SHALL forward any other `aria-*` or `data-*` attribute passed to it.
+
+#### Scenario: Complete TextInput native attribute passthrough contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 `TextInput` SHALL forward `autocomplete`, `spellcheck`, `maxlength`, `name` and `inputmode` to its native `<input>`, and SHALL forward any other `aria-*` or `data-*` attribute passed to it. Component-managed attributes (`id`, `type`, `value`, `disabled`, `required`, `placeholder`, `aria-invalid`) SHALL take precedence over forwarded ones. A consumer `aria-describedby` SHALL be appended after the component's own error or hint id, separated by a space, and the attribute SHALL be omitted when neither exists. (src: packages/ui/core/src/lib/forms/TextInput/TextInput.svelte)
 
@@ -36,6 +50,13 @@ Every form field label in core SHALL take `font-family`, `text-transform` and `l
 - **AND** without hint or error it SHALL be `"external"`
 
 ### Requirement: Select placeholder and attributes
+
+`Select` SHALL keep `"Select an option..."` as the default `placeholder`, rendered as a hidden, disabled `""` option that is selected while `value` is `""`.
+
+#### Scenario: Complete Select placeholder and attributes contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 `Select` SHALL keep `"Select an option..."` as the default `placeholder`, rendered as a hidden, disabled `""` option that is selected while `value` is `""`. It SHALL accept `placeholder={null}` (or `""`) to render only `options`. It SHALL NOT render the placeholder option when `options` contain an option whose value is `""`. It SHALL forward `id` to the native `<select>` (and its label), use `ariaLabel` as the `aria-label` when no visible `label` is set, and forward `data-*` attributes to the native `<select>`. (src: packages/ui/core/src/lib/forms/Select/Select.svelte)
 
@@ -91,6 +112,13 @@ Every form field label in core SHALL take `font-family`, `text-transform` and `l
 - **AND** without those props they SHALL be named "Decrease" and "Increase"
 
 ### Requirement: Checkbox and Radio end-to-end testing guidance
+
+The README and the `Checkbox` / `Radio` Storybook descriptions SHALL state that the native input is visually hidden (1×1 px, clipped), that Playwright's `.check()` on a `getByLabel` / `getByRole` locator does not pass the visibility check, and that tests SHALL call `.check()` on the visible label text (e.g. `page.getByText("Accept terms").check()`) and use `getByLabel` / `getByRole` for assertions.
+
+#### Scenario: Complete Checkbox and Radio end-to-end testing guidance contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The README and the `Checkbox` / `Radio` Storybook descriptions SHALL state that the native input is visually hidden (1×1 px, clipped), that Playwright's `.check()` on a `getByLabel` / `getByRole` locator does not pass the visibility check, and that tests SHALL call `.check()` on the visible label text (e.g. `page.getByText("Accept terms").check()`) and use `getByLabel` / `getByRole` for assertions. (src: README.md; packages/ui/core/src/lib/forms/Checkbox/Checkbox.stories.svelte; packages/ui/core/src/lib/forms/Radio/Radio.stories.svelte)
 

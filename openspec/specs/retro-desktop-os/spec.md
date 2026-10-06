@@ -8,6 +8,13 @@ The `retro/` family provides a "CyberdyneOS" pixel desktop-OS aesthetic (38 comp
 
 ### Requirement: Headless reactive window manager
 
+The system SHALL provide `createWindowManager(options)` — a Svelte 5 runes factory (`.svelte.ts`) that manages multiple windows with reactive `$state`.
+
+#### Scenario: Complete Headless reactive window manager contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL provide `createWindowManager(options)` — a Svelte 5 runes factory (`.svelte.ts`) that manages multiple windows with reactive `$state`. It SHALL accept options `baseZIndex` (default 100), `cascadeOffset` (default 24), `defaultWidth` (default 560), and `defaultHeight` (default 360), and SHALL expose `open`, `close`, `focus`, `minimize`, `restore`, `toggleMinimize`, `toggleMaximize`, `update`, `closeAll`, plus `windows` and `activeId` getters. `open` SHALL dedupe by window `id` (re-focusing and restoring an already-open window), cascade new-window position, and raise the top z-index; `focus` SHALL raise z-index and un-minimize. (src: packages/ui/core/src/lib/retro/WindowManager/windowManager.svelte.ts:3-8,15-21,28-108; packages/ui/core/src/lib/retro/WindowManager/types.ts:1-13)
 
 #### Scenario: Opening an already-open window
@@ -39,6 +46,13 @@ The system SHALL provide `RetroWindow` with bindable position (`x`/`y`, default 
 - **THEN** the system SHALL NOT move the window
 
 ### Requirement: CSS-only pixel/CRT aesthetic
+
+The system SHALL implement the retro pixel/CRT aesthetic entirely in CSS — hard (non-blurred) 2px borders, offset drop shadows, and an active-press transform that shifts the element into its shadow — without images or canvas.
+
+#### Scenario: Complete CSS-only pixel/CRT aesthetic contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL implement the retro pixel/CRT aesthetic entirely in CSS — hard (non-blurred) 2px borders, offset drop shadows, and an active-press transform that shifts the element into its shadow — without images or canvas. Pixel primitives such as `PixelButton` SHALL expose `variant` (`"solid" | "outline" | "ghost" | "neon"`, default `"solid"`) and `size` (`"sm" | "md" | "lg"`, default `"md"`), with the `neon` variant emulating CRT glow via box-shadow. (src: packages/ui/core/src/lib/retro/PixelButton/PixelButton.svelte:6-24,49-77; packages/ui/core/src/lib/retro/RetroWindow/RetroWindow.svelte:167,230-234)
 

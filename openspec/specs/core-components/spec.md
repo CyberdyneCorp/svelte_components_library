@@ -8,6 +8,13 @@ The `@cyberdynecorp/svelte-ui-core` package provides the general-purpose UI comp
 
 ### Requirement: Svelte 5 runes authoring convention
 
+The system SHALL author every component in Svelte 5 runes mode (`<svelte:options runes={true} />`), declaring props via `$props()`, local state via `$state()`, two-way bindable props via `$bindable()`, derived values via `$derived`/`$derived.by`, and slotted content via Svelte `Snippet` + `{@render children()}`.
+
+#### Scenario: Complete Svelte 5 runes authoring convention contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL author every component in Svelte 5 runes mode (`<svelte:options runes={true} />`), declaring props via `$props()`, local state via `$state()`, two-way bindable props via `$bindable()`, derived values via `$derived`/`$derived.by`, and slotted content via Svelte `Snippet` + `{@render children()}`. Each component SHALL live in its own directory containing `Component.svelte`, an `index.ts` re-export, a `Component.stories.svelte`, and a `Component.test.ts`. (src: packages/ui/core/src/lib/primitives/Button/Button.svelte:1,4,6-40; packages/ui/core/src/lib/forms/TextInput/TextInput.svelte:1,5; packages/ui/core/src/lib/primitives/Button/index.ts:1)
 
 #### Scenario: Component folder shape
@@ -33,6 +40,13 @@ The system SHALL re-export every public component from `packages/ui/core/src/lib
 
 ### Requirement: Button contract
 
+The system SHALL provide a `Button` with a `variant` prop restricted to `"brand" | "secondary" | "outline" | "ghost" | "danger"` (default `"brand"`), a `size` prop restricted to `"sm" | "md" | "lg"` (default `"md"`, heights 32/40/48px), boolean `disabled` and `loading` props (default `false`), and a `type` prop `"button" | "submit" | "reset"` (default `"button"`).
+
+#### Scenario: Complete Button contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL provide a `Button` with a `variant` prop restricted to `"brand" | "secondary" | "outline" | "ghost" | "danger"` (default `"brand"`), a `size` prop restricted to `"sm" | "md" | "lg"` (default `"md"`, heights 32/40/48px), boolean `disabled` and `loading` props (default `false`), and a `type` prop `"button" | "submit" | "reset"` (default `"button"`). When `loading` is true the button SHALL be disabled, render a spinner, hide its content, and set `aria-busy`. (src: packages/ui/core/src/lib/primitives/Button/Button.svelte:7-11,29-33,42,60-71,109-125)
 
 #### Scenario: Loading disables and busies the button
@@ -48,6 +62,13 @@ The system SHALL provide a `Button` with a `variant` prop restricted to `"brand"
 - **THEN** the system SHALL reject it at type-check time
 
 ### Requirement: Form control validation display
+
+The system SHALL, for form controls (e.g. `TextInput`, `Select`, `Checkbox`), render an error message as an element with `role="alert"`, set `aria-invalid` when an `error` is present, and link the control to its error or hint text via `aria-describedby`.
+
+#### Scenario: Complete Form control validation display contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL, for form controls (e.g. `TextInput`, `Select`, `Checkbox`), render an error message as an element with `role="alert"`, set `aria-invalid` when an `error` is present, and link the control to its error or hint text via `aria-describedby`. `TextInput` SHALL restrict its `type` prop to eleven allowed HTML input types (default `"text"`) and auto-generate a stable id when none is supplied. (src: packages/ui/core/src/lib/forms/TextInput/TextInput.svelte:29-40,50,75-80; packages/ui/core/src/lib/forms/Select/Select.svelte:37-38,54; packages/ui/core/src/lib/forms/Checkbox/Checkbox.svelte:32-34,51)
 
@@ -69,6 +90,13 @@ The system SHALL provide a `Toast` component that exposes an imperative API via 
 
 ### Requirement: Accessible overlays and tab navigation
 
+The system SHALL implement `Modal` as a dialog with `role="dialog"`, `aria-modal="true"`, `aria-labelledby` pointing at its title, focus trap on Tab/Shift+Tab, Escape-to-close, backdrop-click-to-close, and auto-focus of the close button on open.
+
+#### Scenario: Complete Accessible overlays and tab navigation contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL implement `Modal` as a dialog with `role="dialog"`, `aria-modal="true"`, `aria-labelledby` pointing at its title, focus trap on Tab/Shift+Tab, Escape-to-close, backdrop-click-to-close, and auto-focus of the close button on open. `Tabs` SHALL implement `role="tablist"`/`role="tab"` with `aria-selected`, roving tabindex, and ArrowLeft/ArrowRight navigation with wraparound. (src: packages/ui/core/src/lib/overlay/Modal/Modal.svelte:27-57,62-66; packages/ui/core/src/lib/navigation/Tabs/Tabs.svelte:19-33,36-43)
 
 #### Scenario: Modal focus trap and escape
@@ -79,6 +107,13 @@ The system SHALL implement `Modal` as a dialog with `role="dialog"`, `aria-modal
 
 ### Requirement: Components consume design tokens only
 
+The system SHALL style every component using CSS custom properties (component-layer tokens such as `--btn-brand-bg`, `--input-bg`, semantic state tokens `--color-state-*`, plus `--space-*`, `--radius-*`, `--font-*`) rather than literal color values, so theme switches occur entirely at the token layer.
+
+#### Scenario: Complete Components consume design tokens only contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL style every component using CSS custom properties (component-layer tokens such as `--btn-brand-bg`, `--input-bg`, semantic state tokens `--color-state-*`, plus `--space-*`, `--radius-*`, `--font-*`) rather than literal color values, so theme switches occur entirely at the token layer. (src: packages/ui/core/src/lib/primitives/Button/Button.svelte:79-209; packages/ui/core/src/lib/forms/TextInput/TextInput.svelte:108-148; packages/ui/core/src/lib/feedback/Alert/Alert.svelte:97-124)
 
 #### Scenario: Button style references tokens
@@ -87,6 +122,13 @@ The system SHALL style every component using CSS custom properties (component-la
 - **THEN** the system SHALL reference `--btn-*`, `--space-*`, `--radius-*`, and `--font-*` tokens and SHALL NOT hardcode brand hex values
 
 ### Requirement: Authentication components
+
+The system SHALL provide a `LoginPage` with a `mode` prop `"credentials" | "wallet" | "both"` (default `"both"`) that conditionally renders a credentials form and/or an injected `walletSection` snippet, exposing bindable `email`/`password` and `onsubmit`/`onsignup`/`onforgotpassword` callbacks.
+
+#### Scenario: Complete Authentication components contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL provide a `LoginPage` with a `mode` prop `"credentials" | "wallet" | "both"` (default `"both"`) that conditionally renders a credentials form and/or an injected `walletSection` snippet, exposing bindable `email`/`password` and `onsubmit`/`onsignup`/`onforgotpassword` callbacks. The system SHALL provide a `WalletConnect` whose wallet options carry an `icon` restricted to `"metamask" | "walletconnect" | "coinbase" | "phantom" | "custom"`, defaulting to a built-in set of MetaMask, WalletConnect, Coinbase, and Phantom when none are supplied, and disabling other options while one connection is in progress. (src: packages/ui/core/src/lib/auth/LoginPage/LoginPage.svelte:6,9,19,35-37,158-160; packages/ui/core/src/lib/auth/WalletConnect/WalletConnect.svelte:4-9,23-28,30,32-36,60)
 
@@ -113,6 +155,13 @@ The system SHALL let consumers name the `<nav>` landmark rendered by `Sidebar` a
 - **THEN** the navigation landmark SHALL be named "Navegação inferior" instead of the English default
 
 ### Requirement: MoneyInput contract
+
+The system SHALL provide a `MoneyInput` form component.
+
+#### Scenario: Complete MoneyInput contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL provide a `MoneyInput` form component. It SHALL:
 
@@ -164,6 +213,13 @@ The system SHALL provide a `MoneyInput` form component. It SHALL:
 - **AND** the error text SHALL be rendered with `role="alert"`
 
 ### Requirement: CurrencyDisplay contract
+
+The system SHALL provide a `CurrencyDisplay` data component.
+
+#### Scenario: Complete CurrencyDisplay contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL provide a `CurrencyDisplay` data component. It SHALL:
 
@@ -223,6 +279,13 @@ The system SHALL provide a `CurrencyDisplay` data component. It SHALL:
 
 ### Requirement: ThemeToggle theme preference
 
+`ThemeToggle` SHALL delegate theme resolution, application and persistence to `createThemePreference` from `@cyberdynecorp/svelte-ui-foundation/theme`, using `persistKey` as the storage key; an empty `persistKey` keeps the choice in memory only.
+
+#### Scenario: Complete ThemeToggle theme preference contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 `ThemeToggle` SHALL delegate theme resolution, application and persistence to `createThemePreference` from `@cyberdynecorp/svelte-ui-foundation/theme`, using `persistKey` as the storage key; an empty `persistKey` keeps the choice in memory only. By default it SHALL render the existing two-state light/dark switch with its existing props (`theme`, `size`, `persistKey`, `onchange`) and accessible name. With `includeSystem` it SHALL render a `role="radiogroup"` named by `ariaLabel` (default "Color theme") that contains native radio inputs labelled "Light", "Dark" and "System"; the checked option SHALL be marked by an outline of at least 3:1 contrast, not by colour alone. The `themes` prop (default `{ light: "light", dark: "dark" }`) SHALL map the modes to the `data-theme` values applied. The component SHALL expose bindable `theme` (the resolved mode) and `preference` (`"light" | "dark" | "system"`). It SHALL call `onchange` with the resolved mode and `onpreferencechange` with the chosen preference after a user choice. It SHALL stop following the OS when it unmounts. (src: packages/ui/core/src/lib/primitives/ThemeToggle/ThemeToggle.svelte)
 
 #### Scenario: Two-state default is unchanged
@@ -244,6 +307,13 @@ The system SHALL provide a `CurrencyDisplay` data component. It SHALL:
 - **THEN** the component SHALL persist the dark theme name, call `onpreferencechange("dark")`, and ignore later OS changes
 
 ### Requirement: KpiCard contract
+
+The system SHALL provide a neutral `KpiCard` data-display component, exported from the package root.
+
+#### Scenario: Complete KpiCard contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL provide a neutral `KpiCard` data-display component, exported from the package root. (`StatCard` is taken by `retro/StatCard`.) It SHALL:
 
@@ -284,6 +354,13 @@ The system SHALL provide a neutral `KpiCard` data-display component, exported fr
 - **THEN** the visually hidden trend text SHALL be `diminuiu`
 
 ### Requirement: BudgetBar contract
+
+The system SHALL provide a `BudgetBar` data-display component, exported from the package root.
+
+#### Scenario: Complete BudgetBar contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL provide a `BudgetBar` data-display component, exported from the package root. It SHALL:
 
@@ -342,6 +419,13 @@ The system SHALL provide a `BudgetBar` data-display component, exported from the
 
 Core components SHALL route the style-defining parts of their look through the design-style tokens, so that a theme can reach them.
 
+#### Scenario: Complete Components expose design-style tokens contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+Core components SHALL route the style-defining parts of their look through the design-style tokens, so that a theme can reach them.
+
 Backgrounds SHALL be written as `background: <layer tokens>, <surface colour>`:
 
 - **Surface containers** use `var(--texture-surface), var(--gradient-surface), <surface>`. They are Card, Modal, Dialog, Drawer, Popover, NavBar, Header, Sidebar, BottomNav, DataTable, the PageShell/AppLayout header and sidebar, and the secondary Button.
@@ -377,6 +461,13 @@ With the default token values, every component SHALL render as before. (src: pac
 - **THEN** the Button SHALL show a 3px border and a hard 4px offset shadow, with no prop changes
 
 ### Requirement: Drawer accessibility contract
+
+The system SHALL implement `Drawer` as a modal dialog.
+
+#### Scenario: Complete Drawer accessibility contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL implement `Drawer` as a modal dialog. Its existing props (`open` bindable, `side`, `width`, `title`, `children`, `footer`) keep their meaning. It SHALL:
 
@@ -416,6 +507,13 @@ The system SHALL implement `Drawer` as a modal dialog. Its existing props (`open
 
 ### Requirement: Overlays stack above fixed navigation
 
+The system SHALL set the `z-index` of the `Drawer`, `Modal` and `Dialog` overlays to `var(--z-overlay)` and of `BottomNav` to `var(--z-nav)`, so an open overlay, including the drawer footer, is never covered by `BottomNav`.
+
+#### Scenario: Complete Overlays stack above fixed navigation contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL set the `z-index` of the `Drawer`, `Modal` and `Dialog` overlays to `var(--z-overlay)` and of `BottomNav` to `var(--z-nav)`, so an open overlay, including the drawer footer, is never covered by `BottomNav`. (src: packages/ui/core/src/lib/layout/Drawer/Drawer.svelte; packages/ui/core/src/lib/overlay/Modal/Modal.svelte; packages/ui/core/src/lib/feedback/Dialog/Dialog.svelte; packages/ui/core/src/lib/navigation/BottomNav/BottomNav.svelte; packages/ui/core/src/lib/style-contract.test.ts)
 
 #### Scenario: Drawer footer above BottomNav on a phone
@@ -425,6 +523,13 @@ The system SHALL set the `z-index` of the `Drawer`, `Modal` and `Dialog` overlay
 - **THEN** the topmost element there SHALL be inside the drawer footer
 
 ### Requirement: CurrencyDisplay custom asset amounts
+
+`CurrencyDisplay` SHALL accept optional `decimals` and `symbol` props for crypto and other non-ISO assets.
+
+#### Scenario: Complete CurrencyDisplay custom asset amounts contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 `CurrencyDisplay` SHALL accept optional `decimals` and `symbol` props for crypto and other non-ISO assets. It SHALL:
 
@@ -488,6 +593,13 @@ The system SHALL set the `z-index` of the `Drawer`, `Modal` and `Dialog` overlay
 - **THEN** it SHALL display an em dash and call `console.warn` once
 
 ### Requirement: MoneyInput custom asset amounts
+
+`MoneyInput` SHALL accept optional `decimals` and `symbol` props for crypto and other non-ISO assets, with the same meaning as on `CurrencyDisplay`.
+
+#### Scenario: Complete MoneyInput custom asset amounts contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 `MoneyInput` SHALL accept optional `decimals` and `symbol` props for crypto and other non-ISO assets, with the same meaning as on `CurrencyDisplay`. It SHALL:
 

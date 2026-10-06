@@ -5,6 +5,15 @@
 Foundation SHALL define Layer 3 tokens for the liquidity widgets in `colors.css`, in both `:root` and `[data-theme="light"]`, within one comment-delimited block:
 
 - `--lpos-border` and `--lpos-radius`, for the `LiquidityPositionCard` frame.
+
+#### Scenario: Complete Liquidity component tokens contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+Foundation SHALL define Layer 3 tokens for the liquidity widgets in `colors.css`, in both `:root` and `[data-theme="light"]`, within one comment-delimited block:
+
+- `--lpos-border` and `--lpos-radius`, for the `LiquidityPositionCard` frame.
 - `--lrange-track-bg`, `--lrange-track-border`, `--lrange-radius` and `--lrange-marker-color`, for the `LiquidityRangeBar` track and marker.
 - `--tpair-ring-border`, `--tpair-a-bg`, `--tpair-b-bg` and `--tpair-initials-color`, for the `TokenPairIcon` rings and initials.
 

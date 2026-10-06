@@ -6,6 +6,13 @@ The repository is a pnpm-workspace monorepo publishing two packages — `@cyberd
 ## Requirements
 ### Requirement: Monorepo package layout
 
+The system SHALL define a pnpm workspace covering `packages/config/*` and `packages/ui/*`, publishing two packages: `@cyberdynecorp/svelte-ui-foundation` (private:false via `access: public`, ships raw `src/lib`, no build step, `svelte` field pointing at `./src/lib/index.ts`) and `@cyberdynecorp/svelte-ui-core` (ships compiled `dist`, `svelte` field `./dist/index.js`).
+
+#### Scenario: Complete Monorepo package layout contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL define a pnpm workspace covering `packages/config/*` and `packages/ui/*`, publishing two packages: `@cyberdynecorp/svelte-ui-foundation` (private:false via `access: public`, ships raw `src/lib`, no build step, `svelte` field pointing at `./src/lib/index.ts`) and `@cyberdynecorp/svelte-ui-core` (ships compiled `dist`, `svelte` field `./dist/index.js`). Core SHALL depend on foundation via `workspace:*`. The foundation tarball SHALL contain only runtime source: its `files` field SHALL be `src` with `src/**/*.test.ts` and `src/stories` negated, a form `pnpm publish` honours. `pnpm check:package` SHALL inspect `pnpm pack` output for both packages. (src: pnpm-workspace.yaml:1-3; packages/ui/foundation/package.json; packages/ui/core/package.json:2-15,29-31; scripts/check-package-contents.mjs)
 
 #### Scenario: Foundation ships raw source
@@ -51,6 +58,13 @@ The system SHALL build all packages via the root `build` script `pnpm -r build`;
 
 ### Requirement: Storybook documentation surface
 
+The system SHALL configure Storybook (`@storybook/svelte-vite`) to load `*.stories.svelte` from the packages plus static MDX docs, enabling the `addon-svelte-csf`, `addon-a11y`, `addon-docs`, and `addon-vitest` addons, applying a Cyberdyne dark theme, aliasing the published package names to raw source, and building static output to `docs/` via `storybook build -o docs`.
+
+#### Scenario: Complete Storybook documentation surface contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL configure Storybook (`@storybook/svelte-vite`) to load `*.stories.svelte` from the packages plus static MDX docs, enabling the `addon-svelte-csf`, `addon-a11y`, `addon-docs`, and `addon-vitest` addons, applying a Cyberdyne dark theme, aliasing the published package names to raw source, and building static output to `docs/` via `storybook build -o docs`. A `predev`/`prebuild-storybook` step SHALL run `scripts/copy-cesium.mjs` to copy Cesium runtime assets into `.storybook/public/cesium/`. (src: .storybook/main.ts:10-45; .storybook/manager.ts:4-14; package.json:6-11; scripts/copy-cesium.mjs:1-63)
 
 #### Scenario: Cesium assets copied before Storybook
@@ -59,6 +73,13 @@ The system SHALL configure Storybook (`@storybook/svelte-vite`) to load `*.stori
 - **THEN** the system SHALL first execute `scripts/copy-cesium.mjs` to stage Cesium assets under `.storybook/public/cesium/`
 
 ### Requirement: Testing configuration
+
+The system SHALL define two Vitest projects — a jsdom unit project over `packages/**/*.test.ts` and a browser-based `storybook` project driven by the Storybook test plugin and Playwright/chromium — with coverage thresholds of 90% statements, 85% branches, 90% functions, and 90% lines over core `src/lib`.
+
+#### Scenario: Complete Testing configuration contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The system SHALL define two Vitest projects — a jsdom unit project over `packages/**/*.test.ts` and a browser-based `storybook` project driven by the Storybook test plugin and Playwright/chromium — with coverage thresholds of 90% statements, 85% branches, 90% functions, and 90% lines over core `src/lib`. The system SHALL provide a Playwright config running Cesium globe visual/smoke E2E against a Storybook dev server on `http://localhost:6006` using SwiftShader WebGL. (src: vitest.config.ts:26-86; playwright.config.ts:9-37)
 
@@ -78,6 +99,13 @@ The system SHALL manage versioning with Changesets (base branch `main`, `access:
 
 ### Requirement: Continuous integration
 
+The system SHALL run PR checks via `.github/workflows/test.yaml` (on pull_request to `main`: `pnpm check`, `pnpm build`, `pnpm check:package`, Playwright chromium install, `pnpm test`), publish Storybook to GitHub Pages on push to `main`, and validate OpenSpec specs on pull requests and pushes to `main`.
+
+#### Scenario: Complete Continuous integration contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL run PR checks via `.github/workflows/test.yaml` (on pull_request to `main`: `pnpm check`, `pnpm build`, `pnpm check:package`, Playwright chromium install, `pnpm test`), publish Storybook to GitHub Pages on push to `main`, and validate OpenSpec specs on pull requests and pushes to `main`. CI workflows SHALL use `ubuntu-latest`, Node 20, pnpm cache, and `pnpm install --frozen-lockfile`. (src: .github/workflows/test.yaml:1-23; .github/workflows/publish-storybook.yaml:1-40; .github/workflows/openspec-validate.yaml)
 
 #### Scenario: PR test job
@@ -93,6 +121,13 @@ The system SHALL run PR checks via `.github/workflows/test.yaml` (on pull_reques
 - **THEN** the system SHALL execute `openspec validate --all --strict` and fail the build on any spec error
 
 ### Requirement: Foundation subpath exports
+
+The foundation package SHALL expose, besides `.`, `./styles` and `./tokens`, the subpaths `./themes/calm.css` (pointing to `./src/lib/themes/calm.css`) and `./theme` (with `types` and `default` conditions pointing to `./src/lib/theme/index.ts`).
+
+#### Scenario: Complete Foundation subpath exports contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 The foundation package SHALL expose, besides `.`, `./styles` and `./tokens`, the subpaths `./themes/calm.css` (pointing to `./src/lib/themes/calm.css`) and `./theme` (with `types` and `default` conditions pointing to `./src/lib/theme/index.ts`). Its `files` field SHALL exclude `src/lib/**/*.test.ts` so tests are not published. Storybook SHALL alias `@cyberdynecorp/svelte-ui-foundation/theme` ahead of the bare package alias, so that the subpath resolves to source. (src: packages/ui/foundation/package.json; .storybook/main.ts)
 

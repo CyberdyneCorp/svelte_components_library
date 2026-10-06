@@ -2,6 +2,13 @@
 
 ### Requirement: TokenBalanceRow contract
 
+The system SHALL provide a `TokenBalanceRow` crypto component for token lists.
+
+#### Scenario: Complete TokenBalanceRow contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
 The system SHALL provide a `TokenBalanceRow` crypto component for token lists. It SHALL:
 
 - Take a required `symbol`, a required decimal-string `amount` and a required `decimals`, plus optional `name`, `value` (`{ amount: string; currency: string }`, an ISO 4217 amount), `unpricedLabel` (default `"No price available"`), `chain`, `locale`, `icon` (snippet) and `as` (`"div"` | `"li"`, default `"div"`).
@@ -44,6 +51,13 @@ The system SHALL provide a `TokenBalanceRow` crypto component for token lists. I
 - **AND** without `as` the root SHALL be a `div`
 
 ### Requirement: NetworkBadge label-only display
+
+`NetworkBadge` SHALL accept an optional `chainId` and an optional `showStatus` (default `true`).
+
+#### Scenario: Complete NetworkBadge label-only display contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
 
 `NetworkBadge` SHALL accept an optional `chainId` and an optional `showStatus` (default `true`). It SHALL render `#{chainId}` after the network name only when `chainId` is defined (including `0`). When `showStatus` is `false` it SHALL render neither the connection dot nor the disconnected dimming. With `chainId` set and `showStatus` omitted it SHALL render as before: name, `#{chainId}` and a status dot that reflects `connected`.
 
