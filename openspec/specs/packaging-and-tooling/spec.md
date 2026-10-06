@@ -120,6 +120,12 @@ The system SHALL run PR checks via `.github/workflows/test.yaml` (on pull_reques
 - **WHEN** CI runs
 - **THEN** the system SHALL execute `openspec validate --all --strict` and fail the build on any spec error
 
+#### Scenario: Stable browser dependency optimization
+
+- **GIVEN** a cold Vite dependency cache for the Storybook test project
+- **WHEN** stories dynamically import Cesium
+- **THEN** Cesium and storybook/test SHALL be pre-bundled before test execution to prevent optimization-triggered browser reloads
+
 ### Requirement: Foundation subpath exports
 
 The foundation package SHALL expose, besides `.`, `./styles` and `./tokens`, the subpaths `./themes/calm.css` (pointing to `./src/lib/themes/calm.css`) and `./theme` (with `types` and `default` conditions pointing to `./src/lib/theme/index.ts`).

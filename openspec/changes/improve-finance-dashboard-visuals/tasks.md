@@ -53,3 +53,9 @@
 - [x] Move 67 long normative bodies into explicit contract scenarios while retaining short requirement summaries. All original contract text is preserved verbatim; no validator options or thresholds are relaxed.
 - [x] Verify full strict validation: 18 passed, zero failed. Check full-text preservation and diff whitespace.
 - The application test job for commit 89d1794 passed in CI; final documentation repair triggers a fresh CI run.
+
+## Browser runner follow-up
+
+- CI on 1472130 passed strict OpenSpec validation, but two story suites failed to initialize the runner after Vite optimized Cesium mid-run and reloaded the browser. The 4,992 executed tests passed.
+- Added Cesium to the Storybook test project's existing optimizeDeps.include list to pre-bundle this dynamic dependency before execution. No test suites, assertions or CI gates are removed.
+- Full strict OpenSpec validation remains green (18 entries); full local and CI test verification follows this configuration repair.
