@@ -60,3 +60,9 @@ The library SHALL document a synthetic finance composition using existing shared
 - **GIVEN** synthetic transaction amounts and preformatted balance states
 - **WHEN** a user simulates successive outflows
 - **THEN** income SHALL appear blue, outflows red, zero balance SHALL show a warning and negative balance SHALL show an accessible alert without persisting financial operations
+
+#### Scenario: Consistent simulated records and configurable early warning
+
+- **WHEN** the user simulates an outflow or resets the demonstration
+- **THEN** the table SHALL add or remove the corresponding synthetic rows consistently with summary totals
+- **AND** a labelled local threshold selector SHALL show an early warning for a positive balance strictly below the selected limit, with zero and negative messages taking precedence

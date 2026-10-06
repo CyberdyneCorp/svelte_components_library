@@ -68,24 +68,57 @@ test("cash flow colors and negative balance warning follow simulated outflows", 
   await expect(page.getByRole("article", { name: "Entradas do período" })).toContainText(
     "R$ 8.000,00",
   );
-  const income = page.getByRole("cell", { name: "+R$ 8.000,00", exact: true }).locator("span");
-  const expense = page.getByRole("cell", { name: "−R$ 320,00", exact: true }).locator("span");
-  expect(await income.evaluate((el) => getComputedStyle(el).color)).not.toEqual(
-    await expense.evaluate((el) => getComputedStyle(el).color),
-  );
+
   const simulate = page.getByRole("button", { name: "Simular saída", exact: true });
   const balance = page.getByRole("article", { name: "Saldo do período" });
   await simulate.click();
   await expect(balance).toContainText("R$ 2.680,00");
+  await expect(page.getByRole("cell", { name: "Saída simulada 1", exact: true })).toBeVisible();
+  await expect(page.getByText("Saldo próximo do limite", { exact: true })).toBeVisible();
+  await page.getByLabel("Avisar quando o saldo ficar abaixo de").selectOption("100000");
+  await expect(page.getByText("Saldo próximo do limite", { exact: true })).toHaveCount(0);
   await simulate.click();
   await expect(balance).toContainText("R$ 0,00");
+  await expect(page.getByRole("cell", { name: "Saída simulada 2", exact: true })).toBeVisible();
   await expect(page.getByRole("alert")).toHaveCount(0);
   await expect(page.getByText("Saldo zerado", { exact: true })).toBeVisible();
   await simulate.click();
   await expect(balance).toContainText("−R$ 320,00");
+  await expect(page.getByRole("cell", { name: "Saída simulada 3", exact: true })).toBeVisible();
+  await expect(page.getByRole("article", { name: "Saídas do período" })).toContainText(
+    "R$ 8.320,00",
+  );
   await expect(page.getByRole("alert")).toContainText("Saldo no vermelho");
   await expect(simulate).toBeDisabled();
   await page.getByRole("button", { name: "Reiniciar demonstração" }).click();
   await expect(balance).toContainText("R$ 5.680,00");
+  await expect(page.getByRole("cell", { name: /^Saída simulada/ })).toHaveCount(0);
+  await expect(page.getByRole("article", { name: "Saídas do período" })).toContainText(
+    "R$ 2.320,00",
+  );
+  await page.getByLabel("Avisar quando o saldo ficar abaixo de").selectOption("600000");
+  await expect(page.getByText("Saldo próximo do limite", { exact: true })).toBeVisible();
   await expect(page.getByRole("alert")).toHaveCount(0);
 });
+
+for (const [theme, incomeColor, expenseColor] of [
+  ["calm", "rgb(63, 97, 120)", "rgb(162, 70, 59)"],
+  ["calm-dark", "rgb(152, 185, 207)", "rgb(231, 154, 143)"],
+]) {
+  test(`income is blue and expenses red in ${theme}`, async ({ page }) => {
+    await page.goto(
+      `/iframe.html?id=finance-dashboard--transactions&viewMode=story&globals=theme:${theme}`,
+    );
+    await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    const income = page.getByRole("cell", { name: "+R$ 8.000,00", exact: true }).locator("span");
+    const expense = page.getByRole("cell", { name: "−R$ 320,00", exact: true }).locator("span");
+    await expect(income).toHaveCSS("color", incomeColor);
+    await expect(expense).toHaveCSS("color", expenseColor);
+    await expect(
+      page.getByRole("article", { name: "Entradas do período" }).locator(".income"),
+    ).toHaveCSS("color", incomeColor);
+    await expect(
+      page.getByRole("article", { name: "Saídas do período" }).locator(".expense"),
+    ).toHaveCSS("color", expenseColor);
+  });
+}

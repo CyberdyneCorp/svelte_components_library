@@ -5,7 +5,6 @@
     title: "Finance/Dashboard",
     component: FinanceDashboardDemo,
     parameters: { layout: "fullscreen", a11y: { test: "error" } },
-    globals: { theme: "calm-dark" },
   });
 </script>
 

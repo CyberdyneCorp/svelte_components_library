@@ -37,3 +37,12 @@
 - [x] Add synthetic decreasing-balance controls with zero warning, negative Alert and reset.
 - [x] Verify the transition and reset in Chromium; all 7 finance E2E checks pass.
 - Application balance calculations, persistence and external notifications remain outside this synthetic presentation example.
+
+## Review adjustments
+
+- [x] Keep simulated table rows and summary totals consistent, including reset and filtering.
+- [x] Add a labelled local warning threshold selector; zero and negative alerts take precedence.
+- [x] Add exact blue/red color assertions for calm light and dark, plus table and threshold regressions.
+
+- Verification: 9 Chromium finance regressions and 3 Finance Dashboard Storybook checks passed. `pnpm check` completed with zero errors (core: 30 warnings). Individual OpenSpec strict validation and diff whitespace checks passed.
+- Removed the finance story's fixed dark global so URL/toolbar theme selection is respected; exact color regressions now confirm both calm themes.

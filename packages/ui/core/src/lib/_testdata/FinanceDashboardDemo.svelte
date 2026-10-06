@@ -22,6 +22,7 @@
   const balanceSteps = [
     {
       value: "R$ 5.680,00",
+      cents: 568000,
       expense: "R$ 2.320,00",
       negative: false,
       zero: false,
@@ -29,6 +30,7 @@
     },
     {
       value: "R$ 2.680,00",
+      cents: 268000,
       expense: "R$ 5.320,00",
       negative: false,
       zero: false,
@@ -36,6 +38,7 @@
     },
     {
       value: "R$ 0,00",
+      cents: 0,
       expense: "R$ 8.000,00",
       negative: false,
       zero: true,
@@ -43,6 +46,7 @@
     },
     {
       value: "−R$ 320,00",
+      cents: -32000,
       expense: "R$ 8.320,00",
       negative: true,
       zero: false,
@@ -51,6 +55,14 @@
   ];
   let balanceStep = $state(0);
   let balance = $derived(balanceSteps[balanceStep]);
+  const warningLimits = [
+    { value: "100000", label: "R$ 1.000,00" },
+    { value: "300000", label: "R$ 3.000,00" },
+    { value: "600000", label: "R$ 6.000,00" },
+  ];
+  let warningLimit = $state("300000");
+  let lowBalance = $derived(balance.cents > 0 && balance.cents < Number(warningLimit));
+  let limitLabel = $derived(warningLimits.find((limit) => limit.value === warningLimit)!.label);
   let query = $state("");
   let appliedQuery = $state("");
   let message = $state("");
@@ -115,11 +127,38 @@
       value: "−R$ 2.000,00",
     },
   ];
+  const simulatedRecords = [
+    {
+      id: "simulated-1",
+      direction: "expense",
+      name: "Saída simulada 1",
+      category: "Simulação",
+      date: "06/10/2026",
+      value: "−R$ 3.000,00",
+    },
+    {
+      id: "simulated-2",
+      direction: "expense",
+      name: "Saída simulada 2",
+      category: "Simulação",
+      date: "06/10/2026",
+      value: "−R$ 2.680,00",
+    },
+    {
+      id: "simulated-3",
+      direction: "expense",
+      name: "Saída simulada 3",
+      category: "Simulação",
+      date: "06/10/2026",
+      value: "−R$ 320,00",
+    },
+  ];
+  let activeRecords = $derived([...records, ...simulatedRecords.slice(0, balanceStep)]);
   let rows = $derived(
     empty
       ? []
       : transactions
-        ? records.filter((row) =>
+        ? activeRecords.filter((row) =>
             row.name.toLocaleLowerCase("pt-BR").includes(appliedQuery.toLocaleLowerCase("pt-BR")),
           )
         : positions,
@@ -231,6 +270,11 @@
       {#if transactions}
         <Card padding="lg">
           <h2>Acompanhe o saldo</h2>
+          <Select
+            label="Avisar quando o saldo ficar abaixo de"
+            options={warningLimits}
+            bind:value={warningLimit}
+          />
           <p role="status">{balance.movement} · Saldo: {balance.value}</p>
           {#if balance.negative}
             <Alert variant="error" title="Saldo no vermelho"
@@ -240,6 +284,10 @@
           {:else if balance.zero}
             <Alert variant="warning" role="status" title="Saldo zerado"
               >A próxima saída deixará o saldo negativo.</Alert
+            >
+          {:else if lowBalance}
+            <Alert variant="warning" role="status" title="Saldo próximo do limite"
+              >Seu saldo está abaixo de {limitLabel}. Revise as próximas saídas.</Alert
             >
           {/if}
           <div class="balance-actions">
@@ -251,7 +299,10 @@
               >Reiniciar demonstração</Button
             >
           </div>
-          <p class="footnote">Simulação com valores fictícios; não altera contas ou registros.</p>
+          <p class="footnote">
+            O limite vale apenas nesta prévia e não é salvo. Simulação com valores fictícios; não
+            altera contas ou registros.
+          </p>
         </Card>
       {/if}
       {#if !transactions && !empty}
