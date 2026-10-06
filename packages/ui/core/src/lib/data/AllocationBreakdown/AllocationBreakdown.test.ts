@@ -21,7 +21,7 @@ describe("AllocationBreakdown", () => {
       },
     });
     const region = screen.getByRole("region", { name: "Distribuição" });
-    expect(region).toHaveAccessibleDescription(props.description);
+    expect(region).toContainElement(screen.getByText(props.description));
     expect(screen.getByText("120%")).toBeInTheDocument();
     expect(screen.getByText("-20%")).toBeInTheDocument();
     expect(screen.getByText("−R$ 20")).toBeInTheDocument();

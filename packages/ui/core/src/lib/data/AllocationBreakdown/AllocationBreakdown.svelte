@@ -20,7 +20,6 @@
     unavailableLabel?: string;
   } = $props();
 
-  const descriptionId = $props.id();
   let maximum = $derived(
     items.reduce(
       (max, item) =>
@@ -34,9 +33,8 @@
 <section
   class="cy-allocation"
   aria-label={ariaLabel}
-  aria-describedby={description ? descriptionId : undefined}
 >
-  {#if description}<p class="cy-allocation__description" id={descriptionId}>{description}</p>{/if}
+  {#if description}<p class="cy-allocation__description">{description}</p>{/if}
   {#if items.length === 0}
     <p class="cy-allocation__empty">{emptyLabel}</p>
   {:else}
