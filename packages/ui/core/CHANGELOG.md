@@ -1,5 +1,11 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.19.0
+
+### Minor Changes
+
+- 84bc6c1: Add an optional `minDecimals` to CurrencyDisplay asset mode (and the shared `formatAmount` options) that drops trailing zeros down to that many fraction digits while `decimals` keeps setting the rounding precision. TokenBalanceRow forwards `minDecimals` to its amount and `data-*` attributes to its root element. Defaults are unchanged.
+
 ## 0.18.0
 
 ### Minor Changes
