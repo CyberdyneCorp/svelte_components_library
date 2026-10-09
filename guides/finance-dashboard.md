@@ -63,7 +63,7 @@
 
 ## Allocation interpretation
 
-The central baseline is zero. Positive bars extend right and negative bars left. Length is relative to the largest absolute finite percentage in the supplied set; each half-track represents that magnitude. It is **not** a 0–100 progress meter. Displayed signed percentages remain unchanged except locale formatting to one decimal place. Labels, signs and values communicate meaning without relying on color. Tiny percentages may round to zero in displayed text while their finite bar geometry remains proportional.
+The central baseline is zero. Positive bars extend right and negative bars left. Length is relative to the largest absolute finite percentage in the supplied set; each half-track represents that magnitude. It is **not** a 0–100 progress meter. Displayed signed percentages remain unchanged except locale formatting with at most one decimal place (`20` renders as `20%`, `51.6` as `51.6%` or `51,6%` by locale). Labels, signs and values communicate meaning without relying on color. Tiny percentages may round to zero in displayed text while their finite bar geometry remains proportional.
 
 `NaN` and infinite percentages display `unavailableLabel` and a zero-length bar. A real zero displays `0%`. An empty collection displays `emptyLabel`. The application must supply unique stable IDs, a valid Intl locale and financial precision/formatted monetary strings. Missing amounts should be represented by the application's chosen placeholder, not invented by the component.
 
