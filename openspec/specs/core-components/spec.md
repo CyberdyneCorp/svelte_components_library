@@ -97,13 +97,36 @@ The system SHALL implement `Modal` as a dialog with `role="dialog"`, `aria-modal
 - **WHEN** this capability is implemented or used
 - **THEN** it SHALL satisfy the following contract:
 
-The system SHALL implement `Modal` as a dialog with `role="dialog"`, `aria-modal="true"`, `aria-labelledby` pointing at its title, focus trap on Tab/Shift+Tab, Escape-to-close, backdrop-click-to-close, and auto-focus of the close button on open. `Tabs` SHALL implement `role="tablist"`/`role="tab"` with `aria-selected`, roving tabindex, and ArrowLeft/ArrowRight navigation with wraparound. (src: packages/ui/core/src/lib/overlay/Modal/Modal.svelte:27-57,62-66; packages/ui/core/src/lib/navigation/Tabs/Tabs.svelte:19-33,36-43)
+The system SHALL implement `Modal` as a dialog with `role="dialog"`, `aria-modal="true"`, `aria-labelledby` pointing at its title, focus trap on Tab/Shift+Tab, Escape-to-close, backdrop-click-to-close, and auto-focus of the close button on open. `Tabs` whose items have no `href` SHALL implement `role="tablist"`/`role="tab"` with `aria-selected`, roving tabindex, and ArrowLeft/ArrowRight navigation with wraparound; the optional `ariaLabel` prop names the tablist.
+
+When any `Tabs` item has an `href`, the system SHALL instead render link tabs for navigation between pages, following the WAI-ARIA navigation (not tab widget) pattern:
+
+- a `<nav>` landmark named by `ariaLabel`, containing a list with one `<a href>` per item;
+- `aria-current="page"` on the link whose item id equals `activeId`, and on no other link;
+- no `tablist`/`tab` roles, `aria-selected` or roving tabindex, so every link is a tab stop and arrow keys are not handled;
+- clicks are not intercepted and `onchange` is not called; `activeId` is driven by the consumer's route.
+
+(src: packages/ui/core/src/lib/overlay/Modal/Modal.svelte:27-57,62-66; packages/ui/core/src/lib/navigation/Tabs/Tabs.svelte)
 
 #### Scenario: Modal focus trap and escape
 
 - **GIVEN** an open `Modal`
 - **WHEN** the user presses Escape or Tab past the last focusable element
 - **THEN** the system SHALL close on Escape and cycle focus within the dialog on Tab
+
+#### Scenario: Link tabs mark the current page
+
+- **GIVEN** `Tabs` with items `overview`, `activity` and `settings`, each with an `href`, `activeId="activity"` and `ariaLabel="Wallet sections"`
+- **WHEN** it renders
+- **THEN** the system SHALL expose a navigation landmark named "Wallet sections" containing three links
+- **AND** only the "Activity" link SHALL have `aria-current="page"`
+- **AND** there SHALL be no `tablist` or `tab` roles
+
+#### Scenario: Button tabs are unchanged
+
+- **GIVEN** `Tabs` whose items have no `href`
+- **WHEN** it renders
+- **THEN** the system SHALL render a `tablist` of `tab` buttons with `aria-selected` and roving tabindex, and no navigation landmark
 
 ### Requirement: Components consume design tokens only
 
@@ -667,3 +690,437 @@ The system SHALL set the `z-index` of the `Drawer`, `Modal` and `Dialog` overlay
 - **WHEN** the user types `1.2345`
 - **THEN** the system SHALL still treat the separator as grouping and emit `"12345.00"`
 - **AND** `value="1234.5"` SHALL still display `$1,234.50`
+
+### Requirement: Decimal-safe LiquidityPositionCard
+
+`LiquidityPositionCard` SHALL accept optional decimal-safe props next to its number props:
+
+- `valueMoney`, `pnlMoney` and `uncollectedTotal` of type `LiquidityMoney` (`{ amount: string; currency: string; decimals?: number }`).
+
+#### Scenario: Complete Decimal-safe LiquidityPositionCard contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+`LiquidityPositionCard` SHALL accept optional decimal-safe props next to its number props:
+
+- `valueMoney`, `pnlMoney` and `uncollectedTotal` of type `LiquidityMoney` (`{ amount: string; currency: string; decimals?: number }`). They are rendered through `CurrencyDisplay` with the card's optional `locale`. Their amounts SHALL never be converted to a JS `number`.
+- `uncollectedFees` of type `LiquidityTokenAmount[]` (`{ asset: string; amount: string; decimals?: number }`), one entry per token. Each fee SHALL be shown in `CurrencyDisplay` asset mode. When `decimals` is omitted, the number of fraction digits written in `amount` is used, so no fee is rounded. The fees SHALL be shown in order, followed by `≈ uncollectedTotal` when that prop is set.
+- When set, `valueMoney` SHALL take precedence over `value`, `pnlMoney` over `pnl`, and `uncollectedFees` / `uncollectedTotal` over `uncollected`.
+- `pnlMoney` SHALL show an explicit sign for non-zero displayed values and the success / error tone.
+- `value`, `pnl`, `feeApyPct` and `uncollected` SHALL be optional. The value, P&L, fee APY and uncollected rows SHALL be hidden when neither their number nor their money prop is set, and the bottom row SHALL be hidden when it would be empty.
+- Optional `feeTier` SHALL be shown after the pair in the title. Optional `tokenId` (as `#id`), `chain` and `walletLabel` SHALL be joined with ` · ` into a subtitle, skipping missing parts.
+- Optional `rangeText` SHALL be rendered as visually hidden text that the card's button references with `aria-describedby`. The range bar SHALL then be rendered `decorative` inside an `aria-hidden="true"` wrapper. Without `rangeText`, the range bar keeps its `progressbar` semantics.
+- The number props SHALL render exactly as before when no new prop is set.
+- The package root SHALL export the `LiquidityMoney` and `LiquidityTokenAmount` types.
+
+(src: packages/ui/core/src/lib/retro/LiquidityPositionCard/LiquidityPositionCard.svelte; packages/ui/core/src/lib/retro/LiquidityPositionCard/liquidityPositionCard.ts; packages/ui/core/src/lib/retro/LiquidityPositionCard/types.ts)
+
+#### Scenario: 18-decimal value without float maths
+
+- **GIVEN** `valueMoney={{ amount: "0.000000000000000001", currency: "ETH", decimals: 18 }}` and `locale="en-US"`
+- **WHEN** the card renders
+- **THEN** the value SHALL read `0.000000000000000001 ETH`
+
+#### Scenario: Per-token fees and total
+
+- **GIVEN** `uncollectedFees` of `0.001234567890123456` WETH (18 decimals) and `3.21` USDC (no decimals), and `uncollectedTotal={{ amount: "7.91", currency: "USD" }}`
+- **WHEN** the card renders with `locale="en-US"`
+- **THEN** it SHALL show `0.001234567890123456 WETH`, `3.21 USDC` and `≈ $7.91`
+- **AND** a numeric `uncollected` prop SHALL be ignored
+
+#### Scenario: Money props take precedence
+
+- **GIVEN** `value={12600}`, `pnl={-316.96}`, `valueMoney={{ amount: "1.5", currency: "USD" }}` and `pnlMoney={{ amount: "-0.25", currency: "USD" }}`
+- **WHEN** the card renders with `locale="en-US"`
+- **THEN** the value SHALL read `$1.50` and the P&L `-$0.25`
+
+#### Scenario: Absent rows are hidden
+
+- **GIVEN** only `tokenA`, `tokenB`, `range` and `valueMoney`
+- **WHEN** the card renders
+- **THEN** no P&L, fee APY or uncollected row SHALL be rendered
+
+#### Scenario: Range sentence for screen readers
+
+- **GIVEN** `rangeText="Out of range: 3,200 to 3,900 USDC per WETH, current 4,500"`
+- **WHEN** the card renders
+- **THEN** the button's accessible description SHALL be that sentence
+- **AND** no element SHALL have `role="progressbar"` or `aria-valuenow`
+- **AND** the bar's wrapper SHALL have `aria-hidden="true"`
+
+#### Scenario: Number props unchanged
+
+- **GIVEN** `value={12600}`, `pnl={-316.96}`, `feeApyPct={68.43}` and `uncollected={7.91}`
+- **WHEN** the card renders
+- **THEN** it SHALL show `$12,600`, `-$316.96`, `68.43%` and `$7.91`, and the range bar SHALL keep `role="progressbar"`
+
+### Requirement: Decorative, themeable LiquidityRangeBar
+
+`LiquidityRangeBar` SHALL accept `decorative?: boolean` (default `false`).
+
+#### Scenario: Complete Decorative, themeable LiquidityRangeBar contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+`LiquidityRangeBar` SHALL accept `decorative?: boolean` (default `false`). When `decorative` is true, it SHALL render no `role`, `aria-label` or `aria-value*` attributes and SHALL mark its root `aria-hidden="true"`. The visual output SHALL be the same. When `decorative` is false, the progressbar SHALL carry `ariaLabel` as its accessible name. The track SHALL be styled by the `--lrange-track-bg`, `--lrange-track-border`, `--lrange-radius` and `--lrange-marker-color` tokens. The band SHALL be clipped to the track's rounded corners, and the marker SHALL stay unclipped. The bounds text SHALL use `--color-text-secondary`. (src: packages/ui/core/src/lib/retro/LiquidityRangeBar/LiquidityRangeBar.svelte)
+
+#### Scenario: Decorative mode drops the semantics
+
+- **GIVEN** `decorative`
+- **WHEN** the bar renders
+- **THEN** it SHALL expose no `group` or `progressbar` role and no `aria-valuenow`, `aria-valuemin` or `aria-valuemax`
+- **AND** the in-range label and band geometry SHALL be unchanged
+
+#### Scenario: Named progressbar by default
+
+- **GIVEN** `ariaLabel="WETH/USDC range"`
+- **WHEN** the bar renders without `decorative`
+- **THEN** a `progressbar` named `WETH/USDC range` SHALL be present
+
+### Requirement: TokenPairIcon initials options
+
+`TokenPairIcon` SHALL accept `showInitials?: boolean` (default `true`) and `maxInitials?: number` (default `2`).
+
+#### Scenario: Complete TokenPairIcon initials options contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+`TokenPairIcon` SHALL accept `showInitials?: boolean` (default `true`) and `maxInitials?: number` (default `2`). Rings without an icon SHALL show the first `maxInitials` characters of the symbol, upper-cased, or no text when `showInitials` is false. Icons SHALL still take precedence over initials. The accessible name SHALL be unchanged. The ring border, backgrounds and initials colour SHALL come from `--tpair-ring-border`, `--tpair-a-bg`, `--tpair-b-bg` and `--tpair-initials-color`. `tokenAColor` / `tokenBColor`, when set, SHALL override the background tokens. (src: packages/ui/core/src/lib/retro/TokenPairIcon/TokenPairIcon.svelte)
+
+#### Scenario: Three initials
+
+- **GIVEN** `tokenA="WETH"`, `tokenB="usdc"`, `maxInitials={3}`
+- **WHEN** the icon renders
+- **THEN** the rings SHALL read `WET` and `USD`
+
+#### Scenario: Plain discs
+
+- **GIVEN** `showInitials={false}`
+- **WHEN** the icon renders without icon sources
+- **THEN** the rings SHALL contain no text and the `img` role SHALL keep the name `WETH/USDC`
+
+### Requirement: Form labels use label typography tokens
+
+Every form field label in core SHALL take `font-family`, `text-transform` and `letter-spacing` from `var(--input-label-font)`, `var(--input-label-transform)` and `var(--input-label-letter-spacing)`, and SHALL NOT hard-code those properties.
+
+#### Scenario: Complete Form labels use label typography tokens contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+Every form field label in core SHALL take `font-family`, `text-transform` and `letter-spacing` from `var(--input-label-font)`, `var(--input-label-transform)` and `var(--input-label-letter-spacing)`, and SHALL NOT hard-code those properties. Labels that used the default label size and weight SHALL take them from `var(--input-label-size)` and `var(--input-label-weight)`. This covers `TextInput`, `Select`, `NumberInput`, `MoneyInput`, `PasswordInput`, `Textarea`, `DatePicker`, `DateRangePicker`, `TimePicker`, `ComboBox`, `MultiSelect`, `TagInput`, `RangeSlider`, `CodeEditor`, `ColorPicker`, `ScheduleConfig` (group and field labels), `LeverageSlider` and the `SegmentedRadio` legend, and any rule painted with `color: var(--input-label)`. With default tokens every label SHALL render as before. (src: packages/ui/core/src/lib/forms; packages/ui/core/src/lib/trading/order/LeverageSlider.svelte; packages/ui/core/src/lib/trading/order/SegmentedRadio.svelte; packages/ui/core/src/lib/style-contract.test.ts)
+
+#### Scenario: Hard-coded label typography fails
+
+- **GIVEN** a form label rule that declares `text-transform: uppercase` or `font-family: var(--font-mono)`
+- **WHEN** the style-contract test runs
+- **THEN** it SHALL fail and name the rule and declaration
+
+#### Scenario: Calm label
+
+- **GIVEN** a `TextInput` with `label="Full name"` inside `data-theme="calm"`
+- **WHEN** it renders
+- **THEN** the label's computed `text-transform` SHALL be `none`, its `letter-spacing` `normal`, and its font family SHALL start with Inter
+- **AND** a `TextInput` label outside the calm subtree SHALL stay uppercase in JetBrains Mono
+
+### Requirement: TextInput native attribute passthrough
+
+`TextInput` SHALL forward `autocomplete`, `spellcheck`, `maxlength`, `name` and `inputmode` to its native `<input>`, and SHALL forward any other `aria-*` or `data-*` attribute passed to it.
+
+#### Scenario: Complete TextInput native attribute passthrough contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+`TextInput` SHALL forward `autocomplete`, `spellcheck`, `maxlength`, `name` and `inputmode` to its native `<input>`, and SHALL forward any other `aria-*` or `data-*` attribute passed to it. Component-managed attributes (`id`, `type`, `value`, `disabled`, `required`, `placeholder`, `aria-invalid`) SHALL take precedence over forwarded ones. A consumer `aria-describedby` SHALL be appended after the component's own error or hint id, separated by a space, and the attribute SHALL be omitted when neither exists. (src: packages/ui/core/src/lib/forms/TextInput/TextInput.svelte)
+
+#### Scenario: Native attributes reach the input
+
+- **GIVEN** `autocomplete="off"`, `spellcheck={false}`, `maxlength={42}`, `name="wallet"`, `inputmode="text"` and `data-testid="address"`
+- **WHEN** the `TextInput` renders
+- **THEN** the native `<input>` SHALL carry `autocomplete="off"`, `spellcheck="false"`, `maxlength="42"`, `name="wallet"`, `inputmode="text"` and `data-testid="address"`
+
+#### Scenario: aria-describedby is merged
+
+- **GIVEN** `id="addr"`, `hint="0x…"` and `aria-describedby="external"`
+- **WHEN** the `TextInput` renders
+- **THEN** the input's `aria-describedby` SHALL be `"addr-hint external"`
+- **AND** with `error="Invalid"` instead of a hint it SHALL be `"addr-error external"`
+- **AND** without hint or error it SHALL be `"external"`
+
+### Requirement: Select placeholder and attributes
+
+`Select` SHALL keep `"Select an option..."` as the default `placeholder`, rendered as a hidden, disabled `""` option that is selected while `value` is `""`.
+
+#### Scenario: Complete Select placeholder and attributes contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+`Select` SHALL keep `"Select an option..."` as the default `placeholder`, rendered as a hidden, disabled `""` option that is selected while `value` is `""`. It SHALL accept `placeholder={null}` (or `""`) to render only `options`. It SHALL NOT render the placeholder option when `options` contain an option whose value is `""`. It SHALL forward `id` to the native `<select>` (and its label), use `ariaLabel` as the `aria-label` when no visible `label` is set, and forward `data-*` attributes to the native `<select>`. (src: packages/ui/core/src/lib/forms/Select/Select.svelte)
+
+#### Scenario: Default placeholder unchanged
+
+- **GIVEN** two options and no `value`
+- **WHEN** the `Select` renders
+- **THEN** it SHALL render three options, the first being the hidden, disabled `"Select an option..."` option, and it SHALL be selected
+
+#### Scenario: Placeholder opt-out
+
+- **GIVEN** `placeholder={null}`, options `a` and `b`, and `value="b"`
+- **WHEN** the `Select` renders
+- **THEN** it SHALL render only the options `a` and `b`, with no hidden option, and `b` SHALL be selected
+
+#### Scenario: Explicit empty option wins
+
+- **GIVEN** options `""` ("All"), `a` and `b`, the default placeholder, and `value=""`
+- **WHEN** the `Select` renders
+- **THEN** no hidden placeholder option SHALL be rendered and the checked option SHALL be "All"
+
+#### Scenario: Visually hidden label
+
+- **GIVEN** `ariaLabel="Category"`, `id="row-1"` and `data-row="1"`, and no `label`
+- **WHEN** the `Select` renders
+- **THEN** the native `<select>` SHALL have the accessible name "Category", `id="row-1"` and `data-row="1"`
+
+### Requirement: Button ARIA passthrough and element ref
+
+`Button` SHALL forward any `aria-*` and `data-*` attribute passed to it (e.g. `aria-expanded`, `aria-controls`, `aria-pressed`) to the native `<button>`, while `aria-busy` and `aria-disabled` stay driven by `loading` and `disabled`. An `aria-label` attribute SHALL be used when `ariaLabel` is empty. `Button` SHALL expose a bindable `ref` holding the native `<button>` element. (src: packages/ui/core/src/lib/primitives/Button/Button.svelte)
+
+#### Scenario: Disclosure button
+
+- **GIVEN** `aria-expanded={false}` and `aria-controls="panel-1"`
+- **WHEN** the `Button` renders
+- **THEN** the native `<button>` SHALL carry `aria-expanded="false"` and `aria-controls="panel-1"`
+
+#### Scenario: Focus through ref
+
+- **GIVEN** a parent that binds `bind:ref` on a `Button`
+- **WHEN** the parent calls `ref.focus()`
+- **THEN** the native `<button>` SHALL become the active element
+
+### Requirement: NumberInput step button labels
+
+`NumberInput` SHALL accept `decreaseLabel` and `increaseLabel` props, defaulting to `"Decrease"` and `"Increase"`, and SHALL use them as the accessible names of its decrement and increment buttons. (src: packages/ui/core/src/lib/forms/NumberInput/NumberInput.svelte)
+
+#### Scenario: Localised step buttons
+
+- **GIVEN** `decreaseLabel="Diminuir"` and `increaseLabel="Aumentar"`
+- **WHEN** the `NumberInput` renders
+- **THEN** its step buttons SHALL be named "Diminuir" and "Aumentar"
+- **AND** without those props they SHALL be named "Decrease" and "Increase"
+
+### Requirement: Checkbox and Radio end-to-end testing guidance
+
+The README and the `Checkbox` / `Radio` Storybook descriptions SHALL state that the native input is visually hidden (1×1 px, clipped), that Playwright's `.check()` on a `getByLabel` / `getByRole` locator does not pass the visibility check, and that tests SHALL call `.check()` on the visible label text (e.g. `page.getByText("Accept terms").check()`) and use `getByLabel` / `getByRole` for assertions.
+
+#### Scenario: Complete Checkbox and Radio end-to-end testing guidance contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+The README and the `Checkbox` / `Radio` Storybook descriptions SHALL state that the native input is visually hidden (1×1 px, clipped), that Playwright's `.check()` on a `getByLabel` / `getByRole` locator does not pass the visibility check, and that tests SHALL call `.check()` on the visible label text (e.g. `page.getByText("Accept terms").check()`) and use `getByLabel` / `getByRole` for assertions. (src: README.md; packages/ui/core/src/lib/forms/Checkbox/Checkbox.stories.svelte; packages/ui/core/src/lib/forms/Radio/Radio.stories.svelte)
+
+#### Scenario: Documented locator
+
+- **WHEN** a consumer reads the README Form controls section or the Checkbox / Radio docs page
+- **THEN** it SHALL show `page.getByText(<label>).check()` for the action and `expect(page.getByLabel(<label>)).toBeChecked()` for the assertion
+
+### Requirement: StatusBadge contract
+
+The system SHALL provide `StatusBadge` with:
+
+- `status`: `"active"` (default), `"inactive"`, `"pending"`, `"error"`, `"warning"` or `"info"`;
+- `label` (default `""`);
+- `tone`: `"success"`, `"neutral"`, `"warning"`, `"error"` or `"info"`, overriding the colour.
+
+#### Scenario: Complete StatusBadge contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+The system SHALL provide `StatusBadge` with:
+
+- `status`: `"active"` (default), `"inactive"`, `"pending"`, `"error"`, `"warning"` or `"info"`;
+- `label` (default `""`);
+- `tone`: `"success"`, `"neutral"`, `"warning"`, `"error"` or `"info"`, overriding the colour. Without it the tone comes from the status: active→success, inactive→neutral, pending→warning, error→error, warning→warning, info→info;
+- `indicator`: `"dot"` (default) or `"icon"`;
+- `icon`: an optional snippet that replaces the dot or icon.
+
+With `indicator="dot"` and no `icon`, the badge SHALL render a colour dot and the label exactly as given, with the same colours as before for the original four statuses. With `indicator="icon"`, each status SHALL show its own `Icon` built-in (active `check`, inactive `minus`, pending `clock`, error `x`, warning `alert-triangle`, info `info`), and an empty `label` SHALL fall back to the status' default label (`"Active"`, `"Inactive"`, `"Pending"`, `"Error"`, `"Warning"`, `"Info"`). A custom `icon` snippet SHALL also enable the default label fallback. Icons SHALL be `aria-hidden`; the label carries the meaning. These defaults SHALL be exported as `STATUS_BADGE_DEFAULTS`. (src: packages/ui/core/src/lib/data/StatusBadge/StatusBadge.svelte; packages/ui/core/src/lib/data/StatusBadge/statusBadge.ts)
+
+#### Scenario: Six kinds are distinct without colour
+
+- **GIVEN** one `StatusBadge` per status, each with `indicator="icon"` and no label
+- **WHEN** they render
+- **THEN** each SHALL show a different icon shape and a different label
+
+#### Scenario: Default rendering is unchanged
+
+- **GIVEN** `<StatusBadge status="error" label="Down" />`
+- **WHEN** it renders
+- **THEN** the system SHALL render the colour dot and the text "Down", and no icon
+
+#### Scenario: Tone overrides the colour
+
+- **GIVEN** `<StatusBadge status="pending" tone="info" label="Queued" />`
+- **WHEN** it renders
+- **THEN** it SHALL use the info colours and keep the `pending` status class
+
+#### Scenario: StatusBadge stories fail on axe violations
+
+- **WHEN** the Storybook test project runs the `Data Display/StatusBadge` stories, including the calm and calm-dark ones
+- **THEN** they SHALL run with `parameters.a11y.test = "error"`
+
+### Requirement: Alert role
+
+The system SHALL give `Alert` a `role` prop: `"alert"` (default), `"status"` or `"note"`, rendered as the element's `role`. With `"status"` the element SHALL also carry `aria-live="polite"`. With `"alert"` or `"note"` it SHALL carry no `aria-live` attribute. Variant, severity, appearance and dismissal SHALL behave the same for every role. (src: packages/ui/core/src/lib/feedback/Alert/Alert.svelte)
+
+#### Scenario: Calm informational note
+
+- **GIVEN** `<Alert role="note" title="Watch-only wallet">`
+- **WHEN** it renders
+- **THEN** it SHALL expose `role="note"` and SHALL NOT be an `alert` or a live region
+
+#### Scenario: Polite status
+
+- **GIVEN** `<Alert role="status" title="Saved">`
+- **WHEN** it renders
+- **THEN** it SHALL expose `role="status"` with `aria-live="polite"`
+
+#### Scenario: Default stays assertive
+
+- **GIVEN** an `Alert` without `role`
+- **WHEN** it renders
+- **THEN** it SHALL expose `role="alert"`
+
+### Requirement: Table accessibility options
+
+The system SHALL give `Table` these optional props, and without them SHALL render as before:
+
+- `caption`: rendered as the table's `<caption>`, which names the table.
+
+#### Scenario: Complete Table accessibility options contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+The system SHALL give `Table` these optional props, and without them SHALL render as before:
+
+- `caption`: rendered as the table's `<caption>`, which names the table. With `captionHidden` the caption SHALL be visually hidden and still name the table.
+- `rowHeader`: a column key whose body cells render as `<th scope="row">` instead of `<td>`.
+- `rowAttributes(row, rowIndex)`: attributes spread on each body `<tr>` (for example `data-*`, `aria-current`). A returned `class` SHALL be added next to the built-in row class; `undefined` values SHALL render no attribute.
+- `cell`: a snippet receiving `{ row, column, rowIndex }` that renders every column without its own `cell` snippet. A column's `cell` SHALL take precedence.
+
+`rowIndex` SHALL be the row's display position (0-based) after sorting. Sorting SHALL behave as before. (src: packages/ui/core/src/lib/data/Table/Table.svelte; packages/ui/core/src/lib/data/Table/types.ts)
+
+#### Scenario: Caption and row headers
+
+- **GIVEN** a `Table` with `caption="Team members"` and `rowHeader="name"`
+- **WHEN** it renders
+- **THEN** the table SHALL be named "Team members"
+- **AND** each `name` cell SHALL be a `<th scope="row">`
+
+#### Scenario: Per-row attributes
+
+- **GIVEN** `rowAttributes` returning `{ "data-id": row.id, "aria-current": rowIndex === 1 ? "true" : undefined }`
+- **WHEN** the table renders two rows
+- **THEN** both rows SHALL carry `data-id`, and only the second SHALL carry `aria-current="true"`
+
+#### Scenario: Cell snippet after sorting
+
+- **GIVEN** a table with a `cell` snippet and rows Alice, Bob
+- **WHEN** the user sorts by name descending
+- **THEN** the first rendered cell SHALL receive the row Bob with `rowIndex` 0
+
+#### Scenario: Default rendering is unchanged
+
+- **GIVEN** a `Table` with only `columns` and `rows`
+- **WHEN** it renders
+- **THEN** there SHALL be no caption, no row headers and no extra row attributes
+
+### Requirement: TokenBalanceRow contract
+
+The system SHALL provide a `TokenBalanceRow` crypto component for token lists.
+
+#### Scenario: Complete TokenBalanceRow contract contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+The system SHALL provide a `TokenBalanceRow` crypto component for token lists. It SHALL:
+
+- Take a required `symbol`, a required decimal-string `amount` and a required `decimals`, plus optional `name`, `value` (`{ amount: string; currency: string }`, an ISO 4217 amount), `unpricedLabel` (default `"No price available"`), `chain`, `locale`, `icon` (snippet) and `as` (`"div"` | `"li"`, default `"div"`).
+- Render the amount through `CurrencyDisplay` in asset mode (`currency` = `symbol`, the given `decimals`) and the value through `CurrencyDisplay` in ISO mode, so neither is converted to a JS `number`.
+- Render `unpricedLabel` as text in place of the value when `value` is absent.
+- Render `chain`, when set, as a `NetworkBadge` without chain id and without status dot.
+- Render the `icon` inside an element with `aria-hidden="true"`.
+- Use `as` as the root element, so the row is a list item inside `<ul>`/`<ol>` with `as="li"` and a plain block elsewhere (e.g. a table cell).
+- Have no hover lift or glow and use a dense layout built from foundation tokens.
+
+(src: packages/ui/core/src/lib/crypto/TokenBalanceRow/TokenBalanceRow.svelte)
+
+#### Scenario: Exact 18-decimal amount
+
+- **GIVEN** `symbol="ETH"`, `decimals={18}`, `amount="123456789012345678.123456789012345678"`, `locale="en-US"`
+- **WHEN** it renders
+- **THEN** the amount SHALL display `123,456,789,012,345,678.123456789012345678 ETH`
+- **AND** `amount="0.000000000000000001"` with `locale="pt-BR"` SHALL display `0,000000000000000001 ETH`
+
+#### Scenario: Priced token
+
+- **GIVEN** `value={{ amount: "4512.3", currency: "USD" }}` and `locale="en-US"`
+- **WHEN** it renders
+- **THEN** the value SHALL display `$4,512.30`
+- **AND** no unpriced text SHALL be rendered
+
+#### Scenario: Unpriced token
+
+- **GIVEN** no `value`
+- **WHEN** it renders
+- **THEN** it SHALL display `No price available`
+- **AND** with `unpricedLabel="Sem cotação"` it SHALL display `Sem cotação` instead
+
+#### Scenario: Row in a list
+
+- **GIVEN** a `<ul>` containing a `TokenBalanceRow` with `as="li"` and `chain="Base"`
+- **WHEN** it renders
+- **THEN** the row SHALL be an `li` exposed as a `listitem`
+- **AND** the chain SHALL be shown as `Base` without a chain id or status dot
+- **AND** without `as` the root SHALL be a `div`
+
+### Requirement: NetworkBadge label-only display
+
+`NetworkBadge` SHALL accept an optional `chainId` and an optional `showStatus` (default `true`).
+
+#### Scenario: Complete NetworkBadge label-only display contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+`NetworkBadge` SHALL accept an optional `chainId` and an optional `showStatus` (default `true`). It SHALL render `#{chainId}` after the network name only when `chainId` is defined (including `0`). When `showStatus` is `false` it SHALL render neither the connection dot nor the disconnected dimming. With `chainId` set and `showStatus` omitted it SHALL render as before: name, `#{chainId}` and a status dot that reflects `connected`.
+
+(src: packages/ui/core/src/lib/crypto/NetworkBadge/NetworkBadge.svelte)
+
+#### Scenario: Name only
+
+- **GIVEN** `network="Base"` and no `chainId`
+- **WHEN** it renders
+- **THEN** it SHALL display `Base` and no `#` chain id
+- **AND** `chainId={0}` SHALL display `#0`
+
+#### Scenario: Status hidden
+
+- **GIVEN** `network="Ethereum"`, `showStatus={false}` and `connected={false}`
+- **WHEN** it renders
+- **THEN** no status dot SHALL be rendered and the badge SHALL NOT be dimmed
+
+#### Scenario: Defaults unchanged
+
+- **GIVEN** `network="Ethereum"`, `chainId={1}`
+- **WHEN** it renders
+- **THEN** it SHALL display `Ethereum`, `#1` and a connected status dot
+- **AND** with `connected={false}` the dot SHALL show the disconnected state and the badge SHALL be dimmed

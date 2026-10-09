@@ -3,7 +3,9 @@
 ## Purpose
 
 The `@cyberdynecorp/svelte-ui-foundation` package provides the design system's tokens: colors, typography, spacing, radius, and animations. It follows a three-layer CSS custom-property architecture (primitives -> semantic -> component) so that all components consume tokens rather than literal values, and theming is achieved entirely at the token layer. The system is dark-first with an opt-in light theme. A TypeScript token object mirrors a subset of the CSS tokens for programmatic use.
+
 ## Requirements
+
 ### Requirement: Three-layer token architecture
 
 The foundation SHALL expose reference, semantic and component CSS token layers through base.css.
@@ -363,3 +365,69 @@ Foundation SHALL define `--color-trade-long`, `--color-trade-long-bg`, `--color-
 - **WHEN** trading components render
 - **THEN** long / buy / up states SHALL render red and short / sell / down states green, with no component changes
 
+### Requirement: Liquidity component tokens
+
+Foundation SHALL define Layer 3 tokens for the liquidity widgets in `colors.css`, in both `:root` and `[data-theme="light"]`, within one comment-delimited block:
+
+- `--lpos-border` and `--lpos-radius`, for the `LiquidityPositionCard` frame.
+
+#### Scenario: Complete Liquidity component tokens contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+Foundation SHALL define Layer 3 tokens for the liquidity widgets in `colors.css`, in both `:root` and `[data-theme="light"]`, within one comment-delimited block:
+
+- `--lpos-border` and `--lpos-radius`, for the `LiquidityPositionCard` frame.
+- `--lrange-track-bg`, `--lrange-track-border`, `--lrange-radius` and `--lrange-marker-color`, for the `LiquidityRangeBar` track and marker.
+- `--tpair-ring-border`, `--tpair-a-bg`, `--tpair-b-bg` and `--tpair-initials-color`, for the `TokenPairIcon` rings and initials.
+
+The defaults SHALL reproduce the previous hard-coded look: `2px solid var(--color-text-primary)` borders, `0` radii, `var(--color-surface-raised)` track, `var(--color-text-primary)` marker, brand / secondary default ring fills and `var(--color-text-inverse)` initials. Every design-style preset SHALL redefine them with the same values. `calm` and `calm-dark` SHALL use `1px solid var(--color-border-subtle)` borders, `var(--radius-pill)` for the track, `var(--radius-lg)` for the card, `var(--color-action-brand-bg)` / `var(--color-action-secondary-bg)` ring fills and `var(--color-text-primary)` initials. In every preset, `--tpair-initials-color` SHALL meet 4.5:1 on `--tpair-a-bg` and `--tpair-b-bg`. (src: packages/ui/foundation/src/lib/styles/colors.css; packages/ui/foundation/src/lib/themes/calm.css; packages/ui/foundation/src/lib/themes/presets.test.ts; packages/ui/foundation/src/lib/styles/style-tokens.test.ts)
+
+#### Scenario: Defaults keep today's look
+
+- **WHEN** the `:root` and light declarations of `colors.css` are read
+- **THEN** `--lrange-track-border`, `--tpair-ring-border` and `--lpos-border` SHALL be `2px solid var(--color-text-primary)` and `--lrange-radius` SHALL be `0`
+
+#### Scenario: Calm softens the widgets
+
+- **WHEN** the declarations for `data-theme="calm"` or `data-theme="calm-dark"` are collected
+- **THEN** the three border tokens SHALL be `1px solid var(--color-border-subtle)`, `--lrange-radius` SHALL be `var(--radius-pill)` and `--tpair-initials-color` SHALL be `var(--color-text-primary)`
+
+#### Scenario: Presets stay complete and legible
+
+- **GIVEN** the preset completeness and contrast guards
+- **WHEN** they run for every preset
+- **THEN** every preset SHALL define all ten tokens
+- **AND** `--tpair-initials-color` SHALL reach at least 4.5:1 on both ring fills
+
+### Requirement: Form label typography tokens
+
+The foundation SHALL provide shared typography tokens for form labels.
+
+#### Scenario: Complete Form label typography tokens contract
+
+- **WHEN** this capability is implemented or used
+- **THEN** it SHALL satisfy the following contract:
+
+The system SHALL define, in the `:root` block of `typography.css`, five form label tokens whose defaults reproduce the previous label literals:
+
+- `--input-label-font`: `var(--font-mono)`
+- `--input-label-size`: `0.8125rem`
+- `--input-label-weight`: `var(--font-weight-medium)`
+- `--input-label-transform`: `uppercase`
+- `--input-label-letter-spacing`: `0.04em`
+
+The `calm` and `calm-dark` themes SHALL set `--input-label-font` to `var(--font-body)`, `--input-label-transform` to `none` and `--input-label-letter-spacing` to `normal`, and SHALL keep the default size and weight. Other presets MAY leave the tokens unset. (src: packages/ui/foundation/src/lib/styles/typography.css; packages/ui/foundation/src/lib/themes/calm.css; packages/ui/foundation/src/lib/styles/style-tokens.test.ts)
+
+#### Scenario: Defaults keep the mono uppercase label
+
+- **WHEN** the `:root` declarations of `typography.css` are read
+- **THEN** the five `--input-label-*` tokens SHALL equal the defaults listed above
+
+#### Scenario: Calm uses sentence case in the body font
+
+- **GIVEN** an element with `data-theme="calm"` or `data-theme="calm-dark"`
+- **WHEN** `--input-label-font` is resolved within that theme
+- **THEN** it SHALL resolve to the Inter stack, not JetBrains Mono
+- **AND** `--input-label-transform` SHALL be `none` and `--input-label-letter-spacing` SHALL be `normal`

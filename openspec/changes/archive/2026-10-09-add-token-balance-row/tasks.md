@@ -16,4 +16,4 @@
 
 - [x] 3.1 README Crypto list and `documentation/TRD.md`
 - [x] 3.2 Changeset (minor bump of `@cyberdynecorp/svelte-ui-core`)
-- [ ] 3.3 Archive this change once released
+- [x] 3.3 Archive this change once released
