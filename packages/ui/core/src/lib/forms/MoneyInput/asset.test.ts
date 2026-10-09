@@ -39,9 +39,9 @@ describe("formatAmount", () => {
   });
 
   it("places a symbol like a currency symbol", () => {
-    expect(formatAmount("1.5", { currency: "BTC", decimals: 8, symbol: "₿", locale: "en-US" })).toBe(
-      "₿1.50000000",
-    );
+    expect(
+      formatAmount("1.5", { currency: "BTC", decimals: 8, symbol: "₿", locale: "en-US" }),
+    ).toBe("₿1.50000000");
   });
 
   it("formats 18-decimal values exactly", () => {
@@ -53,6 +53,38 @@ describe("formatAmount", () => {
 
   it("keeps ISO formatting without decimals", () => {
     expect(formatAmount("1234.5", { currency: "USD", locale: "en-US" })).toBe("$1,234.50");
+  });
+});
+
+describe("formatAmount minDecimals", () => {
+  const eth = { currency: "ETH", decimals: 6, locale: "en-US" };
+
+  it("drops trailing zeros down to minDecimals", () => {
+    expect(formatAmount("2", { ...eth, minDecimals: 0 })).toBe("2\u00a0ETH");
+    expect(formatAmount("2", { ...eth, minDecimals: 2 })).toBe("2.00\u00a0ETH");
+    expect(formatAmount("0.00067", { ...eth, minDecimals: 0 })).toBe("0.00067\u00a0ETH");
+    expect(formatAmount("0.00067", { ...eth, minDecimals: 0, locale: "pt-BR" })).toBe(
+      "0,00067\u00a0ETH",
+    );
+  });
+
+  it("still rounds at decimals and keeps the fixed width by default", () => {
+    expect(formatAmount("1.0000005", { ...eth, minDecimals: 0 })).toBe("1.000001\u00a0ETH");
+    expect(formatAmount("2", eth)).toBe("2.000000\u00a0ETH");
+  });
+
+  it("does not change the parsing precision", () => {
+    expect(resolveMinorUnits({ ...eth, minDecimals: 0 })).toBe(6);
+  });
+
+  it("rejects minDecimals outside 0..decimals", () => {
+    for (const minDecimals of [-1, 7, 1.5, Number.NaN]) {
+      expect(() => formatAmount("1", { ...eth, minDecimals })).toThrow(RangeError);
+    }
+  });
+
+  it("is ignored in ISO mode", () => {
+    expect(formatAmount("2", { currency: "USD", locale: "en-US", minDecimals: 0 })).toBe("$2.00");
   });
 });
 

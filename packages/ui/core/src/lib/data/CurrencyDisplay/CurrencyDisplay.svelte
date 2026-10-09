@@ -20,6 +20,7 @@
     maskedLabel = "Hidden amount",
     negativeLabel = "negative",
     decimals = undefined,
+    minDecimals = undefined,
     symbol = undefined,
   }: {
     /** Decimal string ("-1234.50"), never a number. */
@@ -42,6 +43,12 @@
      */
     decimals?: number;
     /**
+     * Asset mode only: fewest fraction digits to show (0–`decimals`). Trailing
+     * zeros beyond it are dropped ("2 ETH", "0.00067 ETH"); defaults to
+     * `decimals`, keeping the fixed-width display.
+     */
+    minDecimals?: number;
+    /**
      * Asset mode only: symbol placed where the locale puts currency symbols
      * ("₿1.00"), unless `currencyDisplay` is "code" or "name".
      */
@@ -55,6 +62,7 @@
       signDisplay,
       currencyDisplay,
       decimals,
+      minDecimals,
       symbol,
     }),
   );
@@ -69,7 +77,7 @@
 
   $effect(() => {
     if (formatted !== null) return;
-    const key = `${String(amount)}|${currency}|${String(decimals)}`;
+    const key = `${String(amount)}|${currency}|${String(decimals)}|${String(minDecimals)}`;
     if (key === lastWarned) return;
     lastWarned = key;
     console.warn(

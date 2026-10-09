@@ -403,6 +403,110 @@ describe("CurrencyDisplay crypto / custom assets", () => {
   });
 });
 
+describe("CurrencyDisplay trimmed asset amounts", () => {
+  const trimmed: Array<[string, string, number, number, string, string]> = [
+    ["ETH", "2", 6, 0, "en-US", "2 ETH"],
+    ["ETH", "0.00067", 6, 0, "pt-BR", "0,00067 ETH"],
+    ["ETH", "2.5", 6, 0, "en-US", "2.5 ETH"],
+    ["USDC", "1250.5", 6, 2, "en-US", "1,250.50 USDC"],
+    ["USDC", "1250.123456", 6, 2, "en-US", "1,250.123456 USDC"],
+    ["ETH", "2", 18, 18, "en-US", "2.000000000000000000 ETH"],
+  ];
+
+  it.each(trimmed)(
+    "formats %s %s (%i decimals, min %i, %s) as %s",
+    (currency, amount, decimals, minDecimals, locale, expected) => {
+      const { container } = render(CurrencyDisplay, {
+        props: { amount, currency, decimals, minDecimals, locale },
+      });
+      expect(value(container)).toBe(expected);
+    },
+  );
+
+  it("keeps the fixed width when minDecimals is omitted", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: { amount: "2", currency: "ETH", decimals: 6, locale: "en-US" },
+    });
+    expect(value(container)).toBe("2.000000 ETH");
+  });
+
+  it("still rounds at decimals, then trims", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: {
+        amount: "1.0000005",
+        currency: "USDC",
+        decimals: 6,
+        minDecimals: 0,
+        locale: "en-US",
+      },
+    });
+    expect(value(container)).toBe("1.000001 USDC");
+  });
+
+  it("treats a trimmed amount that rounds to zero as zero", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: {
+        amount: "-0.0000004",
+        currency: "USDC",
+        decimals: 6,
+        minDecimals: 0,
+        locale: "en-US",
+        tone: "signed",
+      },
+    });
+    expect(value(container)).toBe("0 USDC");
+    expect(root(container)).not.toHaveClass("cy-currency--negative");
+  });
+
+  it("places a symbol and trims together", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: {
+        amount: "1.5",
+        currency: "BTC",
+        decimals: 8,
+        minDecimals: 0,
+        symbol: "₿",
+        locale: "en-US",
+      },
+    });
+    expect(value(container)).toBe("₿1.5");
+  });
+
+  it("masks the trimmed shape", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: {
+        amount: "2.5",
+        currency: "ETH",
+        decimals: 6,
+        minDecimals: 0,
+        locale: "en-US",
+        masked: true,
+      },
+    });
+    expect(text(container.querySelector(".cy-currency__sizer"))).toBe("0.0 ETH");
+  });
+
+  it("ignores minDecimals in ISO mode", () => {
+    const { container } = render(CurrencyDisplay, {
+      props: { amount: "2", currency: "USD", minDecimals: 0, locale: "en-US" },
+    });
+    expect(value(container)).toBe("$2.00");
+  });
+
+  it.each([-1, 7, 1.5, Number.NaN])(
+    "renders an em dash and warns once for minDecimals %s",
+    (minDecimals) => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const { container } = render(CurrencyDisplay, {
+        props: { amount: "2", currency: "ETH", decimals: 6, minDecimals, locale: "en-US" },
+      });
+      expect(value(container)).toBe("—");
+      expect(root(container)).toHaveClass("cy-currency--invalid");
+      expect(warn).toHaveBeenCalledTimes(1);
+    },
+  );
+});
+
 describe("asset helpers", () => {
   it("formats assets from decimal strings", () => {
     expect(formatAsset("1234.5678", { currency: "ETH", decimals: 4, locale: "pt-BR" })).toBe(
