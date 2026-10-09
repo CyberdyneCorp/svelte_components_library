@@ -27,4 +27,4 @@
 - [x] 5.1 Stories with `parameters.a11y.test = "error"`, including calm and calm-dark stories
 - [x] 5.2 README and TRD entries
 - [x] 5.3 Changeset (minor bump of `@cyberdynecorp/svelte-ui-core`)
-- [ ] 5.4 Archive this change once released
+- [x] 5.4 Archive this change once released

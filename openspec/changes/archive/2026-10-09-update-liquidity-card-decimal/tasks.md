@@ -19,4 +19,4 @@
 ## 4. Release
 
 - [x] 4.1 Changeset (minor bumps of `@cyberdynecorp/svelte-ui-core` and `@cyberdynecorp/svelte-ui-foundation`)
-- [ ] 4.2 Archive this change once released
+- [x] 4.2 Archive this change once released
