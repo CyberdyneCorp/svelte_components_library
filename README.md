@@ -187,7 +187,7 @@ Use components:
 `Tabs` has two modes. Items without `href` are an ARIA tab widget (`role="tablist"`, arrow keys) that switches content in place. When items carry `href` they are link tabs for section navigation across routes: a `<nav>` landmark named by `ariaLabel`, holding a list of `<a>` elements with `aria-current="page"` on the `activeId` item. Link tabs keep normal link keyboard behaviour (Tab, Enter) and do not call `onchange`; drive `activeId` from the current route.
 
 ### Data Display (20)
-`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList` · `OrgChart` · `WeatherCard` · `CurrencyDisplay` (locale money amounts, crypto/custom assets via `decimals`, masked mode) · `KpiCard` (KPI tile with trend + delta; `value` takes a string or a snippet) · `BudgetBar` (money budget meter)
+`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList` · `OrgChart` · `WeatherCard` · `CurrencyDisplay` (locale money amounts, crypto/custom assets via `decimals`, trailing zeros trimmed down to `minDecimals`, masked mode) · `KpiCard` (KPI tile with trend + delta; `value` takes a string or a snippet) · `BudgetBar` (money budget meter)
 
 `StatusBadge` has six statuses: `active`, `inactive`, `pending`, `error`, `warning` and `info`. With `indicator="icon"` each one shows its own icon (check, minus, clock, x, triangle, info) and a default label, so badges can be told apart without colour (WCAG 1.4.1). `tone` (`success` | `neutral` | `warning` | `error` | `info`) overrides the colour, and the `icon` snippet replaces the marker. The default `indicator="dot"` renders as before.
 
@@ -206,7 +206,7 @@ Use components:
 `Chatbox` · `ChatPanel` · `ChatResponse` · `PromptExample` · `WelcomeText` · `BotAnswer` · `CommentThread` · `ChatSidebar` (conversation list with rename/delete)
 
 ### Crypto / Web3 (14)
-`TokenBalance` · `TokenBalanceRow` (compact list row: exact token amount, fiat value or unpriced label, chain label; `as="li"` for lists) · `TransactionList` · `AddressDisplay` · `NetworkBadge` (optional `chainId`; `showStatus={false}` hides the connection dot) · `NFTCard` · `PriceDisplay` · `MetricCard` · `GasEstimate` · `TierBadge` (6-tier NFT access system) · `SwapInterface` · `TokenSelector` · `StakingCard` · `TransactionConfirm`
+`TokenBalance` · `TokenBalanceRow` (compact list row: exact token amount, trimmed to `minDecimals` when set, fiat value or unpriced label, chain label; `as="li"` for lists; `data-*` forwarded to the root) · `TransactionList` · `AddressDisplay` · `NetworkBadge` (optional `chainId`; `showStatus={false}` hides the connection dot) · `NFTCard` · `PriceDisplay` · `MetricCard` · `GasEstimate` · `TierBadge` (6-tier NFT access system) · `SwapInterface` · `TokenSelector` · `StakingCard` · `TransactionConfirm`
 
 ### ML / Data Tools (11)
 `CodeBlock` (syntax highlighting) · `Terminal` · `LogViewer` (severity filtering) · `Slider` · `StepProgress` · `Timeline` · `DataChart` (chart wrapper) · `Kbd` (keyboard shortcuts) · `NotebookCell` · `ModelCard` · `ConfusionMatrix`

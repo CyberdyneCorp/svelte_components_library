@@ -12,6 +12,7 @@
     },
     argTypes: {
       as: { control: "inline-radio", options: ["div", "li"] },
+      minDecimals: { control: { type: "number", min: 0 } },
     },
   });
 
@@ -75,6 +76,49 @@
     unpricedLabel: "No market price",
   }}
 />
+
+<!-- `minDecimals` trims trailing zeros ("2 ETH" rather than "2.000000 ETH");
+     stablecoins keep two digits. `data-*` attributes land on the root element. -->
+<Story name="Trimmed amounts" asChild>
+  <ul style="max-width: 32rem; margin: 0; padding: 0;">
+    <TokenBalanceRow
+      as="li"
+      locale="en-US"
+      symbol="ETH"
+      name="Ether"
+      amount="2"
+      decimals={6}
+      minDecimals={0}
+      chain="Ethereum"
+      value={{ amount: "6318.40", currency: "USD" }}
+      data-holding="eth-mainnet"
+    />
+    <TokenBalanceRow
+      as="li"
+      locale="en-US"
+      symbol="ETH"
+      name="Ether"
+      amount="0.00067"
+      decimals={6}
+      minDecimals={0}
+      chain="Base"
+      value={{ amount: "2.12", currency: "USD" }}
+      data-holding="eth-base"
+    />
+    <TokenBalanceRow
+      as="li"
+      locale="en-US"
+      symbol="USDC"
+      name="USD Coin"
+      amount="1250.5"
+      decimals={6}
+      minDecimals={2}
+      chain="Base"
+      value={{ amount: "1250.50", currency: "USD" }}
+      data-holding="usdc-base"
+    />
+  </ul>
+</Story>
 
 {#snippet walletList()}
   <section

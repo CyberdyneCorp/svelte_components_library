@@ -97,6 +97,39 @@
   {/snippet}
 </Story>
 
+<!-- Asset mode with `minDecimals`: trailing zeros are dropped down to that many
+     fraction digits, while `decimals` still sets the rounding precision. -->
+<Story name="TrimmedAssets">
+  {#snippet template()}
+    <div style="display: grid; gap: var(--space-2); justify-items: end;">
+      <CurrencyDisplay amount="2" currency="ETH" decimals={6} minDecimals={0} locale="en-US" />
+      <CurrencyDisplay
+        amount="0.00067"
+        currency="ETH"
+        decimals={6}
+        minDecimals={0}
+        locale="pt-BR"
+      />
+      <CurrencyDisplay
+        amount="1250.5"
+        currency="USDC"
+        decimals={6}
+        minDecimals={2}
+        locale="en-US"
+      />
+      <CurrencyDisplay
+        amount="1.5"
+        currency="BTC"
+        decimals={8}
+        minDecimals={0}
+        symbol="₿"
+        locale="en-US"
+      />
+      <CurrencyDisplay amount="2" currency="ETH" decimals={6} locale="en-US" />
+    </div>
+  {/snippet}
+</Story>
+
 <Story
   name="Masked"
   args={{

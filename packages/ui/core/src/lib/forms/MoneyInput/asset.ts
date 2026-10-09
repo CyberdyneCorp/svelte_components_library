@@ -13,6 +13,12 @@ export const MAX_ASSET_DECIMALS = 100;
 export interface AmountFormatOptions extends FormatMoneyOptions {
   /** Fraction digits of a custom asset (USDC 6, BTC 8, ETH 18). */
   decimals?: number;
+  /**
+   * Asset mode only: fewest fraction digits to display (0–`decimals`). Below
+   * `decimals` it drops trailing zeros down to this many ("2 ETH", "0.00067 ETH");
+   * defaults to `decimals`, so amounts keep a fixed width.
+   */
+  minDecimals?: number;
   /** Optional asset symbol ("₿", "Ξ") placed where the locale puts currency symbols. */
   symbol?: string;
 }
@@ -33,10 +39,21 @@ function assetDecimals(options: AssetFormatOptions): number {
   return decimals;
 }
 
+/** Validated lower fraction-digit bound (integer 0–`decimals`, default `decimals`); throws otherwise. */
+function assetMinDecimals(options: AssetFormatOptions, decimals: number): number {
+  const { minDecimals } = options;
+  if (minDecimals === undefined) return decimals;
+  if (!Number.isInteger(minDecimals) || minDecimals < 0 || minDecimals > decimals) {
+    throw new RangeError(`Invalid asset minDecimals: ${minDecimals}`);
+  }
+  return minDecimals;
+}
+
 /**
  * Fraction digits for parsing, clamping and rounding: the asset's `decimals`
  * in asset mode, the ISO currency's minor units otherwise. Throws on invalid
- * decimals, an empty asset code or an unknown ISO code.
+ * decimals, an empty asset code or an unknown ISO code. `minDecimals` only
+ * affects display, never the precision an amount is parsed or rounded to.
  */
 export function resolveMinorUnits(options: AmountFormatOptions): number {
   return isAssetOptions(options)
@@ -48,7 +65,10 @@ export function resolveMinorUnits(options: AmountFormatOptions): number {
 export function amountRounding(options: AmountFormatOptions): Intl.NumberFormatOptions {
   if (!isAssetOptions(options)) return { style: "currency", currency: options.currency };
   const digits = assetDecimals(options);
-  return { minimumFractionDigits: digits, maximumFractionDigits: digits };
+  return {
+    minimumFractionDigits: assetMinDecimals(options, digits),
+    maximumFractionDigits: digits,
+  };
 }
 
 /** The symbol to place like a currency symbol, or null to append the code. */
@@ -60,7 +80,8 @@ function assetSymbol(options: AssetFormatOptions): string | null {
 
 /**
  * Locale formatting of a custom asset amount with exactly `decimals` fraction
- * digits (half-expand rounding, as Intl does for currencies). The code is
+ * digits (half-expand rounding, as Intl does for currencies), or between
+ * `minDecimals` and `decimals` digits when `minDecimals` is set. The code is
  * appended after the number with a no-break space ("1.234,5678 ETH") in every
  * locale; a `symbol` instead takes the locale's currency-symbol position
  * ("₿1.00" en-US, "1,00 ₿" de-DE), borrowed from the ISO "no currency" XXX.

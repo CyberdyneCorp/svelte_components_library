@@ -5,17 +5,22 @@
   import CurrencyDisplay from "../../data/CurrencyDisplay/CurrencyDisplay.svelte";
   import NetworkBadge from "../NetworkBadge/NetworkBadge.svelte";
 
+  /** `data-*` attributes forwarded to the root element (test hooks, analytics ids). */
+  type DataAttributes = { [key: `data-${string}`]: string | number | boolean | null | undefined };
+
   let {
     symbol,
     name = undefined,
     amount,
     decimals,
+    minDecimals = undefined,
     value = undefined,
     unpricedLabel = "No price available",
     chain = undefined,
     locale = undefined,
     as = "div",
     icon,
+    ...rest
   }: {
     /** Token code ("ETH", "USDC"); also appended to the formatted amount. */
     symbol: string;
@@ -25,6 +30,11 @@
     amount: string;
     /** Fraction digits the amount is shown with (18 for ETH, 6 for USDC). */
     decimals: number;
+    /**
+     * Fewest fraction digits to show (0–`decimals`); trailing zeros beyond it
+     * are dropped ("2 ETH" instead of "2.000000 ETH"). Defaults to `decimals`.
+     */
+    minDecimals?: number;
     /** Fiat value as a decimal string plus ISO 4217 code; omit when the token has no price. */
     value?: { amount: string; currency: string };
     /** Text shown instead of the value when `value` is absent (e.g. the reason there is no price). */
@@ -35,10 +45,10 @@
     /** Root element: "li" inside a `<ul>`/`<ol>`, "div" anywhere else (e.g. a table cell). */
     as?: "div" | "li";
     icon?: Snippet;
-  } = $props();
+  } & DataAttributes = $props();
 </script>
 
-<svelte:element this={as} class="cy-token-row">
+<svelte:element this={as} class="cy-token-row" {...rest}>
   {#if icon}
     <span class="cy-token-row__icon" aria-hidden="true">
       {@render icon()}
@@ -57,7 +67,7 @@
   {/if}
   <span class="cy-token-row__figures">
     <span class="cy-token-row__amount">
-      <CurrencyDisplay {amount} currency={symbol} {decimals} {locale} />
+      <CurrencyDisplay {amount} currency={symbol} {decimals} {minDecimals} {locale} />
     </span>
     {#if value}
       <span class="cy-token-row__value">

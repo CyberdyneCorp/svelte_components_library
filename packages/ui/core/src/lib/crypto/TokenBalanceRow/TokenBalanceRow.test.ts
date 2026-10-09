@@ -86,6 +86,53 @@ describe("TokenBalanceRow", () => {
     list.remove();
   });
 
+  it("trims trailing zeros down to minDecimals", () => {
+    const eth = render(TokenBalanceRow, {
+      props: { symbol: "ETH", amount: "2", decimals: 6, minDecimals: 0, locale: "en-US" },
+    });
+    expect(text(eth.container.querySelector(".cy-token-row__amount"))).toBe("2 ETH");
+
+    const dust = render(TokenBalanceRow, {
+      props: { symbol: "ETH", amount: "0.00067", decimals: 6, minDecimals: 0, locale: "pt-BR" },
+    });
+    expect(text(dust.container.querySelector(".cy-token-row__amount"))).toBe("0,00067 ETH");
+
+    const stable = render(TokenBalanceRow, {
+      props: { symbol: "USDC", amount: "1250.5", decimals: 6, minDecimals: 2, locale: "en-US" },
+    });
+    expect(text(stable.container.querySelector(".cy-token-row__amount"))).toBe("1,250.50 USDC");
+  });
+
+  it("keeps the fixed-width amount when minDecimals is omitted", () => {
+    const { container } = render(TokenBalanceRow, {
+      props: { symbol: "ETH", amount: "2", decimals: 6, locale: "en-US" },
+    });
+    expect(text(container.querySelector(".cy-token-row__amount"))).toBe("2.000000 ETH");
+  });
+
+  it("forwards data-* attributes to the root element, for div and li", () => {
+    const div = render(TokenBalanceRow, {
+      props: { ...ETH, amount: "1", "data-holding": "eth-mainnet", "data-testid": "row" },
+    });
+    const root = div.container.querySelector(".cy-token-row") as HTMLElement;
+    expect(root.tagName).toBe("DIV");
+    expect(root).toHaveAttribute("data-holding", "eth-mainnet");
+    expect(screen.getByTestId("row")).toBe(root);
+    expect(root).toHaveClass("cy-token-row");
+
+    const list = document.createElement("ul");
+    document.body.appendChild(list);
+    render(TokenBalanceRow, {
+      target: list,
+      props: { ...ETH, amount: "1", as: "li", "data-holding": "eth-base" },
+    });
+    expect(list.querySelector(":scope > li.cy-token-row")).toHaveAttribute(
+      "data-holding",
+      "eth-base",
+    );
+    list.remove();
+  });
+
   it("renders the icon snippet hidden from assistive technology", () => {
     const icon = createRawSnippet(() => ({ render: () => "<svg data-testid='icon'></svg>" }));
     render(TokenBalanceRow, { props: { ...ETH, amount: "1", icon } });
