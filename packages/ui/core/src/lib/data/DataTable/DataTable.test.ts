@@ -77,6 +77,28 @@ describe("DataTable", () => {
     expect(checkboxes.length).toBe(5); // 1 header + 4 rows
   });
 
+  it("names the selection checkboxes and header for assistive technology", () => {
+    render(DataTable, { props: { columns, rows, selectable: true } });
+    expect(screen.getByRole("checkbox", { name: "Select all rows" })).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: "Select row 1" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: /Select all rows/ })).toBeInTheDocument();
+  });
+
+  it("builds translated selection names from selectAllLabel and selectRowLabel", () => {
+    render(DataTable, {
+      props: {
+        columns,
+        rows,
+        selectable: true,
+        selectAllLabel: "Selecionar todas",
+        selectRowLabel: (row: Record<string, unknown>) => `Selecionar ${row.name}`,
+      },
+    });
+    expect(screen.getByRole("checkbox", { name: "Selecionar todas" })).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: "Selecionar Alice" })).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: "Selecionar Diana" })).toBeInTheDocument();
+  });
+
   it("toggles row selection on checkbox click", async () => {
     const { container } = render(DataTable, {
       props: { columns, rows, selectable: true },

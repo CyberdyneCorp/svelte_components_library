@@ -83,7 +83,7 @@ The system SHALL provide a `SplitButton` primitive: a primary action joined to a
 - **WHEN** this capability is implemented or used
 - **THEN** it SHALL satisfy the following contract:
 
-`SplitButton` SHALL take `label`, `onclick`, `items` (the Dropdown item shape), `onselect(value)`, `variant` and `size` (Button's), `disabled`, `loading`, `menuLabel` (default `"More actions"`) and `align` (`"left"` | `"right"`). It SHALL render the primary action with the existing `Button` and a joined caret `<button type="button" aria-haspopup="menu" aria-label={menuLabel}>` whose `aria-expanded` reflects the open menu; the caret SHALL open the existing `Dropdown` menu. Selecting an item SHALL call `onselect` with its value and close the menu. Both buttons SHALL be disabled together.
+`SplitButton` SHALL take `label`, `onclick`, `items` (the Dropdown item shape), `onselect(value)`, `variant` and `size` (Button's), `disabled`, `loading`, `menuLabel` (default `"More actions"`) and `align` (`"left"` | `"right"`). It SHALL render the primary action with the existing `Button` and a joined caret `<button type="button" aria-haspopup="menu" aria-label={menuLabel}>` whose `aria-expanded` and `aria-controls` reflect the open menu; the caret SHALL open a `role="menu"` list of `role="menuitem"` buttons that follows the menu-button keyboard pattern (ArrowDown/ArrowUp open and move focus, Escape closes and returns focus to the caret, click outside closes). The items reuse the `Dropdown` item shape. Selecting an item SHALL call `onselect` with its value and close the menu. Both buttons SHALL be disabled together.
 
 (src: packages/ui/core/src/lib/primitives/SplitButton/SplitButton.svelte)
 

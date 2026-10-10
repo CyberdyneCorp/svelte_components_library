@@ -53,7 +53,9 @@ describe("KpiCard", () => {
   });
 
   it("colours by sentiment independently of direction and defaults to neutral", () => {
-    const rising = render(KpiCard, { props: { ...base, trend: "up", delta: "+12%", sentiment: "negative" } });
+    const rising = render(KpiCard, {
+      props: { ...base, trend: "up", delta: "+12%", sentiment: "negative" },
+    });
     expect(rising.container.querySelector(".cy-kpi__delta")).toHaveClass("cy-kpi__delta--negative");
     const neutral = render(KpiCard, { props: { ...base, trend: "up", delta: "+1%" } });
     expect(neutral.container.querySelector(".cy-kpi__delta")).toHaveClass("cy-kpi__delta--neutral");
@@ -63,7 +65,9 @@ describe("KpiCard", () => {
     render(KpiCard, {
       props: { ...base, href: "/spend", trend: "up", delta: "+4.2%", deltaLabel: "vs last month" },
     });
-    const link = screen.getByRole("link", { name: "Monthly spend €1,240.00 increased +4.2% vs last month" });
+    const link = screen.getByRole("link", {
+      name: "Monthly spend €1,240.00 increased +4.2% vs last month",
+    });
     expect(link).toHaveAttribute("href", "/spend");
     expect(screen.queryByRole("article")).toBeNull();
   });
@@ -112,7 +116,9 @@ describe("KpiCard", () => {
       render(KpiCard, {
         props: { ...base, value: richValue, href: "/spend", trend: "up", delta: "+4.2%" },
       });
-      expect(screen.getByRole("link", { name: "Monthly spend €1,240.00 increased +4.2%" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("link", { name: "Monthly spend €1,240.00 increased +4.2%" }),
+      ).toBeInTheDocument();
     });
 
     it("announces a masked snippet's label, not its hidden glyphs", () => {
@@ -125,10 +131,59 @@ describe("KpiCard", () => {
     const { container } = render(KpiCard, { props: base });
     expect(container.querySelector(".cy-kpi__sparkline")).toBeNull();
   });
+
+  describe("visual", () => {
+    const ring = createRawSnippet(() => ({
+      render: () => `<div data-testid="ring" role="img" aria-label="38%"></div>`,
+    }));
+
+    it("renders the visual snippet in a second column beside label and value", () => {
+      const { container } = render(KpiCard, {
+        props: { label: "Uso do disco", value: "152 GB / 400 GB", visual: ring },
+      });
+      const card = screen.getByRole("article", { name: "Uso do disco" });
+      const visual = card.querySelector(".cy-kpi__visual");
+      expect(visual?.querySelector("[data-testid='ring']")).not.toBeNull();
+      expect(card).toHaveClass("cy-kpi--with-visual");
+      // The visual is a sibling of the label/value column, not nested under it.
+      expect(container.querySelector(".cy-kpi__main [data-testid='ring']")).toBeNull();
+      expect(visual?.previousElementSibling).toHaveClass("cy-kpi__main");
+    });
+
+    it("keeps the sparkline below the value when a visual is set", () => {
+      const sparkline = createRawSnippet(() => ({
+        render: () => `<svg data-testid="spark"></svg>`,
+      }));
+      const { container } = render(KpiCard, { props: { ...base, visual: ring, sparkline } });
+      const spark = container.querySelector(".cy-kpi__sparkline");
+      expect(spark?.querySelector("[data-testid='spark']")).not.toBeNull();
+      expect(spark?.previousElementSibling).toHaveClass("cy-kpi__visual");
+    });
+
+    it("renders no visual container and no grid modifier without the snippet", () => {
+      const { container } = render(KpiCard, { props: base });
+      expect(container.querySelector(".cy-kpi__visual")).toBeNull();
+      expect(screen.getByRole("article")).not.toHaveClass("cy-kpi--with-visual");
+    });
+
+    it("renders the visual inside the link variant too", () => {
+      render(KpiCard, { props: { ...base, href: "/disk", visual: ring } });
+      const link = screen.getByRole("link");
+      expect(link.querySelector(".cy-kpi__visual [data-testid='ring']")).not.toBeNull();
+    });
+  });
 });
 
 it("allows featured emphasis and negative value without changing delta sentiment", () => {
-  const { container } = render(KpiCard, { props: { ...base, emphasis: "featured", valueTone: "negative", delta: "+1%", sentiment: "positive" } });
+  const { container } = render(KpiCard, {
+    props: {
+      ...base,
+      emphasis: "featured",
+      valueTone: "negative",
+      delta: "+1%",
+      sentiment: "positive",
+    },
+  });
   expect(screen.getByRole("article", { name: base.label })).toHaveClass("cy-kpi--featured");
   expect(container.querySelector(".cy-kpi__value")).toHaveClass("cy-kpi__value--negative");
   expect(container.querySelector(".cy-kpi__delta")).toHaveClass("cy-kpi__delta--positive");
@@ -137,5 +192,8 @@ it("allows featured emphasis and negative value without changing delta sentiment
 it("keeps default emphasis and tone opt-in", () => {
   const { container } = render(KpiCard, { props: base });
   expect(screen.getByRole("article")).not.toHaveClass("cy-kpi--featured");
-  expect(container.querySelector(".cy-kpi__value")).not.toHaveClass("cy-kpi__value--negative", "cy-kpi__value--positive");
+  expect(container.querySelector(".cy-kpi__value")).not.toHaveClass(
+    "cy-kpi__value--negative",
+    "cy-kpi__value--positive",
+  );
 });

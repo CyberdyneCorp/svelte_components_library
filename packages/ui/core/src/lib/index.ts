@@ -13,6 +13,7 @@ export { StarRating } from "./primitives/StarRating/index.js";
 export { Flag } from "./primitives/Flag/index.js";
 export { InformationPill } from "./primitives/InformationPill/index.js";
 export { CopyButton } from "./primitives/CopyButton/index.js";
+export { SplitButton, type SplitButtonItem } from "./primitives/SplitButton/index.js";
 
 // Forms
 export { TextInput } from "./forms/TextInput/index.js";
@@ -67,11 +68,12 @@ export { ErrorBoundary } from "./feedback/ErrorBoundary/index.js";
 export { Carousel } from "./feedback/Carousel/index.js";
 export { VideoPlayer } from "./feedback/VideoPlayer/index.js";
 export { GlobeLoader } from "./feedback/GlobeLoader/index.js";
+export { PromoBanner } from "./feedback/PromoBanner/index.js";
 
 // Navigation
 export { Tabs, type TabItem } from "./navigation/Tabs/index.js";
-export { Breadcrumb } from "./navigation/Breadcrumb/index.js";
-export { Sidebar, type SidebarItem } from "./navigation/Sidebar/index.js";
+export { Breadcrumb, type BreadcrumbItem } from "./navigation/Breadcrumb/index.js";
+export { Sidebar, type SidebarGroup, type SidebarItem } from "./navigation/Sidebar/index.js";
 export { Header } from "./navigation/Header/index.js";
 export { MenuItem } from "./navigation/MenuItem/index.js";
 export { BreadcrumbOverflow } from "./navigation/BreadcrumbOverflow/index.js";
@@ -124,6 +126,10 @@ export {
   type BudgetState,
   type BudgetStateLabels,
 } from "./data/BudgetBar/index.js";
+export { SettingsRow } from "./data/SettingsRow/index.js";
+export { DescriptionList, type DescriptionListItem } from "./data/DescriptionList/index.js";
+export { KeyValueStrip, type KeyValueStripItem } from "./data/KeyValueStrip/index.js";
+export { PriceTag } from "./data/PriceTag/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
@@ -635,4 +641,8 @@ export type {
 } from "./trading/index.js";
 
 // Finance presentation patterns
-export { AllocationBreakdown, type AllocationItem, type AllocationTone } from "./data/AllocationBreakdown/index.js";
+export {
+  AllocationBreakdown,
+  type AllocationItem,
+  type AllocationTone,
+} from "./data/AllocationBreakdown/index.js";

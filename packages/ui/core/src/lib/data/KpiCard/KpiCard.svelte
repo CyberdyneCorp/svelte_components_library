@@ -2,7 +2,12 @@
 
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { DEFAULT_TREND_LABELS, type KpiSentiment, type KpiTrend, type KpiTrendLabels } from "./types.js";
+  import {
+    DEFAULT_TREND_LABELS,
+    type KpiSentiment,
+    type KpiTrend,
+    type KpiTrendLabels,
+  } from "./types.js";
 
   let {
     emphasis = "default",
@@ -15,6 +20,7 @@
     sentiment = "neutral",
     href = "",
     sparkline,
+    visual,
     trendLabels = {},
     ariaLabel = "",
   }: {
@@ -42,6 +48,12 @@
     href?: string;
     /** Optional sparkline (or any small chart) rendered under the value. */
     sparkline?: Snippet;
+    /**
+     * Optional visual (e.g. a `ProgressRing` or an icon) rendered in a second
+     * column aligned to the end of the card, beside label and value. The card
+     * only gains the second column when this snippet is set.
+     */
+    visual?: Snippet;
     /** Hidden words announced for each trend (i18n). */
     trendLabels?: Partial<KpiTrendLabels>;
     /** Overrides the accessible name of the card or link. */
@@ -55,7 +67,14 @@
 </script>
 
 {#snippet trendIcon(direction: KpiTrend)}
-  <svg class="cy-kpi__icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+  <svg
+    class="cy-kpi__icon"
+    viewBox="0 0 16 16"
+    width="14"
+    height="14"
+    aria-hidden="true"
+    focusable="false"
+  >
     {#if direction === "up"}
       <path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" />
     {:else if direction === "down"}
@@ -67,19 +86,28 @@
 {/snippet}
 
 {#snippet body()}
-  <div class="cy-kpi__label" id={labelId}>{label}</div>
-  <div class="cy-kpi__value" class:cy-kpi__value--positive={valueTone === "positive"} class:cy-kpi__value--negative={valueTone === "negative"}>
-    {#if typeof value === "function"}{@render value()}{:else}{value}{/if}
-  </div>
-  {#if hasDelta}
-    <div class="cy-kpi__delta cy-kpi__delta--{sentiment}">
-      {#if trend}
-        {@render trendIcon(trend)}
-        <span class="cy-kpi__sr">{labels[trend]} </span>
-      {/if}
-      {#if delta}<span class="cy-kpi__delta-value">{delta}</span>{/if}
-      {#if deltaLabel}<span class="cy-kpi__delta-label"> {deltaLabel}</span>{/if}
+  <div class="cy-kpi__main">
+    <div class="cy-kpi__label" id={labelId}>{label}</div>
+    <div
+      class="cy-kpi__value"
+      class:cy-kpi__value--positive={valueTone === "positive"}
+      class:cy-kpi__value--negative={valueTone === "negative"}
+    >
+      {#if typeof value === "function"}{@render value()}{:else}{value}{/if}
     </div>
+    {#if hasDelta}
+      <div class="cy-kpi__delta cy-kpi__delta--{sentiment}">
+        {#if trend}
+          {@render trendIcon(trend)}
+          <span class="cy-kpi__sr">{labels[trend]} </span>
+        {/if}
+        {#if delta}<span class="cy-kpi__delta-value">{delta}</span>{/if}
+        {#if deltaLabel}<span class="cy-kpi__delta-label"> {deltaLabel}</span>{/if}
+      </div>
+    {/if}
+  </div>
+  {#if visual}
+    <div class="cy-kpi__visual">{@render visual()}</div>
   {/if}
   {#if sparkline}
     <div class="cy-kpi__sparkline">{@render sparkline()}</div>
@@ -87,13 +115,20 @@
 {/snippet}
 
 {#if href}
-  <a class="cy-kpi cy-kpi--link" class:cy-kpi--featured={emphasis === "featured"} {href} aria-label={ariaLabel || undefined}>
+  <a
+    class="cy-kpi cy-kpi--link"
+    class:cy-kpi--featured={emphasis === "featured"}
+    class:cy-kpi--with-visual={Boolean(visual)}
+    {href}
+    aria-label={ariaLabel || undefined}
+  >
     {@render body()}
   </a>
 {:else}
   <article
     class="cy-kpi"
     class:cy-kpi--featured={emphasis === "featured"}
+    class:cy-kpi--with-visual={Boolean(visual)}
     aria-label={ariaLabel || undefined}
     aria-labelledby={ariaLabel ? undefined : labelId}
   >
@@ -127,6 +162,33 @@
     outline-offset: 2px;
   }
 
+  .cy-kpi__main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  /* The second column exists only when a visual snippet is set. */
+  .cy-kpi--with-visual {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--space-4);
+  }
+
+  .cy-kpi__visual {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    justify-self: end;
+    flex-shrink: 0;
+  }
+
+  .cy-kpi--with-visual .cy-kpi__sparkline {
+    grid-column: 1 / -1;
+  }
+
   .cy-kpi__label {
     font-size: 0.8125rem;
     color: var(--color-text-secondary);
@@ -151,8 +213,12 @@
     font-size: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
   }
 
-  .cy-kpi__value--positive { color: var(--color-state-success); }
-  .cy-kpi__value--negative { color: var(--color-state-error); }
+  .cy-kpi__value--positive {
+    color: var(--color-state-success);
+  }
+  .cy-kpi__value--negative {
+    color: var(--color-state-error);
+  }
 
   .cy-kpi__delta {
     display: flex;
