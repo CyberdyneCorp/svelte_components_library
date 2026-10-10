@@ -28,6 +28,7 @@ export default defineConfig({
       exclude: [
         "**/index.ts",
         "**/*.test.ts",
+        "**/*.test.svelte",
         "**/*.stories.svelte",
         "**/_testdata/**",
         "**/tokens/**",

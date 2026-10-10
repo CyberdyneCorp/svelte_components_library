@@ -469,14 +469,15 @@ Based on a 4px base grid:
 
 ## 7. Component Inventory
 
-### 7.1 Primitives (14 components)
+### 7.1 Primitives (15 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
 | `Button` | variant, size, disabled, loading, type, id, title, ariaLabel, dataAttrs, onclick | Primary action element with 5 variants (brand, secondary, outline, ghost, danger); `dataAttrs` forwards `data-*` to the inner button |
 | `Badge` | variant, size | Status indicator pill (success, warning, error, info, neutral) |
-| `Icon` | name, size, color | SVG icon system with 27 built-in icons |
-| `IconButton` | icon, label, variant, size, disabled, onclick | Circular icon-only button |
+| `Icon` | name, size, color | SVG icon system with 37 built-in icons (incl. home, bell, edit, trash, key, cloud, globe, more-vertical, refresh, box) |
+| `IconButton` | icon, label, variant, size, disabled, badge, badgeLabel, onclick | Circular icon-only button; optional count bubble with a hidden `badgeLabel` sentence |
+| `SplitButton` | label, onclick, items, onselect, variant, size, disabled, loading, menuLabel, align | Primary Button joined to a caret that opens a `role="menu"` of secondary actions (Dropdown item shape, arrow/Home/End/Escape keys) |
 | `Avatar` | src, alt, initials, size, status | User avatar with image/initials fallback and status dot |
 | `Tooltip` | text, position | Hover tooltip with 4 positions |
 | `ChipButton` | selected, disabled, onclick | Toggle chip for filters |
@@ -493,7 +494,7 @@ Based on a 4px base grid:
 | Component | Props | Description |
 |-----------|-------|------------|
 | `TextInput` | value (bindable), label, placeholder, hint, error, disabled, required, type | Text/email/url/number input with validation |
-| `PasswordInput` | value (bindable), label, error, disabled | Password field with show/hide toggle |
+| `PasswordInput` | value (bindable), label, error, disabled, placeholder, id, name, autocomplete, showLabel, hideLabel, generateLabel, ongenerate | Password field with translatable show/hide toggle and an optional generate button backed by an application-supplied `ongenerate` |
 | `Select` | value (bindable), label, options, placeholder, error, disabled | Styled dropdown select |
 | `Checkbox` | checked (bindable), label, disabled, error | Custom checkbox with green checkmark |
 | `Radio` | options, value (bindable), name, label, disabled, error | Radio button group |
@@ -513,7 +514,7 @@ Based on a 4px base grid:
 | `TimePicker` | value (bindable), label, format, step, disabled | Time selection with hour and minute controls |
 | `ScheduleConfig` | value (bindable), presets | Recurring-event frequency builder (interval / daily / weekly / monthly cron-style schedule) |
 
-### 7.3 Feedback (13 components)
+### 7.3 Feedback (14 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -530,14 +531,15 @@ Based on a 4px base grid:
 | `Carousel` | items, autoplay, interval, showDots, showArrows | Image/content carousel with navigation controls |
 | `VideoPlayer` | src, poster, autoplay, loop, controls | Themed HTML5 video player with custom controls |
 | `GlobeLoader` | size, ink, background, topoJsonUrl, glow, interactive | Self-contained animated rotating globe + satellites loader (2D canvas, no Cesium); drag to spin |
+| `PromoBanner` | title, description, icon, price, actions, dismissible, dismissLabel, ondismiss | Upsell/announcement `role="region"` named by its title with icon, price (e.g. `PriceTag`) and actions snippets; dismiss via IconButton |
 
 ### 7.4 Navigation (10 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
 | `Tabs` | items, activeId (bindable), ariaLabel, onchange | Horizontal tab bar with green underline; items with `href` render link tabs (`<nav>` of `<a>`, `aria-current="page"` on the active one) instead of a tablist |
-| `Breadcrumb` | items | Chevron-separated navigation trail |
-| `Sidebar` | items, activeId, collapsed | Multi-level collapsible sidebar |
+| `Breadcrumb` | items (label, href, icon, iconOnly) | Chevron-separated navigation trail; crumbs can show an `Icon`, with `iconOnly` keeping the label for assistive technology |
+| `Sidebar` | items, groups, activeId, collapsed, ariaLabel, externalLabel, onnavigate | Multi-level collapsible sidebar; labelled `groups` (collapsible), item `badge`/`external`/`disabled`, flyout for collapsed items with children |
 | `Header` | title, children, logo | Top navigation bar |
 | `MenuItem` | label, icon, active, href, onclick, children | Reusable navigation menu item |
 | `BreadcrumbOverflow` | items, maxVisible | Breadcrumb that collapses middle items into an overflow menu |
@@ -546,7 +548,7 @@ Based on a 4px base grid:
 | `MenuBar` | menus | Desktop-style horizontal menu bar with nested menus |
 | `BottomNav` | items, activeId (bindable) | Mobile bottom tab navigation |
 
-### 7.5 Data Display (17 components)
+### 7.5 Data Display (21 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -560,13 +562,17 @@ Based on a 4px base grid:
 | `DiffViewer` | oldText, newText, mode, language, showLineNumbers | LCS-based text diff viewer with split and unified modes |
 | `Calendar` | date (bindable), events, onselect | Month grid calendar with event markers and date navigation |
 | `Kanban` | columns, ondrop, onmove | Drag-and-drop board with configurable columns and card management |
-| `DataTable` | columns, rows, selectable, expandable, resizable, pagination, pageSize | Enhanced data table with row selection, expandable rows, column resize, and pagination; per-column `cell` Snippet render override |
+| `DataTable` | columns, rows, selectable, selectAllLabel, selectRowLabel, expandable, resizable, pagination, pageSize | Enhanced data table with row selection (checkboxes named by `selectAllLabel`/`selectRowLabel`), expandable rows, column resize, and pagination; per-column `cell` Snippet render override |
 | `VirtualizedList` | items, itemHeight, overscan, containerHeight | Performant scrollable list with windowed rendering |
 | `InfiniteScroll` | onLoadMore, threshold, loading, hasMore, children | Infinite scroll container with loading trigger |
 | `FilterBar` | filters, active (bindable), onchange | Combined filter chips for tables and lists |
 | `SortableList` | items (bindable), onreorder, handle, disabled | Drag-to-reorder list with HTML5 Drag and Drop |
 | `OrgChart` | nodes, rootId, orientation, oncollapse | Hierarchical org/tree chart with collapsible nodes |
 | `WeatherCard` | data, location, loading, error, source, dismissible | Current-conditions card (temp, feels-like, wind dir, humidity, cloud, pressure) — controlled |
+| `SettingsRow` | title, description, badge, badgeVariant, as, icon, actions, children, data-* | Settings list row: round icon container, title, description, Badge and end-aligned actions; `as="li"` inside lists |
+| `DescriptionList` | items, columns, dividers, value, action | `<dl>` of label/value rows; `value` and `action` snippets receive the item (e.g. StatusBadge value, edit IconButton) |
+| `KeyValueStrip` | items, ariaLabel, copyLabel | Inline `<ul>` of "label: value" facts with dividers, CopyButton for `copy` items and `<a>` for `href` items |
+| `PriceTag` | amount, currency, locale, originalAmount, period, savings, originalLabel, size | Current price with optional struck original price (both via CurrencyDisplay), period and savings Badge |
 
 ### 7.6 Layout (9 components)
 

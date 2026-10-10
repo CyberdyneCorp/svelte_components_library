@@ -29,7 +29,17 @@ export type IconName =
   | "play"
   | "pause"
   | "clock"
-  | "alert-triangle";
+  | "alert-triangle"
+  | "home"
+  | "bell"
+  | "edit"
+  | "trash"
+  | "key"
+  | "cloud"
+  | "globe"
+  | "more-vertical"
+  | "refresh"
+  | "box";
 
 export const BUILTIN_ICON_NAMES: readonly IconName[] = [
   "check",
@@ -59,4 +69,14 @@ export const BUILTIN_ICON_NAMES: readonly IconName[] = [
   "pause",
   "clock",
   "alert-triangle",
+  "home",
+  "bell",
+  "edit",
+  "trash",
+  "key",
+  "cloud",
+  "globe",
+  "more-vertical",
+  "refresh",
+  "box",
 ];

@@ -1,24 +1,34 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import Icon from "./Icon.svelte";
+  import { BUILTIN_ICON_NAMES } from "./icon-names.js";
 
   const { Story } = defineMeta({
     title: "Primitives/Icon",
     component: Icon,
     tags: ["autodocs"],
+    parameters: {
+      a11y: { test: "error" },
+    },
   });
 
-  const allIcons = [
-    "check", "x", "chevron-down", "chevron-right", "chevron-left",
-    "search", "alert-circle", "info", "settings", "menu",
-    "plus", "minus", "copy", "external-link", "terminal",
-    "cpu", "shield", "zap", "activity", "lock",
+  const consoleIcons = [
+    "home",
+    "bell",
+    "edit",
+    "trash",
+    "key",
+    "cloud",
+    "globe",
+    "more-vertical",
+    "refresh",
+    "box",
   ];
 </script>
 
-<Story name="AllIcons">
+<Story name="AllIcons" asChild>
   <div class="icon-grid">
-    {#each allIcons as name}
+    {#each BUILTIN_ICON_NAMES as name (name)}
       <div class="icon-cell">
         <Icon {name} size={24} color="var(--color-text-primary)" />
         <span class="icon-label">{name}</span>
@@ -27,7 +37,18 @@
   </div>
 </Story>
 
-<Story name="Sizes">
+<Story name="ConsoleGlyphs" asChild>
+  <div class="icon-grid">
+    {#each consoleIcons as name (name)}
+      <div class="icon-cell">
+        <Icon {name} size={24} color="var(--color-text-primary)" />
+        <span class="icon-label">{name}</span>
+      </div>
+    {/each}
+  </div>
+</Story>
+
+<Story name="Sizes" asChild>
   <div style="display: flex; align-items: center; gap: 1.5rem;">
     <Icon name="zap" size={14} color="var(--color-text-primary)" />
     <Icon name="zap" size={20} color="var(--color-text-primary)" />
@@ -37,7 +58,7 @@
   </div>
 </Story>
 
-<Story name="CustomColor">
+<Story name="CustomColor" asChild>
   <div style="display: flex; align-items: center; gap: 1.5rem;">
     <Icon name="shield" size={28} color="var(--primitive-green-10)" />
     <Icon name="activity" size={28} color="var(--primitive-cyan-10)" />
@@ -68,7 +89,7 @@
   .icon-label {
     font-family: var(--font-mono);
     font-size: 0.625rem;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-secondary);
     text-align: center;
   }
 </style>

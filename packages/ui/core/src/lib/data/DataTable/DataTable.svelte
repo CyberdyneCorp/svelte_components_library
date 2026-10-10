@@ -34,6 +34,8 @@
     onrowclick,
     onsort,
     renderExpanded,
+    selectAllLabel = "Select all rows",
+    selectRowLabel = (row) => `Select row ${row[rowKey]}`,
   }: {
     columns?: Column[];
     rows?: Array<Record<string, any>>;
@@ -50,6 +52,10 @@
     onrowclick?: (row: Record<string, any>) => void;
     onsort?: (key: string, direction: "asc" | "desc") => void;
     renderExpanded?: (row: Record<string, any>) => string;
+    /** Accessible name of the header checkbox and hidden text of its column header (i18n). */
+    selectAllLabel?: string;
+    /** Accessible name of each row checkbox, built from the row (i18n). */
+    selectRowLabel?: (row: Record<string, any>) => string;
   } = $props();
 
   let sortKey = $state<string | null>(null);
@@ -165,11 +171,13 @@
         <tr>
           {#if selectable}
             <th class="cy-datatable__th cy-datatable__th--checkbox">
+              <span class="cy-datatable__sr">{selectAllLabel}</span>
               <input
                 type="checkbox"
                 checked={allSelected}
                 onchange={toggleSelectAll}
                 class="cy-datatable__checkbox"
+                aria-label={selectAllLabel}
               />
             </th>
           {/if}
@@ -241,6 +249,7 @@
                     checked={selectedRows.includes(rid)}
                     onchange={() => toggleSelectRow(rid)}
                     class="cy-datatable__checkbox"
+                    aria-label={selectRowLabel(row)}
                   />
                 </td>
               {/if}
@@ -337,6 +346,18 @@
 
   .cy-datatable__wrapper {
     overflow-x: auto;
+  }
+
+  .cy-datatable__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .cy-datatable__wrapper--scroll {
