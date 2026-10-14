@@ -1,5 +1,13 @@
 # @cyberdynecorp/svelte-ui-core
 
+## 0.21.0
+
+### Minor Changes
+
+- 8aa6192: Add `DataGrid`: an editable ARIA grid with a single tab stop, arrow-key navigation, text, number, select and boolean cells edited in place, per-cell validation that blocks the commit, read-only columns, and committed changes reported through `oncellchange` and `bind:rows`.
+- 8aa6192: Add query filtering: a typed flat query model with `operatorsFor`, `isConditionComplete`, `describeCondition` and a client-side `evaluateQuery`, plus `QueryBuilder` (field, operator and typed value rows with an all/any combinator), `FilterChipRow` (removable chips for the active conditions) and `SavedViews` (pick, save, update, rename and delete named views; storage stays in the application). See `guides/query-filtering.md`.
+- 8aa6192: Add utility display components: `Timestamp` (live relative or absolute time in a `<time>` element), `HoverCard` (delayed, keyboard-reachable preview card), `ConfirmAction` (click, confirm-dialog or type-to-confirm gating for destructive actions), `CopyableValue` (truncated identifier with icon-only copy), `MaskedValue` (fixed-length mask that keeps hidden secrets out of the DOM, with reveal, auto-hide and copy), `OptionCard` (selectable card around a native radio or checkbox), `FileTypeIcon` and `FileCard` (file tile or row with preview, upload progress, error and remove). `BarChart` accepts multi-series `series` data in grouped or `stacked` layout with a legend and marker shapes. `Dialog` gains `confirmDisabled` and focuses the first body control; `CopyButton` gains `iconOnly` and `copiedLabel`.
+
 ## 0.20.0
 
 ### Minor Changes
