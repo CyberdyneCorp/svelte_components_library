@@ -6,14 +6,22 @@
     label = "Copy",
     size = "md",
     variant = "ghost",
+    iconOnly = false,
+    copiedLabel,
   }: {
     text: string;
     label?: string;
     size?: "sm" | "md";
     variant?: "ghost" | "outline";
+    /** Hide the visible text; `label` stays the accessible name and tooltip. */
+    iconOnly?: boolean;
+    /** Text shown and announced after a successful copy (i18n). Defaults to "Copied!" shown, "Copied" announced. */
+    copiedLabel?: string;
   } = $props();
 
   let copied = $state(false);
+  let copiedName = $derived(copiedLabel ?? "Copied");
+  let copiedText = $derived(copiedLabel ?? "Copied!");
   let timeout: ReturnType<typeof setTimeout> | undefined;
 
   async function handleCopy() {
@@ -46,21 +54,22 @@
 <button
   class="cy-copy cy-copy--{variant} cy-copy--{size}"
   class:cy-copy--copied={copied}
+  class:cy-copy--icon-only={iconOnly}
   onclick={handleCopy}
-  aria-label={copied ? "Copied" : label}
-  title={copied ? "Copied!" : label}
+  aria-label={copied ? copiedName : label}
+  title={copied ? copiedText : label}
 >
   {#if copied}
     <svg class="cy-copy__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="20 6 9 17 4 12" />
     </svg>
-    <span class="cy-copy__label">Copied!</span>
+    {#if !iconOnly}<span class="cy-copy__label">{copiedText}</span>{/if}
   {:else}
     <svg class="cy-copy__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
       <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
     </svg>
-    <span class="cy-copy__label">{label}</span>
+    {#if !iconOnly}<span class="cy-copy__label">{label}</span>{/if}
   {/if}
 </button>
 
@@ -127,6 +136,10 @@
 
   .cy-copy--copied.cy-copy--outline {
     border-color: var(--color-action-brand-default);
+  }
+
+  .cy-copy--icon-only {
+    padding: var(--space-1);
   }
 
   .cy-copy__icon {

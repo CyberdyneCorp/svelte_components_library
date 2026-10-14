@@ -59,3 +59,6 @@
     <CopyButton text="cyb_token_xyz" label="Copy Token" variant="outline" size="sm" />
   </div>
 </Story>
+
+<!-- Icon only: the label stays the accessible name and tooltip. -->
+<Story name="Icon only" args={{ text: "req_01HZX4Q9T7", label: "Copy request ID", iconOnly: true }} />

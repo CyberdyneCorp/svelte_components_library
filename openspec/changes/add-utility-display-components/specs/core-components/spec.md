@@ -28,7 +28,7 @@
 - **WHEN** this capability is implemented or used
 - **THEN** it SHALL satisfy the following contract:
 
-With `iconOnly`, `CopyButton` SHALL render only its icon, and SHALL keep `aria-label` set to `label` (or "Copied" after a copy) and `title` set to the same text. It SHALL also accept `copiedLabel` (default `"Copied"`) for the post-copy text, so it can be translated. Without `iconOnly`, rendering SHALL be unchanged apart from using `copiedLabel`.
+With `iconOnly`, `CopyButton` SHALL render only its icon, and SHALL keep `aria-label` set to `label` (or "Copied" after a copy) and `title` set to the same text. It SHALL also accept an optional `copiedLabel` that replaces the post-copy text (visible text, `title` and `aria-label`), so it can be translated. Without it, the post-copy text SHALL stay "Copied!" (visible and `title`) and "Copied" (`aria-label`). Without `iconOnly` and `copiedLabel`, rendering SHALL be unchanged.
 
 (src: packages/ui/core/src/lib/primitives/CopyButton/CopyButton.svelte)
 

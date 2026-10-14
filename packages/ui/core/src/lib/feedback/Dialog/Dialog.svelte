@@ -10,6 +10,7 @@
     confirmLabel = "Confirm",
     cancelLabel = "Cancel",
     variant = "default",
+    confirmDisabled = false,
     onconfirm,
     oncancel,
     children,
@@ -19,6 +20,8 @@
     confirmLabel?: string;
     cancelLabel?: string;
     variant?: "default" | "danger";
+    /** Disables the confirm button (e.g. until a required field is valid). */
+    confirmDisabled?: boolean;
     onconfirm?: () => void;
     oncancel?: () => void;
     children?: Snippet;
@@ -32,6 +35,7 @@
   }
 
   function handleConfirm() {
+    if (confirmDisabled) return;
     open = false;
     onconfirm?.();
   }
@@ -53,8 +57,10 @@
 
   $effect(() => {
     if (open && dialogEl) {
-      const firstBtn = dialogEl.querySelector<HTMLElement>("button");
-      firstBtn?.focus();
+      const bodyControl = dialogEl.querySelector<HTMLElement>(
+        ".cy-dialog__body :is(input, select, textarea, button, a[href], [tabindex]:not([tabindex='-1'])):not(:disabled)",
+      );
+      (bodyControl ?? dialogEl.querySelector<HTMLElement>("button:not(:disabled)"))?.focus();
     }
   });
 </script>
@@ -75,7 +81,7 @@
         <button class="cy-dialog__btn cy-dialog__btn--cancel" onclick={handleCancel}>
           {cancelLabel}
         </button>
-        <button class="cy-dialog__btn cy-dialog__btn--confirm cy-dialog__btn--{variant}" onclick={handleConfirm}>
+        <button class="cy-dialog__btn cy-dialog__btn--confirm cy-dialog__btn--{variant}" disabled={confirmDisabled} onclick={handleConfirm}>
           {confirmLabel}
         </button>
       </div>
@@ -153,6 +159,12 @@
     border: var(--border-width) var(--border-style) transparent;
   }
 
+  .cy-dialog__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
   .cy-dialog__btn--cancel {
     background: var(--color-surface-raised);
     color: var(--color-text-secondary);
@@ -169,7 +181,7 @@
     color: var(--btn-brand-text);
   }
 
-  .cy-dialog__btn--confirm.cy-dialog__btn--default:hover {
+  .cy-dialog__btn--confirm.cy-dialog__btn--default:hover:not(:disabled) {
     background: var(--btn-brand-bg-hover);
     box-shadow: var(--shadow-glow-green);
   }
@@ -179,7 +191,7 @@
     color: var(--btn-danger-text);
   }
 
-  .cy-dialog__btn--confirm.cy-dialog__btn--danger:hover {
+  .cy-dialog__btn--confirm.cy-dialog__btn--danger:hover:not(:disabled) {
     background: var(--btn-danger-bg-hover);
     box-shadow: 0 0 12px var(--color-state-error-bg);
   }

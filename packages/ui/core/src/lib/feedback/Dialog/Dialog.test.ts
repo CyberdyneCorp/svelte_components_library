@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/svelte";
+import { createRawSnippet, tick } from "svelte";
 import { describe, it, expect, vi } from "vitest";
 import Dialog from "./Dialog.svelte";
 
@@ -126,5 +127,30 @@ describe("Dialog", () => {
     render(Dialog, { props: { open: true, title: "My Dialog" } });
     const title = screen.getByText("My Dialog");
     expect(title.id).toBe("dialog-title");
+  });
+
+  it("keeps the dialog open and skips onconfirm while confirmDisabled", async () => {
+    const onconfirm = vi.fn();
+    render(Dialog, { props: { open: true, title: "Test", confirmDisabled: true, onconfirm } });
+    const confirm = screen.getByRole("button", { name: "Confirm" });
+    expect(confirm).toBeDisabled();
+    await fireEvent.click(confirm);
+    expect(onconfirm).not.toHaveBeenCalled();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("focuses the first control in the body when there is one", async () => {
+    const children = createRawSnippet(() => ({
+      render: () => `<label>Name <input /></label>`,
+    }));
+    render(Dialog, { props: { open: true, title: "Rename", children } });
+    await tick();
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveFocus();
+  });
+
+  it("focuses the first enabled button without body controls", async () => {
+    render(Dialog, { props: { open: true, title: "Test" } });
+    await tick();
+    expect(screen.getByRole("button", { name: "Cancel" })).toHaveFocus();
   });
 });
