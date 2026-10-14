@@ -2,12 +2,23 @@
 
 <script lang="ts">
   import ChartFrame from "../ChartFrame/ChartFrame.svelte";
-  import { categoryTable, columnHeaders, type ChartLabels } from "../ChartFrame/chartTable.js";
-
-  type BarData = { label: string; value: number; color?: string };
+  import ChartLegend from "../ChartLegend/ChartLegend.svelte";
+  import { markerPath, seriesStyle } from "../ChartLegend/markers.js";
+  import { categoryTable, columnHeaders, type ChartLabels, type ChartTableData } from "../ChartFrame/chartTable.js";
+  import {
+    dataMatrix,
+    layoutBars,
+    rectMarker,
+    seriesMatrix,
+    type BarDatum,
+    type BarRect,
+    type BarSeries,
+  } from "./barLayout.js";
 
   let {
     data = [],
+    series = [],
+    stacked = false,
     width = "100%",
     height = "300px",
     horizontal = false,
@@ -21,7 +32,11 @@
     showDataToggle = true,
     labels = {},
   }: {
-    data?: BarData[];
+    data?: BarDatum[];
+    /** Multi-series data; takes precedence over `data` when non-empty. */
+    series?: BarSeries[];
+    /** Stack series within each category instead of placing them side by side. */
+    stacked?: boolean;
     width?: string;
     height?: string;
     horizontal?: boolean;
@@ -39,33 +54,55 @@
 
   const viewW = 600;
   const viewH = 300;
+  const defaultColors = ["#00ff41", "#00d4ff", "#bf5af2", "#ffb800"];
+
   let padding = $derived(horizontal
     ? { top: 20, right: 40, bottom: 30, left: 80 }
     : { top: 20, right: 20, bottom: 50, left: 50 });
 
-  let plotW = $derived(viewW - padding.left - padding.right);
-  let plotH = $derived(viewH - padding.top - padding.bottom);
-  let maxVal = $derived(data.length ? Math.max(...data.map((d) => d.value)) : 1);
+  let multi = $derived(series.length > 0);
+  let seriesColors = $derived(series.map((s, i) => s.color || defaultColors[i % defaultColors.length]));
+  let matrix = $derived(multi ? seriesMatrix(series) : dataMatrix(data));
+
+  let layout = $derived(
+    layoutBars({
+      ...matrix,
+      colors: multi ? seriesColors : data.map((d) => d.color || barColor),
+      perCategoryColors: !multi,
+      stacked: multi && stacked,
+      horizontal,
+      plot: {
+        left: padding.left,
+        top: padding.top,
+        width: viewW - padding.left - padding.right,
+        height: viewH - padding.top - padding.bottom,
+      },
+    }),
+  );
+
+  let showLegend = $derived(series.length >= 2);
+  let legendItems = $derived(
+    series.map((s, i) => ({ label: s.name, color: seriesColors[i], marker: seriesStyle(i).marker })),
+  );
 
   let hoveredIndex: number | null = $state(null);
 
-  function getBarColor(d: BarData): string {
-    return d.color || barColor;
+  function markerD(rect: BarRect): string | null {
+    const m = showLegend ? rectMarker(rect) : null;
+    return m ? markerPath(seriesStyle(rect.seriesIndex).marker, m.cx, m.cy, m.size) : null;
   }
 
-  function formatNum(n: number): string {
-    return Number.isInteger(n) ? n.toString() : n.toFixed(2);
+  function multiTable(labelHeader: string): ChartTableData {
+    return {
+      columns: [labelHeader, ...series.map((s) => s.name)],
+      rows: matrix.categories.map((c, ci) => [c, ...matrix.values.map((row) => row[ci])]),
+    };
   }
 
-  function gridTicks(max: number, count: number): number[] {
-    const step = max / count;
-    return Array.from({ length: count + 1 }, (_, i) => step * i);
-  }
-
-  let ticks = $derived(gridTicks(maxVal, 4));
-  let tableData = $derived(
-    categoryTable(data, ...columnHeaders({ label: "Label", value: "Value" }, labels.columns)),
-  );
+  let tableData = $derived.by(() => {
+    const [labelHeader, valueHeader] = columnHeaders({ label: "Label", value: "Value" }, labels.columns);
+    return multi ? multiTable(labelHeader) : categoryTable(data, labelHeader, valueHeader);
+  });
 </script>
 
 <ChartFrame
@@ -80,7 +117,7 @@
   data={tableData}
 >
 {#snippet children(a11y)}
-<div class="cy-bar-chart" style="width: {width}; height: {height};">
+<div class="cy-bar-chart" class:cy-bar-chart--legend={showLegend} style="width: {width}; height: {height};">
   <svg
     {...a11y}
     viewBox="0 0 {viewW} {viewH}"
@@ -89,125 +126,62 @@
     role="img"
   >
     {#if showGrid}
-      {#each ticks as tick}
-        {#if horizontal}
-          <line
-            x1={padding.left + (tick / maxVal) * plotW}
-            y1={padding.top}
-            x2={padding.left + (tick / maxVal) * plotW}
-            y2={padding.top + plotH}
-            class="cy-bar-chart__grid"
-          />
-        {:else}
-          <line
-            x1={padding.left}
-            y1={padding.top + plotH - (tick / maxVal) * plotH}
-            x2={viewW - padding.right}
-            y2={padding.top + plotH - (tick / maxVal) * plotH}
-            class="cy-bar-chart__grid"
-          />
-        {/if}
+      {#each layout.ticks as tick, i (i)}
+        <line {...tick.line} class="cy-bar-chart__grid" />
       {/each}
     {/if}
 
     <!-- Axis lines -->
-    {#if horizontal}
-      <line x1={padding.left} y1={padding.top} x2={padding.left} y2={padding.top + plotH} class="cy-bar-chart__axis" />
-    {:else}
-      <line x1={padding.left} y1={padding.top + plotH} x2={viewW - padding.right} y2={padding.top + plotH} class="cy-bar-chart__axis" />
-      <line x1={padding.left} y1={padding.top} x2={padding.left} y2={padding.top + plotH} class="cy-bar-chart__axis" />
-    {/if}
+    {#each layout.axes as axis, i (i)}
+      <line {...axis} class="cy-bar-chart__axis" />
+    {/each}
 
     <!-- Tick labels for value axis -->
-    {#each ticks as tick}
-      {#if horizontal}
-        <text
-          x={padding.left + (tick / maxVal) * plotW}
-          y={padding.top + plotH + 16}
-          class="cy-bar-chart__tick"
-          text-anchor="middle"
-        >{formatNum(tick)}</text>
-      {:else}
-        <text
-          x={padding.left - 8}
-          y={padding.top + plotH - (tick / maxVal) * plotH + 4}
-          class="cy-bar-chart__tick"
-          text-anchor="end"
-        >{formatNum(tick)}</text>
-      {/if}
+    {#each layout.ticks as tick, i (i)}
+      <text x={tick.label.x} y={tick.label.y} class="cy-bar-chart__tick" text-anchor={tick.label.anchor}>{tick.label.text}</text>
     {/each}
 
     <!-- Bars -->
-    {#each data as d, i}
-      {@const barGap = 0.2}
-      {@const color = getBarColor(d)}
+    {#each layout.rects as rect, i (i)}
       {@const isHovered = hoveredIndex === i}
-      {#if horizontal}
-        {@const barH = (plotH / data.length) * (1 - barGap)}
-        {@const barY = padding.top + (plotH / data.length) * i + (plotH / data.length) * barGap / 2}
-        {@const barW = (d.value / maxVal) * plotW}
-        <rect
-          x={padding.left}
-          y={barY}
-          width={barW}
-          height={barH}
-          fill={color}
-          opacity={isHovered ? 1 : 0.85}
-          class="cy-bar-chart__bar"
-          class:cy-bar-chart__bar--animated={animate}
-          style={isHovered ? `filter: drop-shadow(0 0 8px ${color})` : ""}
-          onmouseenter={() => hoveredIndex = i}
-          onmouseleave={() => hoveredIndex = null}
-          role="presentation"
-        />
-        <text
-          x={padding.left - 6}
-          y={barY + barH / 2 + 4}
-          class="cy-bar-chart__label"
-          text-anchor="end"
-        >{d.label}</text>
-        {#if showValues}
-          <text
-            x={padding.left + barW + 6}
-            y={barY + barH / 2 + 4}
-            class="cy-bar-chart__value"
-          >{formatNum(d.value)}</text>
-        {/if}
-      {:else}
-        {@const barW = (plotW / data.length) * (1 - barGap)}
-        {@const barX = padding.left + (plotW / data.length) * i + (plotW / data.length) * barGap / 2}
-        {@const barH = (d.value / maxVal) * plotH}
-        <rect
-          x={barX}
-          y={padding.top + plotH - barH}
-          width={barW}
-          height={barH}
-          fill={color}
-          opacity={isHovered ? 1 : 0.85}
-          class="cy-bar-chart__bar"
-          class:cy-bar-chart__bar--animated={animate}
-          style={isHovered ? `filter: drop-shadow(0 0 8px ${color})` : ""}
-          onmouseenter={() => hoveredIndex = i}
-          onmouseleave={() => hoveredIndex = null}
-          role="presentation"
-        />
-        <text
-          x={barX + barW / 2}
-          y={padding.top + plotH + 16}
-          class="cy-bar-chart__label"
-          text-anchor="middle"
-        >{d.label}</text>
-        {#if showValues}
-          <text
-            x={barX + barW / 2}
-            y={padding.top + plotH - barH - 6}
-            class="cy-bar-chart__value"
-            text-anchor="middle"
-          >{formatNum(d.value)}</text>
-        {/if}
+      <rect
+        x={rect.x}
+        y={rect.y}
+        width={rect.width}
+        height={rect.height}
+        fill={rect.color}
+        opacity={isHovered ? 1 : 0.85}
+        class="cy-bar-chart__bar"
+        class:cy-bar-chart__bar--animated={animate}
+        style={isHovered ? `filter: drop-shadow(0 0 8px ${rect.color})` : ""}
+        data-series={multi ? rect.seriesIndex : undefined}
+        onmouseenter={() => hoveredIndex = i}
+        onmouseleave={() => hoveredIndex = null}
+        role="presentation"
+      />
+    {/each}
+
+    {#each layout.rects as rect, i (i)}
+      {@const d = markerD(rect)}
+      {#if d}
+        <path {d} class="cy-bar-chart__marker" data-marker={seriesStyle(rect.seriesIndex).marker} />
       {/if}
     {/each}
+
+    {#each layout.categoryLabels as label, i (i)}
+      <text x={label.x} y={label.y} class="cy-bar-chart__label" text-anchor={label.anchor}>{label.text}</text>
+    {/each}
+
+    {#if showValues}
+      {#each layout.valueLabels as label, i (i)}
+        <text x={label.x} y={label.y} class="cy-bar-chart__value" text-anchor={label.anchor}>{label.text}</text>
+      {/each}
+    {/if}
   </svg>
+
+  {#if showLegend}
+    <ChartLegend items={legendItems} ariaLabel={labels.legend} blockClass="cy-bar-chart" />
+  {/if}
 </div>
 {/snippet}
 </ChartFrame>
@@ -222,6 +196,18 @@
     width: 100%;
     height: 100%;
     display: block;
+  }
+
+  /* With a legend the SVG takes the height left over below it. */
+  .cy-bar-chart--legend {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .cy-bar-chart--legend .cy-bar-chart__svg {
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
   .cy-bar-chart__grid {
@@ -258,6 +244,11 @@
     font-size: 9px;
     fill: var(--color-text-secondary);
     font-family: var(--font-body);
+  }
+
+  .cy-bar-chart__marker {
+    fill: var(--color-surface-default);
+    pointer-events: none;
   }
 
   .cy-bar-chart__value {

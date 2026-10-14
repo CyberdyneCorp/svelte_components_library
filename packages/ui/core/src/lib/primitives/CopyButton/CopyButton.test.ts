@@ -147,4 +147,20 @@ describe("CopyButton", () => {
     await waitFor(() => expect(btn.getAttribute("aria-label")).toBe("Copy"));
     vi.useRealTimers();
   });
+
+  it("hides the visible text with iconOnly but keeps the accessible name", () => {
+    render(CopyButton, { props: { text: "abc", label: "Copy request ID", iconOnly: true } });
+    const btn = screen.getByRole("button", { name: "Copy request ID" });
+    expect(btn).toHaveAttribute("title", "Copy request ID");
+    expect(btn.textContent?.trim()).toBe("");
+  });
+
+  it("uses copiedLabel after copying", async () => {
+    Object.assign(navigator, { clipboard: { writeText: vi.fn().mockResolvedValue(undefined) } });
+    render(CopyButton, { props: { text: "abc", copiedLabel: "Copiado" } });
+    await fireEvent.click(screen.getByRole("button"));
+    const btn = await screen.findByRole("button", { name: "Copiado" });
+    expect(btn).toHaveAttribute("title", "Copiado");
+    expect(btn.textContent).toContain("Copiado");
+  });
 });

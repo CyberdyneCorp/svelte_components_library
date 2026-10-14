@@ -14,6 +14,12 @@ export { Flag } from "./primitives/Flag/index.js";
 export { InformationPill } from "./primitives/InformationPill/index.js";
 export { CopyButton } from "./primitives/CopyButton/index.js";
 export { SplitButton, type SplitButtonItem } from "./primitives/SplitButton/index.js";
+export {
+  FileTypeIcon,
+  fileCategory,
+  fileExtension,
+  type FileCategory,
+} from "./primitives/FileTypeIcon/index.js";
 
 // Forms
 export { TextInput } from "./forms/TextInput/index.js";
@@ -24,6 +30,31 @@ export { Switch } from "./forms/Switch/index.js";
 export { Textarea } from "./forms/Textarea/index.js";
 export { FileDropzone } from "./forms/FileDropzone/index.js";
 export { Radio } from "./forms/Radio/index.js";
+export { OptionCard } from "./forms/OptionCard/index.js";
+export {
+  QueryBuilder,
+  DEFAULT_QUERY_LABELS,
+  createCondition,
+  defaultOperator,
+  describeCondition,
+  emptyQuery,
+  evaluateQuery,
+  isConditionComplete,
+  mergeQueryLabels,
+  operatorsFor,
+  valueShape,
+  type Query,
+  type QueryCondition,
+  type QueryField,
+  type QueryFieldOption,
+  type QueryFieldType,
+  type QueryLabels,
+  type QueryLabelsInput,
+  type QueryOperator,
+  type QueryScalar,
+  type QueryValue,
+  type QueryValueShape,
+} from "./forms/QueryBuilder/index.js";
 export { DateRangePicker } from "./forms/DateRangePicker/index.js";
 export { MultiSelect } from "./forms/MultiSelect/index.js";
 export { TagInput } from "./forms/TagInput/index.js";
@@ -57,6 +88,7 @@ export { ScheduleConfig } from "./forms/ScheduleConfig/index.js";
 // Feedback
 export { Alert } from "./feedback/Alert/index.js";
 export { Dialog } from "./feedback/Dialog/index.js";
+export { ConfirmAction } from "./feedback/ConfirmAction/index.js";
 export { Notification } from "./feedback/Notification/index.js";
 export { Toast } from "./feedback/Toast/index.js";
 export { Skeleton } from "./feedback/Skeleton/index.js";
@@ -130,6 +162,29 @@ export { SettingsRow } from "./data/SettingsRow/index.js";
 export { DescriptionList, type DescriptionListItem } from "./data/DescriptionList/index.js";
 export { KeyValueStrip, type KeyValueStripItem } from "./data/KeyValueStrip/index.js";
 export { PriceTag } from "./data/PriceTag/index.js";
+export {
+  Timestamp,
+  relativeParts,
+  type RelativeTimeParts,
+  type RelativeTimeUnit,
+} from "./data/Timestamp/index.js";
+export { CopyableValue, truncateMiddle } from "./data/CopyableValue/index.js";
+export { MaskedValue } from "./data/MaskedValue/index.js";
+export { FileCard } from "./data/FileCard/index.js";
+export { FilterChipRow } from "./data/FilterChipRow/index.js";
+export {
+  SavedViews,
+  DEFAULT_SAVED_VIEWS_LABELS,
+  type SavedView,
+  type SavedViewsLabels,
+} from "./data/SavedViews/index.js";
+export {
+  DataGrid,
+  type DataGridChange,
+  type DataGridColumn,
+  type DataGridLabels,
+  type DataGridRow,
+} from "./data/DataGrid/index.js";
 
 // Layout
 export { Card } from "./layout/Card/index.js";
@@ -147,6 +202,7 @@ export { Modal } from "./overlay/Modal/index.js";
 export { ContextMenu } from "./overlay/ContextMenu/index.js";
 export { ModalBackdrop } from "./overlay/ModalBackdrop/index.js";
 export { Popover } from "./overlay/Popover/index.js";
+export { HoverCard } from "./overlay/HoverCard/index.js";
 export { CommandPalette } from "./overlay/CommandPalette/index.js";
 
 // Auth
@@ -200,7 +256,7 @@ export { SemanticSearch } from "./graph/SemanticSearch/index.js";
 
 // Charts
 export { LineChart } from "./charts/LineChart/index.js";
-export { BarChart } from "./charts/BarChart/index.js";
+export { BarChart, type BarDatum, type BarSeries } from "./charts/BarChart/index.js";
 export { AreaChart } from "./charts/AreaChart/index.js";
 export { HeatmapChart } from "./charts/HeatmapChart/index.js";
 export { PieChart } from "./charts/PieChart/index.js";

@@ -168,16 +168,16 @@ Use components:
 </Card>
 ```
 
-## Components (261)
+## Components (273)
 
-### Primitives (15)
-`Button` · `Badge` · `Icon` (37 built-in) · `IconButton` (optional count `badge` + `badgeLabel`) · `SplitButton` (primary action joined to a menu of secondary actions) · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` · `ThemeToggle` · `StarRating`
+### Primitives (16)
+`Button` · `Badge` · `Icon` (37 built-in) · `IconButton` (optional count `badge` + `badgeLabel`) · `SplitButton` (primary action joined to a menu of secondary actions) · `Avatar` · `Tooltip` · `ChipButton` · `ToggleGroup` · `AvatarGroup` · `Flag` · `InformationPill` · `CopyButton` (`iconOnly`, translatable `copiedLabel`) · `FileTypeIcon` (extension badge coloured by file category) · `ThemeToggle` · `StarRating`
 
-### Forms (21)
-`TextInput` · `PasswordInput` (translatable toggle labels, native `name`/`autocomplete`/`id`, application-supplied `ongenerate`) · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `MoneyInput` (locale money entry as decimal strings; crypto/custom assets via `decimals`) · `ComboBox` · `RangeSlider` · `CodeEditor` · `ColorPicker` · `SearchInput` · `DatePicker` · `TimePicker` · `ScheduleConfig`
+### Forms (23)
+`TextInput` · `PasswordInput` (translatable toggle labels, native `name`/`autocomplete`/`id`, application-supplied `ongenerate`) · `Select` · `Checkbox` · `Radio` · `Switch` · `Textarea` · `FileDropzone` · `DateRangePicker` · `MultiSelect` · `TagInput` · `NumberInput` · `MoneyInput` (locale money entry as decimal strings; crypto/custom assets via `decimals`) · `ComboBox` · `RangeSlider` · `CodeEditor` · `ColorPicker` · `SearchInput` · `DatePicker` · `TimePicker` · `ScheduleConfig` · `OptionCard` (selectable card around a native radio or checkbox) · `QueryBuilder` (typed field/operator/value conditions with an all/any combinator)
 
-### Feedback (14)
-`Alert` · `Dialog` · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary` · `Carousel` · `VideoPlayer` · `GlobeLoader` (animated canvas globe loader) · `PromoBanner` (dismissible upsell region with price and actions slots)
+### Feedback (15)
+`Alert` · `Dialog` (`confirmDisabled`) · `ConfirmAction` (click, confirm-dialog or type-to-confirm gating) · `Notification` · `Toast` (queue manager) · `Skeleton` (loading placeholders) · `Accordion` · `Dropdown` · `ProgressRing` · `Stepper` · `ErrorBoundary` · `Carousel` · `VideoPlayer` · `GlobeLoader` (animated canvas globe loader) · `PromoBanner` (dismissible upsell region with price and actions slots)
 
 `Alert` takes `role`: `"alert"` (default, assertive), `"status"` (polite live region, for non-urgent updates such as "Saved") or `"note"` (static advisory text, not announced).
 
@@ -186,8 +186,8 @@ Use components:
 
 `Tabs` has two modes. Items without `href` are an ARIA tab widget (`role="tablist"`, arrow keys) that switches content in place. When items carry `href` they are link tabs for section navigation across routes: a `<nav>` landmark named by `ariaLabel`, holding a list of `<a>` elements with `aria-current="page"` on the `activeId` item. Link tabs keep normal link keyboard behaviour (Tab, Enter) and do not call `onchange`; drive `activeId` from the current route.
 
-### Data Display (24)
-`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList` · `OrgChart` · `WeatherCard` · `CurrencyDisplay` (locale money amounts, crypto/custom assets via `decimals`, trailing zeros trimmed down to `minDecimals`, masked mode) · `KpiCard` (KPI tile with trend + delta; `value` takes a string or a snippet; `sparkline` and `visual` snippets) · `BudgetBar` (money budget meter) · `SettingsRow` (icon, title, description, badge and actions row) · `DescriptionList` (`<dl>` of label/value rows with `value`/`action` snippets) · `KeyValueStrip` (inline facts with copy and link actions) · `PriceTag` (current and struck original price, period, savings badge)
+### Data Display (31)
+`Table` (sortable columns) · `Pagination` · `ProgressBar` · `StatusBadge` · `EmptyState` · `StickyNote` · `VirtualizedList` · `InfiniteScroll` · `FileTree` · `DiffViewer` · `Calendar` · `Kanban` · `DataTable` · `FilterBar` · `SortableList` · `OrgChart` · `WeatherCard` · `CurrencyDisplay` (locale money amounts, crypto/custom assets via `decimals`, trailing zeros trimmed down to `minDecimals`, masked mode) · `KpiCard` (KPI tile with trend + delta; `value` takes a string or a snippet; `sparkline` and `visual` snippets) · `BudgetBar` (money budget meter) · `SettingsRow` (icon, title, description, badge and actions row) · `DescriptionList` (`<dl>` of label/value rows with `value`/`action` snippets) · `KeyValueStrip` (inline facts with copy and link actions) · `PriceTag` (current and struck original price, period, savings badge) · `Timestamp` (live relative or absolute `<time>`) · `CopyableValue` (truncated identifier with icon-only copy) · `MaskedValue` (masked secret; hidden value never in the DOM) · `FileCard` (file tile/row with preview, progress, error, remove) · `FilterChipRow` (active query conditions as removable chips) · `SavedViews` (named views; storage stays in the app) · `DataGrid` (editable ARIA grid with validation)
 
 `StatusBadge` has six statuses: `active`, `inactive`, `pending`, `error`, `warning` and `info`. With `indicator="icon"` each one shows its own icon (check, minus, clock, x, triangle, info) and a default label, so badges can be told apart without colour (WCAG 1.4.1). `tone` (`success` | `neutral` | `warning` | `error` | `info`) overrides the colour, and the `icon` snippet replaces the marker. The default `indicator="dot"` renders as before.
 
@@ -196,8 +196,8 @@ Use components:
 ### Layout (9)
 `Card` · `AppLayout` · `PageHeader` · `ContentSlot` · `Drawer` (focus trap, Escape / backdrop close, `closeLabel`, `onclose`) · `SplitView` · `GridLayout` · `PageShell` · `FloatingPanel` (draggable + resizable window)
 
-### Overlay (5)
-`Modal` · `ModalBackdrop` · `ContextMenu` · `Popover` · `CommandPalette` (Cmd+K)
+### Overlay (6)
+`Modal` · `ModalBackdrop` · `ContextMenu` · `Popover` · `HoverCard` (delayed, keyboard-reachable preview card) · `CommandPalette` (Cmd+K)
 
 ### Auth (2)
 `LoginPage` (credentials + wallet modes) · `WalletConnect` (MetaMask, WalletConnect, Coinbase, Phantom)
@@ -215,7 +215,7 @@ Use components:
 `GraphViewer` (force-directed network graph with community detection, zoom/pan, search) · `SemanticSearch` (vector search results with relevance scores)
 
 ### Charts (21)
-`LineChart` · `BarChart` · `AreaChart` · `HeatmapChart` · `PieChart` · `Sparkline` · `Gauge` · `TreeMap` · `GanttChart` · `ActivityHeatmap` · `CumulativeFlow` (CFD) · `AgingWIP` · `BurndownChart` · `VelocityChart` · `SankeyChart` · `ScatterChart` · `VennDiagram` · `WordCloud` · `ElevationProfile` (terrain cross-section + Fresnel overlay) · `ChartFrame` (accessible figure: title/description + data-table fallback with "Show data" toggle) · `ChartLegend` (shape and dash markers, readable in grayscale)
+`LineChart` · `BarChart` (grouped or `stacked` multi-series) · `AreaChart` · `HeatmapChart` · `PieChart` · `Sparkline` · `Gauge` · `TreeMap` · `GanttChart` · `ActivityHeatmap` · `CumulativeFlow` (CFD) · `AgingWIP` · `BurndownChart` · `VelocityChart` · `SankeyChart` · `ScatterChart` · `VennDiagram` · `WordCloud` · `ElevationProfile` (terrain cross-section + Fresnel overlay) · `ChartFrame` (accessible figure: title/description + data-table fallback with "Show data" toggle) · `ChartLegend` (shape and dash markers, readable in grayscale)
 
 Every `ChartFrame` chart (Line, Area, Bar, Pie, Scatter, TreeMap, Sankey, Sparkline, Gauge, Heatmap) takes a typed `labels` prop to localize its accessible name, data-table column headers and caption, "Show data"/"Hide data" toggle and legend name, e.g. `labels={{ columns: { label: "Categoria", value: "Valor" }, showData: "Mostrar dados" }}`.
 
@@ -671,3 +671,7 @@ Private — Cyberdyne Corp.
 ### Finance dashboard patterns
 
 See [the finance dashboard adoption guide](guides/finance-dashboard.md) and **Finance / Dashboard** in Storybook for synthetic wealth, transactions and empty-position screens. `FilterBar` composes responsive controls, `AllocationBreakdown` presents signed allocations, and `KpiCard` supports opt-in metric emphasis and value tone.
+
+### Query filtering
+
+See [the query filtering guide](guides/query-filtering.md) and **Patterns / Query filtering** in Storybook. `QueryBuilder`, `FilterChipRow` and `SavedViews` share one flat `Query` model; `evaluateQuery` filters small client-side lists, and larger sets should be filtered on the server.
