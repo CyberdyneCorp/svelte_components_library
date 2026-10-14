@@ -469,7 +469,7 @@ Based on a 4px base grid:
 
 ## 7. Component Inventory
 
-### 7.1 Primitives (15 components)
+### 7.1 Primitives (16 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -483,13 +483,14 @@ Based on a 4px base grid:
 | `ChipButton` | selected, disabled, onclick | Toggle chip for filters |
 | `Flag` | variant, size | Feature/status flag (new, beta, deprecated, experimental) |
 | `InformationPill` | label, value, variant | Key:value inline chip |
-| `CopyButton` | text, label, size, variant | Clipboard copy with feedback animation |
+| `CopyButton` | text, label, size, variant, iconOnly, copiedLabel | Clipboard copy with feedback animation; `iconOnly` keeps `label` as the accessible name |
+| `FileTypeIcon` | type, fileName, size, label | SVG page with the extension and a category stripe (pdf, document, spreadsheet, presentation, image, audio, video, archive, code, other); `fileExtension`/`fileCategory` helpers |
 | `ToggleGroup` | items, value (bindable), multiple, size, variant | Grouped toggle buttons for single/multi selection |
 | `AvatarGroup` | avatars, max, size, overlap | Stacked avatar display with overflow count |
 | `ThemeToggle` | theme (bindable), size | Dark/light theme toggle switch |
 | `StarRating` | value (bindable, `number \| null`), max, size, readonly, halfStars | Interactive star rating with half-star support; nullish value = unrated (optional binds safe) |
 
-### 7.2 Forms (20 components)
+### 7.2 Forms (22 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -498,6 +499,8 @@ Based on a 4px base grid:
 | `Select` | value (bindable), label, options, placeholder, error, disabled | Styled dropdown select |
 | `Checkbox` | checked (bindable), label, disabled, error | Custom checkbox with green checkmark |
 | `Radio` | options, value (bindable), name, label, disabled, error | Radio button group |
+| `OptionCard` | title, description, type, name, value, group (bindable), checked (bindable), disabled, icon, meta, onchange | Selectable card around a visually hidden native radio/checkbox; named by the title, described by the description |
+| `QueryBuilder` | fields, query (bindable), onchange, maxConditions, labels, ariaLabel | Rows of field, operator and typed value over a flat `Query` with all/any combinator; helpers `operatorsFor`, `isConditionComplete`, `describeCondition`, `evaluateQuery` |
 | `Switch` | checked (bindable), label, disabled | Toggle switch with smooth animation |
 | `Textarea` | value (bindable), label, placeholder, hint, error, rows, maxlength | Multi-line input with character count |
 | `FileDropzone` | accept, multiple, disabled, maxSize, onfiles | Drag-and-drop file upload zone |
@@ -514,12 +517,13 @@ Based on a 4px base grid:
 | `TimePicker` | value (bindable), label, format, step, disabled | Time selection with hour and minute controls |
 | `ScheduleConfig` | value (bindable), presets | Recurring-event frequency builder (interval / daily / weekly / monthly cron-style schedule) |
 
-### 7.3 Feedback (14 components)
+### 7.3 Feedback (15 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
 | `Alert` | variant, severity, title, inline, card, borderSide, icon, role, dismissible, ondismiss | Alert with left/top border accent; `severity` tones (critical/warn/caution/good), `inline` (no banner chrome), `card` appearance, optional `icon` snippet; `role` is `alert` (default, assertive), `status` (polite live region) or `note` (not announced) |
-| `Dialog` | open (bindable), title, confirmLabel, cancelLabel, variant, onconfirm, oncancel | Confirmation dialog modal |
+| `Dialog` | open (bindable), title, confirmLabel, cancelLabel, variant, confirmDisabled, onconfirm, oncancel | Confirmation dialog modal; focuses the first body control |
+| `ConfirmAction` | label, level, variant, size, disabled, title, confirmLabel, cancelLabel, confirmText, typePrompt, onconfirm, oncancel | Trigger whose action needs no confirmation, a confirm Dialog, or typing an exact phrase |
 | `Notification` | variant, message, duration, onclose | Auto-dismissing toast notification |
 | `Toast` | children | Global toast queue manager with context API |
 | `Skeleton` | variant, width, height, lines, animated | Loading placeholder (text, circle, rect, card) |
@@ -548,7 +552,7 @@ Based on a 4px base grid:
 | `MenuBar` | menus | Desktop-style horizontal menu bar with nested menus |
 | `BottomNav` | items, activeId (bindable) | Mobile bottom tab navigation |
 
-### 7.5 Data Display (21 components)
+### 7.5 Data Display (28 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -573,6 +577,13 @@ Based on a 4px base grid:
 | `DescriptionList` | items, columns, dividers, value, action | `<dl>` of label/value rows; `value` and `action` snippets receive the item (e.g. StatusBadge value, edit IconButton) |
 | `KeyValueStrip` | items, ariaLabel, copyLabel | Inline `<ul>` of "label: value" facts with dividers, CopyButton for `copy` items and `<a>` for `href` items |
 | `PriceTag` | amount, currency, locale, originalAmount, period, savings, originalLabel, size | Current price with optional struck original price (both via CurrencyDisplay), period and savings Badge |
+| `Timestamp` | value, format, locale, timeZone, dateStyle, timeStyle, live, now, invalidLabel | `<time>` with `Intl` relative or absolute text, absolute time as `title`, live refresh |
+| `CopyableValue` | value, display, truncate, head, tail, mono, label, copyLabel | Middle/end-truncated identifier, full text for assistive tech, icon-only copy |
+| `MaskedValue` | value, visibleEnd, maskLength, maskChar, label, revealable, revealed (bindable), copyable, autoHideAfter | Fixed-length mask plus last characters; hidden value never in the DOM; reveal toggle with `aria-pressed` |
+| `FileCard` | name, meta, layout, preview, previewSrc, progress, error, onopen, onremove | File tile or row with preview fallback to FileTypeIcon, upload progressbar, error and remove |
+| `FilterChipRow` | fields, query, onremove, onclear, labels, ariaLabel | Complete query conditions as a labelled list of removable chips |
+| `SavedViews` | views, activeId (bindable), dirty, onselect, onsave, onupdate, onrename, ondelete, labels | View Select, modified Badge and SplitButton save/rename/delete actions; no storage |
+| `DataGrid` | columns, rows (bindable), rowKey, ariaLabel, readonly, oncellchange, labels | Editable ARIA grid: one tab stop, arrow keys, text/number/select/boolean cells, validation, read-only cells |
 
 ### 7.6 Layout (9 components)
 
@@ -588,7 +599,7 @@ Based on a 4px base grid:
 | `PageShell` | sidebar, header, footer, children | Full page shell combining header, sidebar, and content area |
 | `FloatingPanel` | title, open (bindable), header, footer, children, minWidth, minHeight, defaultWidth, initialX/Y, resizable, onclose | Draggable + resizable floating window with titlebar and close |
 
-### 7.7 Overlay (5 components)
+### 7.7 Overlay (6 components)
 
 | Component | Props | Description |
 |-----------|-------|------------|
@@ -596,6 +607,7 @@ Based on a 4px base grid:
 | `ModalBackdrop` | open, onclick, blur | Standalone backdrop overlay |
 | `ContextMenu` | items, children | Right-click positioned menu |
 | `Popover` | trigger, content, position, open (bindable) | Floating content with arrow |
+| `HoverCard` | trigger, children, open (bindable), openDelay, closeDelay, position | Delayed preview card on hover or focus; placed after the trigger so Tab reaches its links |
 | `CommandPalette` | open (bindable), commands, placeholder | Cmd+K search overlay with keyboard navigation |
 
 ### 7.8 Auth (2 components)
@@ -665,7 +677,7 @@ Based on a 4px base grid:
 | Component | Props | Description |
 |-----------|-------|------------|
 | `LineChart` | data, series, xAxis, yAxis, legend, tooltip | Multi-series line chart with axis configuration |
-| `BarChart` | data, series, xAxis, yAxis, horizontal, stacked | Vertical/horizontal bar chart with stacking |
+| `BarChart` | data, series, stacked, horizontal, showValues, labels | Vertical/horizontal bars; multi-series `series` grouped or stacked with legend and marker shapes |
 | `AreaChart` | data, series, xAxis, yAxis, stacked, gradient | Area chart with optional stacking and gradient fill |
 | `HeatmapChart` | data, xLabels, yLabels, colorScale, showValues | Heatmap grid with configurable color scales |
 | `PieChart` | data, donut, showLabels, showLegend | Pie/donut chart with labels and legend |
