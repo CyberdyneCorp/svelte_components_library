@@ -26,7 +26,7 @@ Data screens (logs, records, orders, users) need more than the preset filters of
 
 ## Impact
 
-- New: `data/QueryBuilder/query.ts` (model and helpers), `forms/QueryBuilder`, `data/FilterChipRow`, `data/SavedViews`.
+- New: `forms/QueryBuilder` (component plus `query.ts` model and helpers), `data/FilterChipRow`, `data/SavedViews`.
 - Depends on `add-utility-display-components` for `Dialog.confirmDisabled`.
 - Exports, stories (including a composed "Filtered list" story with DataTable), README, TRD, and a `guides/query-filtering.md` adoption guide. Minor changeset.
 

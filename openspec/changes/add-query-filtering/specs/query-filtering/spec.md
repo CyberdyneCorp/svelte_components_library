@@ -23,9 +23,9 @@ It SHALL export these helpers:
 - `valueShape(operator)` SHALL return `"none"`, `"single"`, `"range"` or `"list"`.
 - `isConditionComplete(condition, fields)` SHALL be true only when the field exists, the operator is valid for its type, and the value matches the shape: no value for `none`; a non-empty string, a finite number or a date string for `single`; two such values with min ≤ max for `range`; a non-empty array for `list`.
 - `describeCondition(condition, field, labels?)` SHALL return readable text such as "Status is any of Active, Paused" or "Price between 10 and 20", using option labels for enum values.
-- `evaluateQuery(query, row, fields)` SHALL return whether `row[field.key]` satisfies the query. It SHALL ignore incomplete conditions. It SHALL compare text case-insensitively, treat `null`, `undefined` and `""` as empty, compare `on` by local calendar day and `before`/`after` by instant, and return `true` when no condition is complete.
+- `evaluateQuery(query, row, fields)` SHALL return whether `row[field.key]` satisfies the query. It SHALL ignore incomplete conditions. It SHALL compare text case-insensitively, treat `null`, `undefined`, `""` and `[]` as empty, compare `on` by local calendar day, treat `before` as before the start of that day and `after` as on or after the start of the next day, let `in`/`not_in` match array-valued row fields by any element, and return `true` when no condition is complete. Helpers `emptyQuery`, `createCondition`, `mergeQueryLabels` and `DEFAULT_QUERY_LABELS` SHALL also be exported.
 
-(src: packages/ui/core/src/lib/data/QueryBuilder/query.ts)
+(src: packages/ui/core/src/lib/forms/QueryBuilder/query.ts)
 
 #### Scenario: Evaluate an AND query
 
@@ -59,10 +59,10 @@ The system SHALL provide a `QueryBuilder` form component that edits a `Query` ov
 
 - a field Select;
 - an operator Select limited to `operatorsFor(type)`;
-- a value control chosen by `valueShape` and field type: a text input for text, a number input for number, a native date input for date, a MultiSelect of the field's options for enum lists, two controls labelled "From" and "To" for ranges, and none for the `none` shape;
+- a value control chosen by `valueShape` and field type: a TextInput of type text, number or date named "Value"; a fieldset (legend "Values") of Checkboxes for enum lists; two inputs named "From" and "To" for ranges; and none for the `none` shape;
 - an IconButton named "Remove condition n".
 
-An "Add condition" button SHALL append a condition with the first field, its default operator and no value. It SHALL be disabled when `maxConditions` is reached. When there are at least two conditions, a control SHALL switch the combinator between "Match all" (`and`) and "Match any" (`or`). Changing a condition's field SHALL reset its operator to the default and clear its value. Changing the operator SHALL clear the value unless the old and new value shapes are the same. Every edit SHALL update `query` immutably and call `onchange` with the new query. After an add, focus SHALL move to the new row's field select. After a remove, focus SHALL move to the next row's field select, or to "Add condition" when no row is left. Condition ids SHALL be unique within the query.
+An "Add condition" button SHALL append a condition with the first field, its default operator and no value. It SHALL be disabled when `maxConditions` is reached. When there are at least two conditions, a Select named "Combine conditions" SHALL switch the combinator between "Match all" (`and`) and "Match any" (`or`). Changing a condition's field SHALL reset its operator to the default and clear its value. Changing the operator SHALL clear the value unless the old and new value shapes are the same. Every edit SHALL update `query` immutably and call `onchange` with the new query. After an add, focus SHALL move to the new row's field select. After a remove, focus SHALL move to the next row's field select, else the previous row's, or to "Add condition" when no row is left. Condition ids SHALL be unique within the query.
 
 (src: packages/ui/core/src/lib/forms/QueryBuilder/QueryBuilder.svelte)
 
@@ -101,7 +101,7 @@ The system SHALL provide a `FilterChipRow` data component that lists the complet
 - **WHEN** this capability is implemented or used
 - **THEN** it SHALL satisfy the following contract:
 
-`FilterChipRow` SHALL take `fields`, `query`, `onremove(conditionId)`, optional `onclear()`, optional `labels` and `ariaLabel` (default `"Active filters"`). It SHALL render a `<ul>` with `aria-label` holding one `<li>` per complete condition, in query order. Each chip SHALL show `describeCondition(...)` and SHALL contain a button named `Remove filter: <description>` that calls `onremove` with the condition id. When `query.combinator` is `"or"` and there are at least two chips, a "Match any" label SHALL precede the list. When `onclear` is given and there is at least one chip, a "Clear all" button SHALL call it. When no condition is complete, the component SHALL render nothing. After a chip's removal, focus SHALL move to the next chip's remove button, else the previous one, else "Clear all", else the component root.
+`FilterChipRow` SHALL take `fields`, `query`, `onremove(conditionId)`, optional `onclear()`, optional `labels` and `ariaLabel` (default `"Active filters"`). It SHALL render a `<ul>` with `aria-label` holding one `<li>` per complete condition, in query order. Each chip SHALL show `describeCondition(...)` and SHALL contain a button named `Remove filter: <description>` that calls `onremove` with the condition id. When `query.combinator` is `"or"` and there are at least two chips, a "Match any" label SHALL precede the list. When `onclear` is given and there is at least one chip, a "Clear all" button SHALL call it. When no condition is complete, the component SHALL render only its empty root. After a chip's removal, focus SHALL move to the next chip's remove button, else the previous one, else the component root (`tabindex="-1"`).
 
 (src: packages/ui/core/src/lib/data/FilterChipRow/FilterChipRow.svelte)
 
@@ -125,7 +125,7 @@ The system SHALL provide a `SavedViews` data component for choosing and managing
 - **WHEN** this capability is implemented or used
 - **THEN** it SHALL satisfy the following contract:
 
-`SavedViews` SHALL be generic over the state type `T`. It SHALL take `views: Array<{ id: string; name: string; state: T; builtin?: boolean }>`, `activeId` (bindable), `dirty` (default `false`), `onselect(view)`, `onsave(name)`, optional `onupdate(view)`, optional `onrename(view, name)`, optional `ondelete(view)`, optional `labels` and `label` (default `"View"`). It SHALL render:
+`SavedViews` SHALL be generic over the state type `T`. It SHALL take `views: Array<{ id: string; name: string; state: T; builtin?: boolean }>`, `activeId` (bindable), `dirty` (default `false`), `onselect(view)`, `onsave(name)`, optional `onupdate(view)`, optional `onrename(view, name)`, optional `ondelete(view)`, optional `labels` (its own `SavedViewsLabels`, defaults exported as `DEFAULT_SAVED_VIEWS_LABELS`) and `label` (default `"View"`). It SHALL render:
 
 - a labelled Select of view names, where choosing one sets `activeId` and calls `onselect`;
 - a "Modified" Badge while `dirty`;
