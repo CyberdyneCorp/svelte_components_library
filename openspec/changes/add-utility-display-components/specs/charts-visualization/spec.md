@@ -9,7 +9,7 @@
 - **WHEN** this capability is implemented or used
 - **THEN** it SHALL satisfy the following contract:
 
-`BarChart` SHALL accept an optional `series: Array<{ name: string; color?: string; data: Array<{ label: string; value: number }> }>` and `stacked` (default `false`). When `series` is non-empty, it SHALL take precedence over `data`. Categories SHALL be the distinct labels in order of first appearance across all series, and a series without a category SHALL count as 0. With `stacked=false`, each category SHALL show one bar per series side by side. With `stacked=true`, each category SHALL show one bar whose segments are stacked in series order, the value axis SHALL scale to the largest category total, and values below 0 SHALL be drawn as 0. Both layouts SHALL work with `horizontal`. Series without a `color` SHALL take colours from the shared default palette in order. When there are two or more series, the chart SHALL render a `ChartLegend` with each series' marker shape, and each bar or segment large enough to hold its marker SHALL draw that series' shape inside it. With `showValues`, grouped bars SHALL label each bar and stacked bars SHALL label the category total. The data-table fallback SHALL have one row per category and one column per series. Single-series `data` rendering SHALL be unchanged.
+`BarChart` SHALL accept an optional `series: Array<{ name: string; color?: string; data: Array<{ label: string; value: number }> }>` and `stacked` (default `false`). When `series` is non-empty, it SHALL take precedence over `data`. Categories SHALL be the distinct labels in order of first appearance across all series, and a series without a category SHALL count as 0. With `stacked=false`, each category SHALL show one bar per series side by side. With `stacked=true`, each category SHALL show one bar whose segments are stacked in series order, the value axis SHALL scale to the largest category total, and values below 0 SHALL be drawn as 0. Both layouts SHALL work with `horizontal`. Series without a `color` SHALL take colours from the shared default palette in order. When there are two or more series, the chart SHALL render a `ChartLegend` with each series' marker shape, and each bar or segment large enough to hold its marker SHALL draw that series' shape inside it. With `showValues`, grouped bars SHALL label each bar and stacked bars SHALL label the category total. The data-table fallback SHALL have one row per category and one column per series. Single-series `data` rendering SHALL be unchanged, except that empty or all-zero data SHALL use a unit scale instead of producing `NaN` geometry.
 
 (src: packages/ui/core/src/lib/charts/BarChart/BarChart.svelte; packages/ui/core/src/lib/charts/BarChart/barLayout.ts)
 
@@ -26,3 +26,9 @@
 - **GIVEN** series A with labels "x" and "y", and series B with only "y"
 - **WHEN** it renders with `stacked=false`
 - **THEN** there SHALL be 2 categories and B's "x" value in the data table SHALL be 0
+
+#### Scenario: All-zero data
+
+- **GIVEN** `data` where every value is 0
+- **WHEN** it renders
+- **THEN** no SVG attribute SHALL contain `NaN`

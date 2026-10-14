@@ -82,3 +82,80 @@ describe("BarChart accessibility", () => {
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 });
+
+describe("BarChart multi-series", () => {
+  const usage = [
+    { name: "Compute", data: [{ label: "Jan", value: 10 }, { label: "Feb", value: 20 }] },
+    { name: "Storage", data: [{ label: "Jan", value: 5 }, { label: "Feb", value: 5 }] },
+  ];
+
+  const tableRows = (name: string) =>
+    [...screen.getByRole("table", { name }).querySelectorAll("tr")].map((r) => [...r.children].map((c) => c.textContent));
+
+  it("stacks segments, scales to the largest total and lists the series in a legend", () => {
+    render(BarChart, { props: { series: usage, stacked: true, title: "Usage" } });
+    expect(document.querySelectorAll(".cy-bar-chart__bar")).toHaveLength(4);
+    const ticks = [...document.querySelectorAll(".cy-bar-chart__tick")].map((t) => Number(t.textContent));
+    expect(Math.max(...ticks)).toBeGreaterThanOrEqual(25);
+    const legend = screen.getByRole("list", { name: "Legend" });
+    expect(within(legend).getByText("Compute")).toBeInTheDocument();
+    expect(within(legend).getByText("Storage")).toBeInTheDocument();
+    expect(tableRows("Usage data")).toEqual([
+      ["Label", "Compute", "Storage"],
+      ["Jan", "10", "5"],
+      ["Feb", "20", "5"],
+    ]);
+  });
+
+  it("labels stack totals when showValues is on", () => {
+    render(BarChart, { props: { series: usage, stacked: true } });
+    const values = [...document.querySelectorAll(".cy-bar-chart__value")].map((v) => v.textContent);
+    expect(values).toEqual(["15", "25"]);
+  });
+
+  it("groups bars and fills a missing category with 0", () => {
+    render(BarChart, {
+      props: {
+        title: "Grouped",
+        series: [
+          { name: "A", data: [{ label: "x", value: 1 }, { label: "y", value: 2 }] },
+          { name: "B", data: [{ label: "y", value: 3 }] },
+        ],
+      },
+    });
+    expect(document.querySelectorAll(".cy-bar-chart__bar")).toHaveLength(4);
+    expect(document.querySelectorAll(".cy-bar-chart__value")).toHaveLength(4);
+    expect(tableRows("Grouped data")).toEqual([
+      ["Label", "A", "B"],
+      ["x", "1", "0"],
+      ["y", "2", "3"],
+    ]);
+  });
+
+  it("draws each series' legend shape inside segments that fit it", () => {
+    render(BarChart, { props: { series: usage, stacked: true } });
+    const shapes = new Set([...document.querySelectorAll(".cy-bar-chart__marker")].map((m) => m.getAttribute("data-marker")));
+    expect(shapes).toEqual(new Set(["circle", "square"]));
+  });
+
+  it("uses series colours, falling back to the default palette", () => {
+    render(BarChart, { props: { series: [{ ...usage[0], color: "#123456" }, usage[1]] } });
+    const fills = [...document.querySelectorAll(".cy-bar-chart__bar")].map((b) => b.getAttribute("fill"));
+    expect(fills).toEqual(["#123456", "#123456", "#00d4ff", "#00d4ff"]);
+  });
+
+  it("prefers series over data and shows no legend or markers for one series", () => {
+    render(BarChart, { props: { data: [{ label: "ignored", value: 1 }], series: [usage[0]] } });
+    expect(within(plot()).queryByText("ignored")).not.toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Legend" })).not.toBeInTheDocument();
+    expect(document.querySelector(".cy-bar-chart__marker")).not.toBeInTheDocument();
+  });
+});
+
+describe("BarChart degenerate data", () => {
+  it("renders all-zero data without NaN geometry", () => {
+    render(BarChart, { props: { data: [{ label: "A", value: 0 }, { label: "B", value: 0 }] } });
+    expect(plot().outerHTML).not.toContain("NaN");
+    expect(document.querySelectorAll(".cy-bar-chart__bar")).toHaveLength(2);
+  });
+});
